@@ -1,11 +1,9 @@
 # Portfolio Description
 
-
 ## Fields of Expertise
-
 Machine Learning - Quantitative Finance (Quant) - Quantum Information Science - Computational Physics
 
-## Portfolio Description
+## Overview
 
 Welcome to my portfolio repository! This collection of projects showcases my expertise and experience in various advanced and interdisciplinary fields. Each project has been meticulously developed to highlight my skills and knowledge, making this repository a representation of my capabilities in the following areas:
 
