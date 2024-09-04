@@ -25,7 +25,7 @@ The project leverages the **Northwind** database as the data source, with **Flas
 - **Backend**: Flask, Python
 - **Frontend**: Streamlit, HTML, CSS
 - **Database**: Northwind (SQL Server)
-- **Machine Learning**: Scikit-learn, TensorFlow
+- **Machine Learning**: Scikit-learn
 - **Data Visualization**: Matplotlib, Seaborn
 
 ## Installation
