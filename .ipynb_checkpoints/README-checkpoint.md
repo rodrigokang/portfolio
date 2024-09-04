@@ -34,9 +34,7 @@ A machine learning project focusing on the recognition of handwritten digits usi
 A project to predict housing prices based on various features using linear regression and other predictive modeling techniques.
 
 ### [Retail](./retail)
-A comprehensive project focused on customer churn prediction for a retail dataset using the Northwind database. By leveraging RFM variables and scores, this project implements various Machine Learning models, including Logistic Regression, Naive Bayes, K-Nearest Neighbors (KNN), Random Forest, Support Vector Machines (SVM), and Gradient Boosting, to identify and predict customer churn. SQL queries are used to extract and preprocess the data from the database.
-
-The project also features a dashboard developed with Streamlit, enhanced with HTML and CSS for improved user experience. The backend is managed using an ORM, and the API is built with Flask, facilitating seamless integration and interaction with the machine learning models. The analysis aims to enhance customer retention strategies by evaluating and comparing the performance of these models in predicting customer abandonment.
+A comprehensive project focused on customer churn prediction for a retail dataset using the Northwind database. By leveraging RFM variables and scores, this project implements various Supervised Machine Learning models to identify and predict customer churn. SQL queries are used to extract and preprocess the data from the database.
 
 ### [Path Integral](./path_integral)
 Exploring the path integral formulation in quantum mechanics, including numerical simulations and theoretical analysis.
