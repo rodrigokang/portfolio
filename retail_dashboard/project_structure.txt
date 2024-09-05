@@ -1,0 +1,9 @@
+retail_dashboard/
+├── main.py                 # Main Flask file
+├── segmentation_models.py  # Segmentation logic
+├── dashboard.py            # Main Streamlit file
+├── models.py               # ORM definition (SQLAlchemy)
+├── migrations/             # Migration files
+├── templates/              # HTML files (if using templates)
+├── static/                 # CSS files and static resources
+├── requirements.txt        # Project dependencies
