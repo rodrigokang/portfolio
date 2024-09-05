@@ -1,8 +1,9 @@
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<< Description >>>>>>>>>>>>>>>>>>>>>>>>>>>>> #
 
-# * Name: "ML models for retail"
+# * Name: "Clustering for retail"
 # * Owner: Rodrigo J. Kang
-# * Description: This script contains ML algorithm-based models for retail.
+# * Description: This script contains K-Mean algorithm to perform
+#                customer segmentation for retail.
 
 # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
 
@@ -28,8 +29,6 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import seaborn as sns
-import networkx as nx
-import re
 
 # ==============================
 # Import libraries for RFM model
@@ -43,32 +42,13 @@ import random
 
 # Machine learning modules
 # ------------------------
-# RFM
-# ------------------------
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import calinski_harabasz_score, davies_bouldin_score, silhouette_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
-# ----------------
-# Churn prediction
-# ----------------
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from imblearn.under_sampling import RandomUnderSampler
-from scipy.stats import uniform
-from sklearn.model_selection import RandomizedSearchCV # GridSearchCV
-from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.metrics import roc_curve, roc_auc_score
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from scipy.stats import ks_2samp
-from scipy.stats import zscore
 
 # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
-
-# =========
-# RFM Model
-# =========
 
 class RFM:
     """
@@ -399,290 +379,5 @@ class RFM:
             print()
             print(f"An error occurred during segmentation: {e}")
             print("========================================")
-    
-# <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
-
-# ===========
-# Churn Model
-# ===========
-
-class ChurnPredictorRfmLr:
-    """
-    Class to predict customer churn rate using a logistic regression model based on RFM.
-    """
-
-    def __init__(self, random_state=42):
-        """
-        Initializes the ChurnPredictorRfmLr with a random seed for reproducibility.
-
-        Args:
-            random_state (int, optional): Random seed for reproducibility. Default value is 42.
-        """
-        self.model = None
-        self.random_state = random_state
-        
-    def set_seed(self, seed):
-        """
-        Sets the random seed for numpy and random.
-
-        Args:
-            seed (int): Random seed for reproducibility.
-        """
-        np.random.seed(seed)
-        random.seed(seed)
-
-    def preprocess_data(self, input_data):
-        """
-        Preprocesses the input data by adding 'churn' and 'delta_compra_zscore' columns
-        based on the comparison of 'recency' with 'average_latency' for low-activity customers.
-
-        Args:
-            input_data (DataFrame): Input data.
-
-        Returns:
-            DataFrame: Preprocessed data with added 'churn' and 'delta_compra_zscore' columns.
-        """
-        try:
-            # Create the delta_compra column
-            input_data['delta_compra'] = input_data['recency'] - input_data['average_latency']
-
-            # Create the churn column using the criterion of Z-Score > 1
-            input_data['churn'] = ((input_data['category'] == 'low-activity customers') & 
-                                   (input_data['delta_compra'] > 0) &
-                                   (input_data['s_rfm'] < input_data[input_data['category'] == 
-                                    'low-activity customers']['s_rfm'].mean())).astype(int)
-
-            return input_data
-
-        except Exception as e:
-            print(f"An error occurred during data preprocessing: {e}")
-            return pd.DataFrame()
-    
-    # ********************************************************************
-    
-    def train(self, input_data, test_size=0.2, 
-              sampling_strategy=1.0, n_iter=30, cv_folds=5):
-        """
-        Trains the model using the input data.
-
-        Args:
-            input_data (DataFrame): Input data for training.
-            test_size (float): Proportion of the dataset to include in the test split.
-            sampling_strategy (float): Sampling strategy for RandomUnderSampler.
-            n_iter (int): Number of parameter settings that are sampled.
-            cv_folds (int): Number of folds in cross-validation.
-
-        Returns:
-            tuple: X_test, y_test for evaluation.
-        """
-        try:
-            self.set_seed(self.random_state)
-
-            # Split the dataset into training and test sets
-            X = input_data[['recency', 'delta_compra', 'frequency', 'amount', 's_rfm']]
-            y = input_data['churn']
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=self.random_state)
-
-            # Perform undersampling of the majority class in the training set
-            rus = RandomUnderSampler(sampling_strategy=sampling_strategy, random_state=self.random_state)
-            X_resampled, y_resampled = rus.fit_resample(X_train, y_train)
-
-            # Generate a list of uniformly spaced values for C
-            C_values = np.random.uniform(0.01, 100, 100)
-
-            # Define the hyperparameter search space
-            param_distributions = {
-                'C': C_values,  # List of uniformly spaced C values
-                'solver': ['liblinear', 'saga']
-            }
-
-            # Set up RandomizedSearchCV
-            random_search = RandomizedSearchCV(
-                estimator=LogisticRegression(random_state=self.random_state),
-                param_distributions=param_distributions,
-                n_iter=n_iter,  # Number of combinations to try
-                cv=cv_folds,    # Number of folds for cross-validation
-                scoring='accuracy',
-                random_state=self.random_state  # Set seed for reproducibility
-            )
-
-            # Train the model
-            random_search.fit(X_resampled, y_resampled)
-
-            # Save the best model
-            self.model = random_search.best_estimator_
-
-            # Print the best parameters found
-            print(f"Best parameters found: {random_search.best_params_}")
-
-            return X_test, y_test
-        
-        except Exception as e:
-            print()
-            print(f"An error occurred during LogisticRegression training: {e}")
-            print("===================================================")
-            return pd.DataFrame(), pd.Series()
-    
-    # ********************************************************************
-
-    def evaluate_model(self, X_test, y_test):
-        """
-        Evaluates the model's performance on the test data.
-
-        Args:
-            X_test (DataFrame): Test features.
-            y_test (Series): True labels for the test set.
-
-        Returns:
-            tuple: A tuple containing the predicted labels and predicted probabilities for the test set.
-        """
-        try:
-            y_pred = self.model.predict(X_test)
-            y_prob = self.model.predict_proba(X_test)[:, 1]
-
-            # Display the confusion matrix on the test set
-            conf_matrix = confusion_matrix(y_test, y_pred)
-            print('Confusion Matrix:')
-            print('====================')
-            print(pd.DataFrame(conf_matrix, columns=['Predicted 1', 'Predicted 0'], index=['Actual 1', 'Actual 0']))
-            print()
-            print('Performance Metrics:')
-            print('===========================')
-            # Calculate and display the metrics
-            accuracy = accuracy_score(y_test, y_pred)
-            precision = precision_score(y_test, y_pred)
-            recall = recall_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred)
-
-            print(f'Accuracy: {accuracy:.4f}')
-            print(f'Precision: {precision:.4f}')
-            print(f'Recall: {recall:.4f}')
-            print(f'F1 Score: {f1:.4f}\n')
-
-            return y_pred, y_prob
-        
-        except Exception as e:
-            print()
-            print(f"An error occurred during model evaluation: {e}")
-            print("===================================================")
-            return np.array([]), np.array([])
-    
-    # ********************************************************************
-    
-    def plot_roc_curve(self, y_test, y_prob):
-        """
-        Visualizes the ROC curve.
-
-        Args:
-            y_test (Series): True labels for the test set.
-            y_prob (array): Predicted probabilities for the test set.
-        """
-        try:
-            fpr, tpr, thresholds = roc_curve(y_test, y_prob)
-            roc_auc = roc_auc_score(y_test, y_prob)
-
-            plt.figure(figsize=(8, 8))
-            plt.plot(fpr, tpr, color='blue', lw=2, label=f'AUC = {roc_auc:.3f}')
-            plt.plot([0, 1], [0, 1], color='gray', linestyle='--')
-            plt.title('ROC Curve')
-            plt.xlabel('False Positive Rate (FPR)')
-            plt.ylabel('True Positive Rate (TPR)')
-            plt.legend(loc='lower right')
-            plt.show()
-            
-        except Exception as e:
-            print()
-            print(f"An error occurred during ROC curve plotting: {e}")
-            print("===========================================")
-            return pd.DataFrame()
-
-    def plot_ks_curve(self, y_test, y_prob):
-        """
-        Visualizes the KS test.
-
-        Args:
-            y_test (Series): True labels for the test set.
-            y_prob (array): Predicted probabilities for the test set.
-        """
-        try:
-            ks_statistic, ks_p_value = ks_2samp(y_prob[y_test == 0], y_prob[y_test == 1])
-
-            plt.figure(figsize=(10, 6))
-
-            sns.histplot(y_prob[y_test == 0], bins=50, label='~ Churn', kde=True, color='skyblue', alpha=0.7)
-            sns.histplot(y_prob[y_test == 1], bins=50, label='Churn', kde=True, color='salmon', alpha=0.7)
-
-            plt.title('Probability Distributions for Churn and Non-Churn')
-            plt.xlabel('Predicted Churn Probability')
-            plt.ylabel('Frequency')
-            plt.legend()
-            plt.show()
-
-            # CDF Plot
-            plt.figure(figsize=(10, 6))
-
-            # Compute and plot ECDF for Non-Churn
-            x_no_churn = np.sort(y_prob[y_test == 0])
-            y_no_churn = np.arange(1, len(x_no_churn) + 1) / len(x_no_churn)
-            plt.plot(x_no_churn, y_no_churn, label='Non-Churn', color='blue')
-
-            # Compute and plot ECDF for Churn
-            x_churn = np.sort(y_prob[y_test == 1])
-            y_churn = np.arange(1, len(x_churn) + 1) / len(x_churn)
-            plt.plot(x_churn, y_churn, label='Churn', color='red')
-
-            plt.title('Empirical Cumulative Distribution Function (ECDF)')
-            plt.xlabel('Predicted Churn Probability')
-            plt.ylabel('ECDF')
-            plt.legend()
-
-            plt.show()
-
-            print(f'KS Statistic: {ks_statistic:.4f}')
-            print(f'KS p-value: {ks_p_value:.4f}')
-            print()
-            
-        except Exception as e:
-            print()
-            print(f"An error occurred during KS test: {e}")
-            print("=========================================")
-            return pd.DataFrame()
-    
-    # ********************************************************************
-    
-    def predict(self, performance_data, churn_threshold=0.5):
-        """
-        Predicts churn probabilities and labels for the input data.
-
-        Args:
-            performance_data (DataFrame): Input data for prediction.
-            churn_threshold (float): Threshold for classifying churn.
-
-        Returns:
-            DataFrame: Input data with added probability and prediction columns.
-        """
-        try:
-            self.set_seed(self.random_state)
-
-            # Calculate churn probabilities
-            probabilities = self.model.predict_proba(performance_data[['recency', 'delta_compra', 
-                                                                       'frequency', 'amount', 's_rfm']])[:, 1]
-            # Classify as churn or non-churn based on the threshold
-            predictions = (probabilities >= churn_threshold).astype(int)
-
-            # Add probability and prediction columns to the dataframe
-            performance_data['churn_probability'] = probabilities.round(5)
-            performance_data['churn_prediction'] = predictions
-
-            # Remove the 'churn' column
-            performance_data = performance_data.drop(columns=['churn', 'delta_compra'])
-
-            return performance_data
-        
-        except Exception as e:
-            print()
-            print(f"An error occurred during prediction: {e}")
-            print("===========================================")
-            return pd.DataFrame()
 
 # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
