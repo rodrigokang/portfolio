@@ -33,7 +33,7 @@ A machine learning project focusing on the recognition of handwritten digits usi
 ### [Housing Price](./housing_price)
 A project to predict housing prices based on various features using linear regression and other predictive modeling techniques.
 
-### [Retail Customer Segmentation](./retail)
+### [Retail Customer Segmentation](./retail_dashboard)
 A comprehensive project focused on customer segmentation for a retail dataset using the Northwind database. By leveraging RFM (Recency-Frequency-Monetary) variables and scores, this project implements K-Means clustering to segment customers into different clusters. The segmented data is used to gain insights into customer behavior and preferences. SQL queries are used to extract and preprocess the data from the database.
 
 ### [Path Integral](./path_integral)
