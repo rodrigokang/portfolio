@@ -33,7 +33,7 @@ To run the project locally, follow these steps:
    cd repository
 3. Install the required packages:
    ```bash
-   pip install -r requirements.txt
+   conda env create -f environment.yml
 4. Run the Flask backend:
    ```bash
    python app.py

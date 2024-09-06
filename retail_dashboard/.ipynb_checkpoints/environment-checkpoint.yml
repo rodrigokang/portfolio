@@ -1,0 +1,12 @@
+name: retail_dashboard_env
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - flask
+  - streamlit
+  - sqlalchemy
+  - scikit-learn
+  - pandas
+  - pip:
+    - flask-migrate
