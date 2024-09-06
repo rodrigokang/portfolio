@@ -6,4 +6,4 @@ retail_dashboard/
 ├── migrations/             # Migration files
 ├── templates/              # HTML files (if using templates)
 ├── static/                 # CSS files and static resources
-├── requirements.txt        # Project dependencies
+├── environment.yml         # Project dependencies
