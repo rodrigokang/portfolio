@@ -31,12 +31,18 @@ To run the project locally, follow these steps:
 2. Navigate into the project directory:
    ```bash
    cd repository
-3. Install the required packages:
+3. Install the required packages and activate de environment:
    ```bash
    conda env create -f environment.yml
+   conda activate retail_dashboard_env
 4. Run the Flask backend:
    ```bash
    python app.py
 5. Run the Streamlit dashboard:
    ```bash
    streamlit run dashboard.py
+6. If you make any changes to the database models, you can handle migrations using the following commands:
+   ```bash
+   flask db init # Initialize migrations (only the first time)
+   flask db migrate -m "Migration Message" # Create a migration whenever the models are updated
+   flask db upgrade # Apply the migration to the database
