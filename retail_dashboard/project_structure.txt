@@ -7,3 +7,4 @@ retail_dashboard/
 ├── templates/              # HTML files (if using templates)
 ├── static/                 # CSS files and static resources
 ├── environment.yml         # Project dependencies
+├── northwind.db            # Northwind Database
