@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .indicator-container {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f0f0f0; /* Light background color */
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .indicator-card {
+            background-color: #e0f7fa; /* Light blue background */
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin-right: 10px;
+            text-align: center;
+        }
+        .indicator-card:last-child {
+            margin-right: 0;
+        }
+        .indicator-label {
+            color: #333; /* Dark text color */
+        }
+        .indicator-value {
+            color: #000; /* Black text color */
+            font-weight: bold; /* Bold numbers */
+            font-size: 24px; /* Larger font size */
+        }
+    </style>
+</head>
+<body>
+    <div class="indicator-container">
+        <div class="indicator-card">
+            <div class="indicator-label">Average Units:</div>
+            <div class="indicator-value">{{ avg_units }}</div>
+        </div>
+        <div class="indicator-card">
+            <div class="indicator-label">Average Price:</div>
+            <div class="indicator-value">{{ avg_price }}</div>
+        </div>
+    </div>
+</body>
+</html>

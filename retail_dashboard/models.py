@@ -1,3 +1,11 @@
+# <<<<<<<<<<<<<<<<<<<<<<<<<<< Description >>>>>>>>>>>>>>>>>>>>>>>>>>> #
+#
+# This module defines the SQLAlchemy ORM models for the Northwind 
+# database. It sets up the schema and relationships for the database 
+# tables used in the application.
+#
+# =================================================================== #
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
