@@ -10,6 +10,7 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     text-align: center;
+    background-color: lightblue; /* Adding light blue background */
 }
 
 .indicator h4 {

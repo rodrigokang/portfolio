@@ -35,10 +35,15 @@
     </style>
 </head>
 <body>
+    <!-- Container for Products page indicators -->
     <div class="indicator-container">
         <div class="indicator-card">
-            <div class="indicator-label">Average Units:</div>
-            <div class="indicator-value">{{ avg_units }}</div>
+            <div class="indicator-label">Number of Customers:</div>
+            <div class="indicator-value">{{ total_distinct_customers }}</div>
+        </div>
+        <div class="indicator-card">
+            <div class="indicator-label">Total Quantity:</div>
+            <div class="indicator-value">{{ total_quantity }}</div>
         </div>
         <div class="indicator-card">
             <div class="indicator-label">Average Price:</div>

@@ -16,47 +16,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/RJKANG/Desktop/portf
 db.init_app(app)
 
 # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
-# Customer
-# <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
-
-def serialize_customer(data):
-    """
-    Serializes a customer object into a dictionary format.
-
-    Args:
-        data (Customer): The customer object.
-
-    Returns:
-        dict: A dictionary representing the customer data.
-    """
-    return {
-        'CustomerID': data.CustomerID,
-        'CustomerName': data.CustomerName,
-        'ContactName': data.ContactName,
-        'Address': data.Address,
-        'City': data.City,
-        'PostalCode': data.PostalCode,
-        'Country': data.Country
-    }
-
-@app.route('/api/customers', methods=['GET'])
-def get_customers():
-    """
-    Fetches data from the Customers table.
-
-    Returns:
-        Response: A JSON response containing a list of serialized customer data.
-    """
-    try:
-        customers = Customer.query.all()
-        customers_list = [serialize_customer(c) for c in customers]
-        return jsonify(customers_list)
-    except Exception as e:
-        print(f"Error fetching customers: {e}")
-        return jsonify({'error': str(e)}), 500
-
-
-# <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
 # Products
 # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
 
