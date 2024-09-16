@@ -2,7 +2,8 @@
 #
 # This Flask application provides a RESTful API to interact with the 
 # Northwind database. It utilizes SQLAlchemy as the ORM to manage
-# database operations and performs customer segmentation based on country.
+# database operations and performs customer segmentation based on 
+# country.
 #
 # =================================================================== #
 

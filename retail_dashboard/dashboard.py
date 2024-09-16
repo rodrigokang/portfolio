@@ -1,3 +1,4 @@
+# Import libraries
 import streamlit as st
 import requests
 import pandas as pd
@@ -5,7 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-# Define the base URL of your Flask application
+# Define the base URL of Flask application
 base_url = 'http://127.0.0.1:5000'
 
 def authenticate_user(username, password):
@@ -195,7 +196,8 @@ def main():
                     indicator_html = indicator_html_path.read_text()
                     indicator_html = indicator_html.replace('{{ total_quantity }}', f'{total_quantity}')
                     indicator_html = indicator_html.replace('{{ avg_price }}', f'${avg_price:.2f}')
-                    indicator_html = indicator_html.replace('{{ total_distinct_customers }}', f'{total_distinct_customers}')  # Update distinct customers
+                    indicator_html = indicator_html.replace('{{ total_distinct_customers }}', 
+                                                            f'{total_distinct_customers}')  # Update distinct customers
                     st.markdown(indicator_html, unsafe_allow_html=True)
                 else:
                     st.error(f'HTML file not found at {indicator_html_path}')
