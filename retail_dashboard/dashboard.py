@@ -7,7 +7,7 @@ import seaborn as sns
 from pathlib import Path
 
 # Define the base URL of Flask application
-base_url = 'https://segmentation-model-dashboard.onrender.com'
+base_url = 'https://myapi-segmentation-model-dashboard.onrender.com'
 
 def authenticate_user(username, password):
     """
