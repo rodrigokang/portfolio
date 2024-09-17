@@ -8,6 +8,7 @@
 # =================================================================== #
 
 # Import Flask, SQLAlchemy, and additional libraries
+import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS  # Import CORS for cross-origin requests
@@ -17,9 +18,17 @@ from segmentation import RFM  # Import the RFM class from the segmentation scrip
 
 # Create the Flask app and configure the database
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/RJKANG/Desktop/portfolio/retail_dashboard/northwind.db'
+
+# Define the base directory for the database
+basedir = os.path.abspath(os.path.dirname(__file__))
+database_path = os.path.join(basedir, 'northwind.db')
+
+# Configure the SQLAlchemy database URI
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{database_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
+
+# Initialize SQLAlchemy with the Flask app
+db = SQLAlchemy(app)
 
 # Enable CORS for all domains
 CORS(app)
