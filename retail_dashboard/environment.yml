@@ -12,7 +12,6 @@ dependencies:
   - requests
   - scikit-learn
   - sqlalchemy
-  - flask
   - streamlit
   - pip:
     - flask-migrate
