@@ -31,6 +31,10 @@ def login_page():
     the user is authenticated and granted access to the application.
     """
     st.title("Login Page")
+
+    # Display a banner with login information
+    st.info("For testing purposes, use the following credentials: \n\n**Username**: admin\n**Password**: password")
+
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     if st.button("Login"):
