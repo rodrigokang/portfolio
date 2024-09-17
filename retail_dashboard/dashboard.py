@@ -3,6 +3,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from pathlib import Path
 
 # Define the base URL of Flask application
@@ -156,13 +157,13 @@ def create_barplot(df):
     df['OrderDate'] = pd.to_datetime(df['OrderDate'])  # Ensure 'OrderDate' is in datetime format
     products_by_date = df.groupby(df['OrderDate'].dt.date)['Quantity'].sum()  # Group by day
 
-    fig, ax = plt.subplots(figsize=(12, 6))  # Adjust figure size
-    ax.bar(products_by_date.index, products_by_date.values, color='skyblue')
+    plt.figure(figsize=(12, 3))  # Smaller figure size
+    sns.barplot(x=products_by_date.index, y=products_by_date.values)
     plt.title("Total Quantity of Products Over Time")
     plt.xlabel("Order Date")
     plt.ylabel("Total Quantity")
     plt.xticks(rotation=45)  # Rotate the x-axis labels
-    st.pyplot(fig)
+    st.pyplot(plt)
 
 def main():
     """

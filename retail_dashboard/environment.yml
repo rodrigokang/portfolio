@@ -8,6 +8,7 @@ dependencies:
   - flask-sqlalchemy
   - pandas
   - matplotlib
+  - seaborn
   - requests
   - scikit-learn
   - sqlalchemy
