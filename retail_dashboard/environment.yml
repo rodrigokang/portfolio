@@ -7,6 +7,7 @@ dependencies:
   - flask
   - flask-sqlalchemy
   - pandas
+  - seaborn=0.12.2
   - matplotlib
   - requests
   - scikit-learn
@@ -14,4 +15,3 @@ dependencies:
   - streamlit
   - pip:
     - flask-migrate
-    - seaborn
