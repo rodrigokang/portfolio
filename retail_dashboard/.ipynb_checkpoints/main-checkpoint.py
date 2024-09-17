@@ -10,6 +10,7 @@
 # Import Flask, SQLAlchemy, and additional libraries
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS  # Import CORS for cross-origin requests
 from models import db, Customer, Order, OrderDetail, Product, Category  # Import relevant ORM models
 import pandas as pd
 from segmentation import RFM  # Import the RFM class from the segmentation script
@@ -19,6 +20,9 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/RJKANG/Desktop/portfolio/retail_dashboard/northwind.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+
+# Enable CORS for all domains
+CORS(app)
 
 # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
 # Helper Functions
@@ -192,4 +196,4 @@ def segment_customers():
 
 # Main function to run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')  # Host set to '0.0.0.0' to be accessible from outside
