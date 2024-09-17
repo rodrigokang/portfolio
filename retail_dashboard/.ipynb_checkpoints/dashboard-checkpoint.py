@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Define the base URL of Flask application
-base_url = 'http://127.0.0.1:5000'
+base_url = 'https://rfmbasedcustomersegmentationmodel.streamlit.app/'
 
 def authenticate_user(username, password):
     """
