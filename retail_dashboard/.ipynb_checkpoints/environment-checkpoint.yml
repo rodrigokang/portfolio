@@ -8,10 +8,10 @@ dependencies:
   - flask-sqlalchemy
   - pandas
   - matplotlib
-  - seaborn
   - requests
   - scikit-learn
   - sqlalchemy
   - streamlit
   - pip:
     - flask-migrate
+    - seaborn

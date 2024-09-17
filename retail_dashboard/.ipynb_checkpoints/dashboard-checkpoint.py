@@ -43,6 +43,7 @@ def login_page():
         else:
             st.error("Invalid username or password")
 
+
 def fetch_products():
     """
     Fetch product data from the Flask API.
