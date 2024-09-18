@@ -175,9 +175,11 @@ def segment_customers():
         # Get the DataFrame directly from the request JSON
         df = pd.DataFrame(data.get('data', []))
 
-        # Check if 'OrderDate' exists in the DataFrame
+        # Check if required columns are present
         if 'OrderDate' not in df.columns:
             raise ValueError("'OrderDate' column is missing from the data.")
+        if 'CustomerID' not in df.columns:
+            raise ValueError("'CustomerID' column is missing from the data.")
 
         # Apply country filter if specified
         if country_filter and country_filter != "All countries":
@@ -185,6 +187,9 @@ def segment_customers():
 
         # Preprocess data to calculate recency, frequency, and monetary_value
         preprocessed_data = preprocess_data(df)
+
+        # Ensure CustomerID is included in the preprocessed data
+        preprocessed_data['CustomerID'] = df['CustomerID'].values
 
         # Convert datetime columns to string (optional step, depending on your downstream processing)
         for col in preprocessed_data.select_dtypes(include=[pd.Timestamp]).columns:
@@ -197,6 +202,9 @@ def segment_customers():
 
         # Get the segmented data
         segments = rfm.get_segments()
+
+        # Add CustomerID to the resulting segments (if it's not already included)
+        segments['CustomerID'] = preprocessed_data['CustomerID']
 
         # Return the segmented data as JSON
         return jsonify(segments.to_dict(orient='records'))  # Convert DataFrame to JSON
