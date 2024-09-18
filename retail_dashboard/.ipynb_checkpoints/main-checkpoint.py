@@ -203,9 +203,6 @@ def segment_customers():
         # Get the segmented data
         segments = rfm.get_segments()
 
-        # Add CustomerID to the resulting segments (if it's not already included)
-        segments['CustomerID'] = preprocessed_data['CustomerID']
-
         # Return the segmented data as JSON
         return jsonify(segments.to_dict(orient='records'))  # Convert DataFrame to JSON
     except Exception as e:
