@@ -1,7 +1,7 @@
 # Portfolio Description
 
 ## Fields of Expertise
-Machine Learning - Quantitative Finance (Quant) - Quantum Information Science - Computational Physics
+Machine Learning - Quantitative Finance (Quant) - Quantum Information Science
 
 ## Overview
 
@@ -15,9 +15,6 @@ Work in this area involves financial modeling, asset allocation, risk management
 
 ### Quantum Information Science
 Explorations into the realm of quantum computing, quantum information theory and quantum control theory. This includes simulations of quantum algorithms, quantum cryptography, and studies on quantum entanglement and coherence.
-
-### Computational Physics
-Projects that apply computational methods to solve complex physical problems. This includes simulations, numerical methods, and data analysis in fields such as statistical mechanics, fluid dynamics, and condensed matter physics, among others.
 
 ## Projects
 
@@ -36,23 +33,15 @@ A project to predict housing prices based on various features using linear regre
 ### [Retail Customer Segmentation](./retail_dashboard)
 A comprehensive project focused on customer segmentation for a retail dataset using the Northwind database. By leveraging RFM (Recency-Frequency-Monetary) variables and scores, this project implements K-Means clustering to segment customers into different clusters. The segmented data is used to gain insights into customer behavior and preferences. SQL queries are used to extract and preprocess the data from the database.
 
-### [Path Integral](./path_integral)
-Exploring the path integral formulation in quantum mechanics, including numerical simulations and theoretical analysis.
-
 ### [Blockchain](./blockchain)
 Investigating blockchain technology and its applications, including smart contracts, cryptographic security, and decentralized applications.
 
 ### [Fraud Detection](./fraud_detection)
 Developing machine learning models to detect fraudulent transactions, enhancing security and reducing financial losses.
 
-### [High Energy Physics Processes](./high_energy_physics_processes)
-Simulations and analysis of high energy physics processes, exploring particle interactions and fundamental forces.
-
-### [Ising Model](./ising_model)
-A computational study of the Ising model in statistical mechanics, including simulations of phase transitions and critical phenomena.
-
 ### [Quantum Control Theory](./quantum_control_theory)
 Projects on the control of quantum systems, focusing on the application of control theory to quantum computing and quantum information processing.
 
 ## Contact
-Feel free to explore the projects and delve into the code and documentation. For any inquiries, please reach out to me via [rodrigokang88@gmail.com](mailto:rodrigokang88@gmail.com).
+Feel free to explore the projects and delve into the code and documentation. For any inquiries, please reach out to me via [rodrigokang88@gmail.com](mailto:rodrigokang88@gmail.com) or connect with me on [LinkedIn](http://www.linkedin.com/in/rodrigojuankang).
+
