@@ -236,7 +236,7 @@ class RFM:
         """
         try:
             # Filter out necessary columns
-            segments_df = self.data[['Recency', 'Frequency', 'MonetaryValue', 
+            segments_df = self.data[['ClusterID', 'Recency', 'Frequency', 'MonetaryValue', 
                                      'cluster', 'category', 'description', 's_rfm']]
             
             # Rename columns
