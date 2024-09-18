@@ -241,7 +241,7 @@ class RFM:
             
             # Rename columns
             segments_df = segments_df.rename(columns={
-                'CustomerID': 'ID',
+                'CustomerID': 'CustomerID',
                 'cluster': 'Cluster',
                 'category': 'Category',
                 'description': 'Description',
