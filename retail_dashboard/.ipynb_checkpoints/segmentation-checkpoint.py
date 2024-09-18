@@ -235,12 +235,13 @@ class RFM:
             DataFrame: DataFrame with customer segments and their descriptions.
         """
         try:
-            # Filter out necessary columns
-            segments_df = self.data[['Recency', 'Frequency', 'MonetaryValue', 
+            # Ensure CustomerID is included in the returned DataFrame
+            segments_df = self.data[['CustomerID', 'Recency', 'Frequency', 'MonetaryValue', 
                                      'cluster', 'category', 'description', 's_rfm']]
             
             # Rename columns
             segments_df = segments_df.rename(columns={
+                'CustomerID': 'CustomerID',
                 'cluster': 'Cluster',
                 'category': 'Category',
                 'description': 'Description',
@@ -251,5 +252,6 @@ class RFM:
         except Exception as e:
             print(f"An error occurred while retrieving segments: {e}")
             return pd.DataFrame()
+
 
 # <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> #
