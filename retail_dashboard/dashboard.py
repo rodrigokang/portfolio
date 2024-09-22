@@ -222,8 +222,8 @@ def main():
                 st.dataframe(filtered_products_df, use_container_width=True)
                 st.markdown('</div>', unsafe_allow_html=True)
 
-                csv = convert_df_to_csv(filtered_products_df)
-                st.download_button(
+                csv = cont_df_to_csv(filtered_products_df)
+                st.download_buvertton(
                     label="Download Product Data as CSV",
                     data=csv,
                     file_name='products_data.csv',
