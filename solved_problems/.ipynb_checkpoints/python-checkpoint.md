@@ -8,13 +8,13 @@
 4. Use the `dir()` function to list all the functions and constants available in the `math` and `cmath` libraries.
 5. Select the function `sqrt` from both libraries (`math.sqrt` and `cmath.sqrt`) and use the `help()` function to display the documentation for each. Compare how the `sqrt` function differs between the two libraries.
 6. Assign the values `7` and `3` to the variables `x` and `y`, respectively. Perform the following operations on `x` and `y`: 
-  - Addition
-  - Subtraction
-  - Multiplication
-  - Division
-  - Integer division (`//`)
-  - Modulus (remainder of the division)
-  - Exponentiation (`x ** y`)
+    - Addition
+    - Subtraction
+    - Multiplication
+    - Division
+    - Integer division (`//`)
+    - Modulus (remainder of the division)
+    - Exponentiation (`x ** y`)
 
     For each operation, print the result and specify the data type of the output.
 
