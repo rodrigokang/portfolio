@@ -19,7 +19,7 @@
 For each operation, print the result and specify the data type of the output.
 
 7. **Part (a):**
-   - Given the complex number \( z = 4 + 3j \), assign it to the variable `z`.
+   - Given the complex number $z = 4 + 3j$, assign it to the variable `z`.
    - Verify that `z` is a complex number.
    - Obtain and print the real and imaginary parts of `z`.
 
@@ -27,12 +27,12 @@ For each operation, print the result and specify the data type of the output.
    - Evaluate the sum, subtraction, multiplication, and division of the complex numbers \( z_1 = -1 - 1j \) and \( z_2 = 1 - 1j \).
 
 3. **Part (c):**
-   - For the complex number \( z_3 = -2 + 1j \), calculate and print its:
+   - For the complex number $z_3 = -2 + 1j$, calculate and print its:
      - Conjugate
      - Modulus (magnitude)
      - Phase (angle in radians)
 
 4. **Part (d):**
-   - Given the complex number \( z_4 = 1 + 1j \), convert it to polar form.
+   - Given the complex number $z_4 = 1 + 1j$, convert it to polar form.
    - Then, convert it back to its binomial form from the polar form.
 
