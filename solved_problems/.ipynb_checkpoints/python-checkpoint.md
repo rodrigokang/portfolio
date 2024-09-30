@@ -16,7 +16,7 @@
   - Modulus (remainder of the division)
   - Exponentiation (`x ** y`)
 
-For each operation, print the result and specify the data type of the output.
+  For each operation, print the result and specify the data type of the output.
 
 7. **Part (a):**
    - Given the complex number $z = 4 + 3j$, assign it to the variable `z`.
