@@ -1,0 +1,75 @@
+CustomerID,R,F,M,category,score,description
+2,147.0,2,111.0,low activity customers,0.07211261055189322,r ↑ f ↓ m ↓
+3,77.0,1,504.0,low activity customers,0.22626864372141986,r ↑ f ↓ m ↓
+4,58.0,5,1723.75,general maintenance customers,0.39458433544703053,r ↑ f ↑ m ↓
+5,58.0,9,5406.9,important customers to remember,0.5166211830897858,r ↑ f ↑ m ↑
+7,7.0,13,15253.75,high contribution customers,0.7876194872532605,r ↓ f ↑ m ↑
+8,125.0,3,1227.5,low activity customers,0.2542199617760279,r ↑ f ↓ m ↓
+9,79.0,7,5256.35,important customers to remember,0.4483548812850233,r ↑ f ↑ m ↑
+10,13.0,12,7963.75,high contribution customers,0.7073885287394186,r ↓ f ↑ m ↑
+11,170.0,2,599.25,low activity customers,0.12957739844625876,r ↑ f ↓ m ↓
+13,209.0,2,126.0,low activity customers,0.0,r ↑ f ↓ m ↓
+14,71.0,6,2249.0,general maintenance customers,0.40501482732605343,r ↑ f ↑ m ↓
+15,169.0,4,2713.8500000000004,general maintenance customers,0.2824177103228719,r ↑ f ↑ m ↓
+16,8.0,3,790.0,recent customers,0.5487780722381679,r ↓ f ↓ m ↓
+17,51.0,4,667.0,recent customers,0.3755258527650272,r ↓ f ↓ m ↓
+18,145.0,2,336.0,low activity customers,0.12018961404478568,r ↑ f ↓ m ↓
+19,42.0,5,5017.09,important customers to remember,0.4885089993297428,r ↑ f ↑ m ↑
+20,1.0,35,35631.21,high contribution customers,1.0,r ↓ f ↑ m ↑
+21,29.0,8,1658.2,important customers to remember,0.5321682130194079,r ↑ f ↑ m ↑
+23,35.0,3,2030.2,recent customers,0.43627107263659415,r ↓ f ↓ m ↓
+24,9.0,9,4313.9,high contribution customers,0.6314435515886325,r ↓ f ↑ m ↑
+25,47.0,15,13384.32,high contribution customers,0.7246279272347366,r ↓ f ↑ m ↑
+27,21.0,1,62.46,low activity customers,0.3206669456867829,r ↑ f ↓ m ↓
+28,92.0,5,1656.0,general maintenance customers,0.33887760002378053,r ↑ f ↑ m ↓
+29,16.0,4,593.0,recent customers,0.5066829116501351,r ↓ f ↓ m ↓
+30,154.0,3,1555.0,low activity customers,0.25495224657327886,r ↑ f ↓ m ↓
+31,20.0,2,1275.0,recent customers,0.4497786017290183,r ↓ f ↓ m ↓
+33,197.0,2,1377.1000000000001,low activity customers,0.18996064228527915,r ↑ f ↓ m ↓
+34,217.0,6,4073.25,general maintenance customers,0.3025084312178974,r ↑ f ↑ m ↓
+35,48.0,6,4320.5,important customers to remember,0.4865255339708614,r ↑ f ↑ m ↑
+36,28.0,6,1104.25,recent customers,0.5038893545002782,r ↓ f ↓ m ↓
+37,14.0,21,15391.02,high contribution customers,0.787973331156164,r ↓ f ↑ m ↑
+38,132.0,5,1127.0,general maintenance customers,0.26213900982420885,r ↑ f ↑ m ↓
+39,126.0,8,2078.75,general maintenance customers,0.3455285046056512,r ↑ f ↑ m ↓
+41,19.0,11,4826.75,high contribution customers,0.6452299488907907,r ↓ f ↑ m ↑
+44,104.0,8,4384.45,important customers to remember,0.4154743278885158,r ↑ f ↑ m ↑
+46,62.0,13,7358.68,important customers to remember,0.5598349837690575,r ↑ f ↑ m ↑
+47,37.0,1,500.0,low activity customers,0.33623826906401894,r ↑ f ↓ m ↓
+48,135.0,3,890.5,low activity customers,0.21627707998025436,r ↑ f ↓ m ↓
+49,40.0,7,3240.9,important customers to remember,0.5116585441075978,r ↑ f ↑ m ↑
+51,5.0,14,23362.6,high contribution customers,0.8307473179679492,r ↓ f ↑ m ↑
+52,187.0,2,1503.6,low activity customers,0.20440064399413413,r ↑ f ↓ m ↓
+54,34.0,2,399.0,low activity customers,0.36735973402478267,r ↑ f ↓ m ↓
+55,2.0,10,10744.5,high contribution customers,0.8078624236979961,r ↓ f ↑ m ↑
+56,36.0,3,1492.5,recent customers,0.42244507385654095,r ↓ f ↓ m ↓
+58,90.0,3,851.1600000000001,low activity customers,0.2515686622983896,r ↑ f ↓ m ↓
+59,16.0,4,16040.75,high contribution customers,0.5774790027358908,r ↓ f ↑ m ↑
+60,9.0,4,2514.0,recent customers,0.6034217436276025,r ↓ f ↓ m ↓
+61,22.0,12,4049.1,high contribution customers,0.6407463454658823,r ↓ f ↑ m ↑
+62,36.0,9,17880.6,high contribution customers,0.6812366865930999,r ↓ f ↑ m ↑
+63,26.0,20,18178.8,high contribution customers,0.7323131074869385,r ↓ f ↑ m ↑
+65,42.0,22,18421.42,high contribution customers,0.6897180693767939,r ↓ f ↑ m ↑
+66,0.0,5,1025.2,recent customers,0.7342841104658311,r ↓ f ↓ m ↓
+67,159.0,5,1596.0,general maintenance customers,0.26283370460874644,r ↑ f ↑ m ↓
+68,23.0,6,5875.75,high contribution customers,0.5557923862587736,r ↓ f ↑ m ↑
+69,149.0,8,926.6899999999999,general maintenance customers,0.2593944015091337,r ↑ f ↑ m ↓
+70,56.0,4,1323.6,general maintenance customers,0.3637453188223536,r ↑ f ↑ m ↓
+71,2.0,16,22500.06,high contribution customers,0.8847864883379094,r ↓ f ↑ m ↑
+72,55.0,8,7438.7,important customers to remember,0.5245877830706751,r ↑ f ↑ m ↑
+73,27.0,6,14619.0,high contribution customers,0.6148356093439982,r ↓ f ↑ m ↑
+75,12.0,13,11114.02,high contribution customers,0.7386742842560026,r ↓ f ↑ m ↑
+76,155.0,6,8051.3,general maintenance customers,0.41193083474653835,r ↑ f ↑ m ↓
+77,145.0,2,421.0,low activity customers,0.12983568780618648,r ↑ f ↓ m ↓
+79,6.0,3,710.5,recent customers,0.5654546098113994,r ↓ f ↓ m ↓
+80,133.0,12,4269.4,important customers to remember,0.4185408224423279,r ↑ f ↑ m ↑
+81,168.0,3,3949.25,low activity customers,0.3378392830823329,r ↑ f ↓ m ↓
+83,43.0,8,3251.85,important customers to remember,0.5179959799681128,r ↑ f ↑ m ↑
+84,114.0,5,1020.5,general maintenance customers,0.27421435195229854,r ↑ f ↑ m ↓
+85,163.0,3,825.5999999999999,low activity customers,0.18914587402381072,r ↑ f ↓ m ↓
+86,86.0,11,4841.9,important customers to remember,0.4807483227673488,r ↑ f ↑ m ↑
+87,7.0,12,5872.5,high contribution customers,0.7043933980915092,r ↓ f ↑ m ↑
+88,22.0,6,3020.0,important customers to remember,0.5518793874211776,r ↑ f ↑ m ↑
+89,103.0,4,4416.0,general maintenance customers,0.39066373806346777,r ↑ f ↑ m ↓
+90,223.0,3,566.0,low activity customers,0.11853844472467145,r ↑ f ↓ m ↓
+91,69.0,2,573.75,low activity customers,0.27992393378348146,r ↑ f ↓ m ↓

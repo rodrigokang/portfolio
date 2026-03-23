@@ -1,0 +1,15 @@
+# About {.unnumbered}
+
+I am a physicist and data scientist with a background in applied mathematics, machine learning, and computational modeling. My work focuses on applying quantitative methods to real-world problems, combining mathematical reasoning with practical implementation.
+
+My academic training in physics has strongly shaped the way I approach data science and machine learning. My research included work on **quantum optimal control theory**, with particular emphasis on algorithmic design based on *shortcuts to adiabaticity* and the study of computational complexity in physical systems. This background continues to influence my modeling philosophy: clear problem formulation, explicit assumptions, and careful evaluation of model behavior.
+
+Professionally, I have applied machine learning, advanced analytics, and optimization techniques in data-intensive industries. Much of my work has been developed within the **energy sector**, where I have contributed to quantitative modeling, decision-support systems, and optimization frameworks for gas trading and operational planning.
+
+In the retail sector, I have worked on projects involving customer segmentation, churn prediction, and recommendation systems, balancing theoretical rigor with practical constraints such as data quality, interpretability, and deployment considerations.
+
+More recently, within Oil & Gas research and development environments, my work has focused on integrating physical modeling, statistical inference, and machine learning to address complex industrial problems. These projects include predictive modeling for pipeline corrosion, machine learning approaches to production optimization, and simulation-based frameworks for decision-making under uncertainty.
+
+Across both academic and industrial settings, my perspective remains consistent: machine learning methods such as Deep Learning and Reinforcement Learning are powerful computational tools, but their effectiveness ultimately depends on disciplined modeling, transparent assumptions, and careful validation.
+
+Outside my professional work, I enjoy playing the bass guitar and maintain a longstanding interest in theology.

@@ -1,0 +1,11 @@
+flask
+flask-sqlalchemy
+pandas
+matplotlib
+requests
+seaborn
+scikit-learn
+sqlalchemy
+streamlit
+flask-migrate
+flask-cors
