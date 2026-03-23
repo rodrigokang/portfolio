@@ -1,8 +1,10 @@
 # Data Science Across Domains  
 ### From Methods and Models to Business Applications
 
-Read the portfolio online:  
-https://rodrigokang.github.io/data-science-across-domains/
+**Read the portfolio online:**  
+[Data Science Across Domains – Portfolio Website](https://rodrigokang.github.io/data-science-across-domains/)
+
+---
 
 This repository contains the materials for **Data Science Across Domains**, a portfolio of applied data science projects presented in book form. The goal of the project is to document how quantitative methods, machine learning models, and structured experimentation can be applied to real-world problems across different domains.
 
@@ -16,7 +18,7 @@ The repository is organized into two main components: the written portfolio and 
 
 ### Book
 
-[projects](./projects)
+[Projects](./projects)
 
 The written portfolio is developed using **Quarto** and structured as a technical book. It presents a collection of applied projects in data science and machine learning, each organized as a standalone case study.
 
@@ -36,7 +38,7 @@ The book can be read sequentially or explored project by project, depending on t
 
 ### Code
 
-[notebooks-and-scripts](./notebooks-and-scripts)
+[Notebooks and Scripts](./notebooks-and-scripts)
 
 This directory contains all computational artifacts referenced throughout the portfolio.
 
