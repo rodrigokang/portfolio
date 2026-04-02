@@ -20,7 +20,7 @@ book:
         href: "mailto:rodrigokang88@gmail.com"
       - icon: file-pdf
         text: PDF
-        href: https://raw.githubusercontent.com/rodrigokang/posts/main/data-science-across-domains.pdf
+        href: https://raw.githubusercontent.com/rodrigokang/portfolio/main/data-science-across-domains.pdf
 
   chapters:
     - index.qmd
