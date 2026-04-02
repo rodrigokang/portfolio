@@ -1,0 +1,3 @@
+# Microbial Population Dynamics (Lotka–Volterra Model)
+
+## Introduction

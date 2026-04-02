@@ -1,0 +1,67 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Data Science Across Domains"
+  subtitle: "From Methods and Models to Business Applications"
+  author: "Rodrigo Kang"
+  language: en
+  cover-image: cover.png
+
+  sidebar:
+    collapse-level: 1
+    tools:
+      - icon: github
+        href: https://github.com/rodrigokang/portfolio
+      - icon: linkedin
+        href: https://www.linkedin.com/in/rodrigojuankang/
+      - icon: envelope
+        href: "mailto:rodrigokang88@gmail.com"
+      - icon: file-pdf
+        text: PDF
+        href: https://raw.githubusercontent.com/rodrigokang/posts/main/data-science-across-domains.pdf
+
+  chapters:
+    - index.qmd
+    - preface.qmd
+    - about.qmd
+    - reading-guide.qmd
+    - 1-capm-and-fama-french-factor-model.qmd
+    - 2-asset-allocation-unsupervised-learning.qmd
+    - 3-credit-card-fraud-detection-ml-benchmark.qmd
+    - 4-customer-lifetime-value-prediction-retail.qmd
+    - 5-marketing-campaign-optimization.qmd
+    - 6-rfm-kmeans-customer-segmentation.qmd
+    - 7-geochemical-fingerprint-deconvolution.qmd
+    - 8-porous-media-pore-throat-detection-cv.qmd
+    - 9-climate-forecasting-time-series.qmd
+    - 10-microbial-population-dynamics-lotka-volterra.qmd
+    - 11-optimal-hedging-industrial-gas-demand.qmd
+    - 12-knowledge-extraction-technical-documents-llm.qmd
+    - 13-customer-sentiment-topic-analysis-nlp.qmd
+    - 14-scientific-literature-mining-nlp-llm.qmd
+    - references.qmd
+
+bibliography: references.bib
+csl: ieee.csl
+
+format:
+  html:
+    theme: cosmo
+    code-copy: true
+    code-line-numbers: true
+    mermaid:
+      theme: default
+  pdf:
+    include-in-header: header.tex
+    latex-engine: xelatex
+    documentclass: book
+    fontsize: 12pt
+    toc: true
+    toc-depth: 4
+    number-sections: true
+    mainfont: "Linux Libertine O"
+    link-citations: true
+    mermaid:
+      theme: default
