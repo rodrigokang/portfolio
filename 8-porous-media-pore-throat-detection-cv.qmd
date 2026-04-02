@@ -1,3 +1,5 @@
 # Pore–Throat Detection in Porous Media
 
+_Work in progress._
+
 ## Introduction

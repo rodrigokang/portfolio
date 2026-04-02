@@ -1,3 +1,5 @@
 # Knowledge Extraction from Technical Documents with LLMs
 
+_Work in progress._
+
 ## Introduction

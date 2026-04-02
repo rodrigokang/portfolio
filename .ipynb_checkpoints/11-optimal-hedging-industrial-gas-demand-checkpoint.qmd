@@ -1,3 +1,5 @@
 # Optimal Hedging of Industrial Gas Demand
 
+_Work in progress._
+
 ## Introduction

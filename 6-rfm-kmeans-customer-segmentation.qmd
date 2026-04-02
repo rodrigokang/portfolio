@@ -1,3 +1,5 @@
 # RFM Segmentation with K-Means
 
+_Work in progress._
+
 ## Introduction
