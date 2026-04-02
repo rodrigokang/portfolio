@@ -2,7 +2,7 @@
 ### From Methods and Models to Business Applications
 
 **Read the portfolio online:**  
-[Data Science Across Domains – Portfolio Website](https://rodrigokang.github.io/data-science-across-domains/)
+[Data Science Across Domains – Portfolio Website](https://rodrigokang.github.io/portfolio)
 
 ---
 
@@ -17,8 +17,6 @@ The repository is organized into two main components: the written portfolio and 
 ## Repository Structure
 
 ### Book
-
-[Projects](./projects)
 
 The written portfolio is developed using **Quarto** and structured as a technical book. It presents a collection of applied projects in data science and machine learning, each organized as a standalone case study.
 
