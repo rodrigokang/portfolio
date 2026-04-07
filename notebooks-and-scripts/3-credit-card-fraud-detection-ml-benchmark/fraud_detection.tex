@@ -1,0 +1,231 @@
+%=====================
+% Paquetes utilizados
+%=====================
+
+%===============================================================================================
+% Clases de documentos: article, report or book.
+% Tamaño de fuente: 10pt (default), 11pt o 12pt.
+% Tamaño de papel: a4 paper(default), letterpaper, a5paper, b5paper, executivepaper, legalpaper.
+% Número de columnas: una columna (predeterminado) o dos columnas.
+%===============================================================================================
+
+\documentclass[11pt,a4paper]{article}
+%\usepackage{multicol}
+
+%======================================================================================================================================================
+% "inputenc" es un paquete para traducir varios estándares y otras codificaciones de entrada a un 'lenguaje interno de LaTeX'. 
+% El lenguaje interno se expresa completamente en la codificación base de TeX
+% (caracteres imprimibles ASCII estándar, tokens de control de carro y secuencias de control de TeX, estas últimas definidas principalmente por LaTeX).
+%======================================================================================================================================================
+
+\usepackage[utf8]{inputenc}
+
+%========================================================
+% Para cambiar la fuente. 
+% Para el caso estándar, elimine las dos últimas líneas.
+%========================================================
+
+\usepackage[T1]{fontenc}
+\usepackage{libertine}
+\usepackage{libertinust1math}
+
+%==================================================================================================================================================
+% Paquete para redefinir el comando \author para que funcione normalmente o para permitir un estilo de nota al pie de entrada de autor/afiliación.
+%==================================================================================================================================================
+
+\usepackage{authblk}
+
+%===============================================================================================================================
+% Este paquete busca pdfTeX en modo pdf e implementa y configura el modificador \ifpdf. 
+% La detección se basa en el valor de \pdfoutput (que el paquete no cambiará). El paquete funciona con formatos planos o LaTeX. 
+% Para usarlo con LaTeX simplemente \usepackage{ifpdf}. Luego use \ifpdf ... \else ... \fi.
+%===============================================================================================================================
+
+\usepackage{ifpdf}
+\newif\ifpdf\ifx\pdfoutput\undefined\pdffalse\else\pdfoutput=1\pdftrue\fi
+
+%================================================================
+% Para que alternativamente se puedan usar figuras en pdf o jpg.
+%================================================================
+
+\newcommand{\pdfgraphics}{\ifpdf\DeclareGraphicsExtensions{.pdf,.jpg}\fi}
+
+%==============================================================================================================================
+% Para proporcionar los medios para componer texto en español, con el soporte provisto por el paquete estándar de LaTeX babel.
+%==============================================================================================================================
+
+\usepackage[spanish,es-tabla]{babel}
+
+%===============================================================================================================================
+% "hyperref" se usa para manejar comandos de referencias cruzadas en LaTeX para producir enlaces de hipertexto en el documento.
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, filecolor=black, urlcolor=blue, citecolor=blue}
+%===============================================================================================================================
+
+%==================================================================
+% Funciones matematicas.
+% Notación de bra-ket de Dirac.
+% Notación tensorial (índices).
+% Diagramas de Feynman.
+% Para escribir algoritmos en pseudocódigo.
+% Para escribir algoritmos en distintos lenguajes de programacion.
+%==================================================================
+
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{slashed}
+\usepackage{tensor}
+\usepackage{tikz-feynman}
+\usepackage[spanish,onelanguage,ruled,vlined,boxed]{algorithm2e}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+%===================================
+% Fuentes para usar en matemáticas.
+%===================================
+
+\usepackage{amsfonts}
+
+%===============================================
+% Para insertar imágenes.
+% Posicionamiento flotante de figuras y tablas.
+% Para comentar (captions) las figuras.
+%===============================================
+
+\usepackage{graphicx}
+\usepackage{afterpage}
+\usepackage{float}
+\usepackage{subcaption}
+
+%==================================================
+% Bibliografía con bibtex.
+% Encabezados y pies de página.
+% Para dar formato a los títulos de los apéndices.
+%==================================================
+
+\bibliographystyle{unsrt}
+\usepackage{fancyhdr}
+\usepackage[hang,flushmargin]{footmisc} % Para configurar notas al pie de página
+\usepackage{appendix}
+
+%==============================
+% Configuración de longitudes.
+%==============================
+
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{0in}
+\setlength{\voffset}{-0.5in}
+\setlength{\hoffset}{0.5in}
+\setlength{\textheight}{9in}
+\setlength{\textwidth}{6in}
+\setlength{\topskip}{0in}
+\setlength{\parskip}{2ex}
+
+\renewcommand{\arraystretch}{1.0}
+\renewcommand{\baselinestretch}{1.0}
+
+%==========================================================
+% Para definir un nuevo encabezado para todas las páginas.
+%==========================================================
+
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}}
+
+%======================
+% Titulo del documento
+%======================
+
+\title{\textbf{``Benchmark de modelos de ML para la detecci\'on de fraude con tarjetas de cr\'edito''} \\ \Large \textit{Aprendizaje Estad\'istico}}
+
+%=============================
+% Autor - Institución - Fecha
+%=============================
+
+\author[1]{Rodrigo J. Kang}
+\affil[1]{\normalsize \textit{Facultad de Ciencias Exactas Universidad Nacional de La Plata, C.C 67, 1900 La Plata, Argentina.}}
+\date{}
+
+%========================
+% Comienzo del documento
+%========================
+
+\begin{document}
+
+%==================================================
+% Exteriorizar Titulo - Autor - Institución - Date
+%==================================================
+
+\maketitle
+
+\begin{abstract}
+En este trabajo estudiamos el problema de transacciones fraudulentas con tarjetas de cr\'edito y llevamos a cabo un an\'alisis formal y una evaluaci\'on del desempe\~no de un abanico de t\'ecnicas de aprendizaje autom\'atico supervisado y no supervisado ampliamente utilizados para la detecci\'on de dicha clase de fraudes. Para ello, en primera instancia realizamos el preprocesamiento de un conjunto de datos abiertos disponibles en la comunidad en l\'inea \href{https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud?select=creditcard.csv}{Kaggle} con el fin de obtener informaci\'on relevante de los mismos y analizamos los problemas asociados intr\'insecamente al dataset que afectan la detecci\'on de fraude \cite{carta2019fraud, japkowicz2000learning, dal2015calibrating} (escasez de datos, heterogeneidad de datos, estacionariedad, arranque en fr\'io y desequilibrio de datos) y por otra parte, usamos dicho dataset para realizar el entrenamiento de los algoritmos de aprendizaje supervisado. A continuaci\'on, generamos una secuencia de n\'umeros pseudoaleatorios con una semilla determinada utilizando las librer\'ias disponibles en Python con el objetivo de reproducir los experimentos y poder generar de esa forma un criterio de comparaci\'on del rendimiento de los distintos algoritmos de aprendizaje autom\'atico.\\
+
+{\setlength{\parindent}{0pt}{\bf Palabras clave:} detecci\'on de fraude, aprendizaje autom\'atico, aprendizaje supervisado y no supervisado, preprocesamiento, desequilibrio de datos, entrenamiento, pseudoaleatorios, Python.}
+\end{abstract}
+
+%=================================
+% Exteriorizar numero de columnas
+%=================================
+
+%\begin{multicols}{2}
+
+%=========
+% Seccion
+%=========
+
+\section{Introducci\'on}
+
+El comercio electr\'onico sin lugar a dudas constituye en la actualidad un cambio de paradigma en los negocios. Adem\'as del dise\~no e implementaci\'on de plataformas de e-commerce eficientes en donde efectuar la compraventa de bienes y servicios mediante la utilizaci\'on de dirvesos dispositivos como las computadoras personales, las tablets y los celulares, la columna vertebral a la hora de realizar operaciones comerciales de dicha \'indole lo conforman el uso de tarjetas de cr\'edito sin las cuales carecer\'ia de sentido el intercabio electr\'onico. Por este motivo, en los \'ultimos a\~nos ha habido un incremento explosivo en las transacciones con tarjetas de cr\'edito y esto ha tra\'ido como consecuencia un cambio en la din\'amica de los negocios. Si bien la era del Big Data y de las nuevas tecnolog\'ias establecen una oportunidad sin precedentes en cuanto a la mejora de la calidad de vida y bienestar social, no quedan absolutamente exentas de problemas, lo que genera ineficiencias en su implementaci\'on. En el caso particular de las transacciones con tarjetas de cr\'edito, un problema no menor lo conforman los fraudes dado que traen aparejadas en el corto plazo p\'erdidas financieras significativas \footnote{Seg\'un un an\'alisis llevado a cabo por la entidad ``Euromonitor International'', el costo financiero asociado a los fraudes a aumentado en el \'area de Europa, Oriente Medio y \'Africa (EMEA) de 2006 a 2016 mientras que la ``Asociaci\'on Estadounidense de Examinadores de Fraudes'' descubri\'o que el 15\% de fraudes corresponden de alguna forma a las transacciones con tarjetas de cr\'edito lo que representa un 80\% del valor financiero total \cite{carta2019fraud}.} que afectan no s\'olo bancos y comerciantes sino tambi\'en a los clientes individuales mientras que por otro lado en el largo plazo pueden impactar negativamente sobre la imagen de una compa\~ia ocasionando que el cliente objeto del fraude desconf\'ie del negocio y elija a un competidor \cite{dal2014learned}.\\
+Aunque el concepto de fraude, tan antig\"uo como la humanidad misma es mucho m\'as abarcativo que las transacciones fraudulentas, en este trabajo nos enfocamos concretamente en estas \'ultimas. Para evitar la perpetraci\'on de fraudes se siguen dos tipos de acciones, prevenci\'on y detecci\'on de fraude \cite{Pozzolo2015AdaptiveML}. La diferencia entre ambas es que la primera es una acci\'on a priori, es decir, se trata de anticipar el fraude bloque\'andolo en su origen, mientras que la segunda es un proceso a posteriori, es decir, partiendo de un conjunto de datos de transacciones con tarjetas de cr\'edito se identifica si una nueva operaci\'on hailitada pertenece o no a la clase de transacciones frudulentas o genuinas. Todo Sistema de Detecci\'on de Fraude (FDS) debe superar de base dos problemas elementales: eficiencia y rentabilidad. Lo primero hace referencia a que dicho sistema debe poder determinar eficientemente si una transacci\'on es o no fraudulenta y lo segundo se refiere a que el costo por detecci\'on no puede ser mayor a la p\'erdida debida a los fraudes. Aqu\'i es donde las t\'ecnicas de aprendizaje automatico se vuelven atractivas para abordar el problema dado que son altamente eficientes y de bajo costo comparativamente a lo que ser\'ia con la intrvenci\'on de expertos (no se excluyen estos \'ultmos sino que se complementan con los m\'etodos de ML disminuy\'endo significativamente los esfuerzos humanos). Por otra parte, los algoritmos de aprendizaje autom\'atico tienen preponderancia en la detecci\'on de transacciones fraudulentas dado que las t\'ecnicas supervisadas pueden entrenarse mediante el an\'alisis de transacciones pasadas para aprender de los patrones fraudulentos y por otro lado, los algoritmos no supervisados permiten resolver el problema de cambio de comportamiento de estafadores para desarrollar nuevos patrones de fraude \cite{carcillo2021combining}. En relaci\'on a esto, se han llevado a cabo innumerables esfuerzos y contibuciones para aplicar las t\'ecnicas de aprendizaje autom\'atico a la detecci\'on de transacciones fraudulentas como por ejemplo Convolutional Neural Networks (CNN) \cite{fu2016credit}, Random Forest \cite{xuan2018random}, y otras m\'etodos muy innovadores \cite{carta2019fraud}. En l\'inea a esto, este trabajo nos porponemos realizar un estudio comparativo de los distintos algoritmos de aprendizaje autom\'atico tanto supervisados como no supervisados evaluando su rendimiento en la aplicaci\'on de detecci\'on de transacciones fraudulentas \cite{niu2019comparison,carcillo2021combining}, para ello en la primera secci\'on analizamos los distintos trabajos relacionados y el estado de arte de las t\'ecnicas existentes, sus aspectos positivos y negativos y los problemas asociados. A continuaci\'on, presentamos el dise\~no experimental, los resultados obtenidos de la evaluaci\'on del rendimiento de los distintos m\'etodos y la interpretaci\'on de los mismos y por \'ultimo derivamos las conlusiones del trabajo.
+
+\section{Balanceo y normalización de datos}
+
+Para tratar la asimetr\'ia que existe entre fraudes y no fraudes en el dataset tomamos una muestra aleatoria del conjunto de transacciones leg\'itimas del mismo tama\~no que el conjunto de transacciones fraudulentas. Existen m\'etodos m\'as sofisticados que en un futuro se analizar\'an y se tendr\'an en cuenta m\'as adelante \cite{japkowicz2000learning, dal2015calibrating, zhu2020optimizing, li2021hybrid}.
+
+%==============
+% Bibliografía
+%==============
+
+% Secuencia para compilar: 
+% 1. pdflatex main.tex 
+% 2. bibtex main.tex 
+% 3. pdflatex main.tex 
+% 4. pdflatex main.tex
+
+\bibliographystyle{plain}
+\bibliography{bibliography.bib}
+
+%\end{multicols}
+
+%===================
+% Fin del documento
+%===================
+
+\end{document}
