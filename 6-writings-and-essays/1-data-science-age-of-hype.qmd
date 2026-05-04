@@ -1,0 +1,139 @@
+# Data Science in the Age of Hype: Why the scientific method still matters
+
+## The Rise of Data Science
+
+Data has become one of the most valuable assets of any modern organization. The unprecedented flow of information—resulting from countless digital interactions such as clicks, e-commerce transactions, mobile communications, and social media activity—reflects its central role in contemporary society. At the same time, the rapid advances in computing that enable large-scale data collection, storage, and processing are radically transforming the way businesses, governments, scientific communities, and institutions make decisions.
+
+Yet, raw data by itself is meaningless. It only acquires value when subjected to systematic and rigorous analysis through methodologies capable of detecting patterns, inferring relationships, predicting trends, and ultimately translating insights into decisions with real-world impact. This is why Clive Humby’s now-famous analogy describes data as "the new oil": like crude oil, data must be refined before it can generate value. The crucial element is not the "raw material" itself but the techniques used to extract its potential and the knowledge derived from it. This reflection naturally leads to a fundamental question: what do we really mean by Data Science?
+
+Historically, the term Data Science emerged from an evolutionary process shaped by multiple contributions that helped formalize it as a discipline. Although its roots lie in statistics and computer science, its consolidation as an autonomous field took place over more than half a century of theoretical and technological developments.
+
+The conceptual seed of Data Science can be traced back to 1962, when American statistician John W. Tukey published his influential essay *The Future of Data Analysis*. In it, Tukey argued that statistics should not be confined to hypothesis confirmation alone, but should place equal emphasis on the exploration, diagnosis, and understanding of data [@tukey1962future; @donoho2017]. He introduced *data analysis* as a distinct discipline, anticipating the vision of a "science of learning from data"—one in which empirical inquiry and iterative interaction with data occupy the core of quantitative knowledge.
+
+Later, in 1974, Danish computer scientist Peter Naur, in his *Concise Survey of Computer Methods*, explicitly used the terms *Data Science* and *Datalogy* to refer to the systematic study of data [@naur1974concise]. Naur argued that computing should focus on the structure, meaning, and organization of data rather than on hardware or programming. Although his proposal went largely unnoticed for years, it laid conceptual foundations that would be revisited decades later.
+
+In 1997, statistician C.F. Jeff Wu, during his inaugural lecture at the University of Michigan titled *Statistics = Data Science?*, proposed renaming statistics as *Data Science* and calling modern statisticians *data scientists* [@wu1997statistics]. His goal was to signal a new era in which statistical inference should integrate with computation and empirical analysis to move beyond mere data description and outdated stereotypes.
+
+This perspective was further developed in 2001 by William S. Cleveland in his seminal article *Data Science: an Action Plan for Expanding the Technical Areas of the Field of Statistics* [@cleveland2001data]. Cleveland proposed a systematic expansion of statistics by identifying six core technical areas of Data Science: multidisciplinary investigations, models and methods for data, computing with data, pedagogy, tool evaluation, and theory. Rather than allowing statistics to contract into a narrowly mathematical discipline, he emphasized the central role of computation, real-world data analysis, education, and the development and evaluation of tools. His framework laid the conceptual groundwork for understanding Data Science as a comprehensive, data-centered field—deeply rooted in statistics, yet necessarily broader in scope and practice.
+
+That same year, Leo Breiman, a statistician at the University of California, Berkeley, published his influential essay *Statistical Modeling: The Two Cultures*, in which he argued that statistical modeling serves two fundamental purposes: **information**—extracting insight into how nature associates response variables with input variables—and **prediction**—the ability to accurately anticipate future responses for new observations [@breiman2001statistical]. Breiman critically observed that traditional statistical practice had largely privileged the informational goal through highly structured, assumption-driven models, often at the expense of predictive performance. He advocated for a broader methodological perspective in which algorithmic and data-driven approaches play a central role, emphasizing prediction as an essential complement rather than a secondary objective. This distinction, and the tension it revealed between explanation and prediction, foreshadowed core principles of modern Data Science, where understanding and predictive accuracy are treated as intertwined but distinct aims.
+
+By the late 2000s, the rise of Big Data and the growing need for professionals capable of combining statistics, programming, and domain expertise fueled the popularization of both the term Data Science and the role of the data scientist. Media consolidation came in 2012, when Thomas H. Davenport and DJ Patil published *Data Scientist: The Sexiest Job of the 21st Century* in the *Harvard Business Review* [@davenport2012data]. Since then, Data Science has become a strategic discipline across both academia and industry.
+
+Today, Data Science is recognized as an interdisciplinary field that integrates statistical, computational, and conceptual methods to extract knowledge, infer patterns, and generate predictions from data. In many ways, it represents the natural evolution of statistics a discipline now equipped to address complex phenomena in fields as diverse as economics, biology, marketing, and physics.
+
+However, despite its relevance and expansion, the term *Data Science* has become somewhat diffuse, often distorted by media overexposure. This ambiguity calls for a deeper examination of its epistemological foundations: if we speak of a **Science** of Data, we must ask what makes a discipline a science?
+
+From this perspective, Data Science can indeed be considered a science. Its scientific character lies in the systematic application of the scientific method to the study of data. The data scientist formulates hypotheses, analyzes observations, and tests results just as any other scientist does. The difference lies in the object of study: data as a quantitative representation of reality.
+
+In this sense, Data Science can be viewed as a generalization of statistics extending its focus from **inference** (understanding how the world behaves based on observed data) to **prediction** (anticipating how it might behave under new conditions). This predictive capability, powered by machine learning algorithms, enables the effective application of the **Hypothetical-Deductive Method**: formulating hypotheses about future phenomena and testing them through data and predictive models. In other words, machine learning acts as a technological enabler that materializes Breiman’s inference–prediction duality, providing tools to model complex relationships directly from data and to test hypotheses that were previously unreachable with traditional statistical methods. It is this integration of inference, prediction, and empirical validation that solidifies the scientific nature of the discipline.
+
+Understanding these foundations is essential for interpreting the true scope of Data Science. While the discipline draws from statistics, computer science, and domain expertise, its ultimate objective is not merely the manipulation of data but the extraction of reliable knowledge about the world. In this sense, Data Science should not be understood as a collection of algorithms or software tools, but as a methodological framework for reasoning under uncertainty.
+
+However, the rapid growth of the field has also brought an unintended consequence: a proliferation of narratives that portray Data Science primarily as a technological revolution driven by ever more sophisticated algorithms. In many contexts, the emphasis has shifted toward tools, automation, and predictive performance, sometimes overshadowing the epistemological principles that historically guided scientific inquiry.
+
+This tension raises a critical question for modern practitioners: if Data Science claims to be a science, what role does the scientific method play in its practice today? Addressing this question requires revisiting the principles that define scientific reasoning and examining how they apply to the analysis and interpretation of data in an era increasingly shaped by computational power and algorithmic models.
+
+## The Nature of Science and the Scientific Method
+
+The very semantics of the term *Data Science* make it impossible to detach it from the concept of *science*. This forces us to pause and reflect: can Data Science truly be regarded as a scientific discipline, or is it merely a fashionable commercial label? A comprehensive analysis of the nature of science lies far beyond the scope of this article; however, for the sake of intellectual honesty, we should not evade the issue. At the very least, we ought to clarify what makes an activity genuinely *scientific*.
+
+From an epistemological perspective, science cannot be defined merely as any endeavor that leads to new discoveries or expands knowledge. Scientific knowledge evolves what was once considered true has often been revised, refined, or discarded. It is therefore reasonable to assume that part of what we regard today as scientifically valid will eventually be replaced, even if we cannot foresee which part. In other words, science does not guarantee truth. What distinguishes science from other forms of inquiry is not the *results* it produces, but the *method* it employs to generate them [@johansson2016philosophy]. Science is better understood as an iterative mechanism—almost algorithmic in nature—that produces, tests, refines, and occasionally rejects knowledge. This is a central idea, because in essence, a data scientist does exactly that: applies the scientific method as a repeatable process of inquiry. We will return to this point shortly when discussing the *Hypothetico-Deductive Method*.
+
+With this foundation in place, it becomes easier to see why Data Science can be viewed as a generalization of Statistics. This is not a trivial claim. Statistics is undoubtedly a science specifically, a formal science, alongside logic and computer science. Formal sciences study abstract systems through reasoning rather than direct experimentation, distinguishing them from natural, social, and applied sciences. Yet classical statistics has been historically grounded in *inductive inference*: reasoning from the particular to the general. Induction allows us to infer broader conclusions from observed cases, but it carries a fundamental limitation: inductive reasoning can *support* a conclusion, but never *prove* it. This problem, famously articulated by David Hume in the 18th century and known as the *problem of induction*, arises from the logical gap between past observations and future expectations.
+
+Bertrand Russell illustrated this issue through the well-known "inductivist turkey". A turkey observes that every morning at 9 a.m. the farmer brings food. After hundreds of consistent observations—rainy days, sunny days, warm and cold alike—the turkey confidently concludes that it will always be fed at 9 a.m. Yet on Christmas Eve, instead of being fed, it is slaughtered. A single contradictory event collapses a conclusion seemingly supported by overwhelming evidence. The lesson is clear: no amount of past observations can logically ensure the truth of a universal claim about the future. Karl Popper pushed this idea further: induction can never confirm a theory with certainty, whereas a single counterexample can refute it. The turkey’s mistake—rooted in the "turkey illusion"—was assuming regularity without understanding the underlying mechanism (the farmer’s intention).
+
+None of this implies that induction is a "bad" method. It remains essential as the generator of hypotheses and conjectures. As Klimovsky notes [@klimovsky1994desventuras], induction may be seen as a probabilistic justification: it evaluates how strongly observations support a hypothesis, rather than certifying its truth. Put simply, science advances by combining induction (to propose hypotheses) and deduction (to test them). Deduction enables us to assess whether predictions derived from hypotheses correspond to reality. Verification, however, does not grant absolute truth; it merely confirms that a hypothesis has survived a test under certain conditions.
+
+This tension lies at the heart of Leo Breiman’s critique of classical statistics. While statistics provided the mathematical language to quantify uncertainty and draw inferences about populations from limited data, it remained fundamentally bound to inductive reasoning: no matter how large the sample or how robust the model, a future observation could always contradict it. Machine Learning transformed this landscape by not only inferring patterns from data but also validating predictive performance empirically. A model is no longer judged solely by how well it explains past data, but by how accurately it predicts *unseen* data. This represents a qualitative shift that operationalizes the hypothetico-deductive paradigm: generating hypotheses (models) and testing them empirically against new observations in a reproducible and quantifiable way.
+
+To illustrate this in a Data Science context, consider a credit-scoring model. Classical statistics may estimate relationships between customer features and default risk through inductive inference on historical samples. A machine learning model, however, must *demonstrate its predictive power* on new customers those the model has never encountered. If the predictions fail, the model is rejected or refined. This is falsification in action, applied to data-driven decision-making.
+
+In this sense, Data Science can be expressed as **Inference + Prediction**, or equivalently, as **Statistics + Machine Learning**. It unites the inductive strength of statistics with the deductive rigor of model testing, fulfilling Breiman’s vision of a discipline that bridges explanation and prediction a modern science of learning from data. The next section will examine this duality through the lens of the *Hypothetico-Deductive Method*, the framework that ultimately solidifies the scientific character of Data Science.
+
+## The Scientific Mindset of a Data Scientist
+
+At the core of scientific inquiry lies a logical structure that transcends individual disciplines: the **Hypothetico-Deductive Method**. It provides the conceptual backbone of the scientific method, linking theoretical conjecture with empirical observation. The process begins with a hypothesis—a tentative model proposed to explain observed behavior or predict its future course. or predict its future course. From this hypothesis, one deduces empirically testable consequences. These predictions are then confronted with real data through experimentation or systematic observation. When evidence contradicts the hypothesis, it must be revised or discarded; when the evidence supports it, the hypothesis gains provisional credibility, though never definitive truth.
+
+This dynamic interplay between theoretical formulation, deduction, and empirical scrutiny defines the essence of scientific work. What grants scientific legitimacy to a model is not its mathematical elegance or computational sophistication, but its **capacity to generate falsifiable predictions**. The scientific method is therefore inherently self-correcting: each cycle of hypothesizing, testing, and refining moves knowledge closer to truth while acknowledging that truth remains an ever-distant horizon.
+
+Traditional inferential statistics implements this logic only partially, primarily through hypothesis testing. A null hypothesis is proposed, its probabilistic implications are derived, and sample data are used to evaluate whether they justify its rejection. Yet this remains predominantly an inductive process, generalizing from finite observations into probabilistic claims about broader populations. Moreover, statistical validation is typically static once the data are gathered, the hypothesis is evaluated solely in that context, rather than through iterative confrontation with new evidence.
+
+Machine learning, by contrast, operationalizes the deductive stage of scientific reasoning through **predictive validation**. Each model can be viewed as a hypothesis about the functional relationship between predictors and outcomes. Training a model corresponds to formulating the hypothesis; evaluating it on unseen data corresponds to testing its empirical consequences. Performance metrics quantify how well the model withstands empirical scrutiny, and failures become informative, guiding the reformulation or replacement of the underlying hypothesis.
+
+This perspective turns Data Science into a **practical enactment of the Hypothetico-Deductive Method**. It combines inductive discovery of structure within data with deductive testing of the predictive consequences of that structure. More importantly, it enables Data Science to progress from mere correlation to **genuine explanation**, seeking models that capture mechanisms rather than patterns alone.
+
+Consider the problem of **customer churn** in retail. A predictive model might accurately identify customers at risk of leaving based solely on behavioral correlations a purely inductive exercise. But if the goal is to determine whether a discount campaign will *reduce* churn, prediction alone is insufficient. The data scientist must investigate—and, when possible, formalize—**causal models** capturing how interventions alter outcomes. Prediction answers *who* is likely to churn; causality answers *why* and *what we can do about it*.
+
+Under the Hypothetico-Deductive paradigm, this iterative cycle can be summarized visually, as shown in @fig-hd_algorithm, and is typically composed of the following stages:
+
+- **Systematic observation** of a phenomenon
+- **Formulation of hypotheses** or models to explain observed patterns
+- **Deduction of testable predictions** grounded in those hypotheses
+- **Empirical evaluation** of predictions via new data
+- **Revision or replacement** of hypotheses based on the evidence collected
+
+```{mermaid}
+%%| label: fig-hd_algorithm
+%%| fig-cap: "The hypothetico-deductive method as an iterative loop: observations motivate hypotheses (induction); hypotheses yield testable predictions (deduction); empirical results either support or challenge the hypothesis, leading to theory formation or revision and ultimately to new questions that restart the process."
+%%| fig-width: 5
+%%| fig-height: 7
+graph TB
+    A[Observations<br/>&<br/>Patterns in Nature]
+    C[Hypothesis]
+    D[Testable Predictions]
+    E[Experimentation<br/>&<br/>Data Collection]
+    F{Analysis of Results<br/>&<br/>Evaluation}
+    G[Hypothesis Supported]
+    H[Hypothesis Revised or Rejected]
+    T[Theory Development<br/>&<br/>Models]
+    Q[New Questions<br/>&<br/>Anomalies]
+    J[Revision or New Hypothesis]
+
+    A -->|Induction| C
+    C -->|Deduction| D
+    D --> E
+    E --> F
+    F -->|Corroboration| G
+    F -->|Falsification| H
+    G --> T
+    T --> Q
+    Q -->|New Observations| A
+    H --> J
+    J --> C
+```
+
+Viewed from this angle, the role of a data scientist extends far beyond executing algorithms or statistical routines. It is the **iterative application of the scientific method** across diverse business contexts generating hypotheses, building predictive and causal models, confronting them with evidence, and allowing data to arbitrate which explanations survive. Data Science thus emerges not merely as a technical discipline, but as the **contemporary expression of scientific thinking** applied to data-rich environments, where distinguishing correlation from causation and prediction from explanation defines true professional excellence.
+
+## The Fundamental Constituents of Data Science
+
+Despite its rapid expansion and increasing visibility, Data Science is often portrayed as a discipline defined by an ever-growing collection of tools, frameworks, and technological trends. New libraries, platforms, and modeling techniques appear constantly, creating the impression that the field evolves primarily through technological novelty. This perception, however, can be misleading. While modern practice indeed relies on a rich computational ecosystem, the scientific core of Data Science is not defined by software stacks or fashionable methodologies. Rather, it rests on a far more compact and principled foundation: **probabilistic reasoning and statistical inference**.
+
+From a first-principles perspective, Data Science is best understood as a systematic framework for reasoning under uncertainty using data. Probability provides the language to model randomness and variability, while Statistics supplies the methodological machinery for learning from data and evaluating the reliability of the conclusions we draw from it. Together, they form the conceptual backbone that allows data-driven reasoning to remain coherent, interpretable, and scientifically grounded.
+
+Computation plays a crucial—but often misunderstood—role in this framework. The term *computation* derives from the Latin *computatio*, formed by the prefix *com* (“together” or “with”) and *putatio*, related to *putare*, meaning “to calculate” or “to reckon.” In its original sense, the word conveys the idea of **calculating together**. In this light, computation can be understood not as an autonomous source of knowledge, but as a process through which machines assist human reasoning by carrying out calculations at scales and speeds beyond our natural capacity. Algorithms, programming languages, and computational environments therefore act as instruments that enable probabilistic models to be simulated, statistical procedures to be implemented, and empirical hypotheses to be tested. Computation does not define Data Science; it provides the **operational medium** through which probabilistic and statistical reasoning becomes executable in practice.
+
+## Data Science as a Strategic Value Engine
+
+At this point, it is crucial to emphasize a key principle that often gets overlooked: **Data Science is not a goal in itself**. No matter how sophisticated the methodologies or how advanced the machine learning models, they are worthless if they do not generate real and measurable impact. The true purpose of Data Science is to inform and improve strategic decisions—transforming data into outcomes that advance organizational goals.
+
+Data-driven decision making empowers organizations to optimize operations, personalize customer experiences, identify risks proactively, and maintain a competitive advantage. As Kozyrkov highlights, outstanding data analysts ensure that their work is focused on solving the **right business problems**, not simply producing technically impressive outputs [@kozyrkov2018great].
+
+This underscores a critical truth: technical excellence without business alignment leads to solutions that may appear successful internally but **fail to influence decisions or create value**. The impact of a model is not measured solely by statistical accuracy or computational ingenuity, but by the extent to which it **changes what the organization does**.
+
+From a decision-theoretic perspective, integrating Data Science into strategy enables measurable improvements not only in profitability or utility, but also in **decision velocity**. Automated analytical pipelines allow organizations to deploy models directly into operational environments continuously monitoring performance, adapting to new data, and discarding approaches that no longer deliver value. This creates a self-correcting loop where models are evaluated and refined over time, accelerating the pathway from insight to action.
+
+Consider, for example, the case of **customer churn** in retail. Without Data Science, retention strategies typically rely on intuition or broad marketing campaigns, often costly and ineffective. In contrast, a churn prediction model can **identify customers most at risk**, enabling targeted interventions such as personalized offers or loyalty programs. If the strategy does not reduce churn among the targeted segment, performance monitoring mechanisms reveal the failure, prompting refinement or alternative plans. Here, data does not merely describe behavior—it actively shapes business outcomes.
+
+Viewed through this lens, Data Science becomes a **strategic value engine**: a discipline that leverages scientific reasoning, computational tools, and domain expertise to drive decisions that matter. This synthesis—model-driven insight aligned with real-world objectives—ensures that Data Science fulfills its true mission: transforming information into impact.
+
+## Why the Scientific Method Still Matters
+
+The strategic impact of Data Science ultimately stems from something deeper than predictive models or analytical pipelines. Its real strength lies in the intellectual framework that guides how data is interpreted, hypotheses are formulated, and decisions are evaluated. The ability of Data Science to generate meaningful impact in organizations is therefore inseparable from the scientific principles that structure its practice.
+
+In an era defined by rapid technological change and the constant emergence of new tools, it is tempting to define Data Science by its most visible artifacts: programming languages, machine learning libraries, cloud platforms, and ever-evolving frameworks. Yet these elements, while powerful, are ultimately transient. Technologies evolve, tools are replaced, and methodologies shift as the field continues to mature.
+
+What endures is something far more fundamental: the scientific mindset that underlies the discipline. At its core, Data Science is not about algorithms but about **reasoning under uncertainty**, formulating hypotheses, confronting them with data, and refining our understanding of complex phenomena through systematic evidence. Probability provides the language for uncertainty, statistics supplies the methods for inference, and computation serves as the medium through which these ideas become operational.
+
+When practiced in this way, Data Science becomes more than a collection of analytical techniques—it becomes a modern expression of the scientific method applied to data-rich environments. Its true power lies not in automation or predictive accuracy alone, but in its capacity to transform data into knowledge and knowledge into better decisions. In the end, the enduring value of Data Science does not come from the sophistication of its tools, but from the rigor of the thinking that guides their use.

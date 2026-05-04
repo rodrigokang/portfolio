@@ -1,0 +1,5 @@
+# Overview {.unnumbered}
+
+This part covers problems related to energy and industrial systems, including the analysis and modeling of production processes, physical assets, and operational data.
+
+The scope of this domain includes approaches for optimization and efficient resource allocation, monitoring and analysis of system integrity, and the study of degradation processes such as corrosion, as well as data-driven methods to support decision-making in complex operational environments.

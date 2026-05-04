@@ -27,20 +27,46 @@ book:
     - preface.qmd
     - about.qmd
     - reading-guide.qmd
-    - 1-capm-and-fama-french-factor-model.qmd
-    - 2-asset-allocation-unsupervised-learning.qmd
-    - 3-credit-card-fraud-detection-ml-benchmark.qmd
-    - 4-customer-lifetime-value-prediction-retail.qmd
-    - 5-marketing-campaign-optimization.qmd
-    - 6-rfm-kmeans-customer-segmentation.qmd
-    - 7-geochemical-fingerprint-deconvolution.qmd
-    - 8-porous-media-pore-throat-detection-cv.qmd
-    - 9-climate-forecasting-time-series.qmd
-    - 10-microbial-population-dynamics-lotka-volterra.qmd
-    - 11-optimal-hedging-industrial-gas-demand.qmd
-    - 12-knowledge-extraction-technical-documents-llm.qmd
-    - 13-customer-sentiment-topic-analysis-nlp.qmd
-    - 14-scientific-literature-mining-nlp-llm.qmd
+
+    - part: "Quantitative Finance"
+      chapters:
+        - 1-quantitative-finance/0-overview.qmd
+        - 1-quantitative-finance/1-capm-and-fama-french-factor-model.qmd
+        - 1-quantitative-finance/2-asset-allocation-unsupervised-learning.qmd
+
+    - part: "Retail Analytics"
+      chapters:
+        - 2-retail-analytics/0-overview.qmd
+        - 2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.qmd
+        - 2-retail-analytics/2-customer-lifetime-value-prediction-retail.qmd
+        - 2-retail-analytics/3-marketing-campaign-optimization.qmd
+        - 2-retail-analytics/4-rfm-kmeans-customer-segmentation.qmd
+        - 2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.qmd
+
+    - part: "Biological Systems"
+      chapters:
+        - 3-biological-systems/0-overview.qmd
+        - 3-biological-systems/1-microbial-population-dynamics-lotka-volterra.qmd
+
+    - part: "Energy and Industrial Systems"
+      chapters:
+        - 4-energy-and-industrial-systems/0-overview.qmd
+        - 4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.qmd
+        - 4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.qmd
+        - 4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.qmd
+        - 4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.qmd
+
+    - part: "Climate and Environmental Systems"
+      chapters:
+        - 5-climate-and-environmental-systems/0-overview.qmd
+        - 5-climate-and-environmental-systems/1-climate-forecasting-time-series.qmd
+
+    - part: "Writings & Essays"
+      chapters:
+        - 6-writings-and-essays/0-overview.qmd
+        - 6-writings-and-essays/1-data-science-age-of-hype.qmd
+        - 6-writings-and-essays/2-conformal-geometry-in-3-d.qmd
+
     - references.qmd
 
 bibliography: references.bib
@@ -53,15 +79,16 @@ format:
     code-line-numbers: true
     mermaid:
       theme: default
-  pdf:
-    include-in-header: header.tex
-    latex-engine: xelatex
-    documentclass: book
-    fontsize: 12pt
-    toc: true
-    toc-depth: 4
-    number-sections: true
-    mainfont: "Linux Libertine O"
-    link-citations: true
-    mermaid:
-      theme: default
+
+#  pdf:
+#    include-in-header: header.tex
+#    latex-engine: xelatex
+#    documentclass: book
+#    fontsize: 12pt
+#    toc: true
+#    toc-depth: 4
+#    number-sections: true
+#    mainfont: "Linux Libertine O"
+#    link-citations: true
+#    mermaid:
+#      theme: default

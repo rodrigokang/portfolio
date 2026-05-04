@@ -1,0 +1,9 @@
+# Conformal Geometry and Electrostatics in Three Dimensions
+
+## Laplace's equation
+
+$$
+\nabla^2 \phi = \frac{\partial ^2 \phi}{\partial x^2} +\frac{\partial ^2 \phi}{\partial y^2} + \frac{\partial ^2 \phi}{\partial z^2} = 0
+$$ {#eq-laplace-equation}
+
+## Conformal Mappings
