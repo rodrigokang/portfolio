@@ -2,4 +2,108 @@
 
 _Work in progress._
 
-## Introduction
+## Problem Definition
+
+This section describes the problem being addressed and explains its relevance within the context of the domain.
+
+Typical questions considered in this section include:
+
+- What is the objective of the project?
+- Why is the problem relevant?
+- What type of decisions or insights depend on the solution?
+- What are the main challenges associated with the problem?
+
+The emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.
+
+## Modeling Approach
+
+This section introduces the conceptual framework used to approach the problem.
+
+The discussion typically includes:
+
+- The main modeling assumptions
+- The reasoning behind the selected methodology
+- The intuition behind the model or algorithm
+- The relationship between the model and the underlying process being studied
+
+Mathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.
+
+The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.
+
+## Data and Methodology
+
+This section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.
+
+Typical topics may include:
+
+- Data collection and sources
+- Feature engineering
+- Cleaning and preprocessing
+- Simulation strategies
+- Training and validation methodology
+- Experimental setup
+
+The goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.
+
+## Implementation
+
+This section describes the computational implementation of the project.
+
+Typical topics may include:
+
+- Libraries and tools used
+- Workflow organization
+- Numerical methods and algorithms
+- Model training procedures
+- Pipeline structure
+- Computational considerations
+
+Implementation details complement the conceptual discussion without turning the chapter into a software manual.
+
+References to notebooks and scripts may be included when appropriate.
+
+## Results and Evaluation
+
+This section presents the main outcomes of the project and evaluates model performance.
+
+Typical elements may include:
+
+- Visualizations and plots
+- Performance metrics
+- Comparisons with baseline approaches
+- Sensitivity analysis
+- Error analysis
+- Interpretation of results
+
+The emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.
+
+## Discussion and Limitations
+
+This section discusses the implications, assumptions, limitations, and possible extensions of the work.
+
+Typical topics may include:
+
+- Model assumptions and their consequences
+- Practical limitations
+- Sources of uncertainty
+- Robustness and generalization
+- Trade-offs associated with the methodology
+- Potential future improvements
+
+This section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.
+
+## Technical Appendix (Optional)
+
+This optional section contains technical details that support the project but are not essential for following the main narrative.
+
+Possible contents include:
+
+- Mathematical derivations
+- Additional proofs
+- Numerical details
+- Extended equations
+- Supplementary experiments
+
+The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.
+
+The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.

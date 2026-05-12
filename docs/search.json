@@ -55,7 +55,84 @@
     "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html",
     "title": "1  CAPM and Fama–French Models",
     "section": "",
-    "text": "1.1 Introduction\nWork in progress.",
+    "text": "1.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#problem-definition",
+    "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#problem-definition",
+    "title": "1  CAPM and Fama–French Models",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#modeling-approach",
+    "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#modeling-approach",
+    "title": "1  CAPM and Fama–French Models",
+    "section": "1.2 Modeling Approach",
+    "text": "1.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#data-and-methodology",
+    "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#data-and-methodology",
+    "title": "1  CAPM and Fama–French Models",
+    "section": "1.3 Data and Methodology",
+    "text": "1.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#implementation",
+    "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#implementation",
+    "title": "1  CAPM and Fama–French Models",
+    "section": "1.4 Implementation",
+    "text": "1.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#results-and-evaluation",
+    "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#results-and-evaluation",
+    "title": "1  CAPM and Fama–French Models",
+    "section": "1.5 Results and Evaluation",
+    "text": "1.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#discussion-and-limitations",
+    "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#discussion-and-limitations",
+    "title": "1  CAPM and Fama–French Models",
+    "section": "1.6 Discussion and Limitations",
+    "text": "1.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#technical-appendix-optional",
+    "href": "1-quantitative-finance/1-capm-and-fama-french-factor-model.html#technical-appendix-optional",
+    "title": "1  CAPM and Fama–French Models",
+    "section": "1.7 Technical Appendix (Optional)",
+    "text": "1.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Quantitative Finance",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>CAPM and Fama–French Models</span>"
@@ -66,7 +143,84 @@
     "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html",
     "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
     "section": "",
-    "text": "2.1 Introduction\nWork in progress.",
+    "text": "2.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#problem-definition",
+    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#problem-definition",
+    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#modeling-approach",
+    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#modeling-approach",
+    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "section": "2.2 Modeling Approach",
+    "text": "2.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#data-and-methodology",
+    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#data-and-methodology",
+    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "section": "2.3 Data and Methodology",
+    "text": "2.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#implementation",
+    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#implementation",
+    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "section": "2.4 Implementation",
+    "text": "2.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#results-and-evaluation",
+    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#results-and-evaluation",
+    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "section": "2.5 Results and Evaluation",
+    "text": "2.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#discussion-and-limitations",
+    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#discussion-and-limitations",
+    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "section": "2.6 Discussion and Limitations",
+    "text": "2.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Quantitative Finance",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+    ]
+  },
+  {
+    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#technical-appendix-optional",
+    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#technical-appendix-optional",
+    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "section": "2.7 Technical Appendix (Optional)",
+    "text": "2.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Quantitative Finance",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
@@ -88,7 +242,84 @@
     "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html",
     "title": "3  Credit Card Fraud Detection",
     "section": "",
-    "text": "3.1 Introduction\nWork in progress.",
+    "text": "3.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#problem-definition",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#problem-definition",
+    "title": "3  Credit Card Fraud Detection",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#modeling-approach",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#modeling-approach",
+    "title": "3  Credit Card Fraud Detection",
+    "section": "3.2 Modeling Approach",
+    "text": "3.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#data-and-methodology",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#data-and-methodology",
+    "title": "3  Credit Card Fraud Detection",
+    "section": "3.3 Data and Methodology",
+    "text": "3.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#implementation",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#implementation",
+    "title": "3  Credit Card Fraud Detection",
+    "section": "3.4 Implementation",
+    "text": "3.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#results-and-evaluation",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#results-and-evaluation",
+    "title": "3  Credit Card Fraud Detection",
+    "section": "3.5 Results and Evaluation",
+    "text": "3.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#discussion-and-limitations",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#discussion-and-limitations",
+    "title": "3  Credit Card Fraud Detection",
+    "section": "3.6 Discussion and Limitations",
+    "text": "3.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#technical-appendix-optional",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#technical-appendix-optional",
+    "title": "3  Credit Card Fraud Detection",
+    "section": "3.7 Technical Appendix (Optional)",
+    "text": "3.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
@@ -99,7 +330,84 @@
     "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html",
     "title": "4  Customer Lifetime Value Prediction",
     "section": "",
-    "text": "4.1 Introduction\nWork in progress.",
+    "text": "4.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#problem-definition",
+    "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#problem-definition",
+    "title": "4  Customer Lifetime Value Prediction",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#modeling-approach",
+    "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#modeling-approach",
+    "title": "4  Customer Lifetime Value Prediction",
+    "section": "4.2 Modeling Approach",
+    "text": "4.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#data-and-methodology",
+    "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#data-and-methodology",
+    "title": "4  Customer Lifetime Value Prediction",
+    "section": "4.3 Data and Methodology",
+    "text": "4.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#implementation",
+    "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#implementation",
+    "title": "4  Customer Lifetime Value Prediction",
+    "section": "4.4 Implementation",
+    "text": "4.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#results-and-evaluation",
+    "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#results-and-evaluation",
+    "title": "4  Customer Lifetime Value Prediction",
+    "section": "4.5 Results and Evaluation",
+    "text": "4.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#discussion-and-limitations",
+    "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#discussion-and-limitations",
+    "title": "4  Customer Lifetime Value Prediction",
+    "section": "4.6 Discussion and Limitations",
+    "text": "4.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#technical-appendix-optional",
+    "href": "2-retail-analytics/2-customer-lifetime-value-prediction-retail.html#technical-appendix-optional",
+    "title": "4  Customer Lifetime Value Prediction",
+    "section": "4.7 Technical Appendix (Optional)",
+    "text": "4.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Customer Lifetime Value Prediction</span>"
@@ -110,7 +418,84 @@
     "href": "2-retail-analytics/3-marketing-campaign-optimization.html",
     "title": "5  Marketing Campaign Optimization",
     "section": "",
-    "text": "5.1 Introduction\nWork in progress.",
+    "text": "5.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/3-marketing-campaign-optimization.html#problem-definition",
+    "href": "2-retail-analytics/3-marketing-campaign-optimization.html#problem-definition",
+    "title": "5  Marketing Campaign Optimization",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/3-marketing-campaign-optimization.html#modeling-approach",
+    "href": "2-retail-analytics/3-marketing-campaign-optimization.html#modeling-approach",
+    "title": "5  Marketing Campaign Optimization",
+    "section": "5.2 Modeling Approach",
+    "text": "5.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/3-marketing-campaign-optimization.html#data-and-methodology",
+    "href": "2-retail-analytics/3-marketing-campaign-optimization.html#data-and-methodology",
+    "title": "5  Marketing Campaign Optimization",
+    "section": "5.3 Data and Methodology",
+    "text": "5.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/3-marketing-campaign-optimization.html#implementation",
+    "href": "2-retail-analytics/3-marketing-campaign-optimization.html#implementation",
+    "title": "5  Marketing Campaign Optimization",
+    "section": "5.4 Implementation",
+    "text": "5.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/3-marketing-campaign-optimization.html#results-and-evaluation",
+    "href": "2-retail-analytics/3-marketing-campaign-optimization.html#results-and-evaluation",
+    "title": "5  Marketing Campaign Optimization",
+    "section": "5.5 Results and Evaluation",
+    "text": "5.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/3-marketing-campaign-optimization.html#discussion-and-limitations",
+    "href": "2-retail-analytics/3-marketing-campaign-optimization.html#discussion-and-limitations",
+    "title": "5  Marketing Campaign Optimization",
+    "section": "5.6 Discussion and Limitations",
+    "text": "5.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/3-marketing-campaign-optimization.html#technical-appendix-optional",
+    "href": "2-retail-analytics/3-marketing-campaign-optimization.html#technical-appendix-optional",
+    "title": "5  Marketing Campaign Optimization",
+    "section": "5.7 Technical Appendix (Optional)",
+    "text": "5.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Marketing Campaign Optimization</span>"
@@ -121,7 +506,84 @@
     "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html",
     "title": "6  RFM Segmentation with K-Means",
     "section": "",
-    "text": "6.1 Introduction\nWork in progress.",
+    "text": "6.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#problem-definition",
+    "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#problem-definition",
+    "title": "6  RFM Segmentation with K-Means",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#modeling-approach",
+    "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#modeling-approach",
+    "title": "6  RFM Segmentation with K-Means",
+    "section": "6.2 Modeling Approach",
+    "text": "6.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#data-and-methodology",
+    "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#data-and-methodology",
+    "title": "6  RFM Segmentation with K-Means",
+    "section": "6.3 Data and Methodology",
+    "text": "6.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#implementation",
+    "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#implementation",
+    "title": "6  RFM Segmentation with K-Means",
+    "section": "6.4 Implementation",
+    "text": "6.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#results-and-evaluation",
+    "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#results-and-evaluation",
+    "title": "6  RFM Segmentation with K-Means",
+    "section": "6.5 Results and Evaluation",
+    "text": "6.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#discussion-and-limitations",
+    "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#discussion-and-limitations",
+    "title": "6  RFM Segmentation with K-Means",
+    "section": "6.6 Discussion and Limitations",
+    "text": "6.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#technical-appendix-optional",
+    "href": "2-retail-analytics/4-rfm-kmeans-customer-segmentation.html#technical-appendix-optional",
+    "title": "6  RFM Segmentation with K-Means",
+    "section": "6.7 Technical Appendix (Optional)",
+    "text": "6.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>RFM Segmentation with K-Means</span>"
@@ -132,7 +594,84 @@
     "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html",
     "title": "7  Customer Sentiment and Topic Analysis",
     "section": "",
-    "text": "7.1 Introduction\nWork in progress.",
+    "text": "7.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#problem-definition",
+    "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#problem-definition",
+    "title": "7  Customer Sentiment and Topic Analysis",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#modeling-approach",
+    "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#modeling-approach",
+    "title": "7  Customer Sentiment and Topic Analysis",
+    "section": "7.2 Modeling Approach",
+    "text": "7.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#data-and-methodology",
+    "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#data-and-methodology",
+    "title": "7  Customer Sentiment and Topic Analysis",
+    "section": "7.3 Data and Methodology",
+    "text": "7.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#implementation",
+    "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#implementation",
+    "title": "7  Customer Sentiment and Topic Analysis",
+    "section": "7.4 Implementation",
+    "text": "7.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#results-and-evaluation",
+    "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#results-and-evaluation",
+    "title": "7  Customer Sentiment and Topic Analysis",
+    "section": "7.5 Results and Evaluation",
+    "text": "7.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#discussion-and-limitations",
+    "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#discussion-and-limitations",
+    "title": "7  Customer Sentiment and Topic Analysis",
+    "section": "7.6 Discussion and Limitations",
+    "text": "7.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
+    ]
+  },
+  {
+    "objectID": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#technical-appendix-optional",
+    "href": "2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html#technical-appendix-optional",
+    "title": "7  Customer Sentiment and Topic Analysis",
+    "section": "7.7 Technical Appendix (Optional)",
+    "text": "7.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
@@ -154,7 +693,84 @@
     "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html",
     "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
     "section": "",
-    "text": "8.1 Introduction\nWork in progress.",
+    "text": "8.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Biological Systems",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
+    ]
+  },
+  {
+    "objectID": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#problem-definition",
+    "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#problem-definition",
+    "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Biological Systems",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
+    ]
+  },
+  {
+    "objectID": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#modeling-approach",
+    "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#modeling-approach",
+    "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
+    "section": "8.2 Modeling Approach",
+    "text": "8.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Biological Systems",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
+    ]
+  },
+  {
+    "objectID": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#data-and-methodology",
+    "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#data-and-methodology",
+    "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
+    "section": "8.3 Data and Methodology",
+    "text": "8.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Biological Systems",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
+    ]
+  },
+  {
+    "objectID": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#implementation",
+    "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#implementation",
+    "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
+    "section": "8.4 Implementation",
+    "text": "8.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Biological Systems",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
+    ]
+  },
+  {
+    "objectID": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#results-and-evaluation",
+    "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#results-and-evaluation",
+    "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
+    "section": "8.5 Results and Evaluation",
+    "text": "8.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Biological Systems",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
+    ]
+  },
+  {
+    "objectID": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#discussion-and-limitations",
+    "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#discussion-and-limitations",
+    "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
+    "section": "8.6 Discussion and Limitations",
+    "text": "8.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Biological Systems",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
+    ]
+  },
+  {
+    "objectID": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#technical-appendix-optional",
+    "href": "3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html#technical-appendix-optional",
+    "title": "8  Microbial Population Dynamics (Lotka–Volterra Model)",
+    "section": "8.7 Technical Appendix (Optional)",
+    "text": "8.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Microbial Population Dynamics (Lotka–Volterra Model)</span>"
@@ -176,7 +792,84 @@
     "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html",
     "title": "9  Geochemical Fingerprint Deconvolution",
     "section": "",
-    "text": "9.1 Introduction\nWork in progress.",
+    "text": "9.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#problem-definition",
+    "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#problem-definition",
+    "title": "9  Geochemical Fingerprint Deconvolution",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#modeling-approach",
+    "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#modeling-approach",
+    "title": "9  Geochemical Fingerprint Deconvolution",
+    "section": "9.2 Modeling Approach",
+    "text": "9.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#data-and-methodology",
+    "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#data-and-methodology",
+    "title": "9  Geochemical Fingerprint Deconvolution",
+    "section": "9.3 Data and Methodology",
+    "text": "9.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#implementation",
+    "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#implementation",
+    "title": "9  Geochemical Fingerprint Deconvolution",
+    "section": "9.4 Implementation",
+    "text": "9.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#results-and-evaluation",
+    "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#results-and-evaluation",
+    "title": "9  Geochemical Fingerprint Deconvolution",
+    "section": "9.5 Results and Evaluation",
+    "text": "9.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#discussion-and-limitations",
+    "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#discussion-and-limitations",
+    "title": "9  Geochemical Fingerprint Deconvolution",
+    "section": "9.6 Discussion and Limitations",
+    "text": "9.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#technical-appendix-optional",
+    "href": "4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html#technical-appendix-optional",
+    "title": "9  Geochemical Fingerprint Deconvolution",
+    "section": "9.7 Technical Appendix (Optional)",
+    "text": "9.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Geochemical Fingerprint Deconvolution</span>"
@@ -187,7 +880,84 @@
     "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html",
     "title": "10  Pore–Throat Detection in Porous Media",
     "section": "",
-    "text": "10.1 Introduction\nWork in progress.",
+    "text": "10.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#problem-definition",
+    "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#problem-definition",
+    "title": "10  Pore–Throat Detection in Porous Media",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#modeling-approach",
+    "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#modeling-approach",
+    "title": "10  Pore–Throat Detection in Porous Media",
+    "section": "10.2 Modeling Approach",
+    "text": "10.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#data-and-methodology",
+    "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#data-and-methodology",
+    "title": "10  Pore–Throat Detection in Porous Media",
+    "section": "10.3 Data and Methodology",
+    "text": "10.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#implementation",
+    "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#implementation",
+    "title": "10  Pore–Throat Detection in Porous Media",
+    "section": "10.4 Implementation",
+    "text": "10.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#results-and-evaluation",
+    "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#results-and-evaluation",
+    "title": "10  Pore–Throat Detection in Porous Media",
+    "section": "10.5 Results and Evaluation",
+    "text": "10.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#discussion-and-limitations",
+    "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#discussion-and-limitations",
+    "title": "10  Pore–Throat Detection in Porous Media",
+    "section": "10.6 Discussion and Limitations",
+    "text": "10.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#technical-appendix-optional",
+    "href": "4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html#technical-appendix-optional",
+    "title": "10  Pore–Throat Detection in Porous Media",
+    "section": "10.7 Technical Appendix (Optional)",
+    "text": "10.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Pore–Throat Detection in Porous Media</span>"
@@ -198,7 +968,84 @@
     "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html",
     "title": "11  Optimal Hedging of Industrial Gas Demand",
     "section": "",
-    "text": "11.1 Introduction\nWork in progress.",
+    "text": "11.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#problem-definition",
+    "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#problem-definition",
+    "title": "11  Optimal Hedging of Industrial Gas Demand",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#modeling-approach",
+    "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#modeling-approach",
+    "title": "11  Optimal Hedging of Industrial Gas Demand",
+    "section": "11.2 Modeling Approach",
+    "text": "11.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#data-and-methodology",
+    "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#data-and-methodology",
+    "title": "11  Optimal Hedging of Industrial Gas Demand",
+    "section": "11.3 Data and Methodology",
+    "text": "11.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#implementation",
+    "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#implementation",
+    "title": "11  Optimal Hedging of Industrial Gas Demand",
+    "section": "11.4 Implementation",
+    "text": "11.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#results-and-evaluation",
+    "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#results-and-evaluation",
+    "title": "11  Optimal Hedging of Industrial Gas Demand",
+    "section": "11.5 Results and Evaluation",
+    "text": "11.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#discussion-and-limitations",
+    "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#discussion-and-limitations",
+    "title": "11  Optimal Hedging of Industrial Gas Demand",
+    "section": "11.6 Discussion and Limitations",
+    "text": "11.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#technical-appendix-optional",
+    "href": "4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html#technical-appendix-optional",
+    "title": "11  Optimal Hedging of Industrial Gas Demand",
+    "section": "11.7 Technical Appendix (Optional)",
+    "text": "11.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
@@ -209,7 +1056,84 @@
     "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html",
     "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
     "section": "",
-    "text": "12.1 Introduction\nWork in progress.",
+    "text": "12.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#problem-definition",
+    "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#problem-definition",
+    "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#modeling-approach",
+    "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#modeling-approach",
+    "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
+    "section": "12.2 Modeling Approach",
+    "text": "12.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#data-and-methodology",
+    "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#data-and-methodology",
+    "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
+    "section": "12.3 Data and Methodology",
+    "text": "12.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#implementation",
+    "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#implementation",
+    "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
+    "section": "12.4 Implementation",
+    "text": "12.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#results-and-evaluation",
+    "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#results-and-evaluation",
+    "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
+    "section": "12.5 Results and Evaluation",
+    "text": "12.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#discussion-and-limitations",
+    "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#discussion-and-limitations",
+    "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
+    "section": "12.6 Discussion and Limitations",
+    "text": "12.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Energy and Industrial Systems",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
+    ]
+  },
+  {
+    "objectID": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#technical-appendix-optional",
+    "href": "4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html#technical-appendix-optional",
+    "title": "12  Knowledge Extraction from Technical Documents with NLP and LLMs",
+    "section": "12.7 Technical Appendix (Optional)",
+    "text": "12.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Knowledge Extraction from Technical Documents with NLP and LLMs</span>"
@@ -231,7 +1155,84 @@
     "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html",
     "title": "13  Climate Forecasting with Time Series",
     "section": "",
-    "text": "13.1 Introduction\nWork in progress.",
+    "text": "13.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Climate and Environmental Systems",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+    ]
+  },
+  {
+    "objectID": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#problem-definition",
+    "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#problem-definition",
+    "title": "13  Climate Forecasting with Time Series",
+    "section": "",
+    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "crumbs": [
+      "Climate and Environmental Systems",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+    ]
+  },
+  {
+    "objectID": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#modeling-approach",
+    "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#modeling-approach",
+    "title": "13  Climate Forecasting with Time Series",
+    "section": "13.2 Modeling Approach",
+    "text": "13.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Climate and Environmental Systems",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+    ]
+  },
+  {
+    "objectID": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#data-and-methodology",
+    "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#data-and-methodology",
+    "title": "13  Climate Forecasting with Time Series",
+    "section": "13.3 Data and Methodology",
+    "text": "13.3 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Climate and Environmental Systems",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+    ]
+  },
+  {
+    "objectID": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#implementation",
+    "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#implementation",
+    "title": "13  Climate Forecasting with Time Series",
+    "section": "13.4 Implementation",
+    "text": "13.4 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Climate and Environmental Systems",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+    ]
+  },
+  {
+    "objectID": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#results-and-evaluation",
+    "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#results-and-evaluation",
+    "title": "13  Climate Forecasting with Time Series",
+    "section": "13.5 Results and Evaluation",
+    "text": "13.5 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Climate and Environmental Systems",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+    ]
+  },
+  {
+    "objectID": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#discussion-and-limitations",
+    "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#discussion-and-limitations",
+    "title": "13  Climate Forecasting with Time Series",
+    "section": "13.6 Discussion and Limitations",
+    "text": "13.6 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Climate and Environmental Systems",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+    ]
+  },
+  {
+    "objectID": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#technical-appendix-optional",
+    "href": "5-climate-and-environmental-systems/1-climate-forecasting-time-series.html#technical-appendix-optional",
+    "title": "13  Climate Forecasting with Time Series",
+    "section": "13.7 Technical Appendix (Optional)",
+    "text": "13.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
@@ -331,6 +1332,83 @@
     "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
     "section": "15.2 Conformal Mappings",
     "text": "15.2 Conformal Mappings",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#problem-definition",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#problem-definition",
+    "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "15.3 Problem Definition",
+    "text": "15.3 Problem Definition\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\n\nWhat is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?\n\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#modeling-approach",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#modeling-approach",
+    "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "15.4 Modeling Approach",
+    "text": "15.4 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#data-and-methodology",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#data-and-methodology",
+    "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "15.5 Data and Methodology",
+    "text": "15.5 Data and Methodology\nThis section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\n\nThe goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#implementation",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#implementation",
+    "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "15.6 Implementation",
+    "text": "15.6 Implementation\nThis section describes the computational implementation of the project.\nTypical topics may include:\n\nLibraries and tools used\nWorkflow organization\nNumerical methods and algorithms\nModel training procedures\nPipeline structure\nComputational considerations\n\nImplementation details complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts may be included when appropriate.",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#results-and-evaluation",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#results-and-evaluation",
+    "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "15.7 Results and Evaluation",
+    "text": "15.7 Results and Evaluation\nThis section presents the main outcomes of the project and evaluates model performance.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\n\nThe emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#discussion-and-limitations",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#discussion-and-limitations",
+    "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "15.8 Discussion and Limitations",
+    "text": "15.8 Discussion and Limitations\nThis section discusses the implications, assumptions, limitations, and possible extensions of the work.\nTypical topics may include:\n\nModel assumptions and their consequences\nPractical limitations\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThis section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#technical-appendix-optional",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#technical-appendix-optional",
+    "title": "15  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "15.9 Technical Appendix (Optional)",
+    "text": "15.9 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\n\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>15</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
