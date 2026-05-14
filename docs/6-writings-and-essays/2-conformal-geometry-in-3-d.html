@@ -512,6 +512,31 @@ window.Quarto = {
 </ul>
 <p>The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.</p>
 <p>The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.</p>
+<div id="fig-conformal-transformation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-conformal-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/conformal-transformation.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conformal-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15.1: Schematic representation of a conformal transformation <span class="math inline">\(f(x,y,z)\)</span> mapping a region <span class="math inline">\(R\)</span> with boundary <span class="math inline">\(\partial R\)</span> in the <span class="math inline">\((x,y,z)\)</span> coordinate system into a transformed region <span class="math inline">\(R'\)</span> with boundary <span class="math inline">\(\partial R'\)</span> in the <span class="math inline">\((x',y',z')\)</span> coordinate system.
+</figcaption>
+</figure>
+</div>
+<p>As shown in <a href="#fig-conformal-transformation" class="quarto-xref">Figure&nbsp;<span>15.1</span></a>, …</p>
+<p>Suppose we have a region <span class="math inline">\(R\)</span> in <span class="math inline">\(xyz\)</span> space in which a scalar field <span class="math inline">\(\phi\)</span> satisfies Laplace’s equation <a href="#eq-laplace-equation" class="quarto-xref">Equation&nbsp;<span>15.1</span></a>. We want to determine what conditions a transformation <span class="math inline">\(f: R \rightarrow R'\)</span> must satisfy such that Laplace’s equation remains invariant under this transformation. For simplicity, let’s consider the simplest case in <span class="math inline">\(\mathbb{R}^2\)</span>.</p>
+<p>Applying the chain rule we have that:</p>
+<p><span id="eq-first-derivative-chain-rule"><span class="math display">\[
+\begin{aligned}
+\frac{\partial \phi}{\partial x} &amp;=
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial x}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial x} \\
+\frac{\partial \phi}{\partial y} &amp;=
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial y}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial y}
+\end{aligned}
+\tag{15.2}\]</span></span></p>
 
 
 </section>

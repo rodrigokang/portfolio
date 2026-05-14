@@ -113,3 +113,24 @@ Possible contents include:
 The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.
 
 The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.
+
+![Schematic representation of a conformal transformation $f(x,y,z)$ mapping a region $R$ with boundary $\partial R$ in the $(x,y,z)$ coordinate system into a transformed region $R'$ with boundary $\partial R'$ in the $(x',y',z')$ coordinate system.](figures/conformal-transformation.png){#fig-conformal-transformation}
+
+As shown in @fig-conformal-transformation, ...
+
+Suppose we have a region $R$ in $xyz$ space in which a scalar field $\phi$ satisfies Laplace's equation @eq-laplace-equation. We want to determine what conditions a transformation $f: R \rightarrow R'$ must satisfy such that Laplace's equation remains invariant under this transformation. For simplicity, let's consider the simplest case in $\mathbb{R}^2$.
+
+Applying the chain rule we have that:
+
+$$
+\begin{aligned}
+\frac{\partial \phi}{\partial x} &=
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial x}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial x} \\
+\frac{\partial \phi}{\partial y} &=
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial y}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial y}
+\end{aligned}
+$$ {#eq-first-derivative-chain-rule}
