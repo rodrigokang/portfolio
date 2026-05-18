@@ -1,0 +1,34 @@
+% <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+% Header / Footer configuration
+% <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+% Page number on the outer corners
+\fancyhead[LE,RO]{\thepage}
+
+% Even (left pages): chapter
+\fancyhead[RE]{\nouppercase{\leftmark}}
+
+% Odd (right pages): section
+\fancyhead[LO]{\nouppercase{\rightmark}}
+
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Chapter -> leftmark
+\renewcommand{\chaptermark}[1]{%
+  \markboth{#1}{}%
+}
+
+% Section -> rightmark
+\renewcommand{\sectionmark}[1]{%
+  \markright{#1}%
+}
+
+\renewcommand{\subsectionmark}[1]{}
+\renewcommand{\subsubsectionmark}[1]{}
+\renewcommand{\paragraphmark}[1]{}
+\renewcommand{\subparagraphmark}[1]{}

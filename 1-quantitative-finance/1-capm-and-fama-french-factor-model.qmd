@@ -4,16 +4,13 @@ _Work in progress._
 
 ## Problem Definition
 
-This section describes the problem being addressed and explains its relevance within the context of the domain.
+This project evaluates how asset pricing models—from the traditional CAPM to the multi-factor extensions of Fama and French—formalise the relationship between risk and expected return. In practice, an investor faced with a price signal must determine whether the potential return justifies the associated risk. Doing this effectively means discounting uncertain future cash flows back to present value, which requires a reliable discount rate. The core question is straightforward: what minimum return should be demanded from an asset given its specific risk profile?
 
-Typical questions considered in this section include:
+Getting this right is critical for asset valuation, portfolio construction, and fund performance evaluation. Without a structured framework, investment decisions often default to guesswork or oversimplified rules of thumb—such as chasing past returns or assuming that any form of risk automatically deserves a premium. Modern financial theory offers a more rigorous perspective: the market does not reward idiosyncratic or stock-specific risk, since it can be diversified away. Only systematic risk warrants a higher expected return. This principle is what separates the CAPM from more naive approaches and serves as the foundation for multi-factor models.
 
-- What is the objective of the project?
-- Why is the problem relevant?
-- What type of decisions or insights depend on the solution?
-- What are the main challenges associated with the problem?
+Key decisions—ranging from efficient capital allocation to identifying market mispricings—rely heavily on these models. If an asset offers an expected return above what its systematic risk predicts, it may indicate undervaluation. However, the real-world challenge is methodological: true expected returns are unobservable. Relying on historical data introduces noise, sample-period sensitivity, and specification errors. Furthermore, the CAPM compresses all systematic risk into a single factor (the market portfolio), a simplification that empirical evidence has repeatedly challenged.
 
-The emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.
+The Fama–French models attempt to address this limitation by capturing additional dimensions of systematic risk, including size, value, profitability, and investment patterns. From a data science perspective, this project explores how these models are constructed, tests their underlying assumptions, and evaluates how well they fit empirical data. The final output is a comparative analysis of the models’ explanatory power and practical limitations when confronted with real-world financial data that rarely behaves as textbook theory predicts.
 
 ## Modeling Approach
 
