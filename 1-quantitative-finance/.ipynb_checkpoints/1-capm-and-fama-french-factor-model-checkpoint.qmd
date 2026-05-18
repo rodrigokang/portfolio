@@ -1,6 +1,6 @@
 # CAPM and Fama–French Models
 
-_Work in progress._
+This project studies how classical and multi-factor asset pricing models explain the relationship between systematic risk and expected return. Using historical market data, the analysis evaluates the assumptions, explanatory power, and empirical limitations of the CAPM and Fama–French frameworks through regression-based factor modeling.
 
 ## Problem Definition
 
