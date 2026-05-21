@@ -14,7 +14,7 @@ The Fama–French models attempt to address this limitation by capturing additio
 
 ## Modeling Approach
 
-To approach the problem of asset valuation, this project is grounded on two fundamental principles of finance. The first is the time value of money: a dollar today is worth more than a dollar tomorrow because it can be invested immediately and start generating returns. The second is risk aversion: an uncertain cash flow is only attractive if it offers additional compensation relative to a risk-free alternative. In essence, these principles reflect the two central variables underlying any financial valuation problem: time and risk.
+To approach the problem of asset valuation, this project is grounded on two fundamental principles of finance. The first is the time value of money: a dollar today is worth more than a dollar tomorrow because it can be invested immediately and start generating returns. The second is risk aversion: an uncertain cash flow is only attractive if it offers additional compensation relative to a risk-free alternative. Together, these principles reflect the two central variables underlying any financial valuation problem: time and risk.
 
 Under this framework, the valuation of an asset can be understood as the present value of an uncertain future cash flow:
 
@@ -24,7 +24,7 @@ $$
 
 Here, $PV$ represents the expected present value of a future cash flow $X_t$ received at time $t$, while $r_t$ denotes the discount rate associated with risk and the opportunity cost of capital. The fundamental challenge for the investor is that this discount rate is not known in advance. In other words, the key question is how much return should be required to compensate for the level of risk being taken. This problem provides the conceptual motivation for the Capital Asset Pricing Model (CAPM) and its multifactor extensions.
 
-Since future returns are uncertain, this project models them as random variables. The most natural way to characterize them is through their expected value, representing the anticipated average return, and their volatility, which measures the dispersion of outcomes around that average. This mean-variance framework, originally developed by Harry Markowitz in modern portfolio theory, shows that total portfolio risk can be reduced by combining assets whose returns do not move exactly in the same way @markowitz1952portfolio. The intuition is straightforward: through diversification, part of the individual fluctuations of each asset tends to offset one another.
+Since future returns are uncertain, this project models them as random variables. A practical way to characterize them is through their expected value, representing the anticipated average return, and their volatility, which measures the dispersion of outcomes around that average. This mean-variance framework, originally developed by Harry Markowitz in modern portfolio theory, shows that total portfolio risk can be reduced by combining assets whose returns do not move exactly in the same way @markowitz1952portfolio. The intuition is straightforward: through diversification, part of the individual fluctuations of each asset tends to offset one another.
 
 However, diversification has an observable practical limit. As portfolios are constructed with an increasing number of assets, total volatility initially falls rapidly but eventually stabilizes around a lower bound. As illustrated in @fig-diversification, this behavior reveals the existence of two distinct components of risk. On the one hand, idiosyncratic or diversifiable risk, which is associated with firm-specific events and can largely be eliminated through diversification. On the other hand, systematic risk, which is linked to broader macroeconomic and market-wide movements and therefore persists even in highly diversified portfolios.
 
@@ -50,7 +50,7 @@ $$
 
 where $\text{SMB}$ (*Small Minus Big*) measures the excess return of small-cap stocks relative to large-cap stocks, while $\text{HML}$ (*High Minus Low*) captures the return differential between value and growth stocks @brealey2011principles @lewinson2022python.
 
-From both a modeling and machine learning perspective, the transition from the CAPM to the Fama–French three-factor model can be interpreted as moving from a simple linear regression to a multiple linear regression framework, incorporating additional explanatory variables to capture dimensions of systematic risk that a single-factor model cannot fully represent.
+From a modeling perspective, the transition from the CAPM to the Fama–French three-factor model can be interpreted as moving from a simple linear regression to a multiple linear regression framework, incorporating additional explanatory variables to capture dimensions of systematic risk that a single-factor model cannot fully represent.
 
 The main objective of the project is not simply to compare statistical goodness-of-fit metrics, but to understand how different economic factors contribute to the generation of returns in financial markets and to evaluate how effectively models of different complexity levels represent that underlying process.
 
