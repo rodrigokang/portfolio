@@ -14,18 +14,45 @@ The Fama–French models attempt to address this limitation by capturing additio
 
 ## Modeling Approach
 
-This section introduces the conceptual framework used to approach the problem.
+To approach the problem of asset valuation, this project is grounded on two fundamental principles of finance. The first is the time value of money: a dollar today is worth more than a dollar tomorrow because it can be invested immediately and start generating returns. The second is risk aversion: an uncertain cash flow is only attractive if it offers additional compensation relative to a risk-free alternative. In essence, these principles reflect the two central variables underlying any financial valuation problem: time and risk.
 
-The discussion typically includes:
+Under this framework, the valuation of an asset can be understood as the present value of an uncertain future cash flow:
 
-- The main modeling assumptions
-- The reasoning behind the selected methodology
-- The intuition behind the model or algorithm
-- The relationship between the model and the underlying process being studied
+$$
+PV = \left( \frac{1}{1 + r_t} \right)^t \mathbb{E}[X_t]
+$$
 
-Mathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.
+Here, $PV$ represents the expected present value of a future cash flow $X_t$ received at time $t$, while $r_t$ denotes the discount rate associated with risk and the opportunity cost of capital. The fundamental challenge for the investor is that this discount rate is not known in advance. In other words, the key question is how much return should be required to compensate for the level of risk being taken. This problem provides the conceptual motivation for the Capital Asset Pricing Model (CAPM) and its multifactor extensions.
 
-The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.
+Since future returns are uncertain, this project models them as random variables. The most natural way to characterize them is through their expected value, representing the anticipated average return, and their volatility, which measures the dispersion of outcomes around that average. This mean-variance framework, originally developed by Harry Markowitz in modern portfolio theory, shows that total portfolio risk can be reduced by combining assets whose returns do not move exactly in the same way @markowitz1952portfolio. The intuition is straightforward: through diversification, part of the individual fluctuations of each asset tends to offset one another.
+
+However, diversification has an observable practical limit. As portfolios are constructed with an increasing number of assets, total volatility initially falls rapidly but eventually stabilizes around a lower bound. As illustrated in @fig-diversification, this behavior reveals the existence of two distinct components of risk. On the one hand, idiosyncratic or diversifiable risk, which is associated with firm-specific events and can largely be eliminated through diversification. On the other hand, systematic risk, which is linked to broader macroeconomic and market-wide movements and therefore persists even in highly diversified portfolios.
+
+![Decomposition of total risk into systematic and diversifiable risk as assets are progressively added to a portfolio.](figures/diversification.png){#fig-diversification}
+
+This distinction has a fundamental implication for asset pricing. In a competitive market, rational investors should not expect compensation for taking risks that can be eliminated at virtually no cost through diversification. As a result, the market only rewards exposure to systematic risk. This idea forms the conceptual foundation of the CAPM, which states that the expected risk premium of an asset should be proportional to the expected risk premium of the market @sharpe1964capital @lintner1975valuation:
+
+$$
+\mathbb{E}[r_i] - r_f = \beta_i \left( \mathbb{E}[r_m] - r_f \right)
+$$
+
+In this expression, $\mathbb{E}[r_i]$ represents the expected return of asset $i$, $r_f$ is the risk-free rate, and $\mathbb{E}[r_m]$ corresponds to the expected return of the market portfolio. The parameter $\beta_i$ measures the sensitivity of the asset to market fluctuations and summarizes its exposure to systematic risk.
+
+From a modeling perspective, the estimation of beta can be interpreted as a simple linear regression between asset returns and market returns @bossaerts2006lectures. In this project, the CAPM is implemented precisely under this framework, using simple linear regression to estimate the market exposure of different assets and analyze the relationship between systematic risk and expected return.
+
+Despite its conceptual simplicity and historical importance, the CAPM assumes that the entire structure of systematic risk can be summarized by a single factor: the market itself. Empirical evidence, however, suggests that certain firm characteristics — such as company size or the relationship between book value and market value — capture persistent return patterns that the CAPM does not fully explain. These observations motivated the development of the multifactor models proposed by Fama and French @fama1997industry.
+
+In this project, these extensions are implemented using multiple linear regression. The three-factor model can be expressed as:
+
+$$
+\mathbb{E}[r_i] - r_f = \alpha + \beta_{mkt} (\mathbb{E}[r_m] - r_f) + \beta_{smb} \cdot \text{SMB} + \beta_{hml} \cdot \text{HML} + \varepsilon
+$$
+
+where $\text{SMB}$ (*Small Minus Big*) measures the excess return of small-cap stocks relative to large-cap stocks, while $\text{HML}$ (*High Minus Low*) captures the return differential between value and growth stocks @brealey2011principles @lewinson2022python.
+
+From both a modeling and machine learning perspective, the transition from the CAPM to the Fama–French three-factor model can be interpreted as moving from a simple linear regression to a multiple linear regression framework, incorporating additional explanatory variables to capture dimensions of systematic risk that a single-factor model cannot fully represent.
+
+The main objective of the project is not simply to compare statistical goodness-of-fit metrics, but to understand how different economic factors contribute to the generation of returns in financial markets and to evaluate how effectively models of different complexity levels represent that underlying process.
 
 ## Data and Methodology
 
