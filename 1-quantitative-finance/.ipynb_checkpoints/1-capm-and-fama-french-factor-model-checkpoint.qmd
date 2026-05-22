@@ -20,7 +20,7 @@ Under this framework, the valuation of an asset can be understood as the present
 
 $$
 PV = \left( \frac{1}{1 + r_t} \right)^t \mathbb{E}[X_t]
-$$
+$$ {#eq-present-value}
 
 Here, $PV$ represents the expected present value of a future cash flow $X_t$ received at time $t$, while $r_t$ denotes the discount rate associated with risk and the opportunity cost of capital. The fundamental challenge for the investor is that this discount rate is not known in advance. In other words, the key question is how much return should be required to compensate for the level of risk being taken. This problem provides the conceptual motivation for the Capital Asset Pricing Model (CAPM) and its multifactor extensions.
 
@@ -34,7 +34,7 @@ This distinction has a fundamental implication for asset pricing. In a competiti
 
 $$
 \mathbb{E}[r_i] - r_f = \beta_i \left( \mathbb{E}[r_m] - r_f \right)
-$$
+$$ {#eq-capm}
 
 In this expression, $\mathbb{E}[r_i]$ represents the expected return of asset $i$, $r_f$ is the risk-free rate, and $\mathbb{E}[r_m]$ corresponds to the expected return of the market portfolio. The parameter $\beta_i$ measures the sensitivity of the asset to market fluctuations and summarizes its exposure to systematic risk.
 
@@ -46,7 +46,7 @@ In this project, these extensions are implemented using multiple linear regressi
 
 $$
 \mathbb{E}[r_i] - r_f = \alpha + \beta_{mkt} (\mathbb{E}[r_m] - r_f) + \beta_{smb} \cdot \text{SMB} + \beta_{hml} \cdot \text{HML} + \varepsilon
-$$
+$$ {#eq-fama-french-3factor}
 
 where $\text{SMB}$ (*Small Minus Big*) measures the excess return of small-cap stocks relative to large-cap stocks, while $\text{HML}$ (*High Minus Low*) captures the return differential between value and growth stocks @brealey2011principles @lewinson2022python.
 
