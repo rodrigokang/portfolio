@@ -36,9 +36,9 @@ Mathematical expressions may be introduced when they help clarify the modeling d
 
 The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.
 
-## Data and Methodology
+## Methodology and Implementation
 
-This section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.
+This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.
 
 Typical topics may include:
 
@@ -48,29 +48,20 @@ Typical topics may include:
 - Simulation strategies
 - Training and validation methodology
 - Experimental setup
-
-The goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.
-
-## Implementation
-
-This section describes the computational implementation of the project.
-
-Typical topics may include:
-
-- Libraries and tools used
-- Workflow organization
 - Numerical methods and algorithms
-- Model training procedures
+- Workflow organization
 - Pipeline structure
 - Computational considerations
 
-Implementation details complement the conceptual discussion without turning the chapter into a software manual.
+The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.
 
-References to notebooks and scripts may be included when appropriate.
+Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.
 
-## Results and Evaluation
+References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.
 
-This section presents the main outcomes of the project and evaluates model performance.
+## Results, Discussion, and Limitations
+
+This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.
 
 Typical elements may include:
 
@@ -80,23 +71,13 @@ Typical elements may include:
 - Sensitivity analysis
 - Error analysis
 - Interpretation of results
-
-The emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.
-
-## Discussion and Limitations
-
-This section discusses the implications, assumptions, limitations, and possible extensions of the work.
-
-Typical topics may include:
-
 - Model assumptions and their consequences
-- Practical limitations
 - Sources of uncertainty
 - Robustness and generalization
 - Trade-offs associated with the methodology
 - Potential future improvements
 
-This section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.
+The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.
 
 ## Technical Appendix (Optional)
 
@@ -109,6 +90,9 @@ Possible contents include:
 - Numerical details
 - Extended equations
 - Supplementary experiments
+- Technical notes on auxiliary methods and algorithms
+
+The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.
 
 The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.
 

@@ -347,11 +347,9 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">7.1</span> Problem Definition</a></li>
   <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">7.2</span> Modeling Approach</a></li>
-  <li><a href="#data-and-methodology" id="toc-data-and-methodology" class="nav-link" data-scroll-target="#data-and-methodology"><span class="header-section-number">7.3</span> Data and Methodology</a></li>
-  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">7.4</span> Implementation</a></li>
-  <li><a href="#results-and-evaluation" id="toc-results-and-evaluation" class="nav-link" data-scroll-target="#results-and-evaluation"><span class="header-section-number">7.5</span> Results and Evaluation</a></li>
-  <li><a href="#discussion-and-limitations" id="toc-discussion-and-limitations" class="nav-link" data-scroll-target="#discussion-and-limitations"><span class="header-section-number">7.6</span> Discussion and Limitations</a></li>
-  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">7.7</span> Technical Appendix (Optional)</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">7.3</span> Methodology and Implementation</a></li>
+  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">7.4</span> Results, Discussion, and Limitations</a></li>
+  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">7.5</span> Technical Appendix (Optional)</a></li>
   </ul>
 </nav>
     </div>
@@ -403,9 +401,9 @@ ul.task-list li input[type="checkbox"] {
 <p>Mathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.</p>
 <p>The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.</p>
 </section>
-<section id="data-and-methodology" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="data-and-methodology"><span class="header-section-number">7.3</span> Data and Methodology</h2>
-<p>This section describes the data sources, preprocessing steps, simulation procedures, and experimental design used throughout the project.</p>
+<section id="methodology-and-implementation" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">7.3</span> Methodology and Implementation</h2>
+<p>This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.</p>
 <p>Typical topics may include:</p>
 <ul>
 <li>Data collection and sources</li>
@@ -414,27 +412,18 @@ ul.task-list li input[type="checkbox"] {
 <li>Simulation strategies</li>
 <li>Training and validation methodology</li>
 <li>Experimental setup</li>
-</ul>
-<p>The goal is to provide enough detail to understand how the analysis was conducted while maintaining a clear and readable narrative.</p>
-</section>
-<section id="implementation" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="implementation"><span class="header-section-number">7.4</span> Implementation</h2>
-<p>This section describes the computational implementation of the project.</p>
-<p>Typical topics may include:</p>
-<ul>
-<li>Libraries and tools used</li>
-<li>Workflow organization</li>
 <li>Numerical methods and algorithms</li>
-<li>Model training procedures</li>
+<li>Workflow organization</li>
 <li>Pipeline structure</li>
 <li>Computational considerations</li>
 </ul>
-<p>Implementation details complement the conceptual discussion without turning the chapter into a software manual.</p>
-<p>References to notebooks and scripts may be included when appropriate.</p>
+<p>The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.</p>
+<p>Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.</p>
+<p>References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.</p>
 </section>
-<section id="results-and-evaluation" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="results-and-evaluation"><span class="header-section-number">7.5</span> Results and Evaluation</h2>
-<p>This section presents the main outcomes of the project and evaluates model performance.</p>
+<section id="results-discussion-and-limitations" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">7.4</span> Results, Discussion, and Limitations</h2>
+<p>This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.</p>
 <p>Typical elements may include:</p>
 <ul>
 <li>Visualizations and plots</li>
@@ -443,25 +432,16 @@ ul.task-list li input[type="checkbox"] {
 <li>Sensitivity analysis</li>
 <li>Error analysis</li>
 <li>Interpretation of results</li>
-</ul>
-<p>The emphasis is placed not only on performance, but also on understanding model behavior and extracting meaningful insights from the results.</p>
-</section>
-<section id="discussion-and-limitations" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="discussion-and-limitations"><span class="header-section-number">7.6</span> Discussion and Limitations</h2>
-<p>This section discusses the implications, assumptions, limitations, and possible extensions of the work.</p>
-<p>Typical topics may include:</p>
-<ul>
 <li>Model assumptions and their consequences</li>
-<li>Practical limitations</li>
 <li>Sources of uncertainty</li>
 <li>Robustness and generalization</li>
 <li>Trade-offs associated with the methodology</li>
 <li>Potential future improvements</li>
 </ul>
-<p>This section is particularly important because it reflects critical thinking, technical maturity, and awareness of the limitations of quantitative models.</p>
+<p>The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.</p>
 </section>
-<section id="technical-appendix-optional" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">7.7</span> Technical Appendix (Optional)</h2>
+<section id="technical-appendix-optional" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">7.5</span> Technical Appendix (Optional)</h2>
 <p>This optional section contains technical details that support the project but are not essential for following the main narrative.</p>
 <p>Possible contents include:</p>
 <ul>
@@ -470,7 +450,9 @@ ul.task-list li input[type="checkbox"] {
 <li>Numerical details</li>
 <li>Extended equations</li>
 <li>Supplementary experiments</li>
+<li>Technical notes on auxiliary methods and algorithms</li>
 </ul>
+<p>The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.</p>
 <p>The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.</p>
 <p>The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.</p>
 
