@@ -1,5 +1,5 @@
 ---
-title: "CAPM Model"
+title: "[Project Title]"
 author: "Rodrigo Kang"
 
 format:
@@ -17,8 +17,8 @@ editor: visual
 
 ## Overview
 
-This notebook accompanies the project [**CAPM and Fama–French Models**](https://rodrigokang.github.io/portfolio/1-quantitative-finance/1-capm-and-fama-french-factor-model.html) and contains the computational implementation supporting the methodology, experiments, and results discussed in the portfolio chapter.
-
+This notebook accompanies the project **\[Project Title\]** and contains the computational implementation supporting the methodology, experiments, and results discussed in the portfolio chapter.\
+\
 The material presented here focuses on practical implementation details, including data preparation, model development, training procedures, evaluation workflows, and complementary computational experiments.
 
 ## Imports and Configuration

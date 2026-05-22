@@ -20,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
-
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-{ counter-reset: source-line 0; }
-pre.numberSource code > span
-{ position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-{ content: counter(source-line);
-position: relative; left: -1em; text-align: right; vertical-align: baseline;
-border: none; display: inline-block;
--webkit-touch-callout: none; -webkit-user-select: none;
--khtml-user-select: none; -moz-user-select: none;
--ms-user-select: none; user-select: none;
-padding: 0 4px; width: 4em;
-}
-pre.numberSource { margin-left: 3em; padding-left: 4px; }
-div.sourceCode
-{ }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -2179,8 +2144,18 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#quarto" id="toc-quarto" class="nav-link active" data-scroll-target="#quarto"><span class="header-section-number">1</span> Quarto</a></li>
-  <li><a href="#running-code" id="toc-running-code" class="nav-link" data-scroll-target="#running-code"><span class="header-section-number">2</span> Running Code</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#imports-and-configuration" id="toc-imports-and-configuration" class="nav-link" data-scroll-target="#imports-and-configuration"><span class="header-section-number">2</span> Imports and Configuration</a></li>
+  <li><a href="#data-loading" id="toc-data-loading" class="nav-link" data-scroll-target="#data-loading"><span class="header-section-number">3</span> Data Loading</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><span class="header-section-number">4</span> Data Preparation</a></li>
+  <li><a href="#exploratory-analysis-optional" id="toc-exploratory-analysis-optional" class="nav-link" data-scroll-target="#exploratory-analysis-optional"><span class="header-section-number">5</span> Exploratory Analysis (Optional)</a></li>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology"><span class="header-section-number">6</span> Methodology</a></li>
+  <li><a href="#model-development" id="toc-model-development" class="nav-link" data-scroll-target="#model-development"><span class="header-section-number">7</span> Model Development</a></li>
+  <li><a href="#training-and-validation" id="toc-training-and-validation" class="nav-link" data-scroll-target="#training-and-validation"><span class="header-section-number">8</span> Training and Validation</a></li>
+  <li><a href="#results-and-evaluation" id="toc-results-and-evaluation" class="nav-link" data-scroll-target="#results-and-evaluation"><span class="header-section-number">9</span> Results and Evaluation</a></li>
+  <li><a href="#additional-experiments-optional" id="toc-additional-experiments-optional" class="nav-link" data-scroll-target="#additional-experiments-optional"><span class="header-section-number">10</span> Additional Experiments (Optional)</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions"><span class="header-section-number">11</span> Conclusions</a></li>
+  <li><a href="#references-optional" id="toc-references-optional" class="nav-link" data-scroll-target="#references-optional"><span class="header-section-number">12</span> References (Optional)</a></li>
   </ul>
 </nav>
 </div>
@@ -2211,26 +2186,133 @@ vertical-align: -.125em;
 </header>
 
 
-<section id="quarto" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="quarto"><span class="header-section-number">1</span> Quarto</h2>
-<p>Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <a href="https://quarto.org" class="uri">https://quarto.org</a>.</p>
+<section id="overview" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
+<p>This notebook accompanies the project <a href="https://rodrigokang.github.io/portfolio/1-quantitative-finance/1-capm-and-fama-french-factor-model.html"><strong>CAPM and Fama–French Models</strong></a> and contains the computational implementation supporting the methodology, experiments, and results discussed in the portfolio chapter.</p>
+<p>The material presented here focuses on practical implementation details, including data preparation, model development, training procedures, evaluation workflows, and complementary computational experiments.</p>
 </section>
-<section id="running-code" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="running-code"><span class="header-section-number">2</span> Running Code</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
-<p>You can add options to executable code like this</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-</div>
-<p>The <code>echo: false</code> option disables the printing of code (only output is displayed).</p>
+<section id="imports-and-configuration" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="imports-and-configuration"><span class="header-section-number">2</span> Imports and Configuration</h2>
+<p>This section includes the libraries, dependencies, and configuration settings required throughout the notebook.</p>
+<p>Typical elements may include:</p>
+<ul>
+<li><p>Package imports</p></li>
+<li><p>Random seed configuration</p></li>
+<li><p>Visualization settings</p></li>
+<li><p>Paths and environment configuration</p></li>
+</ul>
+</section>
+<section id="data-loading" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="data-loading"><span class="header-section-number">3</span> Data Loading</h2>
+<p>This section describes the procedures used to load and organize the data required for the analysis.</p>
+<p>Typical topics may include:</p>
+<ul>
+<li><p>Data sources</p></li>
+<li><p>File loading procedures</p></li>
+<li><p>Database connections</p></li>
+<li><p>Initial data inspection</p></li>
+</ul>
+</section>
+<section id="data-preparation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="data-preparation"><span class="header-section-number">4</span> Data Preparation</h2>
+<p>This section contains the preprocessing and transformation steps applied before model development.</p>
+<p>Typical topics may include:</p>
+<ul>
+<li><p>Data cleaning</p></li>
+<li><p>Missing value handling</p></li>
+<li><p>Feature engineering</p></li>
+<li><p>Encoding and normalization</p></li>
+<li><p>Data transformations</p></li>
+</ul>
+</section>
+<section id="exploratory-analysis-optional" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="exploratory-analysis-optional"><span class="header-section-number">5</span> Exploratory Analysis (Optional)</h2>
+<p>This optional section presents exploratory analyses used to better understand the structure and characteristics of the data.</p>
+<p>Typical elements may include:</p>
+<ul>
+<li><p>Descriptive statistics</p></li>
+<li><p>Visual exploration</p></li>
+<li><p>Correlation analysis</p></li>
+<li><p>Distribution analysis</p></li>
+<li><p>Preliminary pattern identification</p></li>
+</ul>
+</section>
+<section id="methodology" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="methodology"><span class="header-section-number">6</span> Methodology</h2>
+<p>This section implements the methodological framework discussed in the portfolio chapter.</p>
+<p>Typical topics may include:</p>
+<ul>
+<li><p>Model definition</p></li>
+<li><p>Simulation procedures</p></li>
+<li><p>Optimization methods</p></li>
+<li><p>Statistical methodologies</p></li>
+<li><p>Experimental design</p></li>
+</ul>
+<p>Short technical comments may be included when relevant to the implementation.</p>
+</section>
+<section id="model-development" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="model-development"><span class="header-section-number">7</span> Model Development</h2>
+<p>This section contains the practical implementation of the models and algorithms used throughout the project.</p>
+<p>Typical topics may include:</p>
+<ul>
+<li><p>Model construction</p></li>
+<li><p>Training pipelines</p></li>
+<li><p>Hyperparameter configuration</p></li>
+<li><p>Numerical procedures</p></li>
+<li><p>Auxiliary algorithms</p></li>
+</ul>
+</section>
+<section id="training-and-validation" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="training-and-validation"><span class="header-section-number">8</span> Training and Validation</h2>
+<p>This section presents the procedures used to train, validate, and evaluate the models.</p>
+<p>Typical topics may include:</p>
+<ul>
+<li><p>Training procedures</p></li>
+<li><p>Cross-validation strategies</p></li>
+<li><p>Performance monitoring</p></li>
+<li><p>Error estimation</p></li>
+<li><p>Model comparison</p></li>
+</ul>
+</section>
+<section id="results-and-evaluation" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="results-and-evaluation"><span class="header-section-number">9</span> Results and Evaluation</h2>
+<p>This section presents the main computational results obtained throughout the analysis.</p>
+<p>Typical elements may include:</p>
+<ul>
+<li><p>Performance metrics</p></li>
+<li><p>Visualizations and plots</p></li>
+<li><p>Comparative analyses</p></li>
+<li><p>Error analysis</p></li>
+<li><p>Sensitivity analysis</p></li>
+</ul>
+<p>The emphasis is placed on understanding model behavior and interpreting the practical implications of the results.</p>
+</section>
+<section id="additional-experiments-optional" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="additional-experiments-optional"><span class="header-section-number">10</span> Additional Experiments (Optional)</h2>
+<p>This optional section contains complementary experiments that support or extend the main analysis.</p>
+<p>Typical topics may include:</p>
+<ul>
+<li><p>Alternative configurations</p></li>
+<li><p>Sensitivity studies</p></li>
+<li><p>Robustness checks</p></li>
+<li><p>Auxiliary simulations</p></li>
+<li><p>Comparative experiments</p></li>
+</ul>
+</section>
+<section id="conclusions" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="conclusions"><span class="header-section-number">11</span> Conclusions</h2>
+<p>This section summarizes the main findings and computational outcomes of the notebook.</p>
+<p>The discussion may include:</p>
+<ul>
+<li><p>Main implementation results</p></li>
+<li><p>Practical observations</p></li>
+<li><p>Computational considerations</p></li>
+<li><p>Potential improvements</p></li>
+</ul>
+</section>
+<section id="references-optional" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="references-optional"><span class="header-section-number">12</span> References (Optional)</h2>
+<p>This optional section contains references relevant to the methodologies, algorithms, and computational techniques used throughout the notebook.</p>
 </section>
 
 </main>
