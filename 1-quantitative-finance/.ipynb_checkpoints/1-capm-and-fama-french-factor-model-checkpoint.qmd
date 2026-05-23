@@ -110,6 +110,8 @@ Additional model diagnostics are reported below.
 Table 2. Diagnostic statistics associated with the CAPM linear regression model.
 </div>
 
+The estimated beta coefficient is also statistically significant, with a large associated $t$-statistic and a near-zero $p$-value. Similarly, the overall regression presents a large $F$-statistic, supporting the existence of a statistically meaningful linear relationship between Apple returns and market returns during the analyzed period.
+
 The estimated coefficient of determination of approximately $R^2 = 0.625$ indicates that the market factor alone explains a substantial fraction of the observed variability in Apple daily returns during the selected period. Nevertheless, a significant portion of the variability remains unexplained, motivating the consideration of multifactor extensions beyond the single-factor CAPM specification.
 
 The fitted linear relationship between asset and market returns is illustrated in @fig-capm-regression.
