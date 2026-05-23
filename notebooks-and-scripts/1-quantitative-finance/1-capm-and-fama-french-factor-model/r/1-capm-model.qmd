@@ -12,6 +12,10 @@ format:
     theme: cosmo
     embed-resources: true
 
+execute:
+  warning: false
+  message: false
+
 editor: visual
 ---
 
@@ -23,21 +27,34 @@ The material presented here focuses on practical implementation details, includi
 
 ## Imports and Configuration
 
-This notebook contains the R implementation accompanying the CAPM analysis. The workflow uses historical market data from Yahoo Finance and focuses on the practical steps required to estimate a simple linear relationship between an individual asset and the market.
+This section initializes the main libraries used throughout the notebook.
+
+The analysis uses historical market data obtained from Yahoo Finance together with standard R libraries for data manipulation, visualization, and linear regression modeling.
+
+The goal is to evaluate a simple CAPM specification by comparing the returns of an individual asset against the S&P 500 index as a proxy for the overall market.
 
 ```{r}
+Sys.setenv(LANGUAGE = "en")
+
 library(quantmod)
 library(dplyr)
 library(ggplot2)
 library(broom)
 library(PerformanceAnalytics)
+library(gt)
+```
+
+```{r}
+outputs_dir <- "1-capm-model-figures"
+
+dir.create(outputs_dir, showWarnings = FALSE)
 ```
 
 ## Asset Selection and Market Benchmark
 
 Apple Inc. (`AAPL`) is used as the individual asset, while the S&P 500 index (`^GSPC`) is used as a proxy for the market portfolio.
 
-The analysis uses five years of daily market data.
+The analysis uses five years of daily adjusted closing prices obtained from Yahoo Finance.
 
 ```{r}
 asset_ticker <- "AAPL"
@@ -49,7 +66,9 @@ end_date <- "2025-01-01"
 
 ## Data Collection
 
-Daily price data for both the selected asset and the market index are downloaded from Yahoo Finance and combined into a single dataset.
+Daily closing prices for both the selected asset and the market index are downloaded from Yahoo Finance and combined into a single dataset for further analysis.
+
+The downloaded prices are adjusted for corporate actions when available, making them suitable for return calculation.
 
 ```{r}
 asset_data <- getSymbols(
@@ -82,7 +101,7 @@ head(prices)
 
 ## Price Series Visualization
 
-The price series are inspected before computing returns. Since the asset and the market index are expressed on different price scales, this plot is mainly used as a quick check of the downloaded data.
+The price series are inspected before computing returns. Since the asset and the market index are expressed on different price scales, the visualization is mainly used as a preliminary inspection of the downloaded data.
 
 ```{r}
 prices_df <- data.frame(
@@ -90,7 +109,7 @@ prices_df <- data.frame(
   coredata(prices)
 )
 
-ggplot(prices_df, aes(x = date)) +
+closing_prices_plot <- ggplot(prices_df, aes(x = date)) +
   geom_line(aes(y = asset, colour = "Asset")) +
   geom_line(aes(y = market, colour = "Market")) +
   labs(
@@ -100,11 +119,25 @@ ggplot(prices_df, aes(x = date)) +
     colour = NULL
   ) +
   theme_minimal()
+
+closing_prices_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "closing-prices.png"),
+  plot = closing_prices_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
 ```
 
 ## Return Calculation
 
-Daily returns are computed from the closing price series and used as the main variables in the CAPM regression analysis.
+Daily returns are computed from the adjusted closing price series and used as the main variables in the CAPM regression analysis.
+
+These returns provide a normalized representation of market behavior and allow the linear relationship between the asset and the market portfolio to be estimated.
 
 ```{r}
 returns <- na.omit(Return.calculate(prices, method = "discrete"))
@@ -121,8 +154,10 @@ head(returns_df)
 
 The relationship between asset and market returns is briefly explored before estimating the regression model.
 
+The scatter plot provides an initial visual assessment of the linear association assumed by the CAPM framework.
+
 ```{r}
-ggplot(returns_df, aes(x = market, y = asset)) +
+daily_returns_plot <- ggplot(returns_df, aes(x = market, y = asset)) +
   geom_point(alpha = 0.5) +
   labs(
     title = "Asset vs Market Daily Returns",
@@ -130,21 +165,108 @@ ggplot(returns_df, aes(x = market, y = asset)) +
     y = "Asset Returns"
   ) +
   theme_minimal()
+
+daily_returns_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "daily-returns-scatter.png"),
+  plot = daily_returns_plot,
+  width = 7,
+  height = 5,
+  dpi = 300
+)
 ```
 
 ## CAPM Estimation
 
 A simple linear regression is estimated using market returns as the independent variable and asset returns as the dependent variable.
 
+The estimated coefficients are interpreted as the asset alpha and beta under the CAPM specification.
+
 ```{r}
 capm_model <- lm(asset ~ market, data = returns_df)
 
-summary(capm_model)
+capm_coefficients_table <- tidy(capm_model)
+```
+
+```{r}
+capm_coefficients_gt <- capm_coefficients_table |>
+  mutate(
+    estimate = round(estimate, 6),
+    std.error = round(std.error, 6),
+    statistic = round(statistic, 4),
+    p.value = round(p.value, 6)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "CAPM Regression Coefficients"
+  ) |>
+  cols_label(
+    term = "Term",
+    estimate = "Estimate",
+    std.error = "Std. Error",
+    statistic = "t-statistic",
+    p.value = "p-value"
+  )
+
+capm_coefficients_gt
+```
+
+```{r}
+gtsave(
+  data = capm_coefficients_gt,
+  filename = file.path(outputs_dir, "capm-coefficients-table.html")
+)
+```
+
+```{r}
+capm_diagnostics_table <- tibble(
+  Metric = c(
+    "R-squared",
+    "Adjusted R-squared",
+    "F-statistic",
+    "Observations",
+    "AIC",
+    "BIC"
+  ),
+  Value = c(
+    summary(capm_model)$r.squared,
+    summary(capm_model)$adj.r.squared,
+    summary(capm_model)$fstatistic[1],
+    nobs(capm_model),
+    AIC(capm_model),
+    BIC(capm_model)
+  )
+)
+```
+
+```{r}
+capm_diagnostics_gt <- capm_diagnostics_table |>
+  mutate(
+    Value = round(Value, 4)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "CAPM Model Diagnostics"
+  )
+
+capm_diagnostics_gt
+```
+
+```{r}
+gtsave(
+  data = capm_diagnostics_gt,
+  filename = file.path(outputs_dir, "capm-model-diagnostics.html")
+)
 ```
 
 ## Model Evaluation
 
 The estimated regression coefficients are inspected together with the fitted relationship between asset and market returns.
+
+The regression line provides a visual representation of the sensitivity of the selected asset to movements in the market portfolio.
 
 ```{r}
 alpha <- coef(capm_model)[["(Intercept)"]]
@@ -155,7 +277,7 @@ cat("Beta:", round(beta, 4), "\n")
 ```
 
 ```{r}
-ggplot(returns_df, aes(x = market, y = asset)) +
+capm_regression_plot <- ggplot(returns_df, aes(x = market, y = asset)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, colour = "red") +
   labs(
@@ -164,10 +286,16 @@ ggplot(returns_df, aes(x = market, y = asset)) +
     y = "Asset Returns"
   ) +
   theme_minimal()
+
+capm_regression_plot
 ```
 
-## Discussion and Limitations
-
-The estimated beta greater than one suggests that Apple exhibited higher sensitivity to market movements than the S&P 500 during the analyzed period.
-
-While the simple CAPM specification captures a substantial portion of the variation in asset returns, the model remains a simplified representation of market behavior and does not account for additional risk factors or changing market conditions over time.
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "capm-regression.png"),
+  plot = capm_regression_plot,
+  width = 7,
+  height = 5,
+  dpi = 300
+)
+```

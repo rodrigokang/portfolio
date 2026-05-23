@@ -56,26 +56,69 @@ The main objective of the project is not simply to compare statistical goodness-
 
 ## Methodology and Implementation
 
-This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.
+### Data Collection and Preprocessing
 
-Typical topics may include:
+The analysis uses daily adjusted closing prices obtained from Yahoo Finance for both Apple Inc. (`AAPL`) and the S&P 500 index (`^GSPC`). The S&P 500 is used as a proxy for the market portfolio within the CAPM framework.
 
-- Data collection and sources
-- Feature engineering
-- Cleaning and preprocessing
-- Simulation strategies
-- Training and validation methodology
-- Experimental setup
-- Numerical methods and algorithms
-- Workflow organization
-- Pipeline structure
-- Computational considerations
+The selected period spans from January 2020 to January 2025, providing a multi-year sample that includes different market conditions and volatility regimes. Adjusted prices are used in order to account for corporate actions such as stock splits and dividend adjustments when available.
 
-The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.
+After downloading the data, both time series are merged into a single dataset and aligned by trading date. Missing observations are removed prior to return calculation.
 
-Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.
+The price series are initially inspected to verify data consistency and to obtain a preliminary view of the market dynamics during the analyzed period.
 
-References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.
+![Adjusted closing prices for Apple Inc. and the S\&P 500 index between 2020 and 2025. The figure is mainly used as a preliminary inspection of the downloaded financial time series before return calculation.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/closing-prices.png){#fig-capm-closing-prices}
+
+Daily simple returns are then computed from the adjusted closing prices. These returns constitute the main variables used throughout the regression analysis.
+
+Before estimating the model, the relationship between asset and market returns is visually explored through a scatter plot. As shown in @fig-capm-daily-returns-scatter, the data already suggest a positive linear relationship between Apple returns and market returns, supporting the use of a linear regression framework for the CAPM estimation.
+
+![Scatter plot of daily Apple returns against S\&P 500 daily returns. The figure provides an exploratory visualization of the positive relationship between the asset and market returns prior to the CAPM estimation.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/daily-returns-scatter.png){#fig-capm-daily-returns-scatter}
+
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
+
+### CAPM Implementation
+
+Following the theoretical formulation introduced in Equation @eq-capm, the CAPM is implemented through a simple linear regression in which the daily returns of Apple Inc. are modeled as a function of the daily returns of the market portfolio.
+
+For simplicity, the implementation presented here uses raw daily returns without explicitly incorporating a risk-free rate. Under this approximation, the model estimates the linear sensitivity of the selected asset relative to market movements.
+
+The estimated regression coefficients are summarized below.
+
+<iframe 
+  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-coefficients-table.html"
+  width="100%"
+  height="170"
+  style="border: none;">
+</iframe>
+
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+Table 1. Estimated CAPM regression coefficients for Apple Inc. using the S&amp;P 500 as the market proxy.
+</div>
+
+The estimated market beta is approximately $\beta = 1.173311$, indicating that Apple exhibited higher sensitivity to market fluctuations than the S\&P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately $17\%$ more aggressively than the market portfolio in response to market variations.
+
+Additional model diagnostics are reported below.
+
+<iframe 
+  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-model-diagnostics.html"
+  width="100%"
+  height="280"
+  style="border: none;">
+</iframe>
+
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+Table 2. Diagnostic statistics associated with the CAPM linear regression model.
+</div>
+
+The estimated coefficient of determination of approximately $R^2 = 0.625$ indicates that the market factor alone explains a substantial fraction of the observed variability in Apple daily returns during the selected period. Nevertheless, a significant portion of the variability remains unexplained, motivating the consideration of multifactor extensions beyond the single-factor CAPM specification.
+
+The fitted linear relationship between asset and market returns is illustrated in @fig-capm-regression.
+
+![CAPM linear regression between Apple daily returns and S\&P 500 daily returns. The red line represents the fitted linear relationship estimated through ordinary least squares regression.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-regression.png){#fig-capm-regression}
+
+### Fama–French Three-Factor Model Implementation
+
+### Comparative Analysis
 
 ## Results, Discussion, and Limitations
 

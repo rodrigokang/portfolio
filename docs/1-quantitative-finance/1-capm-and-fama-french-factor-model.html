@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,14 +54,15 @@ div.csl-indent {
 <link href="../1-quantitative-finance/0-overview.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -104,7 +105,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -144,7 +145,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -396,7 +399,13 @@ window.Quarto = {
   <ul>
   <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">1.1</span> Problem Definition</a></li>
   <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">1.2</span> Modeling Approach</a></li>
-  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">1.3</span> Methodology and Implementation</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">1.3</span> Methodology and Implementation</a>
+  <ul class="collapse">
+  <li><a href="#data-collection-and-preprocessing" id="toc-data-collection-and-preprocessing" class="nav-link" data-scroll-target="#data-collection-and-preprocessing"><span class="header-section-number">1.3.1</span> Data Collection and Preprocessing</a></li>
+  <li><a href="#capm-implementation" id="toc-capm-implementation" class="nav-link" data-scroll-target="#capm-implementation"><span class="header-section-number">1.3.2</span> CAPM Implementation</a></li>
+  <li><a href="#famafrench-three-factor-model-implementation" id="toc-famafrench-three-factor-model-implementation" class="nav-link" data-scroll-target="#famafrench-three-factor-model-implementation"><span class="header-section-number">1.3.3</span> Fama–French Three-Factor Model Implementation</a></li>
+  <li><a href="#comparative-analysis" id="toc-comparative-analysis" class="nav-link" data-scroll-target="#comparative-analysis"><span class="header-section-number">1.3.4</span> Comparative Analysis</a></li>
+  </ul></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">1.4</span> Results, Discussion, and Limitations</a></li>
   <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">1.5</span> Technical Appendix (Optional)</a></li>
   </ul>
@@ -469,23 +478,72 @@ Figure&nbsp;1.1: Decomposition of total risk into systematic and diversifiable r
 </section>
 <section id="methodology-and-implementation" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">1.3</span> Methodology and Implementation</h2>
-<p>This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.</p>
-<p>Typical topics may include:</p>
-<ul>
-<li>Data collection and sources</li>
-<li>Feature engineering</li>
-<li>Cleaning and preprocessing</li>
-<li>Simulation strategies</li>
-<li>Training and validation methodology</li>
-<li>Experimental setup</li>
-<li>Numerical methods and algorithms</li>
-<li>Workflow organization</li>
-<li>Pipeline structure</li>
-<li>Computational considerations</li>
-</ul>
-<p>The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.</p>
-<p>Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.</p>
-<p>References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.</p>
+<section id="data-collection-and-preprocessing" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="data-collection-and-preprocessing"><span class="header-section-number">1.3.1</span> Data Collection and Preprocessing</h3>
+<p>The analysis uses daily adjusted closing prices obtained from Yahoo Finance for both Apple Inc.&nbsp;(<code>AAPL</code>) and the S&amp;P 500 index (<code>^GSPC</code>). The S&amp;P 500 is used as a proxy for the market portfolio within the CAPM framework.</p>
+<p>The selected period spans from January 2020 to January 2025, providing a multi-year sample that includes different market conditions and volatility regimes. Adjusted prices are used in order to account for corporate actions such as stock splits and dividend adjustments when available.</p>
+<p>After downloading the data, both time series are merged into a single dataset and aligned by trading date. Missing observations are removed prior to return calculation.</p>
+<p>The price series are initially inspected to verify data consistency and to obtain a preliminary view of the market dynamics during the analyzed period.</p>
+<div id="fig-capm-closing-prices" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-capm-closing-prices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/closing-prices.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-capm-closing-prices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Adjusted closing prices for Apple Inc.&nbsp;and the S&amp;P 500 index between 2020 and 2025. The figure is mainly used as a preliminary inspection of the downloaded financial time series before return calculation.
+</figcaption>
+</figure>
+</div>
+<p>Daily simple returns are then computed from the adjusted closing prices. These returns constitute the main variables used throughout the regression analysis.</p>
+<p>Before estimating the model, the relationship between asset and market returns is visually explored through a scatter plot. As shown in <a href="#fig-capm-daily-returns-scatter" class="quarto-xref">Figure&nbsp;<span>1.3</span></a>, the data already suggest a positive linear relationship between Apple returns and market returns, supporting the use of a linear regression framework for the CAPM estimation.</p>
+<div id="fig-capm-daily-returns-scatter" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-capm-daily-returns-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/daily-returns-scatter.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-capm-daily-returns-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: Scatter plot of daily Apple returns against S&amp;P 500 daily returns. The figure provides an exploratory visualization of the positive relationship between the asset and market returns prior to the CAPM estimation.
+</figcaption>
+</figure>
+</div>
+<p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html">here</a>. The corresponding Python notebooks associated with this project are also available in the repository <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python"><i class="bi bi-github"></i></a>.</p>
+</section>
+<section id="capm-implementation" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="capm-implementation"><span class="header-section-number">1.3.2</span> CAPM Implementation</h3>
+<p>Following the theoretical formulation introduced in Equation <a href="#eq-capm" class="quarto-xref">Equation&nbsp;<span>1.2</span></a>, the CAPM is implemented through a simple linear regression in which the daily returns of Apple Inc.&nbsp;are modeled as a function of the daily returns of the market portfolio.</p>
+<p>For simplicity, the implementation presented here uses raw daily returns without explicitly incorporating a risk-free rate. Under this approximation, the model estimates the linear sensitivity of the selected asset relative to market movements.</p>
+<p>The estimated regression coefficients are summarized below.</p>
+<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-coefficients-table.html" width="100%" height="170" style="border: none;">
+</iframe>
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+<p>Table 1. Estimated CAPM regression coefficients for Apple Inc.&nbsp;using the S&amp;P 500 as the market proxy.</p>
+</div>
+<p>The estimated market beta is approximately <span class="math inline">\(\beta = 1.173311\)</span>, indicating that Apple exhibited higher sensitivity to market fluctuations than the S&amp;P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately <span class="math inline">\(17\%\)</span> more aggressively than the market portfolio in response to market variations.</p>
+<p>Additional model diagnostics are reported below.</p>
+<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-model-diagnostics.html" width="100%" height="280" style="border: none;">
+</iframe>
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+<p>Table 2. Diagnostic statistics associated with the CAPM linear regression model.</p>
+</div>
+<p>The estimated coefficient of determination of approximately <span class="math inline">\(R^2 = 0.625\)</span> indicates that the market factor alone explains a substantial fraction of the observed variability in Apple daily returns during the selected period. Nevertheless, a significant portion of the variability remains unexplained, motivating the consideration of multifactor extensions beyond the single-factor CAPM specification.</p>
+<p>The fitted linear relationship between asset and market returns is illustrated in <a href="#fig-capm-regression" class="quarto-xref">Figure&nbsp;<span>1.4</span></a>.</p>
+<div id="fig-capm-regression" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-capm-regression-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-regression.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-capm-regression-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: CAPM linear regression between Apple daily returns and S&amp;P 500 daily returns. The red line represents the fitted linear relationship estimated through ordinary least squares regression.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="famafrench-three-factor-model-implementation" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" class="anchored" data-anchor-id="famafrench-three-factor-model-implementation"><span class="header-section-number">1.3.3</span> Fama–French Three-Factor Model Implementation</h3>
+</section>
+<section id="comparative-analysis" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="comparative-analysis"><span class="header-section-number">1.3.4</span> Comparative Analysis</h3>
+</section>
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">1.4</span> Results, Discussion, and Limitations</h2>
@@ -598,13 +656,14 @@ Figure&nbsp;1.1: Decomposition of total risk into systematic and diversifiable r
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
