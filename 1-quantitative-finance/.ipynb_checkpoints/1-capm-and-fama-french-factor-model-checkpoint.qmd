@@ -76,7 +76,7 @@ Before estimating the model, the relationship between asset and market returns i
 
 ### CAPM Implementation
 
-Following the theoretical formulation introduced in Equation @eq-capm, the CAPM is implemented through a simple linear regression in which the daily returns of Apple Inc. are modeled as a function of the daily returns of the market portfolio.
+Following the theoretical formulation introduced in @eq-capm, the CAPM is implemented through a simple linear regression in which the daily returns of Apple Inc. are modeled as a function of the daily returns of the market portfolio.
 
 For simplicity, the implementation presented here uses raw daily returns without explicitly incorporating a risk-free rate. Under this approximation, the model estimates the linear sensitivity of the selected asset relative to market movements.
 
@@ -120,7 +120,7 @@ Additional implementation details are available in the companion Quarto notebook
 
 ### Fama–French Three-Factor Model Implementation
 
-To extend the single-factor CAPM specification, the Fama–French three-factor model introduced in Equation @eq-fama-french-3factor was estimated using ordinary least squares (OLS) regression. In addition to the market excess return factor, the model incorporates two additional systematic risk factors associated with firm size (`SMB`) and relative valuation (`HML`).
+To extend the single-factor CAPM specification, the Fama–French three-factor model introduced in @eq-fama-french-3factor was estimated using ordinary least squares (OLS) regression. In addition to the market excess return factor, the model incorporates two additional systematic risk factors associated with firm size (`SMB`) and relative valuation (`HML`).
 
 The implementation combines daily adjusted closing prices for Apple Inc. (`AAPL`) obtained from Yahoo Finance with the daily Fama–French factor dataset developed by Kenneth French. The final modeling dataset contains 1,256 daily observations covering the period from January 2020 to December 2024. The average daily excess return of Apple over the sample period was approximately $0.11\%$, with a daily standard deviation close to $2.0\%$.
 
