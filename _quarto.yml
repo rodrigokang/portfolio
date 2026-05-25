@@ -72,6 +72,11 @@ book:
 bibliography: references.bib
 csl: ieee.csl
 
+crossref:
+  fig-prefix: Figure
+  eq-prefix: Equation
+  tbl-prefix: Table
+
 format:
   html:
     theme: cosmo
