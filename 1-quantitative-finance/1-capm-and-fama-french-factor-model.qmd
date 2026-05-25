@@ -40,7 +40,7 @@ In this expression, $\mathbb{E}[r_i]$ represents the expected return of asset $i
 
 From a modeling perspective, the estimation of beta can be interpreted as a simple linear regression between asset returns and market returns @bossaerts2006lectures. In this project, the CAPM is implemented precisely under this framework, using simple linear regression to estimate the market exposure of different assets and analyze the relationship between systematic risk and expected return.
 
-Despite its conceptual simplicity and historical importance, the CAPM assumes that the entire structure of systematic risk can be summarized by a single factor: the market itself. Empirical evidence, however, suggests that certain firm characteristics — such as company size or the relationship between book value and market value — capture persistent return patterns that the CAPM does not fully explain. These observations motivated the development of the multifactor models proposed by Fama and French @fama1997industry.
+Despite its conceptual simplicity and historical importance, the CAPM assumes that the entire structure of systematic risk can be summarized by a single factor: the market itself. Empirical evidence, however, suggests that certain firm characteristics — such as company size or the relationship between book value and market value — capture persistent return patterns that the CAPM does not fully explain. These observations motivated the development of the multifactor models proposed by Fama and French @fama1993common @fama1997industry.
 
 In this project, these extensions are implemented using multiple linear regression. The three-factor model can be expressed as:
 
@@ -60,21 +60,19 @@ The main objective of the project is not simply to compare statistical goodness-
 
 The analysis uses daily adjusted closing prices obtained from Yahoo Finance for both Apple Inc. (`AAPL`) and the S&P 500 index (`^GSPC`). The S&P 500 is used as a proxy for the market portfolio within the CAPM framework.
 
-The selected period spans from January 2020 to January 2025, providing a multi-year sample that includes different market conditions and volatility regimes. Adjusted prices are used in order to account for corporate actions such as stock splits and dividend adjustments when available.
+The selected period spans from January 2020 to December 2024, providing a multi-year sample that includes different market conditions and volatility regimes. Adjusted prices are used in order to account for corporate actions such as stock splits and dividend adjustments when available.
 
 After downloading the data, both time series are merged into a single dataset and aligned by trading date. Missing observations are removed prior to return calculation.
 
 The price series are initially inspected to verify data consistency and to obtain a preliminary view of the market dynamics during the analyzed period.
 
-![Adjusted closing prices for Apple Inc. and the S\&P 500 index between 2020 and 2025. The figure is mainly used as a preliminary inspection of the downloaded financial time series before return calculation.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/closing-prices.png){#fig-capm-closing-prices}
+![Adjusted closing prices for Apple Inc. and the S\&P 500 index between 2020 and 2024. The figure is mainly used as a preliminary inspection of the downloaded financial time series before return calculation.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/closing-prices.png){#fig-capm-closing-prices}
 
 Daily simple returns are then computed from the adjusted closing prices. These returns constitute the main variables used throughout the regression analysis.
 
 Before estimating the model, the relationship between asset and market returns is visually explored through a scatter plot. As shown in @fig-capm-daily-returns-scatter, the data already suggest a positive linear relationship between Apple returns and market returns, supporting the use of a linear regression framework for the CAPM estimation.
 
 ![Scatter plot of daily Apple returns against S\&P 500 daily returns. The figure provides an exploratory visualization of the positive relationship between the asset and market returns prior to the CAPM estimation.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/daily-returns-scatter.png){#fig-capm-daily-returns-scatter}
-
-Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
 
 ### CAPM Implementation
 
@@ -92,10 +90,10 @@ The estimated regression coefficients are summarized below.
 </iframe>
 
 <div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-Table 1. Estimated CAPM regression coefficients for Apple Inc. using the S&amp;P 500 as the market proxy.
+Table 1.1 Estimated CAPM regression coefficients for Apple Inc. using the S&amp;P 500 as the market proxy.
 </div>
 
-The estimated market beta is approximately $\beta = 1.173311$, indicating that Apple exhibited higher sensitivity to market fluctuations than the S\&P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately $17\%$ more aggressively than the market portfolio in response to market variations.
+The estimated market beta is approximately $\beta = 1.173257$, indicating that Apple exhibited higher sensitivity to market fluctuations than the S\&P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately $17\%$ more aggressively than the market portfolio in response to market variations.
 
 Additional model diagnostics are reported below.
 
@@ -107,7 +105,7 @@ Additional model diagnostics are reported below.
 </iframe>
 
 <div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-Table 2. Diagnostic statistics associated with the CAPM linear regression model.
+Table 1.2 Diagnostic statistics associated with the CAPM linear regression model.
 </div>
 
 The estimated beta coefficient is also statistically significant, with a large associated $t$-statistic and a near-zero $p$-value. Similarly, the overall regression presents a large $F$-statistic, supporting the existence of a statistically meaningful linear relationship between Apple returns and market returns during the analyzed period.
@@ -118,7 +116,61 @@ The fitted linear relationship between asset and market returns is illustrated i
 
 ![CAPM linear regression between Apple daily returns and S\&P 500 daily returns. The red line represents the fitted linear relationship estimated through ordinary least squares regression.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-regression.png){#fig-capm-regression}
 
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
+
 ### Fama–French Three-Factor Model Implementation
+
+To extend the single-factor CAPM specification, the Fama–French three-factor model introduced in Equation @eq-fama-french-3factor was estimated using ordinary least squares (OLS) regression. In addition to the market excess return factor, the model incorporates two additional systematic risk factors associated with firm size (`SMB`) and relative valuation (`HML`).
+
+The implementation combines daily adjusted closing prices for Apple Inc. (`AAPL`) obtained from Yahoo Finance with the daily Fama–French factor dataset developed by Kenneth French. The final modeling dataset contains 1,256 daily observations covering the period from January 2020 to December 2024. The average daily excess return of Apple over the sample period was approximately $0.11\%$, with a daily standard deviation close to $2.0\%$.
+
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
+
+Figure @fig-fama-french-factor-series displays the behavior of the three explanatory factors over time. The series exhibit substantial short-term variability, particularly during periods of market stress such as the early stages of the COVID-19 pandemic in 2020. The `SMB` factor shows the highest volatility among the three factors during this period, reflecting the stronger sensitivity of small-cap firms to abrupt changes in market conditions.
+
+![Fama–French daily factor series.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_factor_series.png){#fig-fama-french-factor-series}
+
+The estimated regression coefficients are summarized below.
+
+<iframe 
+  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_coefficient_estimates.html"
+  width="100%"
+  height="240"
+  style="border: none;">
+</iframe>
+
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+Table 1.3 Estimated Fama–French three-factor regression coefficients for Apple Inc.
+</div>
+
+The estimated market beta is approximately $\beta_{mkt} = 1.163$, indicating that Apple exhibits a stronger sensitivity to systematic market movements than the market portfolio itself. The coefficients associated with the size and value factors are both negative and statistically significant. The negative loading on `SMB` suggests that Apple behaves more similarly to large-cap firms than to small-cap firms, which is consistent with its market capitalization and dominant position within the technology sector. Likewise, the negative `HML` exposure indicates characteristics more closely aligned with growth-oriented firms rather than value stocks.
+
+The estimated intercept term ($\alpha \approx 0.00046$) is positive but not statistically significant at conventional significance levels ($p \approx 0.155$), suggesting that, after accounting for the three systematic risk factors, the model does not provide strong evidence of abnormal excess returns during the analyzed period.
+
+The overall regression fit improved relative to the single-factor CAPM specification. The coefficient of determination increased to approximately $R^2 = 0.678$, indicating that the three-factor model explains nearly $68\%$ of the variability observed in Apple excess returns. The F-statistic associated with the regression is also highly significant, supporting the joint explanatory power of the selected factors.
+
+<iframe 
+  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_model_summary.html"
+  width="100%"
+  height="160"
+  style="border: none;">
+</iframe>
+
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+Table 1.4 Diagnostic statistics associated with the Fama–French three-factor regression model.
+</div>
+
+Figure @fig-fama-french-observed-fitted compares the observed excess returns against the fitted values generated by the regression model. The fitted series captures a substantial fraction of the short-term dynamics of Apple returns, although large residual fluctuations remain during periods of elevated volatility.
+
+![Observed and fitted excess returns under the Fama–French three-factor specification.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_observed_vs_fitted_returns.png){#fig-fama-french-observed-fitted}
+
+The residual series displayed in Figure @fig-fama-french-residuals remains approximately centered around zero throughout the analyzed period, without obvious long-term structural drift. However, clusters of higher residual volatility are still visible during stressed market conditions, indicating that a portion of the variability remains unexplained even after incorporating the additional systematic factors.
+
+![Residual series of the Fama–French three-factor model.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_residuals.png){#fig-fama-french-residuals}
+
+Finally, the residual distribution shown in Figure @fig-fama-french-residual-distribution exhibits a roughly symmetric shape centered near zero, although moderate tail behavior remains visible. This behavior is consistent with the presence of occasional large market movements that are not fully captured by the linear factor structure.
+
+![Distribution of residuals from the Fama–French three-factor model.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_residual_distribution.png){#fig-fama-french-residual-distribution}
 
 ### Comparative Analysis
 

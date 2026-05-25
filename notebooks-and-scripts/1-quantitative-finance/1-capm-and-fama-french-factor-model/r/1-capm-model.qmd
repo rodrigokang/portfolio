@@ -60,8 +60,8 @@ The analysis uses five years of daily adjusted closing prices obtained from Yaho
 asset_ticker <- "AAPL"
 market_ticker <- "^GSPC"
 
-start_date <- "2020-01-01"
-end_date <- "2025-01-01"
+start_date <- as.Date("2020-01-01")
+end_date <- as.Date("2024-12-31")
 ```
 
 ## Data Collection

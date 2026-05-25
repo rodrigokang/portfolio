@@ -467,12 +467,12 @@ Figure&nbsp;1.1: Decomposition of total risk into systematic and diversifiable r
 \tag{1.2}\]</span></span></p>
 <p>In this expression, <span class="math inline">\(\mathbb{E}[r_i]\)</span> represents the expected return of asset <span class="math inline">\(i\)</span>, <span class="math inline">\(r_f\)</span> is the risk-free rate, and <span class="math inline">\(\mathbb{E}[r_m]\)</span> corresponds to the expected return of the market portfolio. The parameter <span class="math inline">\(\beta_i\)</span> measures the sensitivity of the asset to market fluctuations and summarizes its exposure to systematic risk.</p>
 <p>From a modeling perspective, the estimation of beta can be interpreted as a simple linear regression between asset returns and market returns <span class="citation" data-cites="bossaerts2006lectures"><a href="../references.html#ref-bossaerts2006lectures" role="doc-biblioref">[4]</a></span>. In this project, the CAPM is implemented precisely under this framework, using simple linear regression to estimate the market exposure of different assets and analyze the relationship between systematic risk and expected return.</p>
-<p>Despite its conceptual simplicity and historical importance, the CAPM assumes that the entire structure of systematic risk can be summarized by a single factor: the market itself. Empirical evidence, however, suggests that certain firm characteristics — such as company size or the relationship between book value and market value — capture persistent return patterns that the CAPM does not fully explain. These observations motivated the development of the multifactor models proposed by Fama and French <span class="citation" data-cites="fama1997industry"><a href="../references.html#ref-fama1997industry" role="doc-biblioref">[5]</a></span>.</p>
+<p>Despite its conceptual simplicity and historical importance, the CAPM assumes that the entire structure of systematic risk can be summarized by a single factor: the market itself. Empirical evidence, however, suggests that certain firm characteristics — such as company size or the relationship between book value and market value — capture persistent return patterns that the CAPM does not fully explain. These observations motivated the development of the multifactor models proposed by Fama and French <span class="citation" data-cites="fama1993common"><a href="../references.html#ref-fama1993common" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="fama1997industry"><a href="../references.html#ref-fama1997industry" role="doc-biblioref">[6]</a></span>.</p>
 <p>In this project, these extensions are implemented using multiple linear regression. The three-factor model can be expressed as:</p>
 <p><span id="eq-fama-french-3factor"><span class="math display">\[
 \mathbb{E}[r_i] - r_f = \alpha + \beta_{mkt} (\mathbb{E}[r_m] - r_f) + \beta_{smb} \cdot \text{SMB} + \beta_{hml} \cdot \text{HML} + \varepsilon
 \tag{1.3}\]</span></span></p>
-<p>where <span class="math inline">\(\text{SMB}\)</span> (<em>Small Minus Big</em>) measures the excess return of small-cap stocks relative to large-cap stocks, while <span class="math inline">\(\text{HML}\)</span> (<em>High Minus Low</em>) captures the return differential between value and growth stocks <span class="citation" data-cites="brealey2011principles"><a href="../references.html#ref-brealey2011principles" role="doc-biblioref">[6]</a></span> <span class="citation" data-cites="lewinson2022python"><a href="../references.html#ref-lewinson2022python" role="doc-biblioref">[7]</a></span>.</p>
+<p>where <span class="math inline">\(\text{SMB}\)</span> (<em>Small Minus Big</em>) measures the excess return of small-cap stocks relative to large-cap stocks, while <span class="math inline">\(\text{HML}\)</span> (<em>High Minus Low</em>) captures the return differential between value and growth stocks <span class="citation" data-cites="brealey2011principles"><a href="../references.html#ref-brealey2011principles" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="lewinson2022python"><a href="../references.html#ref-lewinson2022python" role="doc-biblioref">[8]</a></span>.</p>
 <p>From a modeling perspective, the transition from the CAPM to the Fama–French three-factor model can be interpreted as moving from a simple linear regression to a multiple linear regression framework, incorporating additional explanatory variables to capture dimensions of systematic risk that a single-factor model cannot fully represent.</p>
 <p>The main objective of the project is not simply to compare statistical goodness-of-fit metrics, but to understand how different economic factors contribute to the generation of returns in financial markets and to evaluate how effectively models of different complexity levels represent that underlying process.</p>
 </section>
@@ -481,7 +481,7 @@ Figure&nbsp;1.1: Decomposition of total risk into systematic and diversifiable r
 <section id="data-collection-and-preprocessing" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="data-collection-and-preprocessing"><span class="header-section-number">1.3.1</span> Data Collection and Preprocessing</h3>
 <p>The analysis uses daily adjusted closing prices obtained from Yahoo Finance for both Apple Inc.&nbsp;(<code>AAPL</code>) and the S&amp;P 500 index (<code>^GSPC</code>). The S&amp;P 500 is used as a proxy for the market portfolio within the CAPM framework.</p>
-<p>The selected period spans from January 2020 to January 2025, providing a multi-year sample that includes different market conditions and volatility regimes. Adjusted prices are used in order to account for corporate actions such as stock splits and dividend adjustments when available.</p>
+<p>The selected period spans from January 2020 to December 2024, providing a multi-year sample that includes different market conditions and volatility regimes. Adjusted prices are used in order to account for corporate actions such as stock splits and dividend adjustments when available.</p>
 <p>After downloading the data, both time series are merged into a single dataset and aligned by trading date. Missing observations are removed prior to return calculation.</p>
 <p>The price series are initially inspected to verify data consistency and to obtain a preliminary view of the market dynamics during the analyzed period.</p>
 <div id="fig-capm-closing-prices" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -490,7 +490,7 @@ Figure&nbsp;1.1: Decomposition of total risk into systematic and diversifiable r
 <img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/closing-prices.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-capm-closing-prices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: Adjusted closing prices for Apple Inc.&nbsp;and the S&amp;P 500 index between 2020 and 2025. The figure is mainly used as a preliminary inspection of the downloaded financial time series before return calculation.
+Figure&nbsp;1.2: Adjusted closing prices for Apple Inc.&nbsp;and the S&amp;P 500 index between 2020 and 2024. The figure is mainly used as a preliminary inspection of the downloaded financial time series before return calculation.
 </figcaption>
 </figure>
 </div>
@@ -506,7 +506,6 @@ Figure&nbsp;1.3: Scatter plot of daily Apple returns against S&amp;P 500 daily r
 </figcaption>
 </figure>
 </div>
-<p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html">here</a>. The corresponding Python notebooks associated with this project are also available in the repository <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python"><i class="bi bi-github"></i></a>.</p>
 </section>
 <section id="capm-implementation" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="capm-implementation"><span class="header-section-number">1.3.2</span> CAPM Implementation</h3>
@@ -516,14 +515,14 @@ Figure&nbsp;1.3: Scatter plot of daily Apple returns against S&amp;P 500 daily r
 <iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-coefficients-table.html" width="100%" height="170" style="border: none;">
 </iframe>
 <div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-<p>Table 1. Estimated CAPM regression coefficients for Apple Inc.&nbsp;using the S&amp;P 500 as the market proxy.</p>
+<p>Table 1.1 Estimated CAPM regression coefficients for Apple Inc.&nbsp;using the S&amp;P 500 as the market proxy.</p>
 </div>
-<p>The estimated market beta is approximately <span class="math inline">\(\beta = 1.173311\)</span>, indicating that Apple exhibited higher sensitivity to market fluctuations than the S&amp;P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately <span class="math inline">\(17\%\)</span> more aggressively than the market portfolio in response to market variations.</p>
+<p>The estimated market beta is approximately <span class="math inline">\(\beta = 1.173257\)</span>, indicating that Apple exhibited higher sensitivity to market fluctuations than the S&amp;P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately <span class="math inline">\(17\%\)</span> more aggressively than the market portfolio in response to market variations.</p>
 <p>Additional model diagnostics are reported below.</p>
 <iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-model-diagnostics.html" width="100%" height="280" style="border: none;">
 </iframe>
 <div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-<p>Table 2. Diagnostic statistics associated with the CAPM linear regression model.</p>
+<p>Table 1.2 Diagnostic statistics associated with the CAPM linear regression model.</p>
 </div>
 <p>The estimated beta coefficient is also statistically significant, with a large associated <span class="math inline">\(t\)</span>-statistic and a near-zero <span class="math inline">\(p\)</span>-value. Similarly, the overall regression presents a large <span class="math inline">\(F\)</span>-statistic, supporting the existence of a statistically meaningful linear relationship between Apple returns and market returns during the analyzed period.</p>
 <p>The estimated coefficient of determination of approximately <span class="math inline">\(R^2 = 0.625\)</span> indicates that the market factor alone explains a substantial fraction of the observed variability in Apple daily returns during the selected period. Nevertheless, a significant portion of the variability remains unexplained, motivating the consideration of multifactor extensions beyond the single-factor CAPM specification.</p>
@@ -538,9 +537,71 @@ Figure&nbsp;1.4: CAPM linear regression between Apple daily returns and S&amp;P 
 </figcaption>
 </figure>
 </div>
+<p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html">here</a>. The corresponding Python notebooks associated with this project are also available in the repository <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python"><i class="bi bi-github"></i></a>.</p>
 </section>
 <section id="famafrench-three-factor-model-implementation" class="level3" data-number="1.3.3">
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="famafrench-three-factor-model-implementation"><span class="header-section-number">1.3.3</span> Fama–French Three-Factor Model Implementation</h3>
+<p>To extend the single-factor CAPM specification, the Fama–French three-factor model introduced in Equation <a href="#eq-fama-french-3factor" class="quarto-xref">Equation&nbsp;<span>1.3</span></a> was estimated using ordinary least squares (OLS) regression. In addition to the market excess return factor, the model incorporates two additional systematic risk factors associated with firm size (<code>SMB</code>) and relative valuation (<code>HML</code>).</p>
+<p>The implementation combines daily adjusted closing prices for Apple Inc.&nbsp;(<code>AAPL</code>) obtained from Yahoo Finance with the daily Fama–French factor dataset developed by Kenneth French. The final modeling dataset contains 1,256 daily observations covering the period from January 2020 to December 2024. The average daily excess return of Apple over the sample period was approximately <span class="math inline">\(0.11\%\)</span>, with a daily standard deviation close to <span class="math inline">\(2.0\%\)</span>.</p>
+<p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model.html">here</a>. The corresponding Python notebooks associated with this project are also available in the repository <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python"><i class="bi bi-github"></i></a>.</p>
+<p>Figure <a href="#fig-fama-french-factor-series" class="quarto-xref">Figure&nbsp;<span>1.5</span></a> displays the behavior of the three explanatory factors over time. The series exhibit substantial short-term variability, particularly during periods of market stress such as the early stages of the COVID-19 pandemic in 2020. The <code>SMB</code> factor shows the highest volatility among the three factors during this period, reflecting the stronger sensitivity of small-cap firms to abrupt changes in market conditions.</p>
+<div id="fig-fama-french-factor-series" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fama-french-factor-series-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_factor_series.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fama-french-factor-series-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: Fama–French daily factor series.
+</figcaption>
+</figure>
+</div>
+<p>The estimated regression coefficients are summarized below.</p>
+<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_coefficient_estimates.html" width="100%" height="240" style="border: none;">
+</iframe>
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+<p>Table 1.3 Estimated Fama–French three-factor regression coefficients for Apple Inc.</p>
+</div>
+<p>The estimated market beta is approximately <span class="math inline">\(\beta_{mkt} = 1.163\)</span>, indicating that Apple exhibits a stronger sensitivity to systematic market movements than the market portfolio itself. The coefficients associated with the size and value factors are both negative and statistically significant. The negative loading on <code>SMB</code> suggests that Apple behaves more similarly to large-cap firms than to small-cap firms, which is consistent with its market capitalization and dominant position within the technology sector. Likewise, the negative <code>HML</code> exposure indicates characteristics more closely aligned with growth-oriented firms rather than value stocks.</p>
+<p>The estimated intercept term (<span class="math inline">\(\alpha \approx 0.00046\)</span>) is positive but not statistically significant at conventional significance levels (<span class="math inline">\(p \approx 0.155\)</span>), suggesting that, after accounting for the three systematic risk factors, the model does not provide strong evidence of abnormal excess returns during the analyzed period.</p>
+<p>The overall regression fit improved relative to the single-factor CAPM specification. The coefficient of determination increased to approximately <span class="math inline">\(R^2 = 0.678\)</span>, indicating that the three-factor model explains nearly <span class="math inline">\(68\%\)</span> of the variability observed in Apple excess returns. The F-statistic associated with the regression is also highly significant, supporting the joint explanatory power of the selected factors.</p>
+<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_model_summary.html" width="100%" height="160" style="border: none;">
+</iframe>
+<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
+<p>Table 1.4 Diagnostic statistics associated with the Fama–French three-factor regression model.</p>
+</div>
+<p>Figure <a href="#fig-fama-french-observed-fitted" class="quarto-xref">Figure&nbsp;<span>1.6</span></a> compares the observed excess returns against the fitted values generated by the regression model. The fitted series captures a substantial fraction of the short-term dynamics of Apple returns, although large residual fluctuations remain during periods of elevated volatility.</p>
+<div id="fig-fama-french-observed-fitted" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fama-french-observed-fitted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_observed_vs_fitted_returns.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fama-french-observed-fitted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.6: Observed and fitted excess returns under the Fama–French three-factor specification.
+</figcaption>
+</figure>
+</div>
+<p>The residual series displayed in Figure <a href="#fig-fama-french-residuals" class="quarto-xref">Figure&nbsp;<span>1.7</span></a> remains approximately centered around zero throughout the analyzed period, without obvious long-term structural drift. However, clusters of higher residual volatility are still visible during stressed market conditions, indicating that a portion of the variability remains unexplained even after incorporating the additional systematic factors.</p>
+<div id="fig-fama-french-residuals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fama-french-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_residuals.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fama-french-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.7: Residual series of the Fama–French three-factor model.
+</figcaption>
+</figure>
+</div>
+<p>Finally, the residual distribution shown in Figure <a href="#fig-fama-french-residual-distribution" class="quarto-xref">Figure&nbsp;<span>1.8</span></a> exhibits a roughly symmetric shape centered near zero, although moderate tail behavior remains visible. This behavior is consistent with the presence of occasional large market movements that are not fully captured by the linear factor structure.</p>
+<div id="fig-fama-french-residual-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-fama-french-residual-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_residual_distribution.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-fama-french-residual-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.8: Distribution of residuals from the Fama–French three-factor model.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="comparative-analysis" class="level3" data-number="1.3.4">
 <h3 data-number="1.3.4" class="anchored" data-anchor-id="comparative-analysis"><span class="header-section-number">1.3.4</span> Comparative Analysis</h3>
@@ -593,14 +654,17 @@ Figure&nbsp;1.4: CAPM linear regression between Apple daily returns and S&amp;P 
 <div id="ref-bossaerts2006lectures" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[4] </div><div class="csl-right-inline">P. L. Bossaerts and B. A. Odegaard, <em>Lectures on corporate finance</em>. World Scientific Publishing Company, 2006.</div>
 </div>
+<div id="ref-fama1993common" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">E. F. Fama and K. R. French, <span>“Common risk factors in the returns on stocks and bonds,”</span> <em>Journal of financial economics</em>, vol. 33, no. 1, pp. 3–56, 1993.</div>
+</div>
 <div id="ref-fama1997industry" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[5] </div><div class="csl-right-inline">E. F. Fama and K. R. French, <span>“Industry costs of equity,”</span> <em>Journal of financial economics</em>, vol. 43, no. 2, pp. 153–193, 1997.</div>
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">E. F. Fama and K. R. French, <span>“Industry costs of equity,”</span> <em>Journal of financial economics</em>, vol. 43, no. 2, pp. 153–193, 1997.</div>
 </div>
 <div id="ref-brealey2011principles" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[6] </div><div class="csl-right-inline">R. A. Brealey, S. C. Myers, and F. Allen, <em>Principles of corporate finance</em>. McGraw-Hill Education, 2011.</div>
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">R. A. Brealey, S. C. Myers, and F. Allen, <em>Principles of corporate finance</em>. McGraw-Hill Education, 2011.</div>
 </div>
 <div id="ref-lewinson2022python" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[7] </div><div class="csl-right-inline">E. Lewinson, <em>Python for finance cookbook: Over 80 powerful recipes for effective financial data analysis</em>. Packt Publishing Ltd, 2022.</div>
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">E. Lewinson, <em>Python for finance cookbook: Over 80 powerful recipes for effective financial data analysis</em>. Packt Publishing Ltd, 2022.</div>
 </div>
 </div>
 </section>
