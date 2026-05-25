@@ -172,27 +172,39 @@ Finally, the residual distribution shown in @fig-fama-french-residual-distributi
 
 ![Distribution of residuals from the Fama–French three-factor model.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_residual_distribution.png){#fig-fama-french-residual-distribution}
 
-### Comparative Analysis
-
 ## Results, Discussion, and Limitations
 
-This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.
+The empirical results obtained from both the CAPM and the Fama–French three-factor model provide a useful comparison between single-factor and multifactor approaches to asset pricing. Although both models capture an important fraction of the variability observed in Apple excess returns, the inclusion of additional systematic risk factors in the Fama–French specification produces a measurable improvement in explanatory performance.
 
-Typical elements may include:
+### Comparative Analysis
 
-- Visualizations and plots
-- Performance metrics
-- Comparisons with baseline approaches
-- Sensitivity analysis
-- Error analysis
-- Interpretation of results
-- Model assumptions and their consequences
-- Sources of uncertainty
-- Robustness and generalization
-- Trade-offs associated with the methodology
-- Potential future improvements
+The CAPM estimation produced a market beta close to $\beta \approx 1.18$, indicating that Apple exhibits a level of systematic risk slightly higher than that of the overall market portfolio. The market factor alone explained approximately $62.5\%$ of the variability in Apple excess returns over the analyzed period, resulting in an estimated coefficient of determination of approximately $R^2 = 0.625$.
 
-The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.
+After incorporating the size (`SMB`) and value (`HML`) factors, the explanatory power of the regression increased to approximately $R^2 = 0.678$. Although the increase in explanatory performance is moderate, the multifactor specification captures an additional fraction of return variability that remains unexplained under the single-factor CAPM framework.
+
+The estimated market beta remained relatively stable across both models, suggesting that market risk continues to represent the dominant systematic component driving Apple returns. However, the additional factor loadings provide further insight into the firm's structural characteristics. The negative exposure to the size factor indicates that Apple behaves more similarly to large-cap firms than to smaller companies, while the negative loading associated with the value factor reflects characteristics commonly associated with growth-oriented firms.
+
+From a statistical perspective, both models produced highly significant overall regressions according to their respective F-statistics. Nevertheless, the Fama–French specification generated lower residual variability and a modest improvement in fitted return dynamics, particularly during periods of elevated market volatility.
+
+The comparison between observed and fitted excess returns also suggests that the multifactor specification is better able to reproduce short-term return fluctuations than the CAPM alone. However, significant residual movements remain visible in both models, indicating that a substantial fraction of the variability in daily equity returns cannot be fully captured through linear factor structures alone.
+
+Overall, the empirical results support the interpretation that the Fama–French three-factor model provides a richer and more flexible representation of systematic risk exposures relative to the standard CAPM specification. At the same time, the relatively modest improvement in explanatory power also highlights the dominant role played by market-wide risk in large-cap technology firms such as Apple.
+
+### Model Limitations
+
+Despite their widespread use in financial economics, both the CAPM and the Fama–French three-factor model rely on simplifying assumptions that limit their ability to fully explain observed market behavior.
+
+First, both models assume linear relationships between excess returns and systematic risk factors. In practice, financial markets frequently exhibit nonlinear dynamics, volatility clustering, structural breaks, and regime-dependent behavior that cannot be fully represented within a static linear regression framework.
+
+Second, the analysis relies on historical daily observations and therefore assumes that the estimated factor sensitivities remain relatively stable throughout the selected time horizon. However, the relationship between individual assets and systematic risk factors may evolve over time as market conditions, macroeconomic environments, or firm-specific characteristics change.
+
+An additional limitation arises from the selection of explanatory factors themselves. Although the Fama–French specification extends the CAPM by incorporating size and value effects, many additional sources of systematic risk have been proposed in the literature, including profitability, investment, momentum, liquidity, and volatility-related factors. Consequently, the three-factor model should not be interpreted as a complete description of equity return dynamics.
+
+The analysis also focuses exclusively on a single large-cap technology company. While Apple represents an interesting case study due to its market relevance and liquidity, the estimated coefficients and model diagnostics cannot be directly generalized to other sectors, asset classes, or market environments without additional empirical validation.
+
+Finally, both models are estimated under the assumption that historical relationships provide meaningful information regarding future risk-return behavior. As in most empirical financial applications, this assumption may fail under changing market conditions, particularly during periods of financial stress or structural economic transitions.
+
+Despite these limitations, the CAPM and Fama–French frameworks continue to provide valuable benchmark models for understanding systematic risk exposures, comparing relative asset sensitivities, and constructing interpretable factor-based representations of financial returns.
 
 ## Technical Appendix (Optional)
 
