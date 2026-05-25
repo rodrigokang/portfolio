@@ -178,7 +178,7 @@ The empirical results obtained from both the CAPM and the Fama–French three-fa
 
 ### Comparative Analysis
 
-The CAPM estimation produced a market beta close to $\beta \approx 1.18$, indicating that Apple exhibits a level of systematic risk slightly higher than that of the overall market portfolio. The market factor alone explained approximately $62.5\%$ of the variability in Apple excess returns over the analyzed period, resulting in an estimated coefficient of determination of approximately $R^2 = 0.625$.
+The CAPM estimation produced a market beta close to $\beta \approx 1.17$, indicating that Apple exhibits a level of systematic risk slightly higher than that of the overall market portfolio. The market factor alone explained approximately $62.5\%$ of the variability in Apple excess returns over the analyzed period, resulting in an estimated coefficient of determination of approximately $R^2 = 0.625$.
 
 After incorporating the size (`SMB`) and value (`HML`) factors, the explanatory power of the regression increased to approximately $R^2 = 0.678$. Although the increase in explanatory performance is moderate, the multifactor specification captures an additional fraction of return variability that remains unexplained under the single-factor CAPM framework.
 
