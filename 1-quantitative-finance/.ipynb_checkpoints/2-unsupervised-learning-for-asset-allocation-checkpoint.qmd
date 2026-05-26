@@ -1,4 +1,4 @@
-# Asset Allocation with PCA and Hierarchical Clustering
+# Unsupervised Learning for Asset Allocation
 
 _Work in progress._
 

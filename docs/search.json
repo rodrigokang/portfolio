@@ -106,69 +106,69 @@
     ]
   },
   {
-    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html",
-    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html",
-    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "objectID": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html",
+    "href": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html",
+    "title": "2  Unsupervised Learning for Asset Allocation",
     "section": "",
     "text": "2.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
     "crumbs": [
       "Quantitative Finance",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Unsupervised Learning for Asset Allocation</span>"
     ]
   },
   {
-    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#problem-definition",
-    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#problem-definition",
-    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "objectID": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#problem-definition",
+    "href": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#problem-definition",
+    "title": "2  Unsupervised Learning for Asset Allocation",
     "section": "",
     "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
     "crumbs": [
       "Quantitative Finance",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Unsupervised Learning for Asset Allocation</span>"
     ]
   },
   {
-    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#modeling-approach",
-    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#modeling-approach",
-    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "objectID": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#modeling-approach",
+    "href": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#modeling-approach",
+    "title": "2  Unsupervised Learning for Asset Allocation",
     "section": "2.2 Modeling Approach",
     "text": "2.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
     "crumbs": [
       "Quantitative Finance",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Unsupervised Learning for Asset Allocation</span>"
     ]
   },
   {
-    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#methodology-and-implementation",
-    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#methodology-and-implementation",
-    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "objectID": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#methodology-and-implementation",
+    "href": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#methodology-and-implementation",
+    "title": "2  Unsupervised Learning for Asset Allocation",
     "section": "2.3 Methodology and Implementation",
     "text": "2.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
     "crumbs": [
       "Quantitative Finance",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Unsupervised Learning for Asset Allocation</span>"
     ]
   },
   {
-    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#results-discussion-and-limitations",
-    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#results-discussion-and-limitations",
-    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "objectID": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#results-discussion-and-limitations",
+    "href": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#results-discussion-and-limitations",
+    "title": "2  Unsupervised Learning for Asset Allocation",
     "section": "2.4 Results, Discussion, and Limitations",
     "text": "2.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
     "crumbs": [
       "Quantitative Finance",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Unsupervised Learning for Asset Allocation</span>"
     ]
   },
   {
-    "objectID": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#technical-appendix-optional",
-    "href": "1-quantitative-finance/2-asset-allocation-unsupervised-learning.html#technical-appendix-optional",
-    "title": "2  Asset Allocation with PCA and Hierarchical Clustering",
+    "objectID": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#technical-appendix-optional",
+    "href": "1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html#technical-appendix-optional",
+    "title": "2  Unsupervised Learning for Asset Allocation",
     "section": "2.5 Technical Appendix (Optional)",
     "text": "2.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
     "crumbs": [
       "Quantitative Finance",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Asset Allocation with PCA and Hierarchical Clustering</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Unsupervised Learning for Asset Allocation</span>"
     ]
   },
   {
