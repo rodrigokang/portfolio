@@ -1,28 +1,28 @@
 # How to Read This Portfolio {.unnumbered}
 
-This portfolio is organized around applied projects rather than purely theoretical chapters. Each chapter presents a self-contained case study illustrating how data science methods can be used to address a specific problem, from initial formulation and modeling to evaluation and interpretation.
+This portfolio is organized around applied projects rather than purely theoretical chapters. Each chapter presents a self-contained case study illustrating how quantitative methods, machine learning, and computational modeling can be used to address real-world problems across different domains.
 
-Projects can be read independently. Readers interested in a particular topic can navigate directly to the corresponding chapter without needing to follow the entire sequence.
+Projects can be read independently. Readers interested in a particular topic may navigate directly to the corresponding chapter without following the entire sequence.
 
 Most projects follow a common structure:
 
-1. **Problem definition**  
-   A clear description of the objective and the context in which the problem arises.
+1. **Problem Definition**  
+   Description of the problem, its context, and its practical relevance within the domain.
 
-2. **Modeling approach**  
-   Selection and development of appropriate statistical or machine learning methods.
+2. **Modeling Approach**  
+   Presentation of the conceptual framework, modeling assumptions, and methodological reasoning underlying the proposed solution.
 
-3. **Implementation**  
-   Practical aspects of the solution, including data preparation, model training, and computational considerations.
+3. **Methodology and Implementation**  
+   Description of the data, computational workflow, experimental design, and implementation details used throughout the project.
 
-4. **Evaluation**  
-   Performance assessment using appropriate metrics and baseline comparisons.
+4. **Results, Discussion, and Limitations**  
+   Presentation and interpretation of results together with an analysis of model behavior, assumptions, limitations, and possible extensions.
 
-5. **Discussion and limitations**  
-   Interpretation of results, assumptions behind the model, and potential areas for improvement.
+5. **Technical Appendix (Optional)**  
+   Supplementary technical material, including mathematical derivations, methodological notes, and additional computational details when relevant to the project.
 
-Theoretical concepts appear only when they help clarify modeling decisions or explain the behavior of the methods being used. The emphasis throughout this work is on applied problem solving rather than abstract presentations of algorithms.
+Theoretical concepts and mathematical details are introduced only when they help clarify modeling decisions, support methodological choices, or explain the behavior of the proposed approaches. The emphasis throughout the portfolio remains on applied problem solving, structured reasoning, and practical implementation rather than on purely theoretical discussion.
 
-Each chapter is accompanied by computational artifacts implemented in `Python` and `R`, allowing readers to explore the code and reproduce the results if desired.
+Each chapter is accompanied by computational artifacts implemented in `Python` and `R`, allowing readers to explore the implementation details, reproduce experiments, and examine complementary analyses when appropriate.
 
-The material presented here combines quantitative reasoning, machine learning methods, and computational experimentation, with a consistent focus on building solutions that are both technically sound and practically meaningful across different domains.
+The material presented here combines quantitative reasoning, statistical modeling, machine learning methods, and computational experimentation, with a consistent focus on developing solutions that are both technically sound and practically meaningful.
