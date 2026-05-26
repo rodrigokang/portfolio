@@ -208,17 +208,566 @@ Despite these limitations, the CAPM and Fama–French frameworks continue to pro
 
 ## Technical Appendix (Optional)
 
-This optional section contains technical details that support the project but are not essential for following the main narrative.
+This appendix provides a compact technical background for the regression models used in this project. The main body of the chapter focuses on the financial interpretation of the CAPM and Fama-French models, while this appendix summarizes the statistical structure underlying their empirical estimation.
 
-Possible contents include:
+The CAPM specification can be interpreted as a simple linear regression model, where the excess return of an asset is explained by the excess return of the market portfolio. In contrast, the Fama-French three-factor model extends this idea to a multiple linear regression setting, where asset excess returns are explained by a set of risk factors rather than by the market factor alone.
 
-- Mathematical derivations
-- Additional proofs
-- Numerical details
-- Extended equations
-- Supplementary experiments
+The purpose of this appendix is not to provide a complete treatment of linear regression or statistical learning. Instead, it collects the main concepts needed to understand how the models were estimated, how the coefficients should be interpreted, and how goodness-of-fit and statistical significance measures relate to the empirical results discussed in the project. The presentation follows standard treatments of linear regression and statistical learning @james2023statistical @hastie2009elements @bishop2006pattern @suzuki2020statistical @ugarte2016probability @cowan1998statistical.
 
-The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.
+### Simple Linear Regression and the CAPM Model
 
-The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.
+As discussed previously in @eq-capm, the CAPM establishes a linear relationship between the expected excess return of an asset and the expected excess return of the market portfolio. From a statistical perspective, this relationship can be interpreted as a simple linear regression model of the form
 
+$$
+y_i = \theta_0 + \theta_1 x_i + \varepsilon_i
+$$ {#eq-slr-model}
+
+where $\theta_0$ represents the intercept, $\theta_1$ the slope coefficient, and $\varepsilon_i$ an unobservable random error associated with observation $i$.
+
+Under this interpretation, the empirical CAPM specification can be written as
+
+$$
+r_i - r_f =
+\alpha +
+\beta(r_m - r_f)
++
+\varepsilon
+$$ {#eq-capm-regression}
+
+where the excess return of the asset plays the role of the response variable and the excess return of the market portfolio acts as the predictor variable. In this setting, $\alpha$ corresponds to the intercept term, while $\beta$ measures the sensitivity of the asset return to market movements.
+
+From the perspective of the CAPM, the intercept term $\alpha$ is expected to be equal to zero, implying that expected excess returns are fully explained by exposure to market risk through the coefficient $\beta$. Consequently, testing whether $\alpha$ differs significantly from zero provides a practical way to evaluate the empirical consistency of the model.
+
+#### Ordinary Least Squares Estimation
+
+The parameters of the regression model are estimated by minimizing the discrepancy between the observed data and the fitted regression line. In ordinary least squares (OLS), this discrepancy is quantified through the residual sum of squares (RSS), defined as
+
+$$
+\mathrm{RSS}
+=
+\sum_{i=1}^{N}
+(y_i - \hat{y}_i)^2
+=
+\sum_{i=1}^{N}
+(y_i - \theta_0 - \theta_1 x_i)^2
+$$ {#eq-rss}
+
+where each residual represents the difference between an observed value and the value predicted by the model.
+
+@fig-rss illustrates the geometric interpretation of the residuals in simple linear regression. The ordinary least squares estimator selects the parameters that minimize the squared residual distances between the observations and the fitted regression line.
+
+![Residual Sum of Squares (RSS)](figures/rss.png){#fig-rss fig-align="center"}
+
+The ordinary least squares estimators are obtained by minimizing @eq-rss with respect to the model parameters. Since the RSS is a convex quadratic function of $\theta_0$ and $\theta_1$, the solution can be obtained by setting the gradient equal to zero. The convexity of the RSS follows from the positive definiteness of the associated Hessian matrix, ensuring that the stationary point corresponds to a unique global minimum.
+
+The resulting estimators are given by
+
+$$
+\hat{\theta}_1 =
+\frac{
+\sum_{i=1}^{N}
+(x_i - \bar{x})(y_i - \bar{y})
+}{
+\sum_{i=1}^{N}
+(x_i - \bar{x})^2
+}
+=
+\frac{
+\mathrm{Cov}(x,y)
+}{
+\mathrm{Var}(x)
+}
+$$ {#eq-ols-slope}
+
+and
+
+$$
+\hat{\theta}_0
+=
+\bar{y}
+-
+\hat{\theta}_1 \bar{x}
+$$ {#eq-ols-intercept}
+
+@eq-ols-slope shows that the slope estimator can be interpreted as the ratio between the covariance of $x$ and $y$ and the variance of $x$. Consequently, the estimated slope increases when both variables tend to move together and decreases when their linear relationship weakens. In the context of empirical asset pricing, this interpretation leads naturally to the CAPM market beta, which can be viewed as the ordinary least squares estimator obtained by regressing the excess return of an asset against the excess return of the market portfolio. Under this interpretation, the CAPM beta measures the linear sensitivity of the asset return to market movements in the least-squares sense.
+
+#### Residual Analysis and Model Assumptions
+
+Once the regression coefficients have been estimated, the residuals provide information about the portion of the variability that is not explained by the model. For each observation, the residual is defined as
+
+$$
+e_i
+=
+y_i - \hat{y}_i
+$$ {#eq-residuals}
+
+where $\hat{y}_i$ denotes the predicted value obtained from the fitted regression model.
+
+A distinction should be made between residuals and random errors. Residuals correspond to observable deviations between the fitted model and the data, whereas the random errors $\varepsilon_i$ introduced in @eq-slr-model represent the unobservable stochastic component assumed by the statistical model.
+
+Classical linear regression assumes that the random errors are independent, centered around zero, and have constant variance. Under these assumptions,
+
+$$
+\varepsilon_i
+\sim
+N(0,\sigma^2)
+$$ {#eq-gaussian-errors}
+
+where $\sigma^2$ denotes the variance of the error term.
+
+The assumption of constant variance is commonly referred to as homoscedasticity and can be expressed as
+
+$$
+\mathrm{Var}(\varepsilon_i)
+=
+\sigma^2
+$$ {#eq-homoscedasticity}
+
+for all observations. When the variance of the errors changes across observations, the model is said to exhibit heteroscedasticity, which may affect the reliability of confidence intervals, hypothesis tests, and statistical inference.
+
+Although these assumptions are rarely satisfied exactly in real financial data, they provide the statistical framework underlying ordinary least squares estimation and the interpretation of the inferential quantities discussed in the following sections.
+
+#### Confidence Intervals and Standard Errors
+
+The regression coefficients estimated through ordinary least squares are subject to sampling variability. Consequently, point estimates alone do not provide information about the uncertainty associated with the estimated parameters. This uncertainty is commonly quantified through standard errors and confidence intervals.
+
+Under the assumptions introduced previously, the variance of the random error term can be estimated from the residuals through the residual standard error (RSE), defined as
+
+$$
+\mathrm{RSE}
+=
+\sqrt{
+\frac{
+\mathrm{RSS}
+}{
+N - 2
+}
+}
+$$ {#eq-rse}
+
+where $N$ denotes the number of observations and the subtraction of two degrees of freedom reflects the estimation of the intercept and slope coefficients.
+
+The standard errors associated with the regression coefficients are given by
+
+$$
+\mathrm{SE}(\hat{\theta}_1)
+=
+\sqrt{
+\frac{
+\sigma^2
+}{
+\sum_{i=1}^{N}
+(x_i - \bar{x})^2
+}
+}
+$$ {#eq-se-slope}
+
+and
+
+$$
+\mathrm{SE}(\hat{\theta}_0)
+=
+\sqrt{
+\sigma^2
+\left[
+\frac{1}{N}
++
+\frac{
+\bar{x}^2
+}{
+\sum_{i=1}^{N}
+(x_i - \bar{x})^2
+}
+\right]
+}
+$$ {#eq-se-intercept}
+
+where $\sigma^2$ is typically replaced in practice by the estimator introduced in @eq-rse.
+
+These expressions show that the uncertainty associated with the estimated coefficients depends on both the residual variability and the dispersion of the predictor variable. In particular, the standard error of the slope coefficient decreases as the variability of $x$ increases, leading to more stable estimates of the linear relationship.
+
+Confidence intervals provide a range of plausible values for the regression coefficients. Under approximate normality assumptions, a $95\%$ confidence interval for a parameter $\theta$ can be written as
+
+$$
+\hat{\theta}
+\pm
+2 \cdot \mathrm{SE}(\hat{\theta})
+$$ {#eq-confidence-interval}
+
+indicating the range within which the true parameter value is expected to lie with approximately $95\%$ confidence.
+
+#### Hypothesis Testing and Statistical Significance
+
+Beyond estimating the regression coefficients, it is often important to evaluate whether the observed linear relationship is statistically significant. In simple linear regression, this is commonly assessed through hypothesis testing on the slope coefficient.
+
+The null and alternative hypotheses are given by
+
+$$
+\begin{cases}
+H_0 : \theta_1 = 0 \\
+H_1 : \theta_1 \neq 0
+\end{cases}
+$$ {#eq-hypothesis-test}
+
+Under the null hypothesis, the predictor variable does not contribute to explaining the variability of the response variable, implying the absence of a linear relationship between $x$ and $y$.
+
+The statistical significance of the estimated slope coefficient can be evaluated through the t-statistic,
+
+$$
+t
+=
+\frac{
+\hat{\theta}_1
+}{
+\mathrm{SE}(\hat{\theta}_1)
+}
+$$ {#eq-t-statistic}
+
+which measures the magnitude of the estimated coefficient relative to its standard error.
+
+The corresponding p-value quantifies the probability of observing a statistic at least as extreme as the one obtained under the null hypothesis. Small p-values provide evidence against $H_0$, suggesting that the predictor variable contributes significantly to the regression model.
+
+In the context of the CAPM, hypothesis testing is particularly relevant for evaluating whether the estimated market exposure coefficient differs significantly from zero and whether the intercept term is statistically consistent with the theoretical prediction of $\alpha = 0$.
+
+#### Analysis of Variance (ANOVA)
+
+The variability of the response variable can be decomposed into a component explained by the regression model and a residual component associated with unexplained variability. In simple linear regression, this decomposition is expressed as
+
+$$
+y_i - \bar{y}
+=
+(\hat{y}_i - \bar{y})
++
+(y_i - \hat{y}_i)
+$$ {#eq-anova-decomposition-pointwise}
+
+which separates the total deviation of each observation into an explained component and a residual component.
+
+@fig-anova illustrates the geometric interpretation of this decomposition in the context of simple linear regression.
+
+![ANOVA decomposition in simple linear regression](figures/anova.png){#fig-anova fig-align="center"}
+
+Summing over all observations leads to the classical ANOVA decomposition
+
+$$
+\mathrm{TSS}
+=
+\mathrm{MSS}
++
+\mathrm{RSS}
+$$ {#eq-anova-decomposition}
+
+where
+
+$$
+\mathrm{TSS}
+=
+\sum_{i=1}^{N}
+(y_i - \bar{y})^2
+$$ {#eq-tss}
+
+represents the total variability of the response variable,
+
+$$
+\mathrm{MSS}
+=
+\sum_{i=1}^{N}
+(\hat{y}_i - \bar{y})^2
+$$ {#eq-mss}
+
+corresponds to the variability explained by the regression model, and
+
+$$
+\mathrm{RSS}
+=
+\sum_{i=1}^{N}
+(y_i - \hat{y}_i)^2
+$$ {#eq-rss-anova}
+
+measures the unexplained residual variability.
+
+Dividing each sum of squares by its associated degrees of freedom leads to the corresponding mean squares. In simple linear regression, the mean model square and the mean residual square are given by
+
+$$
+\mathrm{MMS}
+=
+\mathrm{MSS}
+$$ {#eq-mms}
+
+and
+
+$$
+\mathrm{MSR}
+=
+\frac{
+\mathrm{RSS}
+}{
+N - 2
+}
+$$ {#eq-msr}
+
+respectively.
+
+These quantities allow the construction of the F-statistic,
+
+$$
+F
+=
+\frac{
+\mathrm{MMS}
+}{
+\mathrm{MSR}
+}
+$$ {#eq-f-statistic}
+
+which compares the variability explained by the regression model with the unexplained residual variability. Large values of the F-statistic suggest that the regression model explains a substantial fraction of the observed variability relative to the residual noise.
+
+#### Coefficient of Determination ($R^2$)
+
+Another commonly used measure in linear regression is the coefficient of determination, denoted by $R^2$. This statistic quantifies the proportion of the total variability in the response variable that is explained by the regression model.
+
+Using the ANOVA decomposition introduced in @eq-anova-decomposition,
+
+$$
+\mathrm{TSS}
+=
+\mathrm{MSS}
++
+\mathrm{RSS}
+$$
+
+the coefficient of determination can be written as
+
+$$
+R^2
+=
+\frac{
+\mathrm{MSS}
+}{
+\mathrm{TSS}
+}
+=
+1
+-
+\frac{
+\mathrm{RSS}
+}{
+\mathrm{TSS}
+}
+$$ {#eq-r-squared}
+
+Larger values of $R^2$ indicate that the model explains a greater fraction of the observed variability in the data. In particular, $R^2 = 1$ corresponds to a perfect fit, whereas $R^2 = 0$ indicates that the regression model does not explain the variability of the response variable better than the sample mean alone.
+
+In the special case of simple linear regression, the coefficient of determination is directly related to the Pearson correlation coefficient through
+
+$$
+R^2 = r^2
+$$ {#eq-r-squared-correlation}
+
+where $r$ denotes the sample correlation between the predictor variable $x$ and the response variable $y$.
+
+Although $R^2$ provides a useful measure of goodness of fit, a large value does not necessarily imply that the model is statistically valid or economically meaningful. For this reason, $R^2$ is typically interpreted together with residual diagnostics, hypothesis tests, and domain-specific considerations.
+
+### Multiple Linear Regression and the Fama-French Model
+
+While the CAPM can be formulated as a simple linear regression model with a single explanatory factor, the Fama--French three-factor model extends this framework by incorporating additional sources of systematic risk. From a statistical perspective, this leads naturally to a multiple linear regression model in which the response variable depends simultaneously on several predictors.
+
+For a model with $M$ explanatory variables, the linear regression model can be written as
+
+$$
+y_i
+=
+\theta_0
++
+\theta_1 x_{i1}
++
+\theta_2 x_{i2}
++
+\cdots
++
+\theta_M x_{iM}
++
+\varepsilon_i
+$$ {#eq-mlr-scalar}
+
+where $\theta_0$ represents the intercept, $\theta_1,\dots,\theta_M$ denote the regression coefficients associated with the predictor variables, and $\varepsilon_i$ corresponds to the random error associated with observation $i$.
+
+Using matrix notation, the model can be expressed compactly as
+
+$$
+\mathbf{y}
+=
+\mathbf{X}
+\boldsymbol{\theta}
++
+\boldsymbol{\varepsilon}
+$$ {#eq-mlr-matrix}
+
+where
+
+$$
+\mathbf{y}
+=
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_N
+\end{bmatrix},
+\quad
+\mathbf{X}
+=
+\begin{bmatrix}
+1 & x_{11} & \cdots & x_{1M} \\
+1 & x_{21} & \cdots & x_{2M} \\
+\vdots & \vdots & & \vdots \\
+1 & x_{N1} & \cdots & x_{NM}
+\end{bmatrix}
+$$
+
+and
+
+$$
+\boldsymbol{\theta}
+=
+\begin{bmatrix}
+\theta_0 \\
+\theta_1 \\
+\vdots \\
+\theta_M
+\end{bmatrix},
+\quad
+\boldsymbol{\varepsilon}
+=
+\begin{bmatrix}
+\varepsilon_1 \\
+\varepsilon_2 \\
+\vdots \\
+\varepsilon_N
+\end{bmatrix}
+$$
+
+In this representation, the rows of $\mathbf{X}$ correspond to observations, while the columns represent the explanatory variables included in the model. The matrix formulation provides a compact and computationally efficient framework for parameter estimation and statistical inference.
+
+Under this interpretation, the Fama--French three-factor model can be viewed as a particular case of multiple linear regression in which the excess return of an asset is explained simultaneously by the market factor, the SMB factor, and the HML factor.
+
+#### Ordinary Least Squares Estimation
+
+As in the simple linear regression setting, the parameters of the multiple linear regression model are estimated by minimizing the residual sum of squares. Using the matrix formulation introduced in @eq-mlr-matrix, the residual vector can be written as
+
+$$
+\mathbf{e}
+=
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\theta}
+$$ {#eq-mlr-residuals}
+
+and the corresponding residual sum of squares is given by
+
+$$
+\mathrm{RSS}
+=
+\mathbf{e}^T\mathbf{e}
+=
+(\mathbf{y} - \mathbf{X}\boldsymbol{\theta})^T
+(\mathbf{y} - \mathbf{X}\boldsymbol{\theta})
+$$ {#eq-mlr-rss}
+
+The ordinary least squares estimator is obtained by minimizing @eq-mlr-rss with respect to the parameter vector $\boldsymbol{\theta}$. As in the simple linear regression case, the optimization problem is convex and admits a unique global minimum provided that the columns of the design matrix $\mathbf{X}$ are linearly independent.
+
+The resulting estimator is given by
+
+$$
+\hat{\boldsymbol{\theta}}
+=
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T
+\mathbf{y}
+$$ {#eq-mlr-ols}
+
+which generalizes the ordinary least squares estimator introduced previously for simple linear regression.
+
+The matrix formulation highlights an important aspect of multiple linear regression: each coefficient measures the linear contribution of its associated predictor while accounting for the remaining variables included in the model. In the context of the Fama--French model, this means that the estimated coefficients associated with the market, SMB, and HML factors represent their partial contributions to the excess return of the asset after controlling for the other factors included in the regression.
+
+#### Statistical Interpretation of the Coefficients
+
+In multiple linear regression, each regression coefficient measures the expected variation in the response variable associated with a one-unit change in the corresponding predictor, while holding the remaining predictors fixed. This interpretation differs from simple linear regression, where the effect of the predictor is evaluated without conditioning on additional explanatory variables.
+
+Under the ordinary least squares framework, the uncertainty associated with the estimated parameter vector can be characterized through its covariance matrix, given by
+
+$$
+\mathrm{Cov}(\hat{\boldsymbol{\theta}})
+=
+\sigma^2
+(\mathbf{X}^T\mathbf{X})^{-1}
+$$ {#eq-mlr-covariance}
+
+where $\sigma^2$ denotes the variance of the random error term.
+
+As in the simple linear regression setting, the variance of the residuals can be estimated through the residual standard error,
+
+$$
+\mathrm{RSE}
+=
+\sqrt{
+\frac{
+\mathrm{RSS}
+}{
+N - M - 1
+}
+}
+$$ {#eq-mlr-rse}
+
+where $N$ represents the number of observations and $M$ the number of explanatory variables included in the model.
+
+The diagonal elements of @eq-mlr-covariance determine the standard errors associated with each regression coefficient and provide a measure of the uncertainty of the parameter estimates. Larger standard errors indicate greater uncertainty in the estimated contribution of the corresponding predictor.
+
+In the context of the Fama--French three-factor model, the estimated coefficients associated with the market, SMB, and HML factors measure the sensitivity of the asset return to each systematic risk factor after controlling for the remaining factors included in the regression. Consequently, the interpretation of each coefficient should always be understood conditionally on the presence of the other explanatory variables.
+
+The inclusion of multiple predictors may also introduce statistical challenges such as multicollinearity, which occurs when explanatory variables exhibit strong linear dependence. In such cases, coefficient estimates may become unstable and difficult to interpret, even when the overall predictive performance of the model remains satisfactory.
+
+#### Global Hypothesis Testing and Model Significance
+
+In multiple linear regression, it is often important to evaluate whether the explanatory variables collectively contribute to the model. This can be assessed through a global hypothesis test of the form
+
+$$
+\begin{cases}
+H_0 :
+\theta_1 = \theta_2 = \cdots = \theta_M = 0 \\
+H_1 :
+\text{at least one } \theta_j \neq 0
+\end{cases}
+$$ {#eq-global-hypothesis}
+
+Under the null hypothesis, none of the explanatory variables contribute to explaining the variability of the response variable, implying that the model does not perform better than using the sample mean alone.
+
+The global significance of the regression model can be evaluated through the F-statistic,
+
+$$
+F
+=
+\frac{
+(\mathrm{TSS} - \mathrm{RSS})/M
+}{
+\mathrm{RSS}/(N - M - 1)
+}
+$$ {#eq-global-f-statistic}
+
+which compares the variability explained by the model with the unexplained residual variability after adjusting for the corresponding degrees of freedom.
+
+Large values of the F-statistic suggest that the explanatory variables collectively explain a substantial fraction of the observed variability in the response variable. The corresponding p-value provides a quantitative measure of the evidence against the null hypothesis.
+
+In the context of the Fama--French three-factor model, the global F-test evaluates whether the market, SMB, and HML factors jointly contribute to explaining the excess return of the asset. Consequently, the test provides a global assessment of the explanatory power of the multifactor specification relative to a model without risk factors.
+
+#### Limitations of Multiple Linear Regression
+
+Although multiple linear regression provides a flexible and interpretable framework for modeling relationships between variables, its performance depends on several assumptions and modeling choices. In practice, violations of these assumptions may affect the reliability of parameter estimates, confidence intervals, and hypothesis tests.
+
+One important limitation is multicollinearity, which arises when explanatory variables exhibit strong linear dependence. In such cases, the regression coefficients may become unstable and highly sensitive to small changes in the data, making their interpretation more difficult.
+
+Multiple linear regression models may also be affected by omitted variable bias when relevant explanatory factors are excluded from the specification. In empirical asset pricing, this issue motivated the development of multifactor models such as the Fama--French framework, which extends the CAPM by incorporating additional sources of systematic risk beyond the market factor alone.
+
+Another practical limitation is that linear regression assumes a linear relationship between predictors and the response variable. While this assumption often provides a useful approximation, real financial data may exhibit nonlinear effects, structural changes, heteroscedasticity, or temporal dependence that are not fully captured by the model.
+
+Despite these limitations, linear regression models remain fundamental tools in empirical finance due to their interpretability, computational efficiency, and strong connection with statistical inference and risk factor modeling.
