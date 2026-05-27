@@ -82,31 +82,33 @@ For simplicity, the implementation presented here uses raw daily returns without
 
 The estimated regression coefficients are summarized below.
 
-<iframe 
-  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-coefficients-table.html"
-  width="100%"
-  height="170"
-  style="border: none;">
-</iframe>
+::: {#tbl-capm-coefficients}
 
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-Table 1.1 Estimated CAPM regression coefficients for Apple Inc. using the S&amp;P 500 as the market proxy.
-</div>
+Table: Estimated CAPM regression coefficients for Apple Inc. using the S&P 500 as the market proxy.
+
+| Term        | Estimate | Std. Error | t-statistic | p-value  |
+|-------------|----------:|------------:|-------------:|----------:|
+| (Intercept) | 0.000526  | 0.000346    | 1.5226       | 0.128105  |
+| market      | 1.173257  | 0.025682    | 45.6847      | 0.000000  |
+
+:::
 
 The estimated market beta is approximately $\beta = 1.173257$, indicating that Apple exhibited higher sensitivity to market fluctuations than the S\&P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately $17\%$ more aggressively than the market portfolio in response to market variations.
 
 Additional model diagnostics are reported below.
 
-<iframe 
-  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-model-diagnostics.html"
-  width="100%"
-  height="280"
-  style="border: none;">
-</iframe>
+::: {#tbl-capm-diagnostics}
 
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-Table 1.2 Diagnostic statistics associated with the CAPM linear regression model.
-</div>
+Table: Diagnostic statistics associated with the CAPM linear regression model.
+
+| Metric               | Value        |
+|:--------------------:|:------------:|
+| R-squared            | 0.6247       |
+| Adjusted R-squared   | 0.6244       |
+| F-statistic          | 2087.0916    |
+| Observations         | 1256         |
+
+:::
 
 The estimated beta coefficient is also statistically significant, with a large associated $t$-statistic and a near-zero $p$-value. Similarly, the overall regression presents a large $F$-statistic, supporting the existence of a statistically meaningful linear relationship between Apple returns and market returns during the analyzed period.
 
@@ -132,16 +134,18 @@ Additional implementation details are available in the companion Quarto notebook
 
 The estimated regression coefficients are summarized below.
 
-<iframe 
-  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_coefficient_estimates.html"
-  width="100%"
-  height="240"
-  style="border: none;">
-</iframe>
+::: {#tbl-ff3-coefficients}
 
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-Table 1.3 Estimated Fama–French three-factor regression coefficients for Apple Inc.
-</div>
+Table: Estimated Fama–French three-factor regression coefficients for Apple Inc.
+
+| Term             | Estimate   | Std. Error  | t-statistic  | p-value   |
+|:----------------:|-----------:|------------:|-------------:|----------:|
+| Alpha            | 0.000455   | 0.000320    | 1.421686     | 0.155366  |
+| Market Factor    | 1.162676   | 0.024001    | 48.442699    | 0.000000  |
+| Size Factor      | -0.329641  | 0.042313    | -7.790601    | 0.000000  |
+| Value Factor     | -0.370591  | 0.027910    | -13.278185   | 0.000000  |
+
+:::
 
 The estimated market beta is approximately $\beta_{mkt} = 1.163$, indicating that Apple exhibits a stronger sensitivity to systematic market movements than the market portfolio itself. The coefficients associated with the size and value factors are both negative and statistically significant. The negative loading on `SMB` suggests that Apple behaves more similarly to large-cap firms than to small-cap firms, which is consistent with its market capitalization and dominant position within the technology sector. Likewise, the negative `HML` exposure indicates characteristics more closely aligned with growth-oriented firms rather than value stocks.
 
@@ -149,16 +153,20 @@ The estimated intercept term ($\alpha \approx 0.00046$) is positive but not stat
 
 The overall regression fit improved relative to the single-factor CAPM specification. The coefficient of determination increased to approximately $R^2 = 0.678$, indicating that the three-factor model explains nearly $68\%$ of the variability observed in Apple excess returns. The F-statistic associated with the regression is also highly significant, supporting the joint explanatory power of the selected factors.
 
-<iframe 
-  src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_model_summary.html"
-  width="100%"
-  height="160"
-  style="border: none;">
-</iframe>
+::: {#tbl-ff3-diagnostics}
 
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-Table 1.4 Diagnostic statistics associated with the Fama–French three-factor regression model.
-</div>
+Table: Diagnostic statistics associated with the Fama–French three-factor regression model.
+
+| Metric                 | Value         |
+|:----------------------:|:-------------:|
+| R-squared              | 0.677865      |
+| Adjusted R-squared     | 0.677093      |
+| Sigma                  | 0.011345      |
+| F-statistic            | 878.191163    |
+| p-value                | 0.000000      |
+| Observations           | 1256          |
+
+:::
 
 @fig-fama-french-observed-fitted compares the observed excess returns against the fitted values generated by the regression model. The fitted series captures a substantial fraction of the short-term dynamics of Apple returns, although large residual fluctuations remain during periods of elevated volatility.
 

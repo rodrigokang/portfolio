@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,15 +54,14 @@ div.csl-indent {
 <link href="../1-quantitative-finance/0-overview.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -105,7 +104,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -145,9 +144,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -519,17 +516,80 @@ Figure&nbsp;1.3: Scatter plot of daily Apple returns against S&amp;P 500 daily r
 <p>Following the theoretical formulation introduced in <a href="#eq-capm" class="quarto-xref">Equation&nbsp;<span>1.2</span></a>, the CAPM is implemented through a simple linear regression in which the daily returns of Apple Inc.&nbsp;are modeled as a function of the daily returns of the market portfolio.</p>
 <p>For simplicity, the implementation presented here uses raw daily returns without explicitly incorporating a risk-free rate. Under this approximation, the model estimates the linear sensitivity of the selected asset relative to market movements.</p>
 <p>The estimated regression coefficients are summarized below.</p>
-<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-coefficients-table.html" width="100%" height="170" style="border: none;">
-</iframe>
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-<p>Table 1.1 Estimated CAPM regression coefficients for Apple Inc.&nbsp;using the S&amp;P 500 as the market proxy.</p>
+<div id="tbl-capm-coefficients" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-capm-coefficients-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1: Estimated CAPM regression coefficients for Apple Inc.&nbsp;using the S&amp;P 500 as the market proxy.
+</figcaption>
+<div aria-describedby="tbl-capm-coefficients-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Estimated CAPM regression coefficients for Apple Inc.&nbsp;using the S&amp;P 500 as the market proxy.</caption>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t-statistic</th>
+<th style="text-align: right;">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td style="text-align: right;">0.000526</td>
+<td style="text-align: right;">0.000346</td>
+<td style="text-align: right;">1.5226</td>
+<td style="text-align: right;">0.128105</td>
+</tr>
+<tr class="even">
+<td>market</td>
+<td style="text-align: right;">1.173257</td>
+<td style="text-align: right;">0.025682</td>
+<td style="text-align: right;">45.6847</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
 </div>
 <p>The estimated market beta is approximately <span class="math inline">\(\beta = 1.173257\)</span>, indicating that Apple exhibited higher sensitivity to market fluctuations than the S&amp;P 500 during the analyzed period. Under the CAPM interpretation, this coefficient suggests that, on average, Apple returns moved approximately <span class="math inline">\(17\%\)</span> more aggressively than the market portfolio in response to market variations.</p>
 <p>Additional model diagnostics are reported below.</p>
-<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-model-diagnostics.html" width="100%" height="280" style="border: none;">
-</iframe>
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-<p>Table 1.2 Diagnostic statistics associated with the CAPM linear regression model.</p>
+<div id="tbl-capm-diagnostics" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-capm-diagnostics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.2: Diagnostic statistics associated with the CAPM linear regression model.
+</figcaption>
+<div aria-describedby="tbl-capm-diagnostics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Diagnostic statistics associated with the CAPM linear regression model.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Metric</th>
+<th style="text-align: center;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">R-squared</td>
+<td style="text-align: center;">0.6247</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Adjusted R-squared</td>
+<td style="text-align: center;">0.6244</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">F-statistic</td>
+<td style="text-align: center;">2087.0916</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Observations</td>
+<td style="text-align: center;">1256</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
 </div>
 <p>The estimated beta coefficient is also statistically significant, with a large associated <span class="math inline">\(t\)</span>-statistic and a near-zero <span class="math inline">\(p\)</span>-value. Similarly, the overall regression presents a large <span class="math inline">\(F\)</span>-statistic, supporting the existence of a statistically meaningful linear relationship between Apple returns and market returns during the analyzed period.</p>
 <p>The estimated coefficient of determination of approximately <span class="math inline">\(R^2 = 0.625\)</span> indicates that the market factor alone explains a substantial fraction of the observed variability in Apple daily returns during the selected period. Nevertheless, a significant portion of the variability remains unexplained, motivating the consideration of multifactor extensions beyond the single-factor CAPM specification.</p>
@@ -563,18 +623,110 @@ Figure&nbsp;1.5: Fama–French daily factor series.
 </figure>
 </div>
 <p>The estimated regression coefficients are summarized below.</p>
-<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_coefficient_estimates.html" width="100%" height="240" style="border: none;">
-</iframe>
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-<p>Table 1.3 Estimated Fama–French three-factor regression coefficients for Apple Inc.</p>
+<div id="tbl-ff3-coefficients" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ff3-coefficients-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.3: Estimated Fama–French three-factor regression coefficients for Apple Inc.
+</figcaption>
+<div aria-describedby="tbl-ff3-coefficients-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Estimated Fama–French three-factor regression coefficients for Apple Inc.</caption>
+<colgroup>
+<col style="width: 26%">
+<col style="width: 17%">
+<col style="width: 19%">
+<col style="width: 20%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Term</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">t-statistic</th>
+<th style="text-align: right;">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Alpha</td>
+<td style="text-align: right;">0.000455</td>
+<td style="text-align: right;">0.000320</td>
+<td style="text-align: right;">1.421686</td>
+<td style="text-align: right;">0.155366</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Market Factor</td>
+<td style="text-align: right;">1.162676</td>
+<td style="text-align: right;">0.024001</td>
+<td style="text-align: right;">48.442699</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Size Factor</td>
+<td style="text-align: right;">-0.329641</td>
+<td style="text-align: right;">0.042313</td>
+<td style="text-align: right;">-7.790601</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Value Factor</td>
+<td style="text-align: right;">-0.370591</td>
+<td style="text-align: right;">0.027910</td>
+<td style="text-align: right;">-13.278185</td>
+<td style="text-align: right;">0.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
 </div>
 <p>The estimated market beta is approximately <span class="math inline">\(\beta_{mkt} = 1.163\)</span>, indicating that Apple exhibits a stronger sensitivity to systematic market movements than the market portfolio itself. The coefficients associated with the size and value factors are both negative and statistically significant. The negative loading on <code>SMB</code> suggests that Apple behaves more similarly to large-cap firms than to small-cap firms, which is consistent with its market capitalization and dominant position within the technology sector. Likewise, the negative <code>HML</code> exposure indicates characteristics more closely aligned with growth-oriented firms rather than value stocks.</p>
 <p>The estimated intercept term (<span class="math inline">\(\alpha \approx 0.00046\)</span>) is positive but not statistically significant at conventional significance levels (<span class="math inline">\(p \approx 0.155\)</span>), suggesting that, after accounting for the three systematic risk factors, the model does not provide strong evidence of abnormal excess returns during the analyzed period.</p>
 <p>The overall regression fit improved relative to the single-factor CAPM specification. The coefficient of determination increased to approximately <span class="math inline">\(R^2 = 0.678\)</span>, indicating that the three-factor model explains nearly <span class="math inline">\(68\%\)</span> of the variability observed in Apple excess returns. The F-statistic associated with the regression is also highly significant, supporting the joint explanatory power of the selected factors.</p>
-<iframe src="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model-figures/fama_french_model_summary.html" width="100%" height="160" style="border: none;">
-</iframe>
-<div style="text-align: center; font-size: 0.9em; margin-top: -10px;">
-<p>Table 1.4 Diagnostic statistics associated with the Fama–French three-factor regression model.</p>
+<div id="tbl-ff3-diagnostics" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ff3-diagnostics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.4: Diagnostic statistics associated with the Fama–French three-factor regression model.
+</figcaption>
+<div aria-describedby="tbl-ff3-diagnostics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<caption>Diagnostic statistics associated with the Fama–French three-factor regression model.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Metric</th>
+<th style="text-align: center;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">R-squared</td>
+<td style="text-align: center;">0.677865</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Adjusted R-squared</td>
+<td style="text-align: center;">0.677093</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Sigma</td>
+<td style="text-align: center;">0.011345</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">F-statistic</td>
+<td style="text-align: center;">878.191163</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">p-value</td>
+<td style="text-align: center;">0.000000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Observations</td>
+<td style="text-align: center;">1256</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
 </div>
 <p><a href="#fig-fama-french-observed-fitted" class="quarto-xref">Figure&nbsp;<span>1.6</span></a> compares the observed excess returns against the fitted values generated by the regression model. The fitted series captures a substantial fraction of the short-term dynamics of Apple returns, although large residual fluctuations remain during periods of elevated volatility.</p>
 <div id="fig-fama-french-observed-fitted" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1200,14 +1352,13 @@ F
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
