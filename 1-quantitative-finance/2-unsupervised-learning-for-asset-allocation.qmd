@@ -20,18 +20,43 @@ The objective is not simply to maximize historical returns, but to investigate w
 
 ## Modeling Approach
 
-This section introduces the conceptual framework used to approach the problem.
+The modeling approach adopted in this project treats portfolio construction as a problem of understanding the structure of market risk. The analysis focuses on how assets move together, how risk concentrates across the market, and how correlation patterns affect diversification under changing market conditions.
 
-The discussion typically includes:
+Financial markets are rarely composed of independent assets. Securities that belong to different sectors or asset classes often remain exposed to the same underlying drivers, particularly during periods of stress when correlations tend to increase. This means that portfolios that appear diversified on paper may still contain significant hidden concentrations of risk.
 
-- The main modeling assumptions
-- The reasoning behind the selected methodology
-- The intuition behind the model or algorithm
-- The relationship between the model and the underlying process being studied
+The analysis begins with Principal Component Analysis (PCA), following the general perspective of statistical risk decomposition discussed in @meucci2005risk and the idea of principal portfolios introduced in @partovi2004principal. PCA is used to study the covariance structure of the market and identify the dominant directions of variation across asset returns. In practice, a relatively small number of components often explains a large proportion of total market variance, suggesting that many assets continue to react to common underlying factors even when they appear superficially diversified.
 
-Mathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.
+The covariance matrix is decomposed according to
 
-The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.
+$$
+\Sigma = Q \Lambda Q^\top
+$$ {#eq-spectral-decomposition}
+
+where $Q$ contains the eigenvectors and $\Lambda$ the associated eigenvalues. The eigenvectors define orthogonal directions in the transformed risk space, while the eigenvalues measure the variance explained by each component. This decomposition provides a compact representation of the market structure and helps distinguish between broad market behaviour and more localized sources of variation.
+
+The PCA transformation can also be interpreted as a rotation of the original return space into an orthogonal basis of uncorrelated components,
+
+$$
+\tilde{\mathbf{R}} = \Gamma^\top \mathbf{R}
+$$ {#eq-pca-rotation}
+
+where $\mathbf{R}$ denotes the original return vector and $\tilde{\mathbf{R}}$ its representation in the transformed PCA space. Portfolio returns preserve their underlying structure under this transformation while becoming easier to interpret in terms of independent sources of market variation.
+
+PCA is used as a diagnostic tool for studying market structure before constructing the final allocation. The portfolio construction stage is based on Hierarchical Risk Parity (HRP), introduced in @lopez2016building and further developed in @de2018advances. Unlike traditional mean–variance optimization frameworks, HRP does not require direct inversion of the covariance matrix, avoiding part of the numerical instability associated with highly correlated asset universes and estimation error.
+
+The clustering stage identifies groups of statistically similar assets using a correlation-based distance measure,
+
+$$
+d_{ij} = \sqrt{\frac{1}{2}(1 - \rho_{ij})}
+$$ {#eq-correlation-distance}
+
+where $\rho_{ij}$ denotes the correlation between assets $i$ and $j$. Assets with similar behaviour are grouped together into a hierarchical structure that reflects the organization of the market more naturally than a flat covariance matrix alone.
+
+Portfolio weights are then allocated recursively across the hierarchy, reducing concentration in highly correlated regions of the market. In practice, this tends to produce more stable allocations than traditional mean–variance optimization procedures, where small changes in covariance estimates can generate disproportionately large changes in portfolio weights.
+
+An equally weighted $1/N$ portfolio is used as a benchmark throughout the analysis. Although simple, this benchmark provides an important reference point when evaluating whether additional model complexity leads to meaningful improvements in diversification and portfolio robustness out-of-sample.
+
+The resulting framework combines spectral analysis, clustering techniques, and hierarchical risk allocation to study diversification from a structural perspective, with emphasis on robustness and stability under changing market conditions.
 
 ## Methodology and Implementation
 

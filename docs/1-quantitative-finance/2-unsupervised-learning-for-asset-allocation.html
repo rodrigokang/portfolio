@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -70,6 +90,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -388,16 +437,28 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="modeling-approach" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">2.2</span> Modeling Approach</h2>
-<p>This section introduces the conceptual framework used to approach the problem.</p>
-<p>The discussion typically includes:</p>
-<ul>
-<li>The main modeling assumptions</li>
-<li>The reasoning behind the selected methodology</li>
-<li>The intuition behind the model or algorithm</li>
-<li>The relationship between the model and the underlying process being studied</li>
-</ul>
-<p>Mathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.</p>
-<p>The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.</p>
+<p>The modeling approach adopted in this project treats portfolio construction as a problem of understanding the structure of market risk. The analysis focuses on how assets move together, how risk concentrates across the market, and how correlation patterns affect diversification under changing market conditions.</p>
+<p>Financial markets are rarely composed of independent assets. Securities that belong to different sectors or asset classes often remain exposed to the same underlying drivers, particularly during periods of stress when correlations tend to increase. This means that portfolios that appear diversified on paper may still contain significant hidden concentrations of risk.</p>
+<p>The analysis begins with Principal Component Analysis (PCA), following the general perspective of statistical risk decomposition discussed in <span class="citation" data-cites="meucci2005risk"><a href="../references.html#ref-meucci2005risk" role="doc-biblioref">[1]</a></span> and the idea of principal portfolios introduced in <span class="citation" data-cites="partovi2004principal"><a href="../references.html#ref-partovi2004principal" role="doc-biblioref">[2]</a></span>. PCA is used to study the covariance structure of the market and identify the dominant directions of variation across asset returns. In practice, a relatively small number of components often explains a large proportion of total market variance, suggesting that many assets continue to react to common underlying factors even when they appear superficially diversified.</p>
+<p>The covariance matrix is decomposed according to</p>
+<p><span id="eq-spectral-decomposition"><span class="math display">\[
+\Sigma = Q \Lambda Q^\top
+\tag{2.1}\]</span></span></p>
+<p>where <span class="math inline">\(Q\)</span> contains the eigenvectors and <span class="math inline">\(\Lambda\)</span> the associated eigenvalues. The eigenvectors define orthogonal directions in the transformed risk space, while the eigenvalues measure the variance explained by each component. This decomposition provides a compact representation of the market structure and helps distinguish between broad market behaviour and more localized sources of variation.</p>
+<p>The PCA transformation can also be interpreted as a rotation of the original return space into an orthogonal basis of uncorrelated components,</p>
+<p><span id="eq-pca-rotation"><span class="math display">\[
+\tilde{\mathbf{R}} = \Gamma^\top \mathbf{R}
+\tag{2.2}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{R}\)</span> denotes the original return vector and <span class="math inline">\(\tilde{\mathbf{R}}\)</span> its representation in the transformed PCA space. Portfolio returns preserve their underlying structure under this transformation while becoming easier to interpret in terms of independent sources of market variation.</p>
+<p>PCA is used as a diagnostic tool for studying market structure before constructing the final allocation. The portfolio construction stage is based on Hierarchical Risk Parity (HRP), introduced in <span class="citation" data-cites="lopez2016building"><a href="../references.html#ref-lopez2016building" role="doc-biblioref">[3]</a></span> and further developed in <span class="citation" data-cites="de2018advances"><a href="../references.html#ref-de2018advances" role="doc-biblioref">[4]</a></span>. Unlike traditional mean–variance optimization frameworks, HRP does not require direct inversion of the covariance matrix, avoiding part of the numerical instability associated with highly correlated asset universes and estimation error.</p>
+<p>The clustering stage identifies groups of statistically similar assets using a correlation-based distance measure,</p>
+<p><span id="eq-correlation-distance"><span class="math display">\[
+d_{ij} = \sqrt{\frac{1}{2}(1 - \rho_{ij})}
+\tag{2.3}\]</span></span></p>
+<p>where <span class="math inline">\(\rho_{ij}\)</span> denotes the correlation between assets <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. Assets with similar behaviour are grouped together into a hierarchical structure that reflects the organization of the market more naturally than a flat covariance matrix alone.</p>
+<p>Portfolio weights are then allocated recursively across the hierarchy, reducing concentration in highly correlated regions of the market. In practice, this tends to produce more stable allocations than traditional mean–variance optimization procedures, where small changes in covariance estimates can generate disproportionately large changes in portfolio weights.</p>
+<p>An equally weighted <span class="math inline">\(1/N\)</span> portfolio is used as a benchmark throughout the analysis. Although simple, this benchmark provides an important reference point when evaluating whether additional model complexity leads to meaningful improvements in diversification and portfolio robustness out-of-sample.</p>
+<p>The resulting framework combines spectral analysis, clustering techniques, and hierarchical risk allocation to study diversification from a structural perspective, with emphasis on robustness and stability under changing market conditions.</p>
 </section>
 <section id="methodology-and-implementation" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">2.3</span> Methodology and Implementation</h2>
@@ -455,6 +516,20 @@ ul.task-list li input[type="checkbox"] {
 <p>The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.</p>
 
 
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-meucci2005risk" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">A. Meucci, <em>Risk and asset allocation</em>. Springer, 2005.</div>
+</div>
+<div id="ref-partovi2004principal" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">M. H. Partovi, M. Caputo, <em>et al.</em>, <span>“Principal portfolios: Recasting the efficient frontier,”</span> <em>Economics Bulletin</em>, vol. 7, no. 3, pp. 1–10, 2004.</div>
+</div>
+<div id="ref-lopez2016building" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">M. Lopez de Prado, <span>“Building diversified portfolios that outperform out-of-sample,”</span> <em>Journal of Portfolio Management</em>, 2016.</div>
+</div>
+<div id="ref-de2018advances" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">M. L. De Prado, <em>Advances in financial machine learning</em>. John Wiley &amp; Sons, 2018.</div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
