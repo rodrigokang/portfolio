@@ -1,0 +1,1218 @@
+---
+title: "Unsupervised Learning for Asset Allocation"
+author: "Rodrigo Kang"
+
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-line-numbers: true
+    code-overflow: wrap
+    theme: cosmo
+    embed-resources: true
+
+execute:
+  warning: false
+  message: false
+
+editor: visual
+---
+
+## Overview
+
+This notebook accompanies the project **Unsupervised Learning for Asset Allocation** and contains the computational implementation supporting the methodology, experiments, and results discussed in the portfolio chapter.
+
+The material presented here focuses on practical implementation details, including data preparation, PCA analysis, hierarchical clustering, HRP allocation, benchmark comparison, and complementary portfolio diagnostics.
+
+## Imports and Configuration
+
+This section initializes the main libraries used throughout the notebook.
+
+The analysis uses historical market data obtained from Yahoo Finance together with standard R libraries for data manipulation, visualization, portfolio return calculation, and table generation.
+
+```{r}
+Sys.setenv(LANGUAGE = "en")
+
+library(quantmod)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(PerformanceAnalytics)
+library(gt)
+```
+
+```{r}
+outputs_dir <- "1-unsupervised-learning-for-asset-allocation-figures"
+
+dir.create(outputs_dir, showWarnings = FALSE)
+```
+
+## Asset Selection
+
+The analysis uses a selection of large-cap U.S. equities from different sectors of the market. The objective is to work with assets that exhibit different correlation structures and risk profiles while remaining sufficiently liquid throughout the analyzed period.
+
+The selected sample spans from January 2020 to December 2024 and includes different market environments, including the COVID-19 market shock and the subsequent recovery period.
+
+```{r}
+tickers <- c(
+  "AAPL",
+  "MSFT",
+  "GOOGL",
+  "AMZN",
+  "META",
+  "JPM",
+  "BAC",
+  "XOM",
+  "CVX",
+  "JNJ",
+  "PFE",
+  "PG",
+  "KO",
+  "WMT",
+  "HD"
+)
+
+sectors <- c(
+  "Technology",
+  "Technology",
+  "Communication Services",
+  "Consumer Discretionary",
+  "Communication Services",
+  "Financials",
+  "Financials",
+  "Energy",
+  "Energy",
+  "Healthcare",
+  "Healthcare",
+  "Consumer Staples",
+  "Consumer Staples",
+  "Retail",
+  "Consumer Discretionary"
+)
+
+start_date <- as.Date("2020-01-01")
+end_date <- as.Date("2024-12-31")
+```
+
+```{r}
+asset_table <- tibble(
+  Ticker = tickers,
+  Sector = sectors
+)
+
+asset_table_gt <- asset_table |>
+  gt() |>
+  tab_header(
+    title = "Selected Asset Universe"
+  )
+
+asset_table_gt
+```
+
+```{r}
+gtsave(
+  data = asset_table_gt,
+  filename = file.path(outputs_dir, "asset-universe.html")
+)
+```
+
+## Data Collection
+
+Daily adjusted closing prices are downloaded from Yahoo Finance. Adjusted prices are used throughout the analysis in order to account for stock splits and dividend adjustments when available.
+
+The downloaded series are aligned by trading date and combined into a single dataset before return calculation.
+
+```{r}
+price_list <- lapply(
+  tickers,
+  function(ticker) {
+    data <- getSymbols(
+      ticker,
+      src = "yahoo",
+      from = start_date,
+      to = end_date,
+      auto.assign = FALSE
+    )
+
+    Ad(data)
+  }
+)
+
+prices <- do.call(merge, price_list)
+
+colnames(prices) <- tickers
+
+prices <- na.omit(prices)
+
+head(prices)
+```
+
+## Return Calculation
+
+Daily simple returns are computed from the adjusted closing prices and used throughout the analysis. The resulting return matrix forms the basis for the covariance estimation, PCA decomposition, clustering procedures, and portfolio construction stages developed later in the notebook.
+
+```{r}
+returns <- na.omit(Return.calculate(prices, method = "discrete"))
+
+returns_df <- data.frame(
+  date = index(returns),
+  coredata(returns)
+)
+
+head(returns_df)
+```
+
+## Price and Return Series
+
+Before applying the portfolio construction methods, the price and return series are inspected in order to obtain a preliminary view of the market behaviour during the analyzed period.
+
+```{r}
+prices_df <- data.frame(
+  date = index(prices),
+  coredata(prices)
+)
+
+prices_long <- prices_df |>
+  pivot_longer(
+    cols = -date,
+    names_to = "asset",
+    values_to = "price"
+  )
+```
+
+```{r}
+closing_prices_plot <- ggplot(
+  prices_long,
+  aes(x = date, y = price, colour = asset)
+) +
+  geom_line(linewidth = 0.4) +
+  labs(
+    title = "Adjusted Closing Prices",
+    x = "Date",
+    y = "Price",
+    colour = "Asset"
+  ) +
+  theme_minimal()
+
+closing_prices_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "closing-prices.png"),
+  plot = closing_prices_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+```
+
+```{r}
+returns_long <- returns_df |>
+  pivot_longer(
+    cols = -date,
+    names_to = "asset",
+    values_to = "return"
+  )
+```
+
+```{r}
+daily_returns_plot <- ggplot(
+  returns_long,
+  aes(x = date, y = return, colour = asset)
+) +
+  geom_line(linewidth = 0.35, alpha = 0.7) +
+  labs(
+    title = "Daily Returns",
+    x = "Date",
+    y = "Return",
+    colour = "Asset"
+  ) +
+  theme_minimal()
+
+daily_returns_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "daily-returns.png"),
+  plot = daily_returns_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+```
+
+## Correlation Structure
+
+The correlation matrix provides a first view of the dependency structure between assets. Highly correlated groups may indicate exposure to common underlying drivers, while weaker correlations can contribute to diversification within the portfolio.
+
+```{r}
+correlation_matrix <- cor(returns)
+
+correlation_matrix[1:5, 1:5]
+```
+
+```{r}
+correlation_df <- as.data.frame(as.table(correlation_matrix))
+
+colnames(correlation_df) <- c("asset_1", "asset_2", "correlation")
+```
+
+```{r}
+correlation_plot <- ggplot(
+  correlation_df,
+  aes(x = asset_1, y = asset_2, fill = correlation)
+) +
+  geom_tile() +
+  scale_fill_gradient2(
+    low = "blue",
+    mid = "white",
+    high = "red",
+    midpoint = 0
+  ) +
+  labs(
+    title = "Correlation Matrix",
+    x = NULL,
+    y = NULL,
+    fill = "Correlation"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  )
+
+correlation_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "correlation-matrix.png"),
+  plot = correlation_plot,
+  width = 8,
+  height = 7,
+  dpi = 300
+)
+```
+
+## Covariance Matrix
+
+The covariance matrix summarizes how asset returns vary jointly through time and serves as the main input for the PCA decomposition and portfolio allocation procedures developed later in the notebook.
+
+```{r}
+covariance_matrix <- cov(returns)
+
+covariance_matrix[1:5, 1:5]
+```
+
+```{r}
+covariance_df <- as.data.frame(as.table(covariance_matrix))
+
+colnames(covariance_df) <- c("asset_1", "asset_2", "covariance")
+```
+
+```{r}
+covariance_plot <- ggplot(
+  covariance_df,
+  aes(x = asset_1, y = asset_2, fill = covariance)
+) +
+  geom_tile() +
+  labs(
+    title = "Covariance Matrix",
+    x = NULL,
+    y = NULL,
+    fill = "Covariance"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  )
+
+covariance_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "covariance-matrix.png"),
+  plot = covariance_plot,
+  width = 8,
+  height = 7,
+  dpi = 300
+)
+```
+
+## Principal Component Analysis
+
+Principal Component Analysis (PCA) is used to study the dominant sources of variation in the covariance structure of the market. The decomposition allows the analysis to identify how much of the total variance is explained by a reduced number of orthogonal components.
+
+```{r}
+pca_model <- prcomp(
+  returns,
+  center = TRUE,
+  scale. = FALSE
+)
+
+explained_variance <- pca_model$sdev^2 / sum(pca_model$sdev^2)
+
+cumulative_variance <- cumsum(explained_variance)
+```
+
+```{r}
+pca_variance_table <- tibble(
+  Component = paste0("PC", seq_along(explained_variance)),
+  Explained_Variance = explained_variance,
+  Cumulative_Variance = cumulative_variance
+)
+```
+
+```{r}
+pca_variance_gt <- pca_variance_table |>
+  mutate(
+    Explained_Variance = round(Explained_Variance, 4),
+    Cumulative_Variance = round(Cumulative_Variance, 4)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "PCA Explained Variance"
+  )
+
+pca_variance_gt
+```
+
+```{r}
+gtsave(
+  data = pca_variance_gt,
+  filename = file.path(outputs_dir, "pca-explained-variance.html")
+)
+```
+
+```{r}
+explained_variance_plot <- ggplot(
+  pca_variance_table,
+  aes(x = seq_along(Explained_Variance), y = Explained_Variance)
+) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Explained Variance Ratio",
+    x = "Principal Component",
+    y = "Explained Variance"
+  ) +
+  theme_minimal()
+
+explained_variance_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "explained-variance-ratio.png"),
+  plot = explained_variance_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+```{r}
+cumulative_variance_plot <- ggplot(
+  pca_variance_table,
+  aes(x = seq_along(Cumulative_Variance), y = Cumulative_Variance)
+) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Cumulative Explained Variance",
+    x = "Principal Component",
+    y = "Cumulative Variance"
+  ) +
+  theme_minimal()
+
+cumulative_variance_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "cumulative-explained-variance.png"),
+  plot = cumulative_variance_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+## Principal Components
+
+The principal components can be interpreted as orthogonal directions of market variation. Examining the component loadings provides a view of how individual assets contribute to each source of risk identified by the PCA decomposition.
+
+```{r}
+loadings <- as.data.frame(pca_model$rotation)
+
+loadings$asset <- rownames(loadings)
+
+head(loadings)
+```
+
+```{r}
+pc1_loadings <- loadings |>
+  select(asset, PC1) |>
+  arrange(PC1)
+
+pc1_loadings_plot <- ggplot(
+  pc1_loadings,
+  aes(x = reorder(asset, PC1), y = PC1)
+) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "First Principal Component Loadings",
+    x = "Asset",
+    y = "Loading"
+  ) +
+  theme_minimal()
+
+pc1_loadings_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "pc1-loadings.png"),
+  plot = pc1_loadings_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+```{r}
+pc2_loadings <- loadings |>
+  select(asset, PC2) |>
+  arrange(PC2)
+
+pc2_loadings_plot <- ggplot(
+  pc2_loadings,
+  aes(x = reorder(asset, PC2), y = PC2)
+) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Second Principal Component Loadings",
+    x = "Asset",
+    y = "Loading"
+  ) +
+  theme_minimal()
+
+pc2_loadings_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "pc2-loadings.png"),
+  plot = pc2_loadings_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+## Hierarchical Clustering
+
+Hierarchical clustering is used to identify groups of assets with similar correlation patterns. The clustering procedure is based on a correlation-derived distance matrix and produces a hierarchical representation of the dependency structure across the market.
+
+```{r}
+distance_matrix <- sqrt(
+  0.5 * (1 - correlation_matrix)
+)
+
+diag(distance_matrix) <- 0
+
+distance_matrix[1:5, 1:5]
+```
+
+```{r}
+distance_object <- as.dist(distance_matrix)
+
+cluster_model <- hclust(
+  distance_object,
+  method = "ward.D2"
+)
+```
+
+```{r}
+png(
+  filename = file.path(outputs_dir, "hierarchical-clustering-dendrogram.png"),
+  width = 1000,
+  height = 600,
+  res = 120
+)
+
+plot(
+  cluster_model,
+  main = "Hierarchical Clustering Dendrogram",
+  xlab = "",
+  sub = "",
+  ylab = "Distance"
+)
+
+dev.off()
+```
+
+```{r}
+plot(
+  cluster_model,
+  main = "Hierarchical Clustering Dendrogram",
+  xlab = "",
+  sub = "",
+  ylab = "Distance"
+)
+```
+
+## Clustered Correlation Matrix
+
+The dendrogram provides an ordering of the assets based on their hierarchical relationships. Reordering the correlation matrix using this structure makes the clustered behaviour easier to inspect visually.
+
+```{r}
+ordered_tickers <- cluster_model$labels[cluster_model$order]
+
+ordered_correlation_matrix <- correlation_matrix[
+  ordered_tickers,
+  ordered_tickers
+]
+
+ordered_correlation_matrix[1:5, 1:5]
+```
+
+```{r}
+ordered_correlation_df <- as.data.frame(
+  as.table(ordered_correlation_matrix)
+)
+
+colnames(ordered_correlation_df) <- c(
+  "asset_1",
+  "asset_2",
+  "correlation"
+)
+
+ordered_correlation_df$asset_1 <- factor(
+  ordered_correlation_df$asset_1,
+  levels = ordered_tickers
+)
+
+ordered_correlation_df$asset_2 <- factor(
+  ordered_correlation_df$asset_2,
+  levels = ordered_tickers
+)
+```
+
+```{r}
+clustered_correlation_plot <- ggplot(
+  ordered_correlation_df,
+  aes(x = asset_1, y = asset_2, fill = correlation)
+) +
+  geom_tile() +
+  scale_fill_gradient2(
+    low = "blue",
+    mid = "white",
+    high = "red",
+    midpoint = 0
+  ) +
+  labs(
+    title = "Clustered Correlation Matrix",
+    x = NULL,
+    y = NULL,
+    fill = "Correlation"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  )
+
+clustered_correlation_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "clustered-correlation-matrix.png"),
+  plot = clustered_correlation_plot,
+  width = 8,
+  height = 7,
+  dpi = 300
+)
+```
+
+## Hierarchical Risk Parity
+
+The final portfolio allocation is constructed using a Hierarchical Risk Parity (HRP) approach. The allocation process distributes portfolio weights across the hierarchical structure identified by the clustering stage, reducing concentration in highly correlated groups of assets.
+
+```{r}
+get_cluster_var <- function(cov_matrix, cluster_items) {
+  #' Compute cluster variance.
+  #'
+  #' Inputs
+  #' ------
+  #' cov_matrix : matrix or data.frame
+  #'   Covariance matrix of asset returns.
+  #'
+  #' cluster_items : character vector
+  #'   Assets included in the cluster.
+  #'
+  #' Outputs
+  #' -------
+  #' cluster_var : numeric
+  #'   Estimated variance of the cluster.
+  #'
+  #' Author
+  #' ------
+  #' Rodrigo Kang
+
+  cluster_cov <- cov_matrix[
+    cluster_items,
+    cluster_items,
+    drop = FALSE
+  ]
+
+  weights <- rep(
+    1 / length(cluster_items),
+    length(cluster_items)
+  )
+
+  cluster_var <- as.numeric(
+    t(weights) %*% cluster_cov %*% weights
+  )
+
+  return(cluster_var)
+}
+```
+
+```{r}
+hrp_allocation <- function(cov_matrix, ordered_assets) {
+  #' Compute HRP portfolio weights.
+  #'
+  #' Inputs
+  #' ------
+  #' cov_matrix : matrix or data.frame
+  #'   Covariance matrix of asset returns.
+  #'
+  #' ordered_assets : character vector
+  #'   Assets ordered according to the hierarchical clustering structure.
+  #'
+  #' Outputs
+  #' -------
+  #' weights : numeric vector
+  #'   Portfolio weights obtained using recursive bisection.
+  #'
+  #' Author
+  #' ------
+  #' Rodrigo Kang
+
+  weights <- rep(
+    1,
+    length(ordered_assets)
+  )
+
+  names(weights) <- ordered_assets
+
+  clusters <- list(ordered_assets)
+
+  while (length(clusters) > 0) {
+    cluster <- clusters[[1]]
+    clusters <- clusters[-1]
+
+    if (length(cluster) <= 1) {
+      next
+    }
+
+    split_point <- floor(length(cluster) / 2)
+
+    cluster_left <- cluster[1:split_point]
+    cluster_right <- cluster[(split_point + 1):length(cluster)]
+
+    var_left <- get_cluster_var(cov_matrix, cluster_left)
+    var_right <- get_cluster_var(cov_matrix, cluster_right)
+
+    alpha <- 1 - var_left / (var_left + var_right)
+
+    weights[cluster_left] <- weights[cluster_left] * alpha
+    weights[cluster_right] <- weights[cluster_right] * (1 - alpha)
+
+    clusters <- append(
+      clusters,
+      list(cluster_left, cluster_right)
+    )
+  }
+
+  return(weights)
+}
+```
+
+```{r}
+hrp_weights <- hrp_allocation(
+  covariance_matrix,
+  ordered_tickers
+)
+
+hrp_weights
+```
+
+```{r}
+hrp_weights_table <- tibble(
+  Asset = names(hrp_weights),
+  Weight = as.numeric(hrp_weights)
+) |>
+  arrange(desc(Weight))
+```
+
+```{r}
+hrp_weights_gt <- hrp_weights_table |>
+  mutate(
+    Weight = round(Weight, 4)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "HRP Portfolio Weights"
+  )
+
+hrp_weights_gt
+```
+
+```{r}
+gtsave(
+  data = hrp_weights_gt,
+  filename = file.path(outputs_dir, "hrp-portfolio-weights.html")
+)
+```
+
+```{r}
+hrp_weights_plot <- ggplot(
+  hrp_weights_table,
+  aes(x = reorder(Asset, Weight), y = Weight)
+) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "HRP Portfolio Weights",
+    x = "Asset",
+    y = "Weight"
+  ) +
+  theme_minimal()
+
+hrp_weights_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "hrp-portfolio-weights.png"),
+  plot = hrp_weights_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+## Benchmark Portfolio
+
+An equally weighted portfolio is used as a benchmark for comparison. Although simple, the $1/N$ allocation provides a useful reference point for evaluating whether the HRP allocation produces meaningful differences in diversification and portfolio concentration.
+
+```{r}
+equal_weights <- rep(
+  1 / length(tickers),
+  length(tickers)
+)
+
+names(equal_weights) <- tickers
+
+equal_weights
+```
+
+```{r}
+equal_weights_table <- tibble(
+  Asset = names(equal_weights),
+  Weight = as.numeric(equal_weights)
+)
+```
+
+```{r}
+equal_weights_plot <- ggplot(
+  equal_weights_table,
+  aes(x = reorder(Asset, Weight), y = Weight)
+) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Equal Weight Portfolio",
+    x = "Asset",
+    y = "Weight"
+  ) +
+  theme_minimal()
+
+equal_weights_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "equal-weight-portfolio.png"),
+  plot = equal_weights_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+```{r}
+weights_comparison <- tibble(
+  Asset = tickers,
+  Equal_Weight = as.numeric(equal_weights[tickers]),
+  HRP = as.numeric(hrp_weights[tickers])
+)
+```
+
+```{r}
+weights_comparison_gt <- weights_comparison |>
+  mutate(
+    Equal_Weight = round(Equal_Weight, 4),
+    HRP = round(HRP, 4)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Portfolio Weight Comparison"
+  )
+
+weights_comparison_gt
+```
+
+```{r}
+gtsave(
+  data = weights_comparison_gt,
+  filename = file.path(outputs_dir, "portfolio-weight-comparison.html")
+)
+```
+
+```{r}
+weights_comparison_long <- weights_comparison |>
+  pivot_longer(
+    cols = c(Equal_Weight, HRP),
+    names_to = "Portfolio",
+    values_to = "Weight"
+  )
+```
+
+```{r}
+weights_comparison_plot <- ggplot(
+  weights_comparison_long,
+  aes(x = Asset, y = Weight, fill = Portfolio)
+) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Portfolio Weight Comparison",
+    x = "Asset",
+    y = "Weight",
+    fill = "Portfolio"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  )
+
+weights_comparison_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "portfolio-weight-comparison.png"),
+  plot = weights_comparison_plot,
+  width = 10,
+  height = 5,
+  dpi = 300
+)
+```
+
+## Portfolio Performance
+
+The performance of the HRP and equal weight portfolios is evaluated using daily portfolio returns. The comparison focuses on basic risk and return metrics that provide a compact view of portfolio behaviour over the analyzed period.
+
+```{r}
+returns_matrix <- coredata(returns)
+
+equal_weight_returns <- returns_matrix %*% equal_weights[colnames(returns)]
+hrp_returns <- returns_matrix %*% hrp_weights[colnames(returns)]
+
+portfolio_returns <- xts(
+  cbind(
+    Equal_Weight = equal_weight_returns,
+    HRP = hrp_returns
+  ),
+  order.by = index(returns)
+)
+
+head(portfolio_returns)
+```
+
+```{r}
+cumulative_returns <- cumprod(1 + portfolio_returns)
+
+cumulative_returns_df <- data.frame(
+  date = index(cumulative_returns),
+  coredata(cumulative_returns)
+) |>
+  pivot_longer(
+    cols = -date,
+    names_to = "Portfolio",
+    values_to = "Growth"
+  )
+```
+
+```{r}
+cumulative_returns_plot <- ggplot(
+  cumulative_returns_df,
+  aes(x = date, y = Growth, colour = Portfolio)
+) +
+  geom_line() +
+  labs(
+    title = "Cumulative Portfolio Returns",
+    x = "Date",
+    y = "Growth of $1",
+    colour = "Portfolio"
+  ) +
+  theme_minimal()
+
+cumulative_returns_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "cumulative-portfolio-returns.png"),
+  plot = cumulative_returns_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+```
+
+```{r}
+max_drawdown <- function(return_series) {
+  cumulative <- cumprod(1 + return_series)
+  drawdown <- cumulative / cummax(cumulative) - 1
+
+  return(min(drawdown))
+}
+```
+
+```{r}
+performance_summary <- tibble(
+  Portfolio = colnames(portfolio_returns),
+  Annualized_Return = as.numeric(colMeans(portfolio_returns)) * 252,
+  Annualized_Volatility = apply(
+    portfolio_returns,
+    2,
+    sd
+  ) * sqrt(252),
+  Sharpe_Ratio = Annualized_Return / Annualized_Volatility,
+  Maximum_Drawdown = apply(
+    portfolio_returns,
+    2,
+    max_drawdown
+  )
+)
+```
+
+```{r}
+performance_summary_gt <- performance_summary |>
+  mutate(
+    Annualized_Return = round(Annualized_Return, 4),
+    Annualized_Volatility = round(Annualized_Volatility, 4),
+    Sharpe_Ratio = round(Sharpe_Ratio, 4),
+    Maximum_Drawdown = round(Maximum_Drawdown, 4)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Portfolio Performance Summary"
+  )
+
+performance_summary_gt
+```
+
+```{r}
+gtsave(
+  data = performance_summary_gt,
+  filename = file.path(outputs_dir, "portfolio-performance-summary.html")
+)
+```
+
+## Rolling Volatility
+
+Rolling volatility is computed in order to compare how portfolio risk evolves through time under the two allocation schemes. This provides a simple view of how the portfolios behave across different market environments.
+
+```{r}
+rolling_volatility <- rollapply(
+  portfolio_returns,
+  width = 60,
+  FUN = sd,
+  by.column = TRUE,
+  align = "right",
+  fill = NA
+) * sqrt(252)
+
+rolling_volatility_df <- data.frame(
+  date = index(rolling_volatility),
+  coredata(rolling_volatility)
+) |>
+  pivot_longer(
+    cols = -date,
+    names_to = "Portfolio",
+    values_to = "Volatility"
+  )
+```
+
+```{r}
+rolling_volatility_plot <- ggplot(
+  rolling_volatility_df,
+  aes(x = date, y = Volatility, colour = Portfolio)
+) +
+  geom_line() +
+  labs(
+    title = "Rolling Annualized Volatility",
+    x = "Date",
+    y = "Volatility",
+    colour = "Portfolio"
+  ) +
+  theme_minimal()
+
+rolling_volatility_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "rolling-annualized-volatility.png"),
+  plot = rolling_volatility_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+```
+
+## Drawdown Analysis
+
+Drawdowns are examined to evaluate the magnitude and persistence of portfolio losses during adverse market periods.
+
+```{r}
+drawdowns <- cumulative_returns / cummax(cumulative_returns) - 1
+
+drawdowns_df <- data.frame(
+  date = index(drawdowns),
+  coredata(drawdowns)
+) |>
+  pivot_longer(
+    cols = -date,
+    names_to = "Portfolio",
+    values_to = "Drawdown"
+  )
+```
+
+```{r}
+drawdown_plot <- ggplot(
+  drawdowns_df,
+  aes(x = date, y = Drawdown, colour = Portfolio)
+) +
+  geom_line() +
+  labs(
+    title = "Portfolio Drawdowns",
+    x = "Date",
+    y = "Drawdown",
+    colour = "Portfolio"
+  ) +
+  theme_minimal()
+
+drawdown_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "portfolio-drawdowns.png"),
+  plot = drawdown_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+```
+
+## Risk Contribution
+
+The contribution of each asset to total portfolio risk is examined in order to understand how the HRP allocation distributes volatility across the portfolio. This provides an additional view of portfolio concentration beyond the portfolio weights alone.
+
+```{r}
+hrp_weight_vector <- matrix(
+  hrp_weights[colnames(returns)],
+  ncol = 1
+)
+
+portfolio_variance <- as.numeric(
+  t(hrp_weight_vector) %*%
+    covariance_matrix %*%
+    hrp_weight_vector
+)
+
+marginal_risk <- covariance_matrix %*%
+  hrp_weight_vector /
+  sqrt(portfolio_variance)
+
+risk_contribution <- as.numeric(
+  hrp_weight_vector * marginal_risk
+)
+
+risk_contribution_table <- tibble(
+  Asset = colnames(returns),
+  Risk_Contribution = risk_contribution
+) |>
+  arrange(desc(Risk_Contribution))
+```
+
+```{r}
+risk_contribution_gt <- risk_contribution_table |>
+  mutate(
+    Risk_Contribution = round(Risk_Contribution, 6)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "HRP Risk Contribution"
+  )
+
+risk_contribution_gt
+```
+
+```{r}
+gtsave(
+  data = risk_contribution_gt,
+  filename = file.path(outputs_dir, "hrp-risk-contribution.html")
+)
+```
+
+```{r}
+risk_contribution_plot <- ggplot(
+  risk_contribution_table,
+  aes(x = reorder(Asset, Risk_Contribution), y = Risk_Contribution)
+) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "HRP Risk Contribution",
+    x = "Asset",
+    y = "Risk Contribution"
+  ) +
+  theme_minimal()
+
+risk_contribution_plot
+```
+
+```{r}
+ggsave(
+  filename = file.path(outputs_dir, "hrp-risk-contribution.png"),
+  plot = risk_contribution_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+## Summary
+
+This notebook implemented a compact workflow for studying portfolio construction through PCA, hierarchical clustering, and Hierarchical Risk Parity. The analysis used PCA to inspect the dominant directions of market variation, clustering to organize assets according to correlation structure, and HRP to construct a risk-based allocation without direct covariance matrix inversion.
