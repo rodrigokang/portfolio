@@ -375,18 +375,16 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><em>Work in progress.</em></p>
+<p>This project explores the use of unsupervised learning techniques for portfolio construction and risk diversification. The analysis combines Principal Component Analysis (PCA), hierarchical clustering, and Hierarchical Risk Parity (HRP) to study how latent market structure and correlation patterns can be used to build more stable asset allocation strategies.</p>
+<p>Rather than focusing on return forecasting, the project examines how statistical learning methods can help identify common sources of risk, reduce redundancy across correlated assets, and improve portfolio robustness under realistic market conditions. The underlying idea is that portfolios are often considered diversified based on asset labels, sectors, or asset classes, even when a small number of common risk factors continue to drive most of their behaviour. By studying how assets actually move together, the project aims to construct allocations that better reflect the underlying structure of market risk.</p>
 <section id="problem-definition" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="problem-definition"><span class="header-section-number">2.1</span> Problem Definition</h2>
-<p>This section describes the problem being addressed and explains its relevance within the context of the domain.</p>
-<p>Typical questions considered in this section include:</p>
-<ul>
-<li>What is the objective of the project?</li>
-<li>Why is the problem relevant?</li>
-<li>What type of decisions or insights depend on the solution?</li>
-<li>What are the main challenges associated with the problem?</li>
-</ul>
-<p>The emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.</p>
+<p>Constructing a diversified investment portfolio is one of the central problems in quantitative finance. In practice, investors must allocate capital across a large universe of financial instruments while balancing expected returns, risk exposure, diversification, and portfolio stability. Although the classical mean–variance framework introduced by Harry Markowitz remains foundational in modern portfolio theory, its practical implementation presents important limitations when applied to real financial markets.</p>
+<p>Traditional portfolio optimization methods rely heavily on the estimation and inversion of covariance matrices. In large and highly correlated markets, these matrices often become numerically unstable and highly sensitive to small estimation errors. As a result, optimized portfolios may exhibit unintuitive allocations, excessive concentration, poor robustness, and unstable out-of-sample performance. This issue becomes more severe as the number of assets increases and correlation structures evolve through time.</p>
+<p>At the same time, financial markets naturally exhibit latent and hierarchical structures that are not fully captured by traditional optimization approaches. Assets rarely behave as isolated entities. Instead, they tend to move collectively according to sector dynamics, macroeconomic conditions, liquidity regimes, or broader market factors. Under stressed market conditions, assets that appear diversified on paper may suddenly behave in remarkably similar ways, reducing diversification precisely when it becomes most important.</p>
+<p>The motivation behind this project is to explore whether unsupervised learning techniques can provide a more robust and structurally stable framework for asset allocation. Rather than treating portfolio construction purely as a constrained optimization problem, the project approaches it as a problem of identifying and organizing the underlying geometry of market risk.</p>
+<p>To address this, the analysis combines two complementary perspectives. First, Principal Component Analysis (PCA) is used to study the dominant sources of variation in the market and to represent the covariance structure in terms of orthogonal risk components. This provides a compact representation of the market structure while reducing redundancy across highly correlated assets. Second, hierarchical clustering techniques are used to identify groups of statistically similar assets and to construct portfolios using Hierarchical Risk Parity (HRP), a methodology designed to improve allocation stability without requiring direct inversion of the covariance matrix.</p>
+<p>The objective is not simply to maximize historical returns, but to investigate whether combining spectral methods and hierarchical structures can produce portfolios that are more diversified, interpretable, and robust under changing market conditions. The project therefore sits at the intersection of quantitative finance, machine learning, and statistical risk modeling, with a strong emphasis on practical portfolio construction rather than purely theoretical optimization.</p>
 </section>
 <section id="modeling-approach" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">2.2</span> Modeling Approach</h2>
