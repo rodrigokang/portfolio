@@ -60,62 +60,439 @@ The resulting framework combines spectral analysis, clustering techniques, and h
 
 ## Methodology and Implementation
 
-This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.
+The empirical analysis was conducted using a diversified universe of U.S. equities representing multiple sectors of the economy, including technology, financials, energy, healthcare, consumer staples, communication services, and retail. The selected assets were chosen to provide exposure to different market dynamics while still allowing meaningful correlation structures and latent factor relationships to emerge throughout the analysis.
 
-Typical topics may include:
+The asset universe used in the study is summarized in Table @tbl-asset-universe.
 
-- Data collection and sources
-- Feature engineering
-- Cleaning and preprocessing
-- Simulation strategies
-- Training and validation methodology
-- Experimental setup
-- Numerical methods and algorithms
-- Workflow organization
-- Pipeline structure
-- Computational considerations
+| Ticker | Sector                 |
+| ------ | ---------------------- |
+| AAPL   | Technology             |
+| MSFT   | Technology             |
+| GOOGL  | Communication Services |
+| AMZN   | Consumer Discretionary |
+| META   | Communication Services |
+| JPM    | Financials             |
+| BAC    | Financials             |
+| XOM    | Energy                 |
+| CVX    | Energy                 |
+| JNJ    | Healthcare             |
+| PFE    | Healthcare             |
+| PG     | Consumer Staples       |
+| KO     | Consumer Staples       |
+| WMT    | Retail                 |
+| HD     | Consumer Discretionary |
 
-The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.
+: Selected asset universe used throughout the portfolio construction and clustering experiments.
+{#tbl-asset-universe}
 
-Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.
+Daily adjusted closing prices were collected and transformed into continuously compounded daily returns. The analysis focused primarily on the covariance and correlation structure of returns rather than on absolute price levels. @fig-adjusted-closing-prices presents the evolution of adjusted prices across the selected assets during the evaluation period.
 
-References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.
+![Adjusted closing prices of the selected assets over the analysis period, illustrating heterogeneous price dynamics and sector-specific trends across the asset universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/closing-prices.png){#fig-adjusted-closing-prices}
+
+Although the selected securities belong to different sectors, the return series exhibit periods of synchronized behaviour, particularly during episodes of elevated market stress. This becomes more evident when examining the daily return dynamics shown in @fig-daily-returns.
+
+![Daily returns of the selected assets over the analysis period, highlighting volatility clustering and heterogeneous risk dynamics across the asset universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/daily-returns.png){#fig-daily-returns}
+
+The return series display the volatility clustering commonly observed in financial markets, together with periods of sharply increasing cross-asset dependence. The volatility spikes and correlation increases visible in the data are precisely the conditions under which naïve diversification can become less effective, providing the empirical motivation for the PCA and HRP framework adopted in this study.
+
+The covariance matrix shown in @fig-covariance-matrix was estimated directly from the daily return series and used throughout the PCA and HRP stages of the analysis.
+
+![Covariance matrix of asset returns, showing the magnitude of joint variability across the selected assets used in portfolio risk estimation and allocation.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/covariance-matrix.png){#fig-covariance-matrix}
+
+The corresponding correlation matrix is presented in @fig-correlation-matrix. Several economically meaningful relationships already become visible at this stage, particularly among technology, financial, energy, healthcare, and consumer staples stocks.
+
+![Correlation matrix of asset returns, showing the dependence structure across the selected assets prior to hierarchical clustering reordering.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/correlation-matrix.png){#fig-correlation-matrix}
+
+Principal Component Analysis (PCA) was then applied to study the latent structure of market risk. The decomposition was performed on the covariance matrix of returns, allowing the market structure to be represented in terms of orthogonal components ranked by explained variance.
+
+The explained variance associated with each principal component is summarized in Table @tbl-pca-explained-variance.
+
+| Component | Explained Variance | Cumulative Variance |
+| --------- | -----------------: | ------------------: |
+| PC1       |             0.4638 |              0.4638 |
+| PC2       |             0.1793 |              0.6431 |
+| PC3       |             0.0740 |              0.7170 |
+| PC4       |             0.0512 |              0.7682 |
+| PC5       |             0.0466 |              0.8148 |
+| PC6       |             0.0352 |              0.8500 |
+| PC7       |             0.0297 |              0.8798 |
+| PC8       |             0.0262 |              0.9060 |
+| PC9       |             0.0230 |              0.9289 |
+| PC10      |             0.0181 |              0.9470 |
+| PC11      |             0.0144 |              0.9614 |
+| PC12      |             0.0123 |              0.9737 |
+| PC13      |             0.0102 |              0.9839 |
+| PC14      |             0.0084 |              0.9923 |
+| PC15      |             0.0077 |              1.0000 |
+
+: Explained and cumulative variance ratios obtained from Principal Component Analysis (PCA) applied to asset returns.
+{#tbl-pca-explained-variance}
+
+The first principal component explains approximately 46% of total variance, while the first two components together account for roughly 64%. The first five components explain more than 80% of total variance, indicating that a relatively small number of latent factors captures much of the variability in the asset universe. @fig-explained-variance-ratio and @fig-cumulative-explained-variance illustrate this concentration of variance visually.
+
+![Explained variance ratio for each principal component obtained from PCA, showing that the first components capture most of the variability in the asset return space.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/explained-variance-ratio.png){#fig-explained-variance-ratio}
+
+![Cumulative explained variance obtained from Principal Component Analysis (PCA), showing how the first principal components capture most of the variability in the asset return space.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/cumulative-explained-variance.png){#fig-cumulative-explained-variance}
+
+The first principal component captures a broad market-related factor affecting most assets simultaneously, consistent with its dominant contribution to total variance. Subsequent components explain progressively smaller fractions of variance and reveal more localized sectoral structures that are less visible in the original return space.
+
+![Loadings of the first principal component obtained from PCA, illustrating the assets that contribute most strongly to the dominant common risk factor in the portfolio universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/pc1-loadings.png){#fig-pc1-loadings}
+
+![Loadings of the second principal component obtained from PCA, highlighting contrasting sectoral exposures and latent diversification patterns within the asset universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/pc2-loadings.png){#fig-pc2-loadings}
+
+Following the PCA analysis, hierarchical clustering was applied using the correlation-based distance metric described previously. The clustering procedure organizes assets according to statistical similarity, producing a hierarchical representation of the market structure.
+
+The resulting dendrogram is presented in @fig-hierarchical-clustering-dendrogram.
+
+![Hierarchical clustering dendrogram of the asset universe based on return correlations, revealing sectoral similarity structures used in the Hierarchical Risk Parity (HRP) allocation process.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/hierarchical-clustering-dendrogram.png){#fig-hierarchical-clustering-dendrogram}
+
+The hierarchical organization becomes even more evident after reordering the correlation matrix according to the clustering structure, as shown in @fig-clustered-correlation-matrix.
+
+![Clustered correlation matrix of asset returns, highlighting sectoral structure and similarity patterns used in the hierarchical portfolio construction process.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/clustered-correlation-matrix.png){#fig-clustered-correlation-matrix}
+
+Several economically intuitive clusters emerge naturally from the data. Technology firms tend to cluster together, energy companies form a separate branch, and defensive sectors exhibit their own hierarchical relationships.
+
+Portfolio construction was then performed using the Hierarchical Risk Parity (HRP) allocation framework. For comparison purposes, an equally weighted portfolio was used as a benchmark throughout the analysis.
+
+The equal-weight allocation is shown in @fig-equal-weight-portfolio.
+
+![Equal-weight portfolio allocation assigning identical weights to all assets in the investment universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/equal-weight-portfolio.png){#fig-equal-weight-portfolio}
+
+The HRP allocation produced a substantially different weighting structure. The largest portfolio weights were assigned to JNJ, KO, PG, and WMT, while exposure to several technology, financial, and energy assets was reduced relative to the equal-weight benchmark.
+
+| Asset | Weight |
+| ----- | -----: |
+| JNJ   | 0.1285 |
+| KO    | 0.1171 |
+| PG    | 0.1158 |
+| WMT   | 0.1127 |
+| GOOGL | 0.0705 |
+| HD    | 0.0689 |
+| PFE   | 0.0657 |
+| JPM   | 0.0471 |
+| MSFT  | 0.0457 |
+| AMZN  | 0.0439 |
+| AAPL  | 0.0424 |
+| BAC   | 0.0390 |
+| XOM   | 0.0386 |
+| CVX   | 0.0360 |
+| META  | 0.0282 |
+
+: Final portfolio weights obtained using the Hierarchical Risk Parity (HRP) allocation method.
+{#tbl-hrp-weights}
+
+The resulting allocation is visualized in @fig-hrp-portfolio-weights.
+
+![Portfolio weights obtained using the Hierarchical Risk Parity (HRP) allocation method, reflecting the hierarchical correlation structure and risk diversification across assets.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/hrp-portfolio-weights.png){#fig-hrp-portfolio-weights}
+
+A direct comparison between the equal-weight benchmark and the HRP allocation is shown in @fig-portfolio-weight-comparison and Table @tbl-portfolio-weight-comparison.
+
+The differences between the two allocations are visible both at the individual asset level and across sectors. The larger weights assigned to JNJ, KO, PG, and WMT are broadly consistent with the lower volatility and correlation characteristics often associated with defensive sectors.
+
+![Comparison between equal-weight and Hierarchical Risk Parity (HRP) portfolio allocations, highlighting how the HRP framework redistributes exposure according to the hierarchical correlation and risk structure of the asset universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/portfolio-weight-comparison.png){#fig-portfolio-weight-comparison}
+
+| Asset | Equal Weight |    HRP |
+| ----- | -----------: | -----: |
+| AAPL  |       0.0667 | 0.0424 |
+| MSFT  |       0.0667 | 0.0457 |
+| GOOGL |       0.0667 | 0.0705 |
+| AMZN  |       0.0667 | 0.0439 |
+| META  |       0.0667 | 0.0282 |
+| JPM   |       0.0667 | 0.0471 |
+| BAC   |       0.0667 | 0.0390 |
+| XOM   |       0.0667 | 0.0386 |
+| CVX   |       0.0667 | 0.0360 |
+| JNJ   |       0.0667 | 0.1285 |
+| PFE   |       0.0667 | 0.0657 |
+| PG    |       0.0667 | 0.1158 |
+| KO    |       0.0667 | 0.1171 |
+| WMT   |       0.0667 | 0.1127 |
+| HD    |       0.0667 | 0.0689 |
+
+: Comparison between equal-weight portfolio allocation and Hierarchical Risk Parity (HRP) portfolio weights.
+{#tbl-portfolio-weight-comparison}
+
+Risk contributions were also evaluated in order to study how portfolio risk was distributed across assets under the HRP framework.
+
+| Asset | Risk Contribution |
+| ----- | ----------------: |
+| KO    |          0.001158 |
+| JNJ   |          0.001111 |
+| PG    |          0.001090 |
+| GOOGL |          0.001007 |
+| WMT   |          0.000947 |
+| HD    |          0.000925 |
+| JPM   |          0.000676 |
+| MSFT  |          0.000668 |
+| PFE   |          0.000630 |
+| BAC   |          0.000620 |
+| AAPL  |          0.000615 |
+| AMZN  |          0.000562 |
+| CVX   |          0.000489 |
+| XOM   |          0.000450 |
+| META  |          0.000443 |
+
+: Asset-level risk contributions under the Hierarchical Risk Parity (HRP) allocation framework.
+{#tbl-hrp-risk-contribution}
+
+The distribution of risk contributions is illustrated in @fig-hrp-risk-contribution.
+
+![Risk contribution of each asset under the Hierarchical Risk Parity (HRP) allocation, illustrating how portfolio risk is distributed across the investment universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/hrp-risk-contribution.png){#fig-hrp-risk-contribution}
+
+Portfolio performance was evaluated using cumulative returns, rolling annualized volatility, Sharpe ratio, and maximum drawdown. The cumulative return dynamics of both portfolio strategies are shown in @fig-cumulative-portfolio-returns.
+
+![Cumulative returns of the compared portfolio strategies over the evaluation period, illustrating differences in long-term growth dynamics and drawdown behavior.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/cumulative-portfolio-returns.png){#fig-cumulative-portfolio-returns}
+
+The temporal evolution of portfolio risk is shown in @fig-rolling-annualized-volatility.
+
+![Rolling annualized volatility of the portfolio strategies over time, illustrating the dynamic evolution of portfolio risk under different allocation frameworks.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/rolling-annualized-volatility.png){#fig-rolling-annualized-volatility}
+
+Drawdown dynamics were analyzed separately in order to study the behaviour of both portfolios during periods of market stress.
+
+![Portfolio drawdowns over the evaluation period, comparing the magnitude and persistence of temporary losses across the portfolio strategies.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/portfolio-drawdowns.png){#fig-portfolio-drawdowns}
+
+The final performance summary is presented in Table @tbl-portfolio-performance.
+
+| Portfolio              | Annualized Return | Annualized Volatility | Sharpe Ratio | Maximum Drawdown |
+| ---------------------- | ----------------: | --------------------: | -----------: | ---------------: |
+| HRP Portfolio          |            0.1754 |                0.2021 |       0.8680 |          -0.3139 |
+| Equal Weight Portfolio |            0.1514 |                0.1808 |       0.8373 |          -0.2831 |
+
+: Performance comparison between the Hierarchical Risk Parity (HRP) portfolio and the equal-weight benchmark portfolio.
+{#tbl-portfolio-performance}
+
+The HRP portfolio achieved a modest improvement in annualized return and Sharpe ratio relative to the equal-weight benchmark. However, this improvement was accompanied by a somewhat deeper maximum drawdown during the evaluation period, illustrating that diversification benefits do not necessarily translate into lower losses under all market conditions.
+
+The resulting workflow combines PCA, hierarchical clustering, and risk-based portfolio allocation to study diversification from a structural rather than purely optimization-based perspective. Rather than focusing exclusively on return maximization, the analysis emphasizes robustness, interpretability, and stability under realistic market conditions.
+
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/python).
 
 ## Results, Discussion, and Limitations
 
-This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.
+The results of the analysis suggest that the selected asset universe exhibits a considerably more structured organization of risk than might be inferred from asset labels or sector classifications alone. Although the portfolio contains companies operating across multiple industries, both the PCA decomposition and the hierarchical clustering analysis indicate that a relatively small number of latent factors account for a large proportion of observed market variability.
 
-Typical elements may include:
+The PCA results provide the clearest evidence of this concentration. The first principal component alone explains approximately 46% of total variance, while the first two components account for roughly 64%. More than 80% of total variance is captured by the first five components. These findings suggest that much of the apparent diversity within the asset universe is driven by a limited set of common risk sources. From a portfolio construction perspective, this highlights an important distinction between holding many assets and achieving genuine diversification. Increasing the number of securities does not necessarily increase the number of independent sources of risk.
 
-- Visualizations and plots
-- Performance metrics
-- Comparisons with baseline approaches
-- Sensitivity analysis
-- Error analysis
-- Interpretation of results
-- Model assumptions and their consequences
-- Sources of uncertainty
-- Robustness and generalization
-- Trade-offs associated with the methodology
-- Potential future improvements
+The principal component loadings further support this interpretation. The first component exhibits broad exposure across most assets and behaves consistently with a dominant market factor affecting the portfolio universe as a whole. Subsequent components reveal more localized patterns associated with sector-specific behaviour and relative differences between groups of assets. Together, these results illustrate how PCA can provide a compact representation of market structure while helping identify hidden concentrations of risk that may not be immediately visible in the original return space.
 
-The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.
+A complementary perspective emerges from the hierarchical clustering analysis. The dendrogram and clustered correlation matrix reveal economically intuitive groupings that arise directly from the data. Technology companies tend to cluster together, energy firms form a separate branch, and defensive sectors exhibit their own hierarchical relationships. Rather than imposing predefined classifications, the clustering procedure allows the statistical organization of the market to emerge from observed return behaviour. This provides a useful framework for understanding how diversification is distributed across the portfolio and where concentrations of risk may exist.
 
-## Technical Appendix (Optional)
+The portfolio construction stage extends these observations into an allocation framework. Compared with the equal-weight benchmark, the Hierarchical Risk Parity portfolio produces a noticeably different allocation structure. The largest weights were assigned to JNJ, KO, PG, and WMT, while exposure to several technology, financial, and energy assets was reduced. Importantly, this outcome should not be interpreted as a prediction that these assets will outperform in the future. Rather, it reflects their role within the correlation structure of the portfolio and the objective of distributing risk more evenly across the hierarchy identified during the clustering stage.
 
-This optional section contains technical details that support the project but are not essential for following the main narrative.
+This distinction is central to the interpretation of the results. The primary contribution of HRP is not necessarily superior return generation, but a different approach to diversification. Traditional portfolio construction methods often allocate capital directly, whereas HRP attempts to allocate risk. As a consequence, two portfolios with similar levels of capital diversification may exhibit substantially different risk concentrations. The risk contribution analysis suggests that the HRP framework achieves a more balanced distribution of portfolio risk across assets, consistent with its underlying design objectives.
 
-Possible contents include:
+Performance comparisons between the HRP portfolio and the equal-weight benchmark reveal both strengths and trade-offs. The HRP portfolio achieved a modest improvement in annualized return and Sharpe ratio relative to the benchmark. At the same time, it experienced a somewhat deeper maximum drawdown during the evaluation period. These results illustrate an important practical point: improvements in one dimension of portfolio performance do not necessarily translate into improvements across all dimensions. Diversification, risk balancing, and return generation remain competing objectives, and no allocation methodology can fully eliminate these trade-offs.
 
-- Mathematical derivations
-- Additional proofs
-- Numerical details
-- Extended equations
-- Supplementary experiments
-- Technical notes on auxiliary methods and algorithms
+The results should therefore be interpreted as evidence that unsupervised learning techniques can provide useful insights into market structure and portfolio construction rather than as proof of the superiority of a particular allocation strategy. The analysis demonstrates that PCA and hierarchical clustering are capable of uncovering meaningful relationships within the asset universe and that these relationships can be incorporated into a systematic allocation process. Whether this ultimately leads to superior long-term investment performance remains dependent on market conditions, investment horizons, transaction costs, and implementation choices.
 
-The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.
+Several limitations should also be acknowledged. First, the analysis was conducted using a relatively small universe of fifteen assets. While sufficient for illustrating the methodology, larger investment universes may exhibit more complex correlation structures and different clustering behaviour. Second, the study relies on a single historical sample period. Financial markets are inherently dynamic, and correlation structures evolve through time, particularly during periods of economic stress. Consequently, both PCA decompositions and clustering results may vary across market regimes.
 
-The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.
+A further limitation is that the analysis assumes frictionless portfolio implementation. Transaction costs, taxes, liquidity constraints, and rebalancing considerations were not incorporated into the evaluation. In practice, these factors can materially influence realized portfolio performance and may reduce some of the theoretical benefits of more sophisticated allocation methodologies.
 
-The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.
+Finally, although HRP was designed to improve robustness relative to covariance-sensitive optimization frameworks, it does not eliminate market risk or guarantee protection during severe market downturns. Common risk factors can still dominate portfolio behaviour when correlations rise across the market, reducing the effectiveness of diversification precisely when it is needed most.
+
+Taken together, the results suggest that unsupervised learning techniques provide a valuable lens through which to study diversification and market structure. The main contribution of PCA and HRP in this context is not the pursuit of maximum historical return, but the ability to make sources of risk more explicit and to organize portfolio construction around the underlying structure of the market. From this perspective, the project illustrates how statistical learning methods can complement traditional portfolio theory by offering a more interpretable and structurally informed approach to asset allocation.
+
+# Technical Appendix (Optional)
+
+This appendix provides supplementary mathematical and methodological details related to the unsupervised learning techniques used throughout the project.
+
+The objective is not to present a comprehensive treatment of the underlying methods, but rather to summarize the concepts most relevant to the portfolio construction process. The material presented here supports the interpretation of the results and clarifies some of the modeling choices discussed in the main text.
+
+The appendix is organized into two sections. The first summarizes the principal concepts behind Principal Component Analysis (PCA), which was used to study the structure of asset return variability and identify dominant sources of common variation. The second discusses Hierarchical Clustering (HC), which was used to group assets according to their similarity patterns and support diversification decisions.
+
+The main body of the project is intended to remain fully understandable without consulting this appendix. Readers interested primarily in the practical application and results may safely skip the material that follows.
+
+## Principal Component Analysis (PCA)
+
+### Centering of Returns
+
+Let
+
+$$
+X =
+\begin{bmatrix}
+r_{11} & r_{12} & \cdots & r_{1p} \\
+r_{21} & r_{22} & \cdots & r_{2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+r_{n1} & r_{n2} & \cdots & r_{np}
+\end{bmatrix}
+$$ {#eq-return-matrix}
+
+denote the matrix of asset returns, where each column corresponds to an asset and each row represents an observation period.
+
+Prior to applying PCA, the return series were centered by subtracting the sample mean of each asset:
+
+$$
+x_{ij}^{(c)} = r_{ij} - \bar{r}_j
+$$ {#eq-centered-returns}
+
+where $\bar{r}_j$ denotes the average return of asset $j$.
+
+Centering removes differences in mean return levels and ensures that the subsequent analysis focuses exclusively on the covariance structure of the data. The centered return matrix was then used to construct the covariance matrix and perform the eigendecomposition underlying PCA.
+
+### Covariance Matrix
+
+The covariance matrix summarizes the dependence structure among asset returns and is given by
+
+$$
+\Sigma = \frac{1}{n-1} X_c^\top X_c
+$$ {#eq-covariance-matrix}
+
+where $X_c$ denotes the centered return matrix and $n$ is the number of observations.
+
+Each element $\sigma_{ij}$ measures the extent to which the returns of assets $i$ and $j$ vary together. Positive values indicate that returns tend to move in the same direction, whereas negative values indicate opposite movements.
+
+Because PCA is based on the covariance structure of the data, the matrix $\Sigma$ serves as the primary object of analysis. The principal components are obtained by identifying the directions that explain the largest share of the variability captured by this matrix.
+
+### Eigenvalue Decomposition
+
+PCA is based on the eigendecomposition of the covariance matrix,
+
+$$
+\Sigma = V \Lambda V^\top
+$$ {#eq-eigendecomposition}
+
+where $V$ is the matrix of eigenvectors and $\Lambda$ is a diagonal matrix containing the corresponding eigenvalues.
+
+Each eigenvector defines a principal component, while the associated eigenvalue measures the amount of variance explained by that component.
+
+The principal components are mutually orthogonal and provide a new coordinate system in which the dominant patterns of variation become easier to identify. Components associated with larger eigenvalues explain a greater share of total variance and therefore contain more information about the structure of asset returns.
+
+In this project, the eigendecomposition of the covariance matrix provided the basis for evaluating how much of the variability in the investment universe could be explained by a reduced number of components.
+
+### Explained Variance
+
+The eigenvalues obtained from the covariance matrix quantify the amount of variance explained by each principal component. Let $\lambda_i$ denote the eigenvalue associated with the $i$-th principal component. The proportion of variance explained by that component is given by
+
+$$
+\text{PVE}_i = \frac{\lambda_i}{\sum_{j=1}^{p}\lambda_j}
+$$ {#eq-pve}
+
+where $p$ denotes the total number of assets.
+
+The cumulative proportion of explained variance can be expressed as
+
+$$
+\text{CPVE}_k = \sum_{i=1}^{k} \text{PVE}_i
+$$ {#eq-cpve}
+
+representing the fraction of total variance retained when only the first $k$ principal components are considered.
+
+The explained variance analysis indicated a substantial concentration of variability in a small number of components. The first principal component accounted for approximately 46% of total variance, while the first two components explained roughly 64%. The first five components captured more than 80% of the variability observed across the investment universe.
+
+These results suggest that a relatively small number of latent factors drive a large fraction of asset return behavior. Consequently, the effective dimensionality of the dataset is considerably smaller than the number of assets included in the analysis.
+
+### Principal Component Loadings
+
+While explained variance quantifies the importance of each principal component, the component loadings describe how individual assets contribute to those components.
+
+Let
+
+$$
+v_k =
+\begin{bmatrix}
+v_{1k} \\
+v_{2k} \\
+\vdots \\
+v_{pk}
+\end{bmatrix}
+$$ {#eq-loading-vector}
+
+denote the eigenvector associated with the $k$-th principal component. The elements of this vector are commonly referred to as loadings.
+
+Assets with large absolute loadings contribute more strongly to the corresponding component, whereas assets with loadings closer to zero have a smaller influence on that source of variation.
+
+The loadings associated with the first two principal components were examined to identify the assets contributing most strongly to the dominant patterns of return variability. Because principal components are linear combinations of the original assets, the loading structure provides insight into how different securities participate in the latent factors revealed by the PCA decomposition.
+
+Together with the explained variance analysis, the loadings help characterize the underlying structure of the investment universe and identify groups of assets that exhibit similar exposures to common sources of variation.
+
+### Interpretation for Asset Allocation
+
+The PCA results indicate that a substantial portion of total variance can be explained by a relatively small number of principal components. From a portfolio construction perspective, this suggests that many assets are influenced by common underlying factors rather than behaving independently.
+
+As a consequence, the number of securities held in a portfolio may overstate the true degree of diversification achieved. Assets exposed to the same dominant components can contribute similar sources of risk even when they belong to different sectors or industries.
+
+For this reason, PCA can be viewed as a diagnostic tool for assessing the structure of risk within an investment universe. Rather than focusing on individual assets, the analysis emphasizes the latent factors that drive collective movements in returns.
+
+In this project, PCA was used primarily as an exploratory technique to investigate the dimensionality of the dataset and to identify common sources of variation prior to the clustering analysis described in the following section.
+
+## Hierarchical Clustering (HC)
+
+### Correlation-Based Distance
+
+The clustering analysis was based on the correlation structure of asset returns. Let $\rho_{ij}$ denote the Pearson correlation coefficient between assets $i$ and $j$. The corresponding distance measure is defined as
+
+$$
+d_{ij} = \sqrt{\frac{1-\rho_{ij}}{2}}
+$$ {#eq-correlation-distance}
+
+This transformation converts correlations into distances while preserving the properties required by a distance metric.
+
+Several useful relationships follow directly from this definition:
+
+* If $\rho_{ij}=1$, then $d_{ij}=0$.
+* If $\rho_{ij}=0$, then $d_{ij}=\sqrt{1/2}$.
+* If $\rho_{ij}=-1$, then $d_{ij}=1$.
+
+Assets exhibiting similar return dynamics therefore appear close to one another in the resulting distance matrix, whereas assets with dissimilar behavior appear farther apart.
+
+The correlation-based distance matrix served as the primary input to the hierarchical clustering procedure implemented in this project.
+
+### Agglomerative Clustering
+
+Hierarchical clustering was performed using an agglomerative approach.
+
+The procedure begins by assigning each asset to its own cluster. At each iteration, the two clusters exhibiting the smallest distance are merged into a new cluster. This process continues until all assets have been combined into a single hierarchical structure.
+
+If the investment universe contains $p$ assets, the algorithm initially creates $p$ individual clusters. Each merge reduces the number of clusters by one until the hierarchy is complete.
+
+The resulting sequence of merges reveals how assets are related at different levels of similarity. Assets that merge early in the process tend to exhibit highly similar return patterns, whereas assets that merge only at later stages are generally less related.
+
+### Ward's Linkage Method
+
+After computing the distance matrix, the clustering algorithm must determine how distances between clusters are evaluated following each merge. This choice is known as the linkage criterion.
+
+In this project, Ward's linkage method was employed through the Ward.D2 algorithm.
+
+Ward's method seeks to minimize the increase in within-cluster variance produced by each merge. At every iteration, the algorithm selects the pair of clusters whose combination results in the smallest increase in overall cluster heterogeneity.
+
+This approach tends to generate compact and relatively balanced clusters, making it particularly useful for identifying coherent groups of assets exhibiting similar return behavior.
+
+### Dendrogram Interpretation
+
+The hierarchical structure produced by the clustering algorithm can be visualized through a dendrogram.
+
+A dendrogram is a tree-like representation that displays the sequence of cluster merges performed during the agglomerative procedure. Each terminal node corresponds to an individual asset, while internal nodes represent cluster combinations formed throughout the algorithm.
+
+The vertical axis represents the distance at which clusters are merged. Assets connected at lower heights tend to exhibit stronger similarity, whereas assets that merge only at higher levels are generally less related.
+
+The dendrogram presented in the main body of the project reveals the hierarchical organization of the investment universe and highlights groups of assets exhibiting similar return behavior.
+
+### Clustered Correlation Matrix
+
+The ordering produced by hierarchical clustering can be used to reorganize the correlation matrix according to the cluster structure identified in the data.
+
+Rather than displaying assets in an arbitrary order, the reordered matrix places statistically similar assets next to one another. As a result, groups of highly correlated assets appear as visible blocks along the diagonal of the matrix.
+
+This representation provides a convenient way to inspect the dependency structure of the investment universe and to identify groups of assets sharing similar return dynamics.
+
+In this project, the clustered correlation matrix complemented the dendrogram by providing an alternative visualization of the relationships among assets.
+
+### Diversification Through Clustering
+
+The clustering results indicate that similarities among assets are not distributed uniformly throughout the investment universe. Instead, groups of assets exhibiting comparable return behavior emerge naturally from the data.
+
+From a portfolio construction perspective, these clusters can reveal hidden concentrations of risk. A portfolio may contain a large number of securities while remaining exposed to a relatively small set of common drivers if many holdings belong to the same cluster.
+
+Hierarchical clustering provides a complementary perspective on diversification by focusing on relationships among assets rather than on individual securities. Assets belonging to different clusters are more likely to contribute distinct sources of risk and therefore may improve portfolio diversification.
+
+Together, PCA and hierarchical clustering provide complementary views of the structure of asset returns. While PCA identifies dominant sources of variation, clustering reveals how assets are organized according to similarity patterns within the investment universe.
+
+### Methodological Limitations
+
+PCA captures linear relationships among asset returns and may not fully represent nonlinear dependency structures present in financial markets.
+
+Similarly, the clustering structure obtained depends on both the distance metric and the linkage criterion employed. Alternative specifications may produce different cluster configurations and lead to different interpretations of the investment universe.
+
+Despite these limitations, PCA and hierarchical clustering remain useful exploratory tools for understanding the structure of asset returns and supporting diversification analysis.

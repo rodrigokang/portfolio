@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,14 +54,15 @@ div.csl-indent {
 <link href="../1-quantitative-finance/1-capm-and-fama-french-factor-model.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -104,7 +105,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -144,7 +145,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -398,7 +401,28 @@ window.Quarto = {
   <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">2.2</span> Modeling Approach</a></li>
   <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">2.3</span> Methodology and Implementation</a></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">2.4</span> Results, Discussion, and Limitations</a></li>
-  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">2.5</span> Technical Appendix (Optional)</a></li>
+  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">3</span> Technical Appendix (Optional)</a>
+  <ul class="collapse">
+  <li><a href="#principal-component-analysis-pca" id="toc-principal-component-analysis-pca" class="nav-link" data-scroll-target="#principal-component-analysis-pca"><span class="header-section-number">3.1</span> Principal Component Analysis (PCA)</a>
+  <ul class="collapse">
+  <li><a href="#centering-of-returns" id="toc-centering-of-returns" class="nav-link" data-scroll-target="#centering-of-returns"><span class="header-section-number">3.1.1</span> Centering of Returns</a></li>
+  <li><a href="#covariance-matrix" id="toc-covariance-matrix" class="nav-link" data-scroll-target="#covariance-matrix"><span class="header-section-number">3.1.2</span> Covariance Matrix</a></li>
+  <li><a href="#eigenvalue-decomposition" id="toc-eigenvalue-decomposition" class="nav-link" data-scroll-target="#eigenvalue-decomposition"><span class="header-section-number">3.1.3</span> Eigenvalue Decomposition</a></li>
+  <li><a href="#explained-variance" id="toc-explained-variance" class="nav-link" data-scroll-target="#explained-variance"><span class="header-section-number">3.1.4</span> Explained Variance</a></li>
+  <li><a href="#principal-component-loadings" id="toc-principal-component-loadings" class="nav-link" data-scroll-target="#principal-component-loadings"><span class="header-section-number">3.1.5</span> Principal Component Loadings</a></li>
+  <li><a href="#interpretation-for-asset-allocation" id="toc-interpretation-for-asset-allocation" class="nav-link" data-scroll-target="#interpretation-for-asset-allocation"><span class="header-section-number">3.1.6</span> Interpretation for Asset Allocation</a></li>
+  </ul></li>
+  <li><a href="#hierarchical-clustering-hc" id="toc-hierarchical-clustering-hc" class="nav-link" data-scroll-target="#hierarchical-clustering-hc"><span class="header-section-number">3.2</span> Hierarchical Clustering (HC)</a>
+  <ul class="collapse">
+  <li><a href="#correlation-based-distance" id="toc-correlation-based-distance" class="nav-link" data-scroll-target="#correlation-based-distance"><span class="header-section-number">3.2.1</span> Correlation-Based Distance</a></li>
+  <li><a href="#agglomerative-clustering" id="toc-agglomerative-clustering" class="nav-link" data-scroll-target="#agglomerative-clustering"><span class="header-section-number">3.2.2</span> Agglomerative Clustering</a></li>
+  <li><a href="#wards-linkage-method" id="toc-wards-linkage-method" class="nav-link" data-scroll-target="#wards-linkage-method"><span class="header-section-number">3.2.3</span> Ward’s Linkage Method</a></li>
+  <li><a href="#dendrogram-interpretation" id="toc-dendrogram-interpretation" class="nav-link" data-scroll-target="#dendrogram-interpretation"><span class="header-section-number">3.2.4</span> Dendrogram Interpretation</a></li>
+  <li><a href="#clustered-correlation-matrix" id="toc-clustered-correlation-matrix" class="nav-link" data-scroll-target="#clustered-correlation-matrix"><span class="header-section-number">3.2.5</span> Clustered Correlation Matrix</a></li>
+  <li><a href="#diversification-through-clustering" id="toc-diversification-through-clustering" class="nav-link" data-scroll-target="#diversification-through-clustering"><span class="header-section-number">3.2.6</span> Diversification Through Clustering</a></li>
+  <li><a href="#methodological-limitations" id="toc-methodological-limitations" class="nav-link" data-scroll-target="#methodological-limitations"><span class="header-section-number">3.2.7</span> Methodological Limitations</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -462,58 +486,840 @@ d_{ij} = \sqrt{\frac{1}{2}(1 - \rho_{ij})}
 </section>
 <section id="methodology-and-implementation" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">2.3</span> Methodology and Implementation</h2>
-<p>This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.</p>
-<p>Typical topics may include:</p>
-<ul>
-<li>Data collection and sources</li>
-<li>Feature engineering</li>
-<li>Cleaning and preprocessing</li>
-<li>Simulation strategies</li>
-<li>Training and validation methodology</li>
-<li>Experimental setup</li>
-<li>Numerical methods and algorithms</li>
-<li>Workflow organization</li>
-<li>Pipeline structure</li>
-<li>Computational considerations</li>
-</ul>
-<p>The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.</p>
-<p>Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.</p>
-<p>References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.</p>
+<p>The empirical analysis was conducted using a diversified universe of U.S. equities representing multiple sectors of the economy, including technology, financials, energy, healthcare, consumer staples, communication services, and retail. The selected assets were chosen to provide exposure to different market dynamics while still allowing meaningful correlation structures and latent factor relationships to emerge throughout the analysis.</p>
+<p>The asset universe used in the study is summarized in Table <a href="#tbl-asset-universe" class="quarto-xref">Table&nbsp;<span>2.1</span></a>.</p>
+<div id="tbl-asset-universe" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-asset-universe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.1: Selected asset universe used throughout the portfolio construction and clustering experiments.
+</figcaption>
+<div aria-describedby="tbl-asset-universe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Ticker</th>
+<th>Sector</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AAPL</td>
+<td>Technology</td>
+</tr>
+<tr class="even">
+<td>MSFT</td>
+<td>Technology</td>
+</tr>
+<tr class="odd">
+<td>GOOGL</td>
+<td>Communication Services</td>
+</tr>
+<tr class="even">
+<td>AMZN</td>
+<td>Consumer Discretionary</td>
+</tr>
+<tr class="odd">
+<td>META</td>
+<td>Communication Services</td>
+</tr>
+<tr class="even">
+<td>JPM</td>
+<td>Financials</td>
+</tr>
+<tr class="odd">
+<td>BAC</td>
+<td>Financials</td>
+</tr>
+<tr class="even">
+<td>XOM</td>
+<td>Energy</td>
+</tr>
+<tr class="odd">
+<td>CVX</td>
+<td>Energy</td>
+</tr>
+<tr class="even">
+<td>JNJ</td>
+<td>Healthcare</td>
+</tr>
+<tr class="odd">
+<td>PFE</td>
+<td>Healthcare</td>
+</tr>
+<tr class="even">
+<td>PG</td>
+<td>Consumer Staples</td>
+</tr>
+<tr class="odd">
+<td>KO</td>
+<td>Consumer Staples</td>
+</tr>
+<tr class="even">
+<td>WMT</td>
+<td>Retail</td>
+</tr>
+<tr class="odd">
+<td>HD</td>
+<td>Consumer Discretionary</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Daily adjusted closing prices were collected and transformed into continuously compounded daily returns. The analysis focused primarily on the covariance and correlation structure of returns rather than on absolute price levels. <a href="#fig-adjusted-closing-prices" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> presents the evolution of adjusted prices across the selected assets during the evaluation period.</p>
+<div id="fig-adjusted-closing-prices" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-adjusted-closing-prices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/closing-prices.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adjusted-closing-prices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Adjusted closing prices of the selected assets over the analysis period, illustrating heterogeneous price dynamics and sector-specific trends across the asset universe.
+</figcaption>
+</figure>
+</div>
+<p>Although the selected securities belong to different sectors, the return series exhibit periods of synchronized behaviour, particularly during episodes of elevated market stress. This becomes more evident when examining the daily return dynamics shown in <a href="#fig-daily-returns" class="quarto-xref">Figure&nbsp;<span>2.2</span></a>.</p>
+<div id="fig-daily-returns" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-daily-returns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/daily-returns.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-daily-returns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Daily returns of the selected assets over the analysis period, highlighting volatility clustering and heterogeneous risk dynamics across the asset universe.
+</figcaption>
+</figure>
+</div>
+<p>The return series display the volatility clustering commonly observed in financial markets, together with periods of sharply increasing cross-asset dependence. The volatility spikes and correlation increases visible in the data are precisely the conditions under which naïve diversification can become less effective, providing the empirical motivation for the PCA and HRP framework adopted in this study.</p>
+<p>The covariance matrix shown in <a href="#fig-covariance-matrix" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> was estimated directly from the daily return series and used throughout the PCA and HRP stages of the analysis.</p>
+<div id="fig-covariance-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-covariance-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/covariance-matrix.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-covariance-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Covariance matrix of asset returns, showing the magnitude of joint variability across the selected assets used in portfolio risk estimation and allocation.
+</figcaption>
+</figure>
+</div>
+<p>The corresponding correlation matrix is presented in <a href="#fig-correlation-matrix" class="quarto-xref">Figure&nbsp;<span>2.4</span></a>. Several economically meaningful relationships already become visible at this stage, particularly among technology, financial, energy, healthcare, and consumer staples stocks.</p>
+<div id="fig-correlation-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-correlation-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/correlation-matrix.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.4: Correlation matrix of asset returns, showing the dependence structure across the selected assets prior to hierarchical clustering reordering.
+</figcaption>
+</figure>
+</div>
+<p>Principal Component Analysis (PCA) was then applied to study the latent structure of market risk. The decomposition was performed on the covariance matrix of returns, allowing the market structure to be represented in terms of orthogonal components ranked by explained variance.</p>
+<p>The explained variance associated with each principal component is summarized in Table <a href="#tbl-pca-explained-variance" class="quarto-xref">Table&nbsp;<span>2.2</span></a>.</p>
+<div id="tbl-pca-explained-variance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pca-explained-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.2: Explained and cumulative variance ratios obtained from Principal Component Analysis (PCA) applied to asset returns.
+</figcaption>
+<div aria-describedby="tbl-pca-explained-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Component</th>
+<th style="text-align: right;">Explained Variance</th>
+<th style="text-align: right;">Cumulative Variance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PC1</td>
+<td style="text-align: right;">0.4638</td>
+<td style="text-align: right;">0.4638</td>
+</tr>
+<tr class="even">
+<td>PC2</td>
+<td style="text-align: right;">0.1793</td>
+<td style="text-align: right;">0.6431</td>
+</tr>
+<tr class="odd">
+<td>PC3</td>
+<td style="text-align: right;">0.0740</td>
+<td style="text-align: right;">0.7170</td>
+</tr>
+<tr class="even">
+<td>PC4</td>
+<td style="text-align: right;">0.0512</td>
+<td style="text-align: right;">0.7682</td>
+</tr>
+<tr class="odd">
+<td>PC5</td>
+<td style="text-align: right;">0.0466</td>
+<td style="text-align: right;">0.8148</td>
+</tr>
+<tr class="even">
+<td>PC6</td>
+<td style="text-align: right;">0.0352</td>
+<td style="text-align: right;">0.8500</td>
+</tr>
+<tr class="odd">
+<td>PC7</td>
+<td style="text-align: right;">0.0297</td>
+<td style="text-align: right;">0.8798</td>
+</tr>
+<tr class="even">
+<td>PC8</td>
+<td style="text-align: right;">0.0262</td>
+<td style="text-align: right;">0.9060</td>
+</tr>
+<tr class="odd">
+<td>PC9</td>
+<td style="text-align: right;">0.0230</td>
+<td style="text-align: right;">0.9289</td>
+</tr>
+<tr class="even">
+<td>PC10</td>
+<td style="text-align: right;">0.0181</td>
+<td style="text-align: right;">0.9470</td>
+</tr>
+<tr class="odd">
+<td>PC11</td>
+<td style="text-align: right;">0.0144</td>
+<td style="text-align: right;">0.9614</td>
+</tr>
+<tr class="even">
+<td>PC12</td>
+<td style="text-align: right;">0.0123</td>
+<td style="text-align: right;">0.9737</td>
+</tr>
+<tr class="odd">
+<td>PC13</td>
+<td style="text-align: right;">0.0102</td>
+<td style="text-align: right;">0.9839</td>
+</tr>
+<tr class="even">
+<td>PC14</td>
+<td style="text-align: right;">0.0084</td>
+<td style="text-align: right;">0.9923</td>
+</tr>
+<tr class="odd">
+<td>PC15</td>
+<td style="text-align: right;">0.0077</td>
+<td style="text-align: right;">1.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The first principal component explains approximately 46% of total variance, while the first two components together account for roughly 64%. The first five components explain more than 80% of total variance, indicating that a relatively small number of latent factors captures much of the variability in the asset universe. <a href="#fig-explained-variance-ratio" class="quarto-xref">Figure&nbsp;<span>2.5</span></a> and <a href="#fig-cumulative-explained-variance" class="quarto-xref">Figure&nbsp;<span>2.6</span></a> illustrate this concentration of variance visually.</p>
+<div id="fig-explained-variance-ratio" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-explained-variance-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/explained-variance-ratio.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-explained-variance-ratio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.5: Explained variance ratio for each principal component obtained from PCA, showing that the first components capture most of the variability in the asset return space.
+</figcaption>
+</figure>
+</div>
+<div id="fig-cumulative-explained-variance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cumulative-explained-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/cumulative-explained-variance.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cumulative-explained-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.6: Cumulative explained variance obtained from Principal Component Analysis (PCA), showing how the first principal components capture most of the variability in the asset return space.
+</figcaption>
+</figure>
+</div>
+<p>The first principal component captures a broad market-related factor affecting most assets simultaneously, consistent with its dominant contribution to total variance. Subsequent components explain progressively smaller fractions of variance and reveal more localized sectoral structures that are less visible in the original return space.</p>
+<div id="fig-pc1-loadings" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pc1-loadings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/pc1-loadings.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pc1-loadings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.7: Loadings of the first principal component obtained from PCA, illustrating the assets that contribute most strongly to the dominant common risk factor in the portfolio universe.
+</figcaption>
+</figure>
+</div>
+<div id="fig-pc2-loadings" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pc2-loadings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/pc2-loadings.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pc2-loadings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.8: Loadings of the second principal component obtained from PCA, highlighting contrasting sectoral exposures and latent diversification patterns within the asset universe.
+</figcaption>
+</figure>
+</div>
+<p>Following the PCA analysis, hierarchical clustering was applied using the correlation-based distance metric described previously. The clustering procedure organizes assets according to statistical similarity, producing a hierarchical representation of the market structure.</p>
+<p>The resulting dendrogram is presented in <a href="#fig-hierarchical-clustering-dendrogram" class="quarto-xref">Figure&nbsp;<span>2.9</span></a>.</p>
+<div id="fig-hierarchical-clustering-dendrogram" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hierarchical-clustering-dendrogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/hierarchical-clustering-dendrogram.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hierarchical-clustering-dendrogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.9: Hierarchical clustering dendrogram of the asset universe based on return correlations, revealing sectoral similarity structures used in the Hierarchical Risk Parity (HRP) allocation process.
+</figcaption>
+</figure>
+</div>
+<p>The hierarchical organization becomes even more evident after reordering the correlation matrix according to the clustering structure, as shown in <a href="#fig-clustered-correlation-matrix" class="quarto-xref">Figure&nbsp;<span>2.10</span></a>.</p>
+<div id="fig-clustered-correlation-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-clustered-correlation-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/clustered-correlation-matrix.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clustered-correlation-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.10: Clustered correlation matrix of asset returns, highlighting sectoral structure and similarity patterns used in the hierarchical portfolio construction process.
+</figcaption>
+</figure>
+</div>
+<p>Several economically intuitive clusters emerge naturally from the data. Technology firms tend to cluster together, energy companies form a separate branch, and defensive sectors exhibit their own hierarchical relationships.</p>
+<p>Portfolio construction was then performed using the Hierarchical Risk Parity (HRP) allocation framework. For comparison purposes, an equally weighted portfolio was used as a benchmark throughout the analysis.</p>
+<p>The equal-weight allocation is shown in <a href="#fig-equal-weight-portfolio" class="quarto-xref">Figure&nbsp;<span>2.11</span></a>.</p>
+<div id="fig-equal-weight-portfolio" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-equal-weight-portfolio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/equal-weight-portfolio.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-equal-weight-portfolio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.11: Equal-weight portfolio allocation assigning identical weights to all assets in the investment universe.
+</figcaption>
+</figure>
+</div>
+<p>The HRP allocation produced a substantially different weighting structure. The largest portfolio weights were assigned to JNJ, KO, PG, and WMT, while exposure to several technology, financial, and energy assets was reduced relative to the equal-weight benchmark.</p>
+<div id="tbl-hrp-weights" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-hrp-weights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.3: Final portfolio weights obtained using the Hierarchical Risk Parity (HRP) allocation method.
+</figcaption>
+<div aria-describedby="tbl-hrp-weights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Asset</th>
+<th style="text-align: right;">Weight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>JNJ</td>
+<td style="text-align: right;">0.1285</td>
+</tr>
+<tr class="even">
+<td>KO</td>
+<td style="text-align: right;">0.1171</td>
+</tr>
+<tr class="odd">
+<td>PG</td>
+<td style="text-align: right;">0.1158</td>
+</tr>
+<tr class="even">
+<td>WMT</td>
+<td style="text-align: right;">0.1127</td>
+</tr>
+<tr class="odd">
+<td>GOOGL</td>
+<td style="text-align: right;">0.0705</td>
+</tr>
+<tr class="even">
+<td>HD</td>
+<td style="text-align: right;">0.0689</td>
+</tr>
+<tr class="odd">
+<td>PFE</td>
+<td style="text-align: right;">0.0657</td>
+</tr>
+<tr class="even">
+<td>JPM</td>
+<td style="text-align: right;">0.0471</td>
+</tr>
+<tr class="odd">
+<td>MSFT</td>
+<td style="text-align: right;">0.0457</td>
+</tr>
+<tr class="even">
+<td>AMZN</td>
+<td style="text-align: right;">0.0439</td>
+</tr>
+<tr class="odd">
+<td>AAPL</td>
+<td style="text-align: right;">0.0424</td>
+</tr>
+<tr class="even">
+<td>BAC</td>
+<td style="text-align: right;">0.0390</td>
+</tr>
+<tr class="odd">
+<td>XOM</td>
+<td style="text-align: right;">0.0386</td>
+</tr>
+<tr class="even">
+<td>CVX</td>
+<td style="text-align: right;">0.0360</td>
+</tr>
+<tr class="odd">
+<td>META</td>
+<td style="text-align: right;">0.0282</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The resulting allocation is visualized in <a href="#fig-hrp-portfolio-weights" class="quarto-xref">Figure&nbsp;<span>2.12</span></a>.</p>
+<div id="fig-hrp-portfolio-weights" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hrp-portfolio-weights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/hrp-portfolio-weights.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hrp-portfolio-weights-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.12: Portfolio weights obtained using the Hierarchical Risk Parity (HRP) allocation method, reflecting the hierarchical correlation structure and risk diversification across assets.
+</figcaption>
+</figure>
+</div>
+<p>A direct comparison between the equal-weight benchmark and the HRP allocation is shown in <a href="#fig-portfolio-weight-comparison" class="quarto-xref">Figure&nbsp;<span>2.13</span></a> and Table <a href="#tbl-portfolio-weight-comparison" class="quarto-xref">Table&nbsp;<span>2.4</span></a>.</p>
+<p>The differences between the two allocations are visible both at the individual asset level and across sectors. The larger weights assigned to JNJ, KO, PG, and WMT are broadly consistent with the lower volatility and correlation characteristics often associated with defensive sectors.</p>
+<div id="fig-portfolio-weight-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-portfolio-weight-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/portfolio-weight-comparison.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-portfolio-weight-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.13: Comparison between equal-weight and Hierarchical Risk Parity (HRP) portfolio allocations, highlighting how the HRP framework redistributes exposure according to the hierarchical correlation and risk structure of the asset universe.
+</figcaption>
+</figure>
+</div>
+<div id="tbl-portfolio-weight-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-portfolio-weight-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.4: Comparison between equal-weight portfolio allocation and Hierarchical Risk Parity (HRP) portfolio weights.
+</figcaption>
+<div aria-describedby="tbl-portfolio-weight-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Asset</th>
+<th style="text-align: right;">Equal Weight</th>
+<th style="text-align: right;">HRP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AAPL</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0424</td>
+</tr>
+<tr class="even">
+<td>MSFT</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0457</td>
+</tr>
+<tr class="odd">
+<td>GOOGL</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0705</td>
+</tr>
+<tr class="even">
+<td>AMZN</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0439</td>
+</tr>
+<tr class="odd">
+<td>META</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0282</td>
+</tr>
+<tr class="even">
+<td>JPM</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0471</td>
+</tr>
+<tr class="odd">
+<td>BAC</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0390</td>
+</tr>
+<tr class="even">
+<td>XOM</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0386</td>
+</tr>
+<tr class="odd">
+<td>CVX</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0360</td>
+</tr>
+<tr class="even">
+<td>JNJ</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.1285</td>
+</tr>
+<tr class="odd">
+<td>PFE</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0657</td>
+</tr>
+<tr class="even">
+<td>PG</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.1158</td>
+</tr>
+<tr class="odd">
+<td>KO</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.1171</td>
+</tr>
+<tr class="even">
+<td>WMT</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.1127</td>
+</tr>
+<tr class="odd">
+<td>HD</td>
+<td style="text-align: right;">0.0667</td>
+<td style="text-align: right;">0.0689</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Risk contributions were also evaluated in order to study how portfolio risk was distributed across assets under the HRP framework.</p>
+<div id="tbl-hrp-risk-contribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-hrp-risk-contribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.5: Asset-level risk contributions under the Hierarchical Risk Parity (HRP) allocation framework.
+</figcaption>
+<div aria-describedby="tbl-hrp-risk-contribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Asset</th>
+<th style="text-align: right;">Risk Contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>KO</td>
+<td style="text-align: right;">0.001158</td>
+</tr>
+<tr class="even">
+<td>JNJ</td>
+<td style="text-align: right;">0.001111</td>
+</tr>
+<tr class="odd">
+<td>PG</td>
+<td style="text-align: right;">0.001090</td>
+</tr>
+<tr class="even">
+<td>GOOGL</td>
+<td style="text-align: right;">0.001007</td>
+</tr>
+<tr class="odd">
+<td>WMT</td>
+<td style="text-align: right;">0.000947</td>
+</tr>
+<tr class="even">
+<td>HD</td>
+<td style="text-align: right;">0.000925</td>
+</tr>
+<tr class="odd">
+<td>JPM</td>
+<td style="text-align: right;">0.000676</td>
+</tr>
+<tr class="even">
+<td>MSFT</td>
+<td style="text-align: right;">0.000668</td>
+</tr>
+<tr class="odd">
+<td>PFE</td>
+<td style="text-align: right;">0.000630</td>
+</tr>
+<tr class="even">
+<td>BAC</td>
+<td style="text-align: right;">0.000620</td>
+</tr>
+<tr class="odd">
+<td>AAPL</td>
+<td style="text-align: right;">0.000615</td>
+</tr>
+<tr class="even">
+<td>AMZN</td>
+<td style="text-align: right;">0.000562</td>
+</tr>
+<tr class="odd">
+<td>CVX</td>
+<td style="text-align: right;">0.000489</td>
+</tr>
+<tr class="even">
+<td>XOM</td>
+<td style="text-align: right;">0.000450</td>
+</tr>
+<tr class="odd">
+<td>META</td>
+<td style="text-align: right;">0.000443</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The distribution of risk contributions is illustrated in <a href="#fig-hrp-risk-contribution" class="quarto-xref">Figure&nbsp;<span>2.14</span></a>.</p>
+<div id="fig-hrp-risk-contribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hrp-risk-contribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/hrp-risk-contribution.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hrp-risk-contribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.14: Risk contribution of each asset under the Hierarchical Risk Parity (HRP) allocation, illustrating how portfolio risk is distributed across the investment universe.
+</figcaption>
+</figure>
+</div>
+<p>Portfolio performance was evaluated using cumulative returns, rolling annualized volatility, Sharpe ratio, and maximum drawdown. The cumulative return dynamics of both portfolio strategies are shown in <a href="#fig-cumulative-portfolio-returns" class="quarto-xref">Figure&nbsp;<span>2.15</span></a>.</p>
+<div id="fig-cumulative-portfolio-returns" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cumulative-portfolio-returns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/cumulative-portfolio-returns.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cumulative-portfolio-returns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.15: Cumulative returns of the compared portfolio strategies over the evaluation period, illustrating differences in long-term growth dynamics and drawdown behavior.
+</figcaption>
+</figure>
+</div>
+<p>The temporal evolution of portfolio risk is shown in <a href="#fig-rolling-annualized-volatility" class="quarto-xref">Figure&nbsp;<span>2.16</span></a>.</p>
+<div id="fig-rolling-annualized-volatility" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rolling-annualized-volatility-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/rolling-annualized-volatility.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rolling-annualized-volatility-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.16: Rolling annualized volatility of the portfolio strategies over time, illustrating the dynamic evolution of portfolio risk under different allocation frameworks.
+</figcaption>
+</figure>
+</div>
+<p>Drawdown dynamics were analyzed separately in order to study the behaviour of both portfolios during periods of market stress.</p>
+<div id="fig-portfolio-drawdowns" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-portfolio-drawdowns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/portfolio-drawdowns.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-portfolio-drawdowns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.17: Portfolio drawdowns over the evaluation period, comparing the magnitude and persistence of temporary losses across the portfolio strategies.
+</figcaption>
+</figure>
+</div>
+<p>The final performance summary is presented in Table <a href="#tbl-portfolio-performance" class="quarto-xref">Table&nbsp;<span>2.6</span></a>.</p>
+<div id="tbl-portfolio-performance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-portfolio-performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.6: Performance comparison between the Hierarchical Risk Parity (HRP) portfolio and the equal-weight benchmark portfolio.
+</figcaption>
+<div aria-describedby="tbl-portfolio-performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 19%">
+<col style="width: 23%">
+<col style="width: 13%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Portfolio</th>
+<th style="text-align: right;">Annualized Return</th>
+<th style="text-align: right;">Annualized Volatility</th>
+<th style="text-align: right;">Sharpe Ratio</th>
+<th style="text-align: right;">Maximum Drawdown</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HRP Portfolio</td>
+<td style="text-align: right;">0.1754</td>
+<td style="text-align: right;">0.2021</td>
+<td style="text-align: right;">0.8680</td>
+<td style="text-align: right;">-0.3139</td>
+</tr>
+<tr class="even">
+<td>Equal Weight Portfolio</td>
+<td style="text-align: right;">0.1514</td>
+<td style="text-align: right;">0.1808</td>
+<td style="text-align: right;">0.8373</td>
+<td style="text-align: right;">-0.2831</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The HRP portfolio achieved a modest improvement in annualized return and Sharpe ratio relative to the equal-weight benchmark. However, this improvement was accompanied by a somewhat deeper maximum drawdown during the evaluation period, illustrating that diversification benefits do not necessarily translate into lower losses under all market conditions.</p>
+<p>The resulting workflow combines PCA, hierarchical clustering, and risk-based portfolio allocation to study diversification from a structural rather than purely optimization-based perspective. Rather than focusing exclusively on return maximization, the analysis emphasizes robustness, interpretability, and stability under realistic market conditions.</p>
+<p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation.html">here</a>. The corresponding Python notebooks associated with this project are also available in the repository <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/python"><i class="bi bi-github"></i></a>.</p>
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">2.4</span> Results, Discussion, and Limitations</h2>
-<p>This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.</p>
-<p>Typical elements may include:</p>
-<ul>
-<li>Visualizations and plots</li>
-<li>Performance metrics</li>
-<li>Comparisons with baseline approaches</li>
-<li>Sensitivity analysis</li>
-<li>Error analysis</li>
-<li>Interpretation of results</li>
-<li>Model assumptions and their consequences</li>
-<li>Sources of uncertainty</li>
-<li>Robustness and generalization</li>
-<li>Trade-offs associated with the methodology</li>
-<li>Potential future improvements</li>
-</ul>
-<p>The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.</p>
+<p>The results of the analysis suggest that the selected asset universe exhibits a considerably more structured organization of risk than might be inferred from asset labels or sector classifications alone. Although the portfolio contains companies operating across multiple industries, both the PCA decomposition and the hierarchical clustering analysis indicate that a relatively small number of latent factors account for a large proportion of observed market variability.</p>
+<p>The PCA results provide the clearest evidence of this concentration. The first principal component alone explains approximately 46% of total variance, while the first two components account for roughly 64%. More than 80% of total variance is captured by the first five components. These findings suggest that much of the apparent diversity within the asset universe is driven by a limited set of common risk sources. From a portfolio construction perspective, this highlights an important distinction between holding many assets and achieving genuine diversification. Increasing the number of securities does not necessarily increase the number of independent sources of risk.</p>
+<p>The principal component loadings further support this interpretation. The first component exhibits broad exposure across most assets and behaves consistently with a dominant market factor affecting the portfolio universe as a whole. Subsequent components reveal more localized patterns associated with sector-specific behaviour and relative differences between groups of assets. Together, these results illustrate how PCA can provide a compact representation of market structure while helping identify hidden concentrations of risk that may not be immediately visible in the original return space.</p>
+<p>A complementary perspective emerges from the hierarchical clustering analysis. The dendrogram and clustered correlation matrix reveal economically intuitive groupings that arise directly from the data. Technology companies tend to cluster together, energy firms form a separate branch, and defensive sectors exhibit their own hierarchical relationships. Rather than imposing predefined classifications, the clustering procedure allows the statistical organization of the market to emerge from observed return behaviour. This provides a useful framework for understanding how diversification is distributed across the portfolio and where concentrations of risk may exist.</p>
+<p>The portfolio construction stage extends these observations into an allocation framework. Compared with the equal-weight benchmark, the Hierarchical Risk Parity portfolio produces a noticeably different allocation structure. The largest weights were assigned to JNJ, KO, PG, and WMT, while exposure to several technology, financial, and energy assets was reduced. Importantly, this outcome should not be interpreted as a prediction that these assets will outperform in the future. Rather, it reflects their role within the correlation structure of the portfolio and the objective of distributing risk more evenly across the hierarchy identified during the clustering stage.</p>
+<p>This distinction is central to the interpretation of the results. The primary contribution of HRP is not necessarily superior return generation, but a different approach to diversification. Traditional portfolio construction methods often allocate capital directly, whereas HRP attempts to allocate risk. As a consequence, two portfolios with similar levels of capital diversification may exhibit substantially different risk concentrations. The risk contribution analysis suggests that the HRP framework achieves a more balanced distribution of portfolio risk across assets, consistent with its underlying design objectives.</p>
+<p>Performance comparisons between the HRP portfolio and the equal-weight benchmark reveal both strengths and trade-offs. The HRP portfolio achieved a modest improvement in annualized return and Sharpe ratio relative to the benchmark. At the same time, it experienced a somewhat deeper maximum drawdown during the evaluation period. These results illustrate an important practical point: improvements in one dimension of portfolio performance do not necessarily translate into improvements across all dimensions. Diversification, risk balancing, and return generation remain competing objectives, and no allocation methodology can fully eliminate these trade-offs.</p>
+<p>The results should therefore be interpreted as evidence that unsupervised learning techniques can provide useful insights into market structure and portfolio construction rather than as proof of the superiority of a particular allocation strategy. The analysis demonstrates that PCA and hierarchical clustering are capable of uncovering meaningful relationships within the asset universe and that these relationships can be incorporated into a systematic allocation process. Whether this ultimately leads to superior long-term investment performance remains dependent on market conditions, investment horizons, transaction costs, and implementation choices.</p>
+<p>Several limitations should also be acknowledged. First, the analysis was conducted using a relatively small universe of fifteen assets. While sufficient for illustrating the methodology, larger investment universes may exhibit more complex correlation structures and different clustering behaviour. Second, the study relies on a single historical sample period. Financial markets are inherently dynamic, and correlation structures evolve through time, particularly during periods of economic stress. Consequently, both PCA decompositions and clustering results may vary across market regimes.</p>
+<p>A further limitation is that the analysis assumes frictionless portfolio implementation. Transaction costs, taxes, liquidity constraints, and rebalancing considerations were not incorporated into the evaluation. In practice, these factors can materially influence realized portfolio performance and may reduce some of the theoretical benefits of more sophisticated allocation methodologies.</p>
+<p>Finally, although HRP was designed to improve robustness relative to covariance-sensitive optimization frameworks, it does not eliminate market risk or guarantee protection during severe market downturns. Common risk factors can still dominate portfolio behaviour when correlations rise across the market, reducing the effectiveness of diversification precisely when it is needed most.</p>
+<p>Taken together, the results suggest that unsupervised learning techniques provide a valuable lens through which to study diversification and market structure. The main contribution of PCA and HRP in this context is not the pursuit of maximum historical return, but the ability to make sources of risk more explicit and to organize portfolio construction around the underlying structure of the market. From this perspective, the project illustrates how statistical learning methods can complement traditional portfolio theory by offering a more interpretable and structurally informed approach to asset allocation.</p>
 </section>
-<section id="technical-appendix-optional" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">2.5</span> Technical Appendix (Optional)</h2>
-<p>This optional section contains technical details that support the project but are not essential for following the main narrative.</p>
-<p>Possible contents include:</p>
+<section id="technical-appendix-optional" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Technical Appendix (Optional)</h1>
+<p>This appendix provides supplementary mathematical and methodological details related to the unsupervised learning techniques used throughout the project.</p>
+<p>The objective is not to present a comprehensive treatment of the underlying methods, but rather to summarize the concepts most relevant to the portfolio construction process. The material presented here supports the interpretation of the results and clarifies some of the modeling choices discussed in the main text.</p>
+<p>The appendix is organized into two sections. The first summarizes the principal concepts behind Principal Component Analysis (PCA), which was used to study the structure of asset return variability and identify dominant sources of common variation. The second discusses Hierarchical Clustering (HC), which was used to group assets according to their similarity patterns and support diversification decisions.</p>
+<p>The main body of the project is intended to remain fully understandable without consulting this appendix. Readers interested primarily in the practical application and results may safely skip the material that follows.</p>
+<section id="principal-component-analysis-pca" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="principal-component-analysis-pca"><span class="header-section-number">3.1</span> Principal Component Analysis (PCA)</h2>
+<section id="centering-of-returns" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="centering-of-returns"><span class="header-section-number">3.1.1</span> Centering of Returns</h3>
+<p>Let</p>
+<p><span id="eq-return-matrix"><span class="math display">\[
+X =
+\begin{bmatrix}
+r_{11} &amp; r_{12} &amp; \cdots &amp; r_{1p} \\
+r_{21} &amp; r_{22} &amp; \cdots &amp; r_{2p} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+r_{n1} &amp; r_{n2} &amp; \cdots &amp; r_{np}
+\end{bmatrix}
+\tag{3.1}\]</span></span></p>
+<p>denote the matrix of asset returns, where each column corresponds to an asset and each row represents an observation period.</p>
+<p>Prior to applying PCA, the return series were centered by subtracting the sample mean of each asset:</p>
+<p><span id="eq-centered-returns"><span class="math display">\[
+x_{ij}^{(c)} = r_{ij} - \bar{r}_j
+\tag{3.2}\]</span></span></p>
+<p>where <span class="math inline">\(\bar{r}_j\)</span> denotes the average return of asset <span class="math inline">\(j\)</span>.</p>
+<p>Centering removes differences in mean return levels and ensures that the subsequent analysis focuses exclusively on the covariance structure of the data. The centered return matrix was then used to construct the covariance matrix and perform the eigendecomposition underlying PCA.</p>
+</section>
+<section id="covariance-matrix" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="covariance-matrix"><span class="header-section-number">3.1.2</span> Covariance Matrix</h3>
+<p>The covariance matrix summarizes the dependence structure among asset returns and is given by</p>
+<p><span id="eq-covariance-matrix"><span class="math display">\[
+\Sigma = \frac{1}{n-1} X_c^\top X_c
+\tag{3.3}\]</span></span></p>
+<p>where <span class="math inline">\(X_c\)</span> denotes the centered return matrix and <span class="math inline">\(n\)</span> is the number of observations.</p>
+<p>Each element <span class="math inline">\(\sigma_{ij}\)</span> measures the extent to which the returns of assets <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> vary together. Positive values indicate that returns tend to move in the same direction, whereas negative values indicate opposite movements.</p>
+<p>Because PCA is based on the covariance structure of the data, the matrix <span class="math inline">\(\Sigma\)</span> serves as the primary object of analysis. The principal components are obtained by identifying the directions that explain the largest share of the variability captured by this matrix.</p>
+</section>
+<section id="eigenvalue-decomposition" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="eigenvalue-decomposition"><span class="header-section-number">3.1.3</span> Eigenvalue Decomposition</h3>
+<p>PCA is based on the eigendecomposition of the covariance matrix,</p>
+<p><span id="eq-eigendecomposition"><span class="math display">\[
+\Sigma = V \Lambda V^\top
+\tag{3.4}\]</span></span></p>
+<p>where <span class="math inline">\(V\)</span> is the matrix of eigenvectors and <span class="math inline">\(\Lambda\)</span> is a diagonal matrix containing the corresponding eigenvalues.</p>
+<p>Each eigenvector defines a principal component, while the associated eigenvalue measures the amount of variance explained by that component.</p>
+<p>The principal components are mutually orthogonal and provide a new coordinate system in which the dominant patterns of variation become easier to identify. Components associated with larger eigenvalues explain a greater share of total variance and therefore contain more information about the structure of asset returns.</p>
+<p>In this project, the eigendecomposition of the covariance matrix provided the basis for evaluating how much of the variability in the investment universe could be explained by a reduced number of components.</p>
+</section>
+<section id="explained-variance" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="explained-variance"><span class="header-section-number">3.1.4</span> Explained Variance</h3>
+<p>The eigenvalues obtained from the covariance matrix quantify the amount of variance explained by each principal component. Let <span class="math inline">\(\lambda_i\)</span> denote the eigenvalue associated with the <span class="math inline">\(i\)</span>-th principal component. The proportion of variance explained by that component is given by</p>
+<p><span id="eq-pve"><span class="math display">\[
+\text{PVE}_i = \frac{\lambda_i}{\sum_{j=1}^{p}\lambda_j}
+\tag{3.5}\]</span></span></p>
+<p>where <span class="math inline">\(p\)</span> denotes the total number of assets.</p>
+<p>The cumulative proportion of explained variance can be expressed as</p>
+<p><span id="eq-cpve"><span class="math display">\[
+\text{CPVE}_k = \sum_{i=1}^{k} \text{PVE}_i
+\tag{3.6}\]</span></span></p>
+<p>representing the fraction of total variance retained when only the first <span class="math inline">\(k\)</span> principal components are considered.</p>
+<p>The explained variance analysis indicated a substantial concentration of variability in a small number of components. The first principal component accounted for approximately 46% of total variance, while the first two components explained roughly 64%. The first five components captured more than 80% of the variability observed across the investment universe.</p>
+<p>These results suggest that a relatively small number of latent factors drive a large fraction of asset return behavior. Consequently, the effective dimensionality of the dataset is considerably smaller than the number of assets included in the analysis.</p>
+</section>
+<section id="principal-component-loadings" class="level3" data-number="3.1.5">
+<h3 data-number="3.1.5" class="anchored" data-anchor-id="principal-component-loadings"><span class="header-section-number">3.1.5</span> Principal Component Loadings</h3>
+<p>While explained variance quantifies the importance of each principal component, the component loadings describe how individual assets contribute to those components.</p>
+<p>Let</p>
+<p><span id="eq-loading-vector"><span class="math display">\[
+v_k =
+\begin{bmatrix}
+v_{1k} \\
+v_{2k} \\
+\vdots \\
+v_{pk}
+\end{bmatrix}
+\tag{3.7}\]</span></span></p>
+<p>denote the eigenvector associated with the <span class="math inline">\(k\)</span>-th principal component. The elements of this vector are commonly referred to as loadings.</p>
+<p>Assets with large absolute loadings contribute more strongly to the corresponding component, whereas assets with loadings closer to zero have a smaller influence on that source of variation.</p>
+<p>The loadings associated with the first two principal components were examined to identify the assets contributing most strongly to the dominant patterns of return variability. Because principal components are linear combinations of the original assets, the loading structure provides insight into how different securities participate in the latent factors revealed by the PCA decomposition.</p>
+<p>Together with the explained variance analysis, the loadings help characterize the underlying structure of the investment universe and identify groups of assets that exhibit similar exposures to common sources of variation.</p>
+</section>
+<section id="interpretation-for-asset-allocation" class="level3" data-number="3.1.6">
+<h3 data-number="3.1.6" class="anchored" data-anchor-id="interpretation-for-asset-allocation"><span class="header-section-number">3.1.6</span> Interpretation for Asset Allocation</h3>
+<p>The PCA results indicate that a substantial portion of total variance can be explained by a relatively small number of principal components. From a portfolio construction perspective, this suggests that many assets are influenced by common underlying factors rather than behaving independently.</p>
+<p>As a consequence, the number of securities held in a portfolio may overstate the true degree of diversification achieved. Assets exposed to the same dominant components can contribute similar sources of risk even when they belong to different sectors or industries.</p>
+<p>For this reason, PCA can be viewed as a diagnostic tool for assessing the structure of risk within an investment universe. Rather than focusing on individual assets, the analysis emphasizes the latent factors that drive collective movements in returns.</p>
+<p>In this project, PCA was used primarily as an exploratory technique to investigate the dimensionality of the dataset and to identify common sources of variation prior to the clustering analysis described in the following section.</p>
+</section>
+</section>
+<section id="hierarchical-clustering-hc" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="hierarchical-clustering-hc"><span class="header-section-number">3.2</span> Hierarchical Clustering (HC)</h2>
+<section id="correlation-based-distance" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="correlation-based-distance"><span class="header-section-number">3.2.1</span> Correlation-Based Distance</h3>
+<p>The clustering analysis was based on the correlation structure of asset returns. Let <span class="math inline">\(\rho_{ij}\)</span> denote the Pearson correlation coefficient between assets <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. The corresponding distance measure is defined as</p>
+<p><span id="eq-correlation-distance"><span class="math display">\[
+d_{ij} = \sqrt{\frac{1-\rho_{ij}}{2}}
+\tag{3.8}\]</span></span></p>
+<p>This transformation converts correlations into distances while preserving the properties required by a distance metric.</p>
+<p>Several useful relationships follow directly from this definition:</p>
 <ul>
-<li>Mathematical derivations</li>
-<li>Additional proofs</li>
-<li>Numerical details</li>
-<li>Extended equations</li>
-<li>Supplementary experiments</li>
-<li>Technical notes on auxiliary methods and algorithms</li>
+<li>If <span class="math inline">\(\rho_{ij}=1\)</span>, then <span class="math inline">\(d_{ij}=0\)</span>.</li>
+<li>If <span class="math inline">\(\rho_{ij}=0\)</span>, then <span class="math inline">\(d_{ij}=\sqrt{1/2}\)</span>.</li>
+<li>If <span class="math inline">\(\rho_{ij}=-1\)</span>, then <span class="math inline">\(d_{ij}=1\)</span>.</li>
 </ul>
-<p>The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.</p>
-<p>The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.</p>
-<p>The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.</p>
+<p>Assets exhibiting similar return dynamics therefore appear close to one another in the resulting distance matrix, whereas assets with dissimilar behavior appear farther apart.</p>
+<p>The correlation-based distance matrix served as the primary input to the hierarchical clustering procedure implemented in this project.</p>
+</section>
+<section id="agglomerative-clustering" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="agglomerative-clustering"><span class="header-section-number">3.2.2</span> Agglomerative Clustering</h3>
+<p>Hierarchical clustering was performed using an agglomerative approach.</p>
+<p>The procedure begins by assigning each asset to its own cluster. At each iteration, the two clusters exhibiting the smallest distance are merged into a new cluster. This process continues until all assets have been combined into a single hierarchical structure.</p>
+<p>If the investment universe contains <span class="math inline">\(p\)</span> assets, the algorithm initially creates <span class="math inline">\(p\)</span> individual clusters. Each merge reduces the number of clusters by one until the hierarchy is complete.</p>
+<p>The resulting sequence of merges reveals how assets are related at different levels of similarity. Assets that merge early in the process tend to exhibit highly similar return patterns, whereas assets that merge only at later stages are generally less related.</p>
+</section>
+<section id="wards-linkage-method" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="wards-linkage-method"><span class="header-section-number">3.2.3</span> Ward’s Linkage Method</h3>
+<p>After computing the distance matrix, the clustering algorithm must determine how distances between clusters are evaluated following each merge. This choice is known as the linkage criterion.</p>
+<p>In this project, Ward’s linkage method was employed through the Ward.D2 algorithm.</p>
+<p>Ward’s method seeks to minimize the increase in within-cluster variance produced by each merge. At every iteration, the algorithm selects the pair of clusters whose combination results in the smallest increase in overall cluster heterogeneity.</p>
+<p>This approach tends to generate compact and relatively balanced clusters, making it particularly useful for identifying coherent groups of assets exhibiting similar return behavior.</p>
+</section>
+<section id="dendrogram-interpretation" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="dendrogram-interpretation"><span class="header-section-number">3.2.4</span> Dendrogram Interpretation</h3>
+<p>The hierarchical structure produced by the clustering algorithm can be visualized through a dendrogram.</p>
+<p>A dendrogram is a tree-like representation that displays the sequence of cluster merges performed during the agglomerative procedure. Each terminal node corresponds to an individual asset, while internal nodes represent cluster combinations formed throughout the algorithm.</p>
+<p>The vertical axis represents the distance at which clusters are merged. Assets connected at lower heights tend to exhibit stronger similarity, whereas assets that merge only at higher levels are generally less related.</p>
+<p>The dendrogram presented in the main body of the project reveals the hierarchical organization of the investment universe and highlights groups of assets exhibiting similar return behavior.</p>
+</section>
+<section id="clustered-correlation-matrix" class="level3" data-number="3.2.5">
+<h3 data-number="3.2.5" class="anchored" data-anchor-id="clustered-correlation-matrix"><span class="header-section-number">3.2.5</span> Clustered Correlation Matrix</h3>
+<p>The ordering produced by hierarchical clustering can be used to reorganize the correlation matrix according to the cluster structure identified in the data.</p>
+<p>Rather than displaying assets in an arbitrary order, the reordered matrix places statistically similar assets next to one another. As a result, groups of highly correlated assets appear as visible blocks along the diagonal of the matrix.</p>
+<p>This representation provides a convenient way to inspect the dependency structure of the investment universe and to identify groups of assets sharing similar return dynamics.</p>
+<p>In this project, the clustered correlation matrix complemented the dendrogram by providing an alternative visualization of the relationships among assets.</p>
+</section>
+<section id="diversification-through-clustering" class="level3" data-number="3.2.6">
+<h3 data-number="3.2.6" class="anchored" data-anchor-id="diversification-through-clustering"><span class="header-section-number">3.2.6</span> Diversification Through Clustering</h3>
+<p>The clustering results indicate that similarities among assets are not distributed uniformly throughout the investment universe. Instead, groups of assets exhibiting comparable return behavior emerge naturally from the data.</p>
+<p>From a portfolio construction perspective, these clusters can reveal hidden concentrations of risk. A portfolio may contain a large number of securities while remaining exposed to a relatively small set of common drivers if many holdings belong to the same cluster.</p>
+<p>Hierarchical clustering provides a complementary perspective on diversification by focusing on relationships among assets rather than on individual securities. Assets belonging to different clusters are more likely to contribute distinct sources of risk and therefore may improve portfolio diversification.</p>
+<p>Together, PCA and hierarchical clustering provide complementary views of the structure of asset returns. While PCA identifies dominant sources of variation, clustering reveals how assets are organized according to similarity patterns within the investment universe.</p>
+</section>
+<section id="methodological-limitations" class="level3" data-number="3.2.7">
+<h3 data-number="3.2.7" class="anchored" data-anchor-id="methodological-limitations"><span class="header-section-number">3.2.7</span> Methodological Limitations</h3>
+<p>PCA captures linear relationships among asset returns and may not fully represent nonlinear dependency structures present in financial markets.</p>
+<p>Similarly, the clustering structure obtained depends on both the distance metric and the linkage criterion employed. Alternative specifications may produce different cluster configurations and lead to different interpretations of the investment universe.</p>
+<p>Despite these limitations, PCA and hierarchical clustering remain useful exploratory tools for understanding the structure of asset returns and supporting diversification analysis.</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -530,6 +1336,8 @@ d_{ij} = \sqrt{\frac{1}{2}(1 - \rho_{ij})}
 <div class="csl-left-margin">[4] </div><div class="csl-right-inline">M. L. De Prado, <em>Advances in financial machine learning</em>. John Wiley &amp; Sons, 2018.</div>
 </div>
 </div>
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -584,13 +1392,14 @@ d_{ij} = \sqrt{\frac{1}{2}(1 - \rho_{ij})}
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
