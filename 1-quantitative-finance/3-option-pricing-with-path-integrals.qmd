@@ -1,19 +1,20 @@
 # Option Pricing with Path Integrals
 
-_Work in progress._
+Most option pricing models focus on the value of a contract at maturity. Path integral methods approach the same problem from a different perspective: instead of analysing a single outcome, they evaluate the contribution of all possible price trajectories that could lead to it. This viewpoint is particularly appealing for derivatives whose value depends not only on the final price of the underlying asset, but also on the path followed to reach it.
+
+While the Black–Scholes framework remains one of the most influential models in quantitative finance, many derivatives require numerical techniques because closed-form solutions are either unavailable or difficult to obtain. Path integral methods provide an alternative formulation that naturally expresses option values as weighted averages over entire trajectories, creating a direct connection between option pricing and simulation-based methods.
+
+This project investigates whether a path integral formulation can serve as a practical computational framework for option pricing. The analysis focuses on European call options, where analytical Black–Scholes prices are available and can be used as a benchmark. A path integral representation of the pricing problem is derived, implemented numerically using the Metropolis–Hastings algorithm, and evaluated against both the analytical Black–Scholes solution and conventional Monte Carlo estimates. Historical market data is incorporated to illustrate how the methodology can be applied in a realistic setting.
 
 ## Problem Definition
 
-This section describes the problem being addressed and explains its relevance within the context of the domain.
+For a standard European option, the Black–Scholes model provides an elegant closed-form solution under a set of simplifying assumptions. The situation becomes more challenging when dealing with contracts that involve early exercise features, path dependence, or more complex market dynamics. In these cases, analytical solutions may no longer exist, and numerical methods become essential.
 
-Typical questions considered in this section include:
+Most numerical approaches are built around either solving a pricing equation or approximating the evolution of the underlying asset through discrete structures such as lattices. Path integral methods offer a different perspective. Rather than focusing on a single terminal outcome, they formulate the valuation problem as an aggregation over all possible trajectories that the underlying asset could follow between the present and maturity.
 
-- What is the objective of the project?
-- Why is the problem relevant?
-- What type of decisions or insights depend on the solution?
-- What are the main challenges associated with the problem?
+This trajectory-based viewpoint is particularly attractive for derivatives whose value depends on the history of the underlying asset rather than on its final price alone. It also provides a natural bridge between option pricing and simulation-based techniques, allowing the valuation problem to be reformulated in terms of sampling and aggregating large ensembles of possible price paths.
 
-The emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.
+The central question explored in this project is whether this alternative formulation can provide a practical foundation for option pricing while remaining consistent with established financial theory. The goal is not to outperform Black–Scholes where an analytical solution already exists, but to examine whether path integrals can serve as a flexible framework for pricing problems where closed-form solutions are no longer available.
 
 ## Modeling Approach
 
