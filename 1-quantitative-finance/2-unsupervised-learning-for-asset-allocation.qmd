@@ -265,7 +265,7 @@ The HRP portfolio achieved a modest improvement in annualized return and Sharpe 
 
 The resulting workflow combines PCA, hierarchical clustering, and risk-based portfolio allocation to study diversification from a structural rather than purely optimization-based perspective. Rather than focusing exclusively on return maximization, the analysis emphasizes robustness, interpretability, and stability under realistic market conditions.
 
-Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/python).
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation.html). The corresponding Python notebooks associated with this project are also available in the [<i class="bi bi-github"></i> repository](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/python).
 
 ## Results, Discussion, and Limitations
 

@@ -110,7 +110,7 @@ The fitted linear relationship between asset and market returns is illustrated i
 
 ![CAPM linear regression between Apple daily returns and S\&P 500 daily returns. The red line represents the fitted linear relationship estimated through ordinary least squares regression.](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model-figures/capm-regression.png){#fig-capm-regression}
 
-Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/1-capm-model.html). The corresponding Python notebooks associated with this project are also available in the [<i class="bi bi-github"></i> repository](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
 
 ### Fama–French Three-Factor Model Implementation
 
@@ -118,7 +118,7 @@ To extend the single-factor CAPM specification, the Fama–French three-factor m
 
 The implementation combines daily adjusted closing prices for Apple Inc. (`AAPL`) obtained from Yahoo Finance with the daily Fama–French factor dataset developed by Kenneth French. The final modeling dataset contains 1,256 daily observations covering the period from January 2020 to December 2024. The average daily excess return of Apple over the sample period was approximately $0.11\%$, with a daily standard deviation close to $2.0\%$.
 
-Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model.html). The corresponding Python notebooks associated with this project are also available in the repository [<i class="bi bi-github"></i>](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model.html). The corresponding Python notebooks associated with this project are also available in the [<i class="bi bi-github"></i> repository](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python).
 
 @fig-fama-french-factor-series displays the behavior of the three explanatory factors over time. The series exhibit substantial short-term variability, particularly during periods of market stress such as the early stages of the COVID-19 pandemic in 2020. The `SMB` factor shows the highest volatility among the three factors during this period, reflecting the stronger sensitivity of small-cap firms to abrupt changes in market conditions.
 
