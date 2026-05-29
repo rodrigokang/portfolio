@@ -293,7 +293,7 @@ Finally, although HRP was designed to improve robustness relative to covariance-
 
 Taken together, the results suggest that unsupervised learning techniques provide a valuable lens through which to study diversification and market structure. The main contribution of PCA and HRP in this context is not the pursuit of maximum historical return, but the ability to make sources of risk more explicit and to organize portfolio construction around the underlying structure of the market. From this perspective, the project illustrates how statistical learning methods can complement traditional portfolio theory by offering a more interpretable and structurally informed approach to asset allocation.
 
-# Technical Appendix (Optional)
+## Technical Appendix (Optional)
 
 This appendix provides supplementary mathematical and methodological details related to the unsupervised learning techniques used throughout the project.
 
@@ -303,9 +303,9 @@ The appendix is organized into two sections. The first summarizes the principal 
 
 The main body of the project is intended to remain fully understandable without consulting this appendix. Readers interested primarily in the practical application and results may safely skip the material that follows.
 
-## Principal Component Analysis (PCA)
+### Principal Component Analysis (PCA)
 
-### Centering of Returns
+#### Centering of Returns
 
 Let
 
@@ -331,7 +331,7 @@ where $\bar{r}_j$ denotes the average return of asset $j$.
 
 Centering removes differences in mean return levels and ensures that the subsequent analysis focuses exclusively on the covariance structure of the data. The centered return matrix was then used to construct the covariance matrix and perform the eigendecomposition underlying PCA.
 
-### Covariance Matrix
+#### Covariance Matrix
 
 The covariance matrix summarizes the dependence structure among asset returns and is given by
 
@@ -345,7 +345,7 @@ Each element $\sigma_{ij}$ measures the extent to which the returns of assets $i
 
 Because PCA is based on the covariance structure of the data, the matrix $\Sigma$ serves as the primary object of analysis. The principal components are obtained by identifying the directions that explain the largest share of the variability captured by this matrix.
 
-### Eigenvalue Decomposition
+#### Eigenvalue Decomposition
 
 PCA is based on the eigendecomposition of the covariance matrix,
 
@@ -361,7 +361,7 @@ The principal components are mutually orthogonal and provide a new coordinate sy
 
 In this project, the eigendecomposition of the covariance matrix provided the basis for evaluating how much of the variability in the investment universe could be explained by a reduced number of components.
 
-### Explained Variance
+#### Explained Variance
 
 The eigenvalues obtained from the covariance matrix quantify the amount of variance explained by each principal component. Let $\lambda_i$ denote the eigenvalue associated with the $i$-th principal component. The proportion of variance explained by that component is given by
 
@@ -383,7 +383,7 @@ The explained variance analysis indicated a substantial concentration of variabi
 
 These results suggest that a relatively small number of latent factors drive a large fraction of asset return behavior. Consequently, the effective dimensionality of the dataset is considerably smaller than the number of assets included in the analysis.
 
-### Principal Component Loadings
+#### Principal Component Loadings
 
 While explained variance quantifies the importance of each principal component, the component loadings describe how individual assets contribute to those components.
 
@@ -407,7 +407,7 @@ The loadings associated with the first two principal components were examined to
 
 Together with the explained variance analysis, the loadings help characterize the underlying structure of the investment universe and identify groups of assets that exhibit similar exposures to common sources of variation.
 
-### Interpretation for Asset Allocation
+#### Interpretation for Asset Allocation
 
 The PCA results indicate that a substantial portion of total variance can be explained by a relatively small number of principal components. From a portfolio construction perspective, this suggests that many assets are influenced by common underlying factors rather than behaving independently.
 
@@ -417,9 +417,9 @@ For this reason, PCA can be viewed as a diagnostic tool for assessing the struct
 
 In this project, PCA was used primarily as an exploratory technique to investigate the dimensionality of the dataset and to identify common sources of variation prior to the clustering analysis described in the following section.
 
-## Hierarchical Clustering (HC)
+### Hierarchical Clustering (HC)
 
-### Correlation-Based Distance
+#### Correlation-Based Distance
 
 The clustering analysis was based on the correlation structure of asset returns. Let $\rho_{ij}$ denote the Pearson correlation coefficient between assets $i$ and $j$. The corresponding distance measure is defined as
 
@@ -439,7 +439,7 @@ Assets exhibiting similar return dynamics therefore appear close to one another 
 
 The correlation-based distance matrix served as the primary input to the hierarchical clustering procedure implemented in this project.
 
-### Agglomerative Clustering
+#### Agglomerative Clustering
 
 Hierarchical clustering was performed using an agglomerative approach.
 
@@ -449,7 +449,7 @@ If the investment universe contains $p$ assets, the algorithm initially creates 
 
 The resulting sequence of merges reveals how assets are related at different levels of similarity. Assets that merge early in the process tend to exhibit highly similar return patterns, whereas assets that merge only at later stages are generally less related.
 
-### Ward's Linkage Method
+#### Ward's Linkage Method
 
 After computing the distance matrix, the clustering algorithm must determine how distances between clusters are evaluated following each merge. This choice is known as the linkage criterion.
 
@@ -459,7 +459,7 @@ Ward's method seeks to minimize the increase in within-cluster variance produced
 
 This approach tends to generate compact and relatively balanced clusters, making it particularly useful for identifying coherent groups of assets exhibiting similar return behavior.
 
-### Dendrogram Interpretation
+#### Dendrogram Interpretation
 
 The hierarchical structure produced by the clustering algorithm can be visualized through a dendrogram.
 
@@ -469,7 +469,7 @@ The vertical axis represents the distance at which clusters are merged. Assets c
 
 The dendrogram presented in the main body of the project reveals the hierarchical organization of the investment universe and highlights groups of assets exhibiting similar return behavior.
 
-### Clustered Correlation Matrix
+#### Clustered Correlation Matrix
 
 The ordering produced by hierarchical clustering can be used to reorganize the correlation matrix according to the cluster structure identified in the data.
 
@@ -489,7 +489,7 @@ Hierarchical clustering provides a complementary perspective on diversification 
 
 Together, PCA and hierarchical clustering provide complementary views of the structure of asset returns. While PCA identifies dominant sources of variation, clustering reveals how assets are organized according to similarity patterns within the investment universe.
 
-### Methodological Limitations
+#### Methodological Limitations
 
 PCA captures linear relationships among asset returns and may not fully represent nonlinear dependency structures present in financial markets.
 
