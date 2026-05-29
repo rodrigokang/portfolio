@@ -204,7 +204,7 @@ This appendix provides a compact technical background for the regression models 
 
 The CAPM specification can be interpreted as a simple linear regression model, where the excess return of an asset is explained by the excess return of the market portfolio. In contrast, the Fama-French three-factor model extends this idea to a multiple linear regression setting, where asset excess returns are explained by a set of risk factors rather than by the market factor alone.
 
-The purpose of this appendix is not to provide a complete treatment of linear regression or statistical learning. Instead, it collects the main concepts needed to understand how the models were estimated, how the coefficients should be interpreted, and how goodness-of-fit and statistical significance measures relate to the empirical results discussed in the project. The presentation follows standard treatments of linear regression and statistical learning @james2023statistical @hastie2009elements @bishop2006pattern @suzuki2020statistical @ugarte2016probability @cowan1998statistical.
+The purpose of this appendix is not to provide a complete treatment of linear regression or statistical learning. Instead, it collects the main concepts needed to understand how the models were estimated, how the coefficients should be interpreted, and how goodness-of-fit and statistical significance measures relate to the empirical results discussed in the project. The presentation follows standard treatments of linear regression and statistical learning @james2023statistical @ugarte2016probability.
 
 ### Simple Linear Regression and the CAPM Model
 

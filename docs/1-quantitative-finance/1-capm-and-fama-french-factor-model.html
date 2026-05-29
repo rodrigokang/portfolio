@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,15 +54,14 @@ div.csl-indent {
 <link href="../1-quantitative-finance/0-overview.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -105,7 +104,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -145,9 +144,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -789,7 +786,7 @@ Figure&nbsp;1.8: Distribution of residuals from the Fama–French three-factor m
 <h2 data-number="1.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">1.5</span> Technical Appendix (Optional)</h2>
 <p>This appendix provides a compact technical background for the regression models used in this project. The main body of the chapter focuses on the financial interpretation of the CAPM and Fama-French models, while this appendix summarizes the statistical structure underlying their empirical estimation.</p>
 <p>The CAPM specification can be interpreted as a simple linear regression model, where the excess return of an asset is explained by the excess return of the market portfolio. In contrast, the Fama-French three-factor model extends this idea to a multiple linear regression setting, where asset excess returns are explained by a set of risk factors rather than by the market factor alone.</p>
-<p>The purpose of this appendix is not to provide a complete treatment of linear regression or statistical learning. Instead, it collects the main concepts needed to understand how the models were estimated, how the coefficients should be interpreted, and how goodness-of-fit and statistical significance measures relate to the empirical results discussed in the project. The presentation follows standard treatments of linear regression and statistical learning <span class="citation" data-cites="james2023statistical"><a href="../references.html#ref-james2023statistical" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="hastie2009elements"><a href="../references.html#ref-hastie2009elements" role="doc-biblioref">[10]</a></span> <span class="citation" data-cites="bishop2006pattern"><a href="../references.html#ref-bishop2006pattern" role="doc-biblioref">[11]</a></span> <span class="citation" data-cites="suzuki2020statistical"><a href="../references.html#ref-suzuki2020statistical" role="doc-biblioref">[12]</a></span> <span class="citation" data-cites="ugarte2016probability"><a href="../references.html#ref-ugarte2016probability" role="doc-biblioref">[13]</a></span> <span class="citation" data-cites="cowan1998statistical"><a href="../references.html#ref-cowan1998statistical" role="doc-biblioref">[14]</a></span>.</p>
+<p>The purpose of this appendix is not to provide a complete treatment of linear regression or statistical learning. Instead, it collects the main concepts needed to understand how the models were estimated, how the coefficients should be interpreted, and how goodness-of-fit and statistical significance measures relate to the empirical results discussed in the project. The presentation follows standard treatments of linear regression and statistical learning <span class="citation" data-cites="james2023statistical"><a href="../references.html#ref-james2023statistical" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="ugarte2016probability"><a href="../references.html#ref-ugarte2016probability" role="doc-biblioref">[10]</a></span>.</p>
 <section id="simple-linear-regression-and-the-capm-model" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="simple-linear-regression-and-the-capm-model"><span class="header-section-number">1.5.1</span> Simple Linear Regression and the CAPM Model</h3>
 <p>As discussed previously in <a href="#eq-capm" class="quarto-xref">Equation&nbsp;<span>1.2</span></a>, the CAPM establishes a linear relationship between the expected excess return of an asset and the expected excess return of the market portfolio. From a statistical perspective, this relationship can be interpreted as a simple linear regression model of the form</p>
@@ -1279,20 +1276,8 @@ F
 <div id="ref-james2023statistical" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[9] </div><div class="csl-right-inline">G. James, D. Witten, T. Hastie, R. Tibshirani, and J. Taylor, <span>“An introduction to statistical learning: With applications in python,”</span> Springer, 2023.</div>
 </div>
-<div id="ref-hastie2009elements" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[10] </div><div class="csl-right-inline">T. Hastie, <em>The elements of statistical learning: Data mining, inference, and prediction</em>. Springer, 2009.</div>
-</div>
-<div id="ref-bishop2006pattern" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[11] </div><div class="csl-right-inline">C. M. Bishop, <em>Pattern recognition and machine learning</em>. Springer, 2006.</div>
-</div>
-<div id="ref-suzuki2020statistical" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[12] </div><div class="csl-right-inline">J. Suzuki, <em>Statistical learning with math and r</em>. Springer, 2020.</div>
-</div>
 <div id="ref-ugarte2016probability" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[13] </div><div class="csl-right-inline">M. D. Ugarte, A. F. Militino, and A. T. Arnholt, <em>Probability and statistics with r, second edition</em>. Taylor &amp; Francis, 2016.</div>
-</div>
-<div id="ref-cowan1998statistical" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[14] </div><div class="csl-right-inline">G. Cowan, <em>Statistical data analysis</em>. Clarendon Press, 1998.</div>
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">M. D. Ugarte, A. F. Militino, and A. T. Arnholt, <em>Probability and statistics with r, second edition</em>. Taylor &amp; Francis, 2016.</div>
 </div>
 </div>
 </section>
@@ -1351,14 +1336,13 @@ F
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

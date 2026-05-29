@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,15 +54,14 @@ div.csl-indent {
 <link href="../1-quantitative-finance/1-capm-and-fama-french-factor-model.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -105,7 +104,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -145,9 +144,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -471,7 +468,7 @@ d_{ij} = \sqrt{\frac{1}{2}(1 - \rho_{ij})}
 <section id="methodology-and-implementation" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">2.3</span> Methodology and Implementation</h2>
 <p>The empirical analysis was conducted using a diversified universe of U.S. equities representing multiple sectors of the economy, including technology, financials, energy, healthcare, consumer staples, communication services, and retail. The selected assets were chosen to provide exposure to different market dynamics while still allowing meaningful correlation structures and latent factor relationships to emerge throughout the analysis.</p>
-<p>The asset universe used in the study is summarized in Table <a href="#tbl-asset-universe" class="quarto-xref">Table&nbsp;<span>2.1</span></a>.</p>
+<p>The asset universe used in the study is summarized in <a href="#tbl-asset-universe" class="quarto-xref">Table&nbsp;<span>2.1</span></a>.</p>
 <div id="tbl-asset-universe" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-asset-universe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -597,7 +594,7 @@ Figure&nbsp;2.4: Correlation matrix of asset returns, showing the dependence str
 </figure>
 </div>
 <p>Principal Component Analysis (PCA) was then applied to study the latent structure of market risk. The decomposition was performed on the covariance matrix of returns, allowing the market structure to be represented in terms of orthogonal components ranked by explained variance.</p>
-<p>The explained variance associated with each principal component is summarized in Table <a href="#tbl-pca-explained-variance" class="quarto-xref">Table&nbsp;<span>2.2</span></a>.</p>
+<p>The explained variance associated with each principal component is summarized in <a href="#tbl-pca-explained-variance" class="quarto-xref">Table&nbsp;<span>2.2</span></a>.</p>
 <div id="tbl-pca-explained-variance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pca-explained-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -862,7 +859,7 @@ Figure&nbsp;2.12: Portfolio weights obtained using the Hierarchical Risk Parity 
 </figcaption>
 </figure>
 </div>
-<p>A direct comparison between the equal-weight benchmark and the HRP allocation is shown in <a href="#fig-portfolio-weight-comparison" class="quarto-xref">Figure&nbsp;<span>2.13</span></a> and Table <a href="#tbl-portfolio-weight-comparison" class="quarto-xref">Table&nbsp;<span>2.4</span></a>.</p>
+<p>A direct comparison between the equal-weight benchmark and the HRP allocation is shown in <a href="#fig-portfolio-weight-comparison" class="quarto-xref">Figure&nbsp;<span>2.13</span></a> and <a href="#tbl-portfolio-weight-comparison" class="quarto-xref">Table&nbsp;<span>2.4</span></a>.</p>
 <p>The differences between the two allocations are visible both at the individual asset level and across sectors. The larger weights assigned to JNJ, KO, PG, and WMT are broadly consistent with the lower volatility and correlation characteristics often associated with defensive sectors.</p>
 <div id="fig-portfolio-weight-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1093,7 +1090,7 @@ Figure&nbsp;2.17: Portfolio drawdowns over the evaluation period, comparing the 
 </figcaption>
 </figure>
 </div>
-<p>The final performance summary is presented in Table <a href="#tbl-portfolio-performance" class="quarto-xref">Table&nbsp;<span>2.6</span></a>.</p>
+<p>The final performance summary is presented in <a href="#tbl-portfolio-performance" class="quarto-xref">Table&nbsp;<span>2.6</span></a>.</p>
 <div id="tbl-portfolio-performance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-portfolio-performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1158,7 +1155,7 @@ Table&nbsp;2.6: Performance comparison between the Hierarchical Risk Parity (HRP
 </section>
 <section id="technical-appendix-optional" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">2.5</span> Technical Appendix (Optional)</h2>
-<p>This appendix provides supplementary mathematical and methodological details related to the unsupervised learning techniques used throughout the project.</p>
+<p>This appendix provides supplementary mathematical and methodological details related to the unsupervised learning techniques used throughout the project. Additional background on PCA and clustering can be found in <span class="citation" data-cites="james2023statistical"><a href="../references.html#ref-james2023statistical" role="doc-biblioref">[5]</a></span> and <span class="citation" data-cites="hastie2009elements"><a href="../references.html#ref-hastie2009elements" role="doc-biblioref">[6]</a></span>.</p>
 <p>The objective is not to present a comprehensive treatment of the underlying methods, but rather to summarize the concepts most relevant to the portfolio construction process. The material presented here supports the interpretation of the results and clarifies some of the modeling choices discussed in the main text.</p>
 <p>The appendix is organized into two sections. The first summarizes the principal concepts behind Principal Component Analysis (PCA), which was used to study the structure of asset return variability and identify dominant sources of common variation. The second discusses Hierarchical Clustering (HC), which was used to group assets according to their similarity patterns and support diversification decisions.</p>
 <p>The main body of the project is intended to remain fully understandable without consulting this appendix. Readers interested primarily in the practical application and results may safely skip the material that follows.</p>
@@ -1319,6 +1316,12 @@ d_{ij} = \sqrt{\frac{1-\rho_{ij}}{2}}
 <div id="ref-de2018advances" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[4] </div><div class="csl-right-inline">M. L. De Prado, <em>Advances in financial machine learning</em>. John Wiley &amp; Sons, 2018.</div>
 </div>
+<div id="ref-james2023statistical" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">G. James, D. Witten, T. Hastie, R. Tibshirani, and J. Taylor, <span>“An introduction to statistical learning: With applications in python,”</span> Springer, 2023.</div>
+</div>
+<div id="ref-hastie2009elements" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">T. Hastie, <em>The elements of statistical learning: Data mining, inference, and prediction</em>. Springer, 2009.</div>
+</div>
 </div>
 </section>
 </section>
@@ -1376,14 +1379,13 @@ d_{ij} = \sqrt{\frac{1-\rho_{ij}}{2}}
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

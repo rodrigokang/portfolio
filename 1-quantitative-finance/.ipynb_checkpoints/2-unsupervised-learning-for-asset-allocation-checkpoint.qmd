@@ -62,7 +62,7 @@ The resulting framework combines spectral analysis, clustering techniques, and h
 
 The empirical analysis was conducted using a diversified universe of U.S. equities representing multiple sectors of the economy, including technology, financials, energy, healthcare, consumer staples, communication services, and retail. The selected assets were chosen to provide exposure to different market dynamics while still allowing meaningful correlation structures and latent factor relationships to emerge throughout the analysis.
 
-The asset universe used in the study is summarized in Table @tbl-asset-universe.
+The asset universe used in the study is summarized in @tbl-asset-universe.
 
 | Ticker | Sector                 |
 | ------ | ---------------------- |
@@ -105,7 +105,7 @@ The corresponding correlation matrix is presented in @fig-correlation-matrix. Se
 
 Principal Component Analysis (PCA) was then applied to study the latent structure of market risk. The decomposition was performed on the covariance matrix of returns, allowing the market structure to be represented in terms of orthogonal components ranked by explained variance.
 
-The explained variance associated with each principal component is summarized in Table @tbl-pca-explained-variance.
+The explained variance associated with each principal component is summarized in @tbl-pca-explained-variance.
 
 | Component | Explained Variance | Cumulative Variance |
 | --------- | -----------------: | ------------------: |
@@ -185,7 +185,7 @@ The resulting allocation is visualized in @fig-hrp-portfolio-weights.
 
 ![Portfolio weights obtained using the Hierarchical Risk Parity (HRP) allocation method, reflecting the hierarchical correlation structure and risk diversification across assets.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/hrp-portfolio-weights.png){#fig-hrp-portfolio-weights}
 
-A direct comparison between the equal-weight benchmark and the HRP allocation is shown in @fig-portfolio-weight-comparison and Table @tbl-portfolio-weight-comparison.
+A direct comparison between the equal-weight benchmark and the HRP allocation is shown in @fig-portfolio-weight-comparison and @tbl-portfolio-weight-comparison.
 
 The differences between the two allocations are visible both at the individual asset level and across sectors. The larger weights assigned to JNJ, KO, PG, and WMT are broadly consistent with the lower volatility and correlation characteristics often associated with defensive sectors.
 
@@ -251,7 +251,7 @@ Drawdown dynamics were analyzed separately in order to study the behaviour of bo
 
 ![Portfolio drawdowns over the evaluation period, comparing the magnitude and persistence of temporary losses across the portfolio strategies.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/portfolio-drawdowns.png){#fig-portfolio-drawdowns}
 
-The final performance summary is presented in Table @tbl-portfolio-performance.
+The final performance summary is presented in @tbl-portfolio-performance.
 
 | Portfolio              | Annualized Return | Annualized Volatility | Sharpe Ratio | Maximum Drawdown |
 | ---------------------- | ----------------: | --------------------: | -----------: | ---------------: |
@@ -295,7 +295,7 @@ Taken together, the results suggest that unsupervised learning techniques provid
 
 ## Technical Appendix (Optional)
 
-This appendix provides supplementary mathematical and methodological details related to the unsupervised learning techniques used throughout the project.
+This appendix provides supplementary mathematical and methodological details related to the unsupervised learning techniques used throughout the project. Additional background on PCA and clustering can be found in @james2023statistical and @hastie2009elements.
 
 The objective is not to present a comprehensive treatment of the underlying methods, but rather to summarize the concepts most relevant to the portfolio construction process. The material presented here supports the interpretation of the results and clarifies some of the modeling choices discussed in the main text.
 
