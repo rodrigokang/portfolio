@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – Data Science Across Domains</title>
+<title>3&nbsp; Option Pricing with Path Integrals – Data Science Across Domains</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,46 +20,28 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./6-writings-and-essays/2-conformal-geometry-in-3-d.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../2-retail-analytics/0-overview.html" rel="next">
+<link href="../1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -100,7 +82,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-quantitative-finance/0-overview.html">Quantitative Finance</a></li><li class="breadcrumb-item"><a href="../1-quantitative-finance/3-option-pricing-with-path-integrals.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Option Pricing with Path Integrals</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -115,7 +97,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Data Science Across Domains</a> 
+      <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
     <a href="https://github.com/rodrigokang/portfolio" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
     <a href="https://www.linkedin.com/in/rodrigojuankang/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
@@ -133,58 +115,58 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./preface.html" class="sidebar-item-text sidebar-link">
+  <a href="../preface.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./about.html" class="sidebar-item-text sidebar-link">
+  <a href="../about.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">About</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./reading-guide.html" class="sidebar-item-text sidebar-link">
+  <a href="../reading-guide.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">How to Read This Portfolio</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Quantitative Finance</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1-quantitative-finance/0-overview.html" class="sidebar-item-text sidebar-link">
+  <a href="../1-quantitative-finance/0-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1-quantitative-finance/1-capm-and-fama-french-factor-model.html" class="sidebar-item-text sidebar-link">
+  <a href="../1-quantitative-finance/1-capm-and-fama-french-factor-model.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">CAPM and Fama–French Models</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html" class="sidebar-item-text sidebar-link">
+  <a href="../1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unsupervised Learning for Asset Allocation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1-quantitative-finance/3-option-pricing-with-path-integrals.html" class="sidebar-item-text sidebar-link">
+  <a href="../1-quantitative-finance/3-option-pricing-with-path-integrals.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Option Pricing with Path Integrals</span></span></a>
   </div>
 </li>
@@ -201,37 +183,37 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./2-retail-analytics/0-overview.html" class="sidebar-item-text sidebar-link">
+  <a href="../2-retail-analytics/0-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html" class="sidebar-item-text sidebar-link">
+  <a href="../2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Credit Card Fraud Detection</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./2-retail-analytics/2-customer-lifetime-value-prediction-retail.html" class="sidebar-item-text sidebar-link">
+  <a href="../2-retail-analytics/2-customer-lifetime-value-prediction-retail.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Customer Lifetime Value Prediction</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./2-retail-analytics/3-marketing-campaign-optimization.html" class="sidebar-item-text sidebar-link">
+  <a href="../2-retail-analytics/3-marketing-campaign-optimization.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Marketing Campaign Optimization</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./2-retail-analytics/4-rfm-kmeans-customer-segmentation.html" class="sidebar-item-text sidebar-link">
+  <a href="../2-retail-analytics/4-rfm-kmeans-customer-segmentation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">RFM Segmentation with K-Means</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html" class="sidebar-item-text sidebar-link">
+  <a href="../2-retail-analytics/5-customer-sentiment-topic-analysis-nlp.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Customer Sentiment and Topic Analysis</span></span></a>
   </div>
 </li>
@@ -248,13 +230,13 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./3-biological-systems/0-overview.html" class="sidebar-item-text sidebar-link">
+  <a href="../3-biological-systems/0-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html" class="sidebar-item-text sidebar-link">
+  <a href="../3-biological-systems/1-microbial-population-dynamics-lotka-volterra.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Microbial Population Dynamics (Lotka–Volterra Model)</span></span></a>
   </div>
 </li>
@@ -271,31 +253,31 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./4-energy-and-industrial-systems/0-overview.html" class="sidebar-item-text sidebar-link">
+  <a href="../4-energy-and-industrial-systems/0-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html" class="sidebar-item-text sidebar-link">
+  <a href="../4-energy-and-industrial-systems/1-geochemical-fingerprint-deconvolution.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Geochemical Fingerprint Deconvolution</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html" class="sidebar-item-text sidebar-link">
+  <a href="../4-energy-and-industrial-systems/2-porous-media-pore-throat-detection-cv.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Pore–Throat Detection in Porous Media</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html" class="sidebar-item-text sidebar-link">
+  <a href="../4-energy-and-industrial-systems/3-optimal-hedging-industrial-gas-demand.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Optimal Hedging of Industrial Gas Demand</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html" class="sidebar-item-text sidebar-link">
+  <a href="../4-energy-and-industrial-systems/4-nlp-llm-technical-document-extraction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Knowledge Extraction from Technical Documents with NLP and LLMs</span></span></a>
   </div>
 </li>
@@ -312,13 +294,13 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./5-climate-and-environmental-systems/0-overview.html" class="sidebar-item-text sidebar-link">
+  <a href="../5-climate-and-environmental-systems/0-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./5-climate-and-environmental-systems/1-climate-forecasting-time-series.html" class="sidebar-item-text sidebar-link">
+  <a href="../5-climate-and-environmental-systems/1-climate-forecasting-time-series.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Climate Forecasting with Time Series</span></span></a>
   </div>
 </li>
@@ -335,19 +317,19 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./6-writings-and-essays/0-overview.html" class="sidebar-item-text sidebar-link">
+  <a href="../6-writings-and-essays/0-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./6-writings-and-essays/1-data-science-age-of-hype.html" class="sidebar-item-text sidebar-link">
+  <a href="../6-writings-and-essays/1-data-science-age-of-hype.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Science in the Age of Hype: Why the scientific method still matters</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./6-writings-and-essays/2-conformal-geometry-in-3-d.html" class="sidebar-item-text sidebar-link">
+  <a href="../6-writings-and-essays/2-conformal-geometry-in-3-d.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Conformal Geometry and Electrostatics in Three Dimensions</span></span></a>
   </div>
 </li>
@@ -355,7 +337,7 @@ div.csl-indent {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -364,15 +346,25 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">3.1</span> Problem Definition</a></li>
+  <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">3.2</span> Modeling Approach</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">3.3</span> Methodology and Implementation</a></li>
+  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">3.4</span> Results, Discussion, and Limitations</a></li>
+  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">3.5</span> Technical Appendix (Optional)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-quantitative-finance/0-overview.html">Quantitative Finance</a></li><li class="breadcrumb-item"><a href="../1-quantitative-finance/3-option-pricing-with-path-integrals.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Option Pricing with Path Integrals</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Option Pricing with Path Integrals</span></h1>
 </div>
 
 
@@ -389,145 +381,89 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-markowitz1952portfolio" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">H.
-Markowitz, <span>“Portfolio selection,”</span> <em>The Journal of
-Finance</em>, vol. 7, no. 1, pp. 77–91, 1952.</div>
-</div>
-<div id="ref-sharpe1964capital" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">W.
-F. Sharpe, <span>“Capital asset prices: A theory of market equilibrium
-under conditions of risk,”</span> <em>The journal of finance</em>, vol.
-19, no. 3, pp. 425–442, 1964.</div>
-</div>
-<div id="ref-lintner1975valuation" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline">J.
-Lintner, <span>“The valuation of risk assets and the selection of risky
-investments in stock portfolios and capital budgets,”</span> in
-<em>Stochastic optimization models in finance</em>, Elsevier, 1975, pp.
-131–155.</div>
-</div>
-<div id="ref-bossaerts2006lectures" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[4] </div><div class="csl-right-inline">P.
-L. Bossaerts and B. A. Odegaard, <em>Lectures on corporate finance</em>.
-World Scientific Publishing Company, 2006.</div>
-</div>
-<div id="ref-fama1993common" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[5] </div><div class="csl-right-inline">E.
-F. Fama and K. R. French, <span>“Common risk factors in the returns on
-stocks and bonds,”</span> <em>Journal of financial economics</em>, vol.
-33, no. 1, pp. 3–56, 1993.</div>
-</div>
-<div id="ref-fama1997industry" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[6] </div><div class="csl-right-inline">E.
-F. Fama and K. R. French, <span>“Industry costs of equity,”</span>
-<em>Journal of financial economics</em>, vol. 43, no. 2, pp. 153–193,
-1997.</div>
-</div>
-<div id="ref-brealey2011principles" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[7] </div><div class="csl-right-inline">R.
-A. Brealey, S. C. Myers, and F. Allen, <em>Principles of corporate
-finance</em>. McGraw-Hill Education, 2011.</div>
-</div>
-<div id="ref-lewinson2022python" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[8] </div><div class="csl-right-inline">E.
-Lewinson, <em>Python for finance cookbook: Over 80 powerful recipes for
-effective financial data analysis</em>. Packt Publishing Ltd,
-2022.</div>
-</div>
-<div id="ref-meucci2005risk" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[9] </div><div class="csl-right-inline">A.
-Meucci, <em>Risk and asset allocation</em>. Springer, 2005.</div>
-</div>
-<div id="ref-partovi2004principal" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[10] </div><div class="csl-right-inline">M.
-H. Partovi, M. Caputo, <em>et al.</em>, <span>“Principal portfolios:
-Recasting the efficient frontier,”</span> <em>Economics Bulletin</em>,
-vol. 7, no. 3, pp. 1–10, 2004.</div>
-</div>
-<div id="ref-lopez2016building" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[11] </div><div class="csl-right-inline">M.
-Lopez de Prado, <span>“Building diversified portfolios that outperform
-out-of-sample,”</span> <em>Journal of Portfolio Management</em>,
-2016.</div>
-</div>
-<div id="ref-de2018advances" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[12] </div><div class="csl-right-inline">M.
-L. De Prado, <em>Advances in financial machine learning</em>. John Wiley
-&amp; Sons, 2018.</div>
-</div>
-<div id="ref-james2023statistical" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[13] </div><div class="csl-right-inline">G.
-James, D. Witten, T. Hastie, R. Tibshirani, and J. Taylor, <span>“An
-introduction to statistical learning: With applications in
-python,”</span> Springer, 2023.</div>
-</div>
-<div id="ref-hastie2009elements" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[14] </div><div class="csl-right-inline">T.
-Hastie, <em>The elements of statistical learning: Data mining,
-inference, and prediction</em>. Springer, 2009.</div>
-</div>
-<div id="ref-ugarte2016probability" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[15] </div><div class="csl-right-inline">M.
-D. Ugarte, A. F. Militino, and A. T. Arnholt, <em>Probability and
-statistics with r, second edition</em>. Taylor &amp; Francis,
-2016.</div>
-</div>
-<div id="ref-tukey1962future" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[16] </div><div class="csl-right-inline">J.
-W. Tukey, <span>“The future of data analysis,”</span> in
-<em>Breakthroughs in statistics: Methodology and distribution</em>,
-Springer, 1962, pp. 408–452.</div>
-</div>
-<div id="ref-donoho2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[17] </div><div class="csl-right-inline">D.
-L. Donoho, <span>“50 years of data science,”</span> <em>Journal of
-Computational and Graphical Statistics</em>, vol. 26, no. 4, pp.
-745–766, 2017.</div>
-</div>
-<div id="ref-naur1974concise" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[18] </div><div class="csl-right-inline">P.
-Naur, <em>Concise survey of computer methods</em>. Petrocelli/Charter
-Books, 1974.</div>
-</div>
-<div id="ref-wu1997statistics" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[19] </div><div class="csl-right-inline">C.
-F. J. Wu, <span>“Statistics = data science?”</span> 1997. Available: <a href="https://www2.isye.gatech.edu/~jeffwu/presentations/datascience.pdf">https://www2.isye.gatech.edu/~jeffwu/presentations/datascience.pdf</a></div>
-</div>
-<div id="ref-cleveland2001data" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[20] </div><div class="csl-right-inline">W.
-S. Cleveland, <span>“Data science: An action plan for expanding the
-technical areas of the field of statistics,”</span> <em>International
-Statistical Review</em>, vol. 69, no. 1, pp. 21–26, 2001.</div>
-</div>
-<div id="ref-breiman2001statistical" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[21] </div><div class="csl-right-inline">L.
-Breiman, <span>“Statistical modeling: The two cultures,”</span>
-<em>Statistical Science</em>, vol. 16, no. 3, pp. 199–231, 2001.</div>
-</div>
-<div id="ref-davenport2012data" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[22] </div><div class="csl-right-inline">T.
-H. Davenport and D. Patil, <span>“Data scientist,”</span> <em>Harvard
-business review</em>, vol. 90, no. 5, pp. 70–76, 2012.</div>
-</div>
-<div id="ref-johansson2016philosophy" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[23] </div><div class="csl-right-inline">L.-G. Johansson <em>et al.</em>, <em>Philosophy
-of science for scientists</em>. Springer, 2016.</div>
-</div>
-<div id="ref-klimovsky1994desventuras" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[24] </div><div class="csl-right-inline">G.
-Klimovsky, <em>Las desventuras del conocimiento científico</em>. A-Z
-Editora, 1994.</div>
-</div>
-<div id="ref-kozyrkov2018great" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[25] </div><div class="csl-right-inline">C.
-Kozyrkov, <span>“What great data analysts do—and why every organization
-needs them,”</span> <em>Harvard Business Review</em>, 2018.</div>
-</div>
-</div>
+<p><em>Work in progress.</em></p>
+<section id="problem-definition" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="problem-definition"><span class="header-section-number">3.1</span> Problem Definition</h2>
+<p>This section describes the problem being addressed and explains its relevance within the context of the domain.</p>
+<p>Typical questions considered in this section include:</p>
+<ul>
+<li>What is the objective of the project?</li>
+<li>Why is the problem relevant?</li>
+<li>What type of decisions or insights depend on the solution?</li>
+<li>What are the main challenges associated with the problem?</li>
+</ul>
+<p>The emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.</p>
+</section>
+<section id="modeling-approach" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">3.2</span> Modeling Approach</h2>
+<p>This section introduces the conceptual framework used to approach the problem.</p>
+<p>The discussion typically includes:</p>
+<ul>
+<li>The main modeling assumptions</li>
+<li>The reasoning behind the selected methodology</li>
+<li>The intuition behind the model or algorithm</li>
+<li>The relationship between the model and the underlying process being studied</li>
+</ul>
+<p>Mathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.</p>
+<p>The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.</p>
+</section>
+<section id="methodology-and-implementation" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">3.3</span> Methodology and Implementation</h2>
+<p>This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.</p>
+<p>Typical topics may include:</p>
+<ul>
+<li>Data collection and sources</li>
+<li>Feature engineering</li>
+<li>Cleaning and preprocessing</li>
+<li>Simulation strategies</li>
+<li>Training and validation methodology</li>
+<li>Experimental setup</li>
+<li>Numerical methods and algorithms</li>
+<li>Workflow organization</li>
+<li>Pipeline structure</li>
+<li>Computational considerations</li>
+</ul>
+<p>The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.</p>
+<p>Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.</p>
+<p>References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.</p>
+</section>
+<section id="results-discussion-and-limitations" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">3.4</span> Results, Discussion, and Limitations</h2>
+<p>This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.</p>
+<p>Typical elements may include:</p>
+<ul>
+<li>Visualizations and plots</li>
+<li>Performance metrics</li>
+<li>Comparisons with baseline approaches</li>
+<li>Sensitivity analysis</li>
+<li>Error analysis</li>
+<li>Interpretation of results</li>
+<li>Model assumptions and their consequences</li>
+<li>Sources of uncertainty</li>
+<li>Robustness and generalization</li>
+<li>Trade-offs associated with the methodology</li>
+<li>Potential future improvements</li>
+</ul>
+<p>The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.</p>
+</section>
+<section id="technical-appendix-optional" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">3.5</span> Technical Appendix (Optional)</h2>
+<p>This optional section contains technical details that support the project but are not essential for following the main narrative.</p>
+<p>Possible contents include:</p>
+<ul>
+<li>Mathematical derivations</li>
+<li>Additional proofs</li>
+<li>Numerical details</li>
+<li>Extended equations</li>
+<li>Supplementary experiments</li>
+<li>Technical notes on auxiliary methods and algorithms</li>
+</ul>
+<p>The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.</p>
+<p>The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.</p>
+<p>The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -931,11 +867,14 @@ needs them,”</span> <em>Harvard Business Review</em>, 2018.</div>
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./6-writings-and-essays/2-conformal-geometry-in-3-d.html" class="pagination-link" aria-label="Conformal Geometry and Electrostatics in Three Dimensions">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Conformal Geometry and Electrostatics in Three Dimensions</span></span>
+      <a href="../1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.html" class="pagination-link" aria-label="Unsupervised Learning for Asset Allocation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unsupervised Learning for Asset Allocation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../2-retail-analytics/0-overview.html" class="pagination-link" aria-label="Overview">
+        <span class="nav-page-text">Overview</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

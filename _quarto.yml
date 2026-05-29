@@ -33,6 +33,7 @@ book:
         - 1-quantitative-finance/0-overview.qmd
         - 1-quantitative-finance/1-capm-and-fama-french-factor-model.qmd
         - 1-quantitative-finance/2-unsupervised-learning-for-asset-allocation.qmd
+        - 1-quantitative-finance/3-option-pricing-with-path-integrals.qmd
 
     - part: "Retail Analytics"
       chapters:
