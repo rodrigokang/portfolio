@@ -155,6 +155,12 @@ Despite these limitations, the project successfully demonstrates that concepts o
 
 ## Technical Appendix (Optional)
 
+The main body of this project focuses on the practical implementation and evaluation of path-integral-inspired option pricing methods. The purpose of this appendix is to provide additional mathematical and computational details supporting the numerical results presented throughout the chapter.
+
+The material is organized around four topics. Appendix A reviews the Black-Scholes framework underlying the pricing model. Appendix B introduces the Monte Carlo estimator used to approximate risk-neutral expectations. Appendix C summarizes the Metropolis-Hastings algorithm employed in the numerical experiments. Finally, Appendix D discusses the path integral perspective motivating the project and its connection to more general path-dependent pricing problems.
+
+The appendix is intended as a technical reference rather than a prerequisite. Readers interested primarily in the implementation and results can safely skip this section without affecting the overall understanding of the project.
+
 ### Appendix A. Black-Scholes Framework
 
 The numerical experiments presented in this project are built upon the Black-Scholes framework developed by Black and Scholes and later extended by Merton @black1973pricing @merton1973theory. This appendix summarizes the mathematical assumptions underlying the model and connects them to the numerical implementation.
@@ -167,7 +173,7 @@ $$ {#eq-gbm}
 
 where $S_t$ denotes the asset price at time $t$, $\mu$ is the drift parameter, $\sigma$ is the volatility, and $W_t$ represents a standard Wiener process.
 
-Equation @eq-gbm states that the evolution of the asset price contains both a deterministic component and a random component. The deterministic term controls the average growth of the process, while the stochastic term introduces uncertainty into future prices and generates the dispersion observed in the simulated trajectories presented in the main body of the project.
+@eq-gbm states that the evolution of the asset price contains both a deterministic component and a random component. The deterministic term controls the average growth of the process, while the stochastic term introduces uncertainty into future prices and generates the dispersion observed in the simulated trajectories presented in the main body of the project.
 
 Applying Itô's lemma to the logarithm of the asset price yields a stochastic process with a closed-form solution. The terminal asset price can then be written as
 
@@ -177,7 +183,7 @@ $$ {#eq-gbm-solution}
 
 where $Z \sim N(0,1)$ is a standard normal random variable.
 
-Equation @eq-gbm-solution implies that the logarithm of the terminal asset price is normally distributed,
+@eq-gbm-solution implies that the logarithm of the terminal asset price is normally distributed,
 
 $$
 \log(S_T)
@@ -191,7 +197,7 @@ $$ {#eq-lognormal-distribution}
 
 which means that the terminal asset price itself follows a lognormal distribution.
 
-This result plays a central role throughout the project. The Monte Carlo simulations generate terminal prices using Equation @eq-gbm-solution, while the Metropolis-Hastings implementation samples from the distribution described by Equation @eq-lognormal-distribution. As discussed in the main body of the project, the payoff of a European call option depends only on the terminal asset price, making this distribution the key object of interest.
+This result plays a central role throughout the project. The Monte Carlo simulations generate terminal prices using @eq-gbm-solution, while the Metropolis-Hastings implementation samples from the distribution described by @eq-lognormal-distribution. As discussed in the main body of the project, the payoff of a European call option depends only on the terminal asset price, making this distribution the key object of interest.
 
 Under the risk-neutral valuation framework, the expected growth rate of the asset is replaced by the risk-free interest rate $r$. The value of a European call option can then be expressed as
 
@@ -201,7 +207,7 @@ $$ {#eq-risk-neutral-pricing}
 
 where $C$ denotes the option value and $K$ is the strike price.
 
-Evaluating Equation @eq-risk-neutral-pricing under the lognormal distribution of $S_T$ leads to the Black-Scholes formula
+Evaluating @eq-risk-neutral-pricing under the lognormal distribution of $S_T$ leads to the Black-Scholes formula
 
 $$
 C = S_0N(d_1) - Ke^{-rT}N(d_2)
@@ -233,7 +239,7 @@ For the purposes of this project, the availability of an analytical solution is 
 
 The Black-Scholes pricing formula provides a closed-form solution for European call options. However, many derivatives do not admit analytical solutions, making numerical methods necessary. One of the most widely used approaches in quantitative finance is Monte Carlo simulation @rubinstein2016simulation.
 
-The starting point is the risk-neutral valuation formula introduced in Equation @eq-risk-neutral-pricing,
+The starting point is the risk-neutral valuation formula introduced in @eq-risk-neutral-pricing,
 
 $$
 C = e^{-rT}\mathbb{E}\left[\max(S_T-K,0)\right]
@@ -251,7 +257,7 @@ e^{-rT}
 \max\left(S_T^{(i)}-K,0\right).
 $$ {#eq-monte-carlo-estimator}
 
-Equation @eq-monte-carlo-estimator is the estimator implemented in the Python notebook. Each simulation generates a possible terminal asset price according to the geometric Brownian motion model described in Appendix A, computes the corresponding payoff, and averages the results across all simulated scenarios.
+@eq-monte-carlo-estimator is the estimator implemented in the Python notebook. Each simulation generates a possible terminal asset price according to the geometric Brownian motion model described in Appendix A, computes the corresponding payoff, and averages the results across all simulated scenarios.
 
 An important property of Monte Carlo methods is that the estimator converges to the true expected value as the number of simulations increases. Under standard regularity conditions,
 
@@ -280,3 +286,96 @@ This characteristic is one of the principal strengths and weaknesses of Monte Ca
 For the European call option considered in this project, Monte Carlo simulation performs remarkably well. The results presented in the main body of the chapter show that the numerical estimates converge rapidly toward the Black-Scholes benchmark as the number of simulations increases. This behavior is expected because the terminal distribution of the underlying asset is known and can be sampled directly.
 
 The role of Monte Carlo simulation in this project is therefore twofold. First, it provides a practical numerical approximation to the Black-Scholes pricing problem. Second, it serves as a baseline against which the Metropolis-Hastings implementation can be evaluated. Since direct sampling is available in this setting, Monte Carlo represents a natural benchmark for assessing the advantages and limitations of alternative sampling-based approaches.
+
+### Appendix C. Metropolis-Hastings Sampling
+
+The Monte Carlo estimator discussed in Appendix B relies on direct sampling from the target distribution. In the Black-Scholes setting considered in this project, this approach is straightforward because the terminal asset price distribution is known analytically. However, many problems in computational finance involve probability distributions that are difficult to sample from directly.
+
+Markov Chain Monte Carlo (MCMC) methods address this challenge by constructing a stochastic process whose long-run behavior reproduces a desired target distribution. Rather than generating independent samples, MCMC algorithms produce a sequence of correlated samples that gradually explore the probability space.
+
+The Metropolis-Hastings algorithm is one of the most widely used MCMC methods. The algorithm begins from an initial state $x$ and proposes a new candidate state $x'$ from a proposal distribution $q(x'|x)$. The proposed state is then accepted with probability
+
+$$
+\alpha(x,x')
+=
+\min
+\left(
+1,
+\frac{\pi(x')q(x|x')}
+{\pi(x)q(x'|x)}
+\right),
+$$ {#eq-mh-acceptance}
+
+where $\pi(\cdot)$ denotes the target probability distribution.
+
+If the proposed state is accepted, the Markov chain moves to $x'$. Otherwise, the chain remains at its current position. Repeating this procedure produces a sequence of samples whose stationary distribution converges to the target distribution.
+
+In the present project, the objective is not to sample complete asset-price trajectories. Instead, the algorithm is applied to the terminal log-price distribution derived in @eq-lognormal-distribution. This simplification is possible because the payoff of a European call option depends only on the terminal asset price.
+
+The target distribution therefore corresponds to
+
+$$
+\log(S_T)
+\sim
+N
+\left(
+\log(S_0)
++
+\left(
+r-\frac{\sigma^2}{2}
+\right)T,
+\sigma^2T
+\right),
+$$ {#eq-risk-neutral-lognormal}
+
+where the drift parameter has been replaced by the risk-free interest rate in accordance with the risk-neutral valuation framework.
+
+Once samples from the terminal distribution have been generated, option values can be estimated using the same discounted payoff expression introduced in Appendix B. The difference lies not in the pricing equation itself, but in the mechanism used to obtain the samples.
+
+An important consequence of this approach is that successive observations generated by the Markov chain are not independent. This property introduces autocorrelation into the sample and can reduce statistical efficiency relative to direct Monte Carlo simulation.
+
+This observation helps explain the behavior reported in the main body of the project. The Metropolis-Hastings estimator produced option values consistent with the Black-Scholes benchmark, but exhibited larger fluctuations than standard Monte Carlo at smaller sample sizes. Since direct sampling from the terminal distribution is available in this problem, the additional flexibility of MCMC provides little practical advantage.
+
+The purpose of including Metropolis-Hastings in this project is therefore not to outperform conventional Monte Carlo simulation. Rather, it serves as an introduction to sampling techniques that become increasingly relevant when direct sampling is difficult or when the pricing problem depends on higher-dimensional probability distributions. These situations arise naturally in many path-dependent derivatives and motivate the broader path integral perspective discussed in the next appendix.
+
+### Appendix D. Path Integral Perspective
+
+The title of this project refers to the path integral formulation of option pricing. Although the numerical implementation developed throughout the chapter does not perform a full path integral simulation, the underlying motivation originates from a broader perspective on stochastic processes and probability distributions.
+
+The path integral formalism was originally developed in quantum mechanics by Feynman as an alternative formulation of physical dynamics @feynman2010quantum. Rather than describing the evolution of a system through a single trajectory, the theory considers all possible trajectories connecting an initial and a final state. Observable quantities are then obtained by aggregating the contributions of these trajectories.
+
+A similar idea appears naturally in stochastic finance. The future value of a derivative depends on the possible evolutions of the underlying asset, each associated with a particular probability. From this viewpoint, option pricing can be interpreted as an average over a space of possible asset-price paths @linetsky1997path.
+
+In a schematic form, the value of a derivative can be expressed as
+
+$$
+C(S_0,t_0)
+=
+\int \mathcal{D}[S(t)]
+,P[S(t)]
+,\Phi[S(t)]
+$$
+{#eq-path-integral-pricing}
+
+where $\mathcal{D}[S(t)]$ denotes integration over all possible trajectories, $P[S(t)]$ represents the probability associated with a given path, and $\Phi[S(t)]$ denotes the payoff functional.
+
+The key distinction between this expression and the formulations presented in the previous appendices is that the object being integrated is no longer a single terminal value, but an entire trajectory.
+
+For the European call option considered in this project, the payoff depends only on the terminal asset price,
+
+$$
+\Phi[S(t)]
+=
+\max(S_T-K,0).
+$$
+{#eq-european-payoff}
+
+As a consequence, the pricing problem can be reduced to the terminal distribution of $S_T$. This observation explains why the implementation developed in the chapter focuses on sampling terminal prices rather than complete paths. For this particular derivative, the additional information contained in the intermediate trajectory is unnecessary for computing the payoff.
+
+This simplification is one of the reasons why standard Monte Carlo simulation performs so well in the experiments presented earlier. Direct sampling from the terminal distribution is available, making more sophisticated sampling strategies difficult to justify on efficiency grounds alone.
+
+The situation changes when the payoff depends on the entire history of the asset rather than its terminal value. Examples include Asian options, lookback options, barrier options, and many other path-dependent derivatives. In these cases, the trajectory itself becomes part of the pricing problem, and the path integral viewpoint provides a natural conceptual framework for describing the associated probability space @devreese2010path @baaquie2007quantum.
+
+From this perspective, the implementation developed in this project can be viewed as a simplified introduction to a broader class of numerical techniques. The Monte Carlo and Metropolis-Hastings algorithms operate on the terminal distribution because the European call option permits this reduction. More complex derivatives would generally require sampling higher-dimensional objects, including entire asset-price trajectories.
+
+The objective of this chapter was not to build a complete path integral pricing engine, but rather to investigate whether ideas originating from the path integral framework could be translated into a practical computational workflow. The results suggest that, for simple European options, direct Monte Carlo simulation remains the most efficient approach among those considered. At the same time, the project establishes a foundation for exploring more sophisticated derivatives in which the trajectory itself becomes the central object of interest.
