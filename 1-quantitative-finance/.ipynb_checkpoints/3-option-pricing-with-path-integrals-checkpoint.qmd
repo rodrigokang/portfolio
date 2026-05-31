@@ -38,13 +38,13 @@ The objective of this project is not to compete with established option pricing 
 
 The analysis begins with a European call option under the Black--Scholes assumptions. The parameters used throughout the baseline experiment are summarized in @tbl-model-parameters.
 
-| Parameter           |    Value |
-| ------------------- | -------: |
-| Initial Asset Price | 100.0000 |
-| Strike Price        | 100.0000 |
-| Time to Maturity    |   1.0000 |
-| Risk-Free Rate      |   0.0500 |
-| Volatility          |   0.2000 |
+| Parameter             |    Value  |
+| :-------------------: | :-------: |
+| Initial Asset Price   | 100.0000  |
+| Strike Price          | 100.0000  |
+| Time to Maturity      |   1.0000  |
+| Risk-Free Rate        |   0.0500  |
+| Volatility            |   0.2000  |
 
 : Model parameters used in the baseline pricing experiment. {#tbl-model-parameters}
 
@@ -60,11 +60,11 @@ Three pricing approaches are then compared. The Black--Scholes formula serves as
 
 The resulting estimates are reported in @tbl-pricing-methods and visualized in @fig-pricing-method-comparison.
 
-| Method              | Option Price | Absolute Error |
-| ------------------- | -----------: | -------------: |
-| Black-Scholes       |      10.4506 |         0.0000 |
-| Monte Carlo         |      10.3896 |         0.0610 |
-| Metropolis-Hastings |      10.5800 |         0.1295 |
+| Method                | Option Price  | Absolute Error  |
+| :-------------------: | :-----------: | :-------------: |
+| Black-Scholes         |      10.4506  |         0.0000  |
+| Monte Carlo           |      10.3896  |         0.0610  |
+| Metropolis-Hastings   |      10.5800  |         0.1295  |
 
 : Comparison of option prices obtained using Black--Scholes, Monte Carlo simulation, and Metropolis--Hastings sampling. {#tbl-pricing-methods}
 
@@ -74,13 +74,13 @@ All three methods produce estimates close to the analytical benchmark. In this s
 
 To better understand the behavior of the numerical estimators, the experiment is repeated for different sample sizes. The results are shown in @tbl-convergence-analysis and @fig-convergence-analysis.
 
-| Samples | Monte Carlo | Metropolis-Hastings | Black-Scholes |
-| ------: | ----------: | ------------------: | ------------: |
-|     100 |      9.2822 |              8.3345 |       10.4506 |
-|     500 |     11.4302 |              9.4567 |       10.4506 |
-|    1000 |     10.0559 |             11.6238 |       10.4506 |
-|    5000 |     10.3909 |              9.8939 |       10.4506 |
-|   10000 |     10.4008 |             10.8390 |       10.4506 |
+| Samples  | Monte Carlo  | Metropolis-Hastings  | Black-Scholes  |
+| :------: | :----------: | :------------------: | :------------: |
+|     100  |      9.2822  |              8.3345  |       10.4506  |
+|     500  |     11.4302  |              9.4567  |       10.4506  |
+|    1000  |     10.0559  |             11.6238  |       10.4506  |
+|    5000  |     10.3909  |              9.8939  |       10.4506  |
+|   10000  |     10.4008  |             10.8390  |       10.4506  |
 
 : Convergence behavior of Monte Carlo and Metropolis--Hastings estimators as the number of samples increases. {#tbl-convergence-analysis}
 
@@ -100,14 +100,14 @@ After validating the workflow in a controlled setting, the same methodology is a
 
 The resulting inputs are summarized in @tbl-market-inputs.
 
-| Parameter             | Value    |
-| --------------------- | -------- |
-| Ticker                | AAPL     |
-| Spot Price            | 190.3751 |
-| Strike Price          | 190.3751 |
-| Time to Maturity      | 1        |
-| Risk-Free Rate        | 0.05     |
-| Historical Volatility | 0.1992   |
+| Parameter               | Value      |
+| :---------------------: | :--------: |
+| Ticker                  | AAPL       |
+| Spot Price              | 190.3751   |
+| Strike Price            | 190.3751   |
+| Time to Maturity        | 1          |
+| Risk-Free Rate          | 0.05       |
+| Historical Volatility |   0.1992     |
 
 : Market-derived inputs obtained from historical AAPL data. {#tbl-market-inputs}
 
@@ -115,11 +115,11 @@ The objective of this second experiment is not to construct a tradable option pr
 
 Pricing results obtained from the three methods are reported in @tbl-market-comparison and visualized in @fig-market-pricing-comparison.
 
-| Method              | Option Price | Absolute Error |
-| ------------------- | -----------: | -------------: |
-| Black-Scholes       |      19.8397 |         0.0000 |
-| Monte Carlo         |      19.6705 |         0.1693 |
-| Metropolis-Hastings |      19.5573 |         0.2824 |
+| Method               | Option Price  | Absolute Error  |
+| :------------------: | :-----------: | :-------------: |
+| Black-Scholes        |      19.8397  |         0.0000  |
+| Monte Carlo          |      19.6705  |         0.1693  |
+| Metropolis-Hastings  |      19.5573  |         0.2824  |
 
 : Option pricing results using market-derived inputs from AAPL historical data. {#tbl-market-comparison}
 
