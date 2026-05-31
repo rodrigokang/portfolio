@@ -354,8 +354,7 @@ C(S_0,t_0)
 \int \mathcal{D}[S(t)]
 ,P[S(t)]
 ,\Phi[S(t)]
-$$
-{#eq-path-integral-pricing}
+$$ {#eq-path-integral-pricing}
 
 where $\mathcal{D}[S(t)]$ denotes integration over all possible trajectories, $P[S(t)]$ represents the probability associated with a given path, and $\Phi[S(t)]$ denotes the payoff functional.
 
@@ -367,8 +366,7 @@ $$
 \Phi[S(t)]
 =
 \max(S_T-K,0).
-$$
-{#eq-european-payoff}
+$$ {#eq-european-payoff}
 
 As a consequence, the pricing problem can be reduced to the terminal distribution of $S_T$. This observation explains why the implementation developed in the chapter focuses on sampling terminal prices rather than complete paths. For this particular derivative, the additional information contained in the intermediate trajectory is unnecessary for computing the payoff.
 

@@ -903,21 +903,21 @@ r-\frac{\sigma^2}{2}
 <p>The path integral formalism was originally developed in quantum mechanics by Feynman as an alternative formulation of physical dynamics <span class="citation" data-cites="feynman2010quantum"><a href="../references.html#ref-feynman2010quantum" role="doc-biblioref">[4]</a></span>. Rather than describing the evolution of a system through a single trajectory, the theory considers all possible trajectories connecting an initial and a final state. Observable quantities are then obtained by aggregating the contributions of these trajectories.</p>
 <p>A similar idea appears naturally in stochastic finance. The future value of a derivative depends on the possible evolutions of the underlying asset, each associated with a particular probability. From this viewpoint, option pricing can be interpreted as an average over a space of possible asset-price paths <span class="citation" data-cites="linetsky1997path"><a href="../references.html#ref-linetsky1997path" role="doc-biblioref">[5]</a></span>.</p>
 <p>In a schematic form, the value of a derivative can be expressed as</p>
-<p><span class="math display">\[
+<p><span id="eq-path-integral-pricing"><span class="math display">\[
 C(S_0,t_0)
 =
 \int \mathcal{D}[S(t)]
 ,P[S(t)]
 ,\Phi[S(t)]
-\]</span> {#eq-path-integral-pricing}</p>
+\tag{3.14}\]</span></span></p>
 <p>where <span class="math inline">\(\mathcal{D}[S(t)]\)</span> denotes integration over all possible trajectories, <span class="math inline">\(P[S(t)]\)</span> represents the probability associated with a given path, and <span class="math inline">\(\Phi[S(t)]\)</span> denotes the payoff functional.</p>
 <p>The key distinction between this expression and the formulations presented in the previous appendices is that the object being integrated is no longer a single terminal value, but an entire trajectory.</p>
 <p>For the European call option considered in this project, the payoff depends only on the terminal asset price,</p>
-<p><span class="math display">\[
+<p><span id="eq-european-payoff"><span class="math display">\[
 \Phi[S(t)]
 =
 \max(S_T-K,0).
-\]</span> {#eq-european-payoff}</p>
+\tag{3.15}\]</span></span></p>
 <p>As a consequence, the pricing problem can be reduced to the terminal distribution of <span class="math inline">\(S_T\)</span>. This observation explains why the implementation developed in the chapter focuses on sampling terminal prices rather than complete paths. For this particular derivative, the additional information contained in the intermediate trajectory is unnecessary for computing the payoff.</p>
 <p>This simplification is one of the reasons why standard Monte Carlo simulation performs so well in the experiments presented earlier. Direct sampling from the terminal distribution is available, making more sophisticated sampling strategies difficult to justify on efficiency grounds alone.</p>
 <p>The situation changes when the payoff depends on the entire history of the asset rather than its terminal value. Examples include Asian options, lookback options, barrier options, and many other path-dependent derivatives. In these cases, the trajectory itself becomes part of the pricing problem, and the path integral viewpoint provides a natural conceptual framework for describing the associated probability space <span class="citation" data-cites="devreese2010path"><a href="../references.html#ref-devreese2010path" role="doc-biblioref">[6]</a></span> <span class="citation" data-cites="baaquie2007quantum"><a href="../references.html#ref-baaquie2007quantum" role="doc-biblioref">[7]</a></span>.</p>
