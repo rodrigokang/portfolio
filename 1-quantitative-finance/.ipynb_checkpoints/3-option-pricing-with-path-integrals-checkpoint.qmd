@@ -32,26 +32,102 @@ The overall modeling strategy combines three components: a geometric Brownian mo
 
 ## Methodology and Implementation
 
-This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.
+The objective of this project is not to compete with established option pricing methods, but to explore how ideas originating from the path integral formulation can be translated into a practical numerical workflow. To keep the analysis transparent, the implementation is organized around two experiments. The first uses a controlled setting in which the analytical solution is known. The second applies the same workflow to observed market data.
 
-Typical topics may include:
+### Controlled Experiment
 
-- Data collection and sources
-- Feature engineering
-- Cleaning and preprocessing
-- Simulation strategies
-- Training and validation methodology
-- Experimental setup
-- Numerical methods and algorithms
-- Workflow organization
-- Pipeline structure
-- Computational considerations
+The analysis begins with a European call option under the Black--Scholes assumptions. The parameters used throughout the baseline experiment are summarized in @tbl-model-parameters.
 
-The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.
+| Parameter           |    Value |
+| ------------------- | -------: |
+| Initial Asset Price | 100.0000 |
+| Strike Price        | 100.0000 |
+| Time to Maturity    |   1.0000 |
+| Risk-Free Rate      |   0.0500 |
+| Volatility          |   0.2000 |
 
-Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.
+: Model parameters used in the baseline pricing experiment. {#tbl-model-parameters}
 
-References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.
+Under these assumptions, the Black--Scholes formula provides an exact analytical price. This creates a useful benchmark against which numerical estimators can be evaluated.
+
+Although the path integral formulation is naturally expressed in terms of entire asset price trajectories, a European call option depends only on the terminal asset price. For this reason, the implementation does not attempt to sample complete paths through Markov Chain Monte Carlo. Instead, the problem is simplified by sampling from the terminal log-price distribution implied by the risk-neutral geometric Brownian motion model. This reduction preserves the essential pricing problem while keeping the numerical implementation manageable.
+
+Simulated price paths are nevertheless generated to illustrate the stochastic dynamics underlying the model and to provide a visual representation of the path-based perspective motivating the analysis.
+
+![A subset of simulated asset-price trajectories under the risk-neutral geometric Brownian motion model. Although the final implementation estimates option values from the terminal distribution, the simulated paths provide a visual representation of the path-based framework motivating the analysis.](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/simulated-gbm-path.png){#fig-simulated-gbm-path}
+
+Three pricing approaches are then compared. The Black--Scholes formula serves as the analytical benchmark, standard Monte Carlo simulation provides a conventional numerical estimator, and a Metropolis--Hastings sampler is used to generate samples from the terminal risk-neutral distribution.
+
+The resulting estimates are reported in @tbl-pricing-methods and visualized in @fig-pricing-method-comparison.
+
+| Method              | Option Price | Absolute Error |
+| ------------------- | -----------: | -------------: |
+| Black-Scholes       |      10.4506 |         0.0000 |
+| Monte Carlo         |      10.3896 |         0.0610 |
+| Metropolis-Hastings |      10.5800 |         0.1295 |
+
+: Comparison of option prices obtained using Black--Scholes, Monte Carlo simulation, and Metropolis--Hastings sampling. {#tbl-pricing-methods}
+
+![Comparison of option prices obtained using analytical and simulation-based methods.](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/pricing-method-comparison.png){#fig-pricing-method-comparison}
+
+All three methods produce estimates close to the analytical benchmark. In this simple setting, standard Monte Carlo achieves the smallest numerical error. This result is not surprising. For a European call option, direct Monte Carlo sampling is already an efficient estimator, and the additional complexity introduced by Markov Chain Monte Carlo does not provide a clear advantage.
+
+To better understand the behavior of the numerical estimators, the experiment is repeated for different sample sizes. The results are shown in @tbl-convergence-analysis and @fig-convergence-analysis.
+
+| Samples | Monte Carlo | Metropolis-Hastings | Black-Scholes |
+| ------: | ----------: | ------------------: | ------------: |
+|     100 |      9.2822 |              8.3345 |       10.4506 |
+|     500 |     11.4302 |              9.4567 |       10.4506 |
+|    1000 |     10.0559 |             11.6238 |       10.4506 |
+|    5000 |     10.3909 |              9.8939 |       10.4506 |
+|   10000 |     10.4008 |             10.8390 |       10.4506 |
+
+: Convergence behavior of Monte Carlo and Metropolis--Hastings estimators as the number of samples increases. {#tbl-convergence-analysis}
+
+![Convergence of Monte Carlo and Metropolis--Hastings estimates toward the Black--Scholes benchmark as the sample size increases.](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/convergence-analysis.png){#fig-convergence-analysis}
+
+Both estimators move toward the analytical solution as the sample size increases. The Monte Carlo estimator exhibits a more stable convergence pattern, while the Metropolis--Hastings estimates show larger fluctuations at smaller sample sizes. This behavior is consistent with the autocorrelation introduced by Markov chain sampling and illustrates one of the practical trade-offs associated with MCMC-based methods.
+
+The purpose of this comparison is not to demonstrate that Metropolis--Hastings outperforms Monte Carlo in a problem where the analytical solution is already available. Rather, it provides a controlled environment for validating the implementation and understanding the numerical behavior of the estimator before considering more complex derivatives.
+
+### Market Data Example
+
+After validating the workflow in a controlled setting, the same methodology is applied using observed market data. Historical prices for AAPL are downloaded from Yahoo Finance and used to estimate a spot price and historical volatility.
+
+![Historical AAPL price series used in the market-data example.](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/market-price-series.png){#fig-market-price-series}
+
+![Historical log returns used to estimate the volatility parameter employed in the pricing exercise.](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/market-log-returns.png){#fig-market-log-returns}
+
+The resulting inputs are summarized in @tbl-market-inputs.
+
+| Parameter             | Value    |
+| --------------------- | -------- |
+| Ticker                | AAPL     |
+| Spot Price            | 190.3751 |
+| Strike Price          | 190.3751 |
+| Time to Maturity      | 1        |
+| Risk-Free Rate        | 0.05     |
+| Historical Volatility | 0.1992   |
+
+: Market-derived inputs obtained from historical AAPL data. {#tbl-market-inputs}
+
+The objective of this second experiment is not to construct a tradable option pricing model or a production-grade calibration. Instead, it demonstrates that the same workflow can be applied using observed financial data rather than synthetic inputs.
+
+Pricing results obtained from the three methods are reported in @tbl-market-comparison and visualized in @fig-market-pricing-comparison.
+
+| Method              | Option Price | Absolute Error |
+| ------------------- | -----------: | -------------: |
+| Black-Scholes       |      19.8397 |         0.0000 |
+| Monte Carlo         |      19.6705 |         0.1693 |
+| Metropolis-Hastings |      19.5573 |         0.2824 |
+
+: Option pricing results using market-derived inputs from AAPL historical data. {#tbl-market-comparison}
+
+![Comparison of pricing estimates obtained using market-derived inputs from AAPL historical data.](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/market-pricing-comparison.png){#fig-market-pricing-comparison}
+
+The overall conclusions are consistent with those obtained in the controlled experiment. The numerical estimates remain close to the Black--Scholes benchmark, while standard Monte Carlo continues to provide the most accurate approximation among the simulation-based methods considered. At the same time, the exercise demonstrates that the implementation can be applied without modification once the required market inputs have been estimated.
+
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals.html). The corresponding Python notebooks associated with this project are also available in the [<i class="bi bi-github"></i> repository](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/3-option-pricing/python).
 
 ## Results, Discussion, and Limitations
 

@@ -356,7 +356,11 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">3.1</span> Problem Definition</a></li>
   <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">3.2</span> Modeling Approach</a></li>
-  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">3.3</span> Methodology and Implementation</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">3.3</span> Methodology and Implementation</a>
+  <ul class="collapse">
+  <li><a href="#controlled-experiment" id="toc-controlled-experiment" class="nav-link" data-scroll-target="#controlled-experiment"><span class="header-section-number">3.3.1</span> Controlled Experiment</a></li>
+  <li><a href="#market-data-example" id="toc-market-data-example" class="nav-link" data-scroll-target="#market-data-example"><span class="header-section-number">3.3.2</span> Market Data Example</a></li>
+  </ul></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">3.4</span> Results, Discussion, and Limitations</a></li>
   <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">3.5</span> Technical Appendix (Optional)</a></li>
   </ul>
@@ -405,23 +409,292 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="methodology-and-implementation" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">3.3</span> Methodology and Implementation</h2>
-<p>This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.</p>
-<p>Typical topics may include:</p>
-<ul>
-<li>Data collection and sources</li>
-<li>Feature engineering</li>
-<li>Cleaning and preprocessing</li>
-<li>Simulation strategies</li>
-<li>Training and validation methodology</li>
-<li>Experimental setup</li>
-<li>Numerical methods and algorithms</li>
-<li>Workflow organization</li>
-<li>Pipeline structure</li>
-<li>Computational considerations</li>
-</ul>
-<p>The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.</p>
-<p>Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.</p>
-<p>References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.</p>
+<p>The objective of this project is not to compete with established option pricing methods, but to explore how ideas originating from the path integral formulation can be translated into a practical numerical workflow. To keep the analysis transparent, the implementation is organized around two experiments. The first uses a controlled setting in which the analytical solution is known. The second applies the same workflow to observed market data.</p>
+<section id="controlled-experiment" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="controlled-experiment"><span class="header-section-number">3.3.1</span> Controlled Experiment</h3>
+<p>The analysis begins with a European call option under the Black–Scholes assumptions. The parameters used throughout the baseline experiment are summarized in <a href="#tbl-model-parameters" class="quarto-xref">Table&nbsp;<span>3.1</span></a>.</p>
+<div id="tbl-model-parameters" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-model-parameters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.1: Model parameters used in the baseline pricing experiment.
+</figcaption>
+<div aria-describedby="tbl-model-parameters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Initial Asset Price</td>
+<td style="text-align: right;">100.0000</td>
+</tr>
+<tr class="even">
+<td>Strike Price</td>
+<td style="text-align: right;">100.0000</td>
+</tr>
+<tr class="odd">
+<td>Time to Maturity</td>
+<td style="text-align: right;">1.0000</td>
+</tr>
+<tr class="even">
+<td>Risk-Free Rate</td>
+<td style="text-align: right;">0.0500</td>
+</tr>
+<tr class="odd">
+<td>Volatility</td>
+<td style="text-align: right;">0.2000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Under these assumptions, the Black–Scholes formula provides an exact analytical price. This creates a useful benchmark against which numerical estimators can be evaluated.</p>
+<p>Although the path integral formulation is naturally expressed in terms of entire asset price trajectories, a European call option depends only on the terminal asset price. For this reason, the implementation does not attempt to sample complete paths through Markov Chain Monte Carlo. Instead, the problem is simplified by sampling from the terminal log-price distribution implied by the risk-neutral geometric Brownian motion model. This reduction preserves the essential pricing problem while keeping the numerical implementation manageable.</p>
+<p>Simulated price paths are nevertheless generated to illustrate the stochastic dynamics underlying the model and to provide a visual representation of the path-based perspective motivating the analysis.</p>
+<div id="fig-simulated-gbm-path" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-simulated-gbm-path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/simulated-gbm-path.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulated-gbm-path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: A subset of simulated asset-price trajectories under the risk-neutral geometric Brownian motion model. Although the final implementation estimates option values from the terminal distribution, the simulated paths provide a visual representation of the path-based framework motivating the analysis.
+</figcaption>
+</figure>
+</div>
+<p>Three pricing approaches are then compared. The Black–Scholes formula serves as the analytical benchmark, standard Monte Carlo simulation provides a conventional numerical estimator, and a Metropolis–Hastings sampler is used to generate samples from the terminal risk-neutral distribution.</p>
+<p>The resulting estimates are reported in <a href="#tbl-pricing-methods" class="quarto-xref">Table&nbsp;<span>3.2</span></a> and visualized in <a href="#fig-pricing-method-comparison" class="quarto-xref">Figure&nbsp;<span>3.2</span></a>.</p>
+<div id="tbl-pricing-methods" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pricing-methods-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.2: Comparison of option prices obtained using Black–Scholes, Monte Carlo simulation, and Metropolis–Hastings sampling.
+</figcaption>
+<div aria-describedby="tbl-pricing-methods-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th style="text-align: right;">Option Price</th>
+<th style="text-align: right;">Absolute Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Black-Scholes</td>
+<td style="text-align: right;">10.4506</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td>Monte Carlo</td>
+<td style="text-align: right;">10.3896</td>
+<td style="text-align: right;">0.0610</td>
+</tr>
+<tr class="odd">
+<td>Metropolis-Hastings</td>
+<td style="text-align: right;">10.5800</td>
+<td style="text-align: right;">0.1295</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<div id="fig-pricing-method-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pricing-method-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/pricing-method-comparison.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pricing-method-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Comparison of option prices obtained using analytical and simulation-based methods.
+</figcaption>
+</figure>
+</div>
+<p>All three methods produce estimates close to the analytical benchmark. In this simple setting, standard Monte Carlo achieves the smallest numerical error. This result is not surprising. For a European call option, direct Monte Carlo sampling is already an efficient estimator, and the additional complexity introduced by Markov Chain Monte Carlo does not provide a clear advantage.</p>
+<p>To better understand the behavior of the numerical estimators, the experiment is repeated for different sample sizes. The results are shown in <a href="#tbl-convergence-analysis" class="quarto-xref">Table&nbsp;<span>3.3</span></a> and <a href="#fig-convergence-analysis" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>.</p>
+<div id="tbl-convergence-analysis" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-convergence-analysis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.3: Convergence behavior of Monte Carlo and Metropolis–Hastings estimators as the number of samples increases.
+</figcaption>
+<div aria-describedby="tbl-convergence-analysis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Samples</th>
+<th style="text-align: right;">Monte Carlo</th>
+<th style="text-align: right;">Metropolis-Hastings</th>
+<th style="text-align: right;">Black-Scholes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">9.2822</td>
+<td style="text-align: right;">8.3345</td>
+<td style="text-align: right;">10.4506</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">500</td>
+<td style="text-align: right;">11.4302</td>
+<td style="text-align: right;">9.4567</td>
+<td style="text-align: right;">10.4506</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1000</td>
+<td style="text-align: right;">10.0559</td>
+<td style="text-align: right;">11.6238</td>
+<td style="text-align: right;">10.4506</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">10.3909</td>
+<td style="text-align: right;">9.8939</td>
+<td style="text-align: right;">10.4506</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">10.4008</td>
+<td style="text-align: right;">10.8390</td>
+<td style="text-align: right;">10.4506</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<div id="fig-convergence-analysis" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-convergence-analysis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/convergence-analysis.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-convergence-analysis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: Convergence of Monte Carlo and Metropolis–Hastings estimates toward the Black–Scholes benchmark as the sample size increases.
+</figcaption>
+</figure>
+</div>
+<p>Both estimators move toward the analytical solution as the sample size increases. The Monte Carlo estimator exhibits a more stable convergence pattern, while the Metropolis–Hastings estimates show larger fluctuations at smaller sample sizes. This behavior is consistent with the autocorrelation introduced by Markov chain sampling and illustrates one of the practical trade-offs associated with MCMC-based methods.</p>
+<p>The purpose of this comparison is not to demonstrate that Metropolis–Hastings outperforms Monte Carlo in a problem where the analytical solution is already available. Rather, it provides a controlled environment for validating the implementation and understanding the numerical behavior of the estimator before considering more complex derivatives.</p>
+</section>
+<section id="market-data-example" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="market-data-example"><span class="header-section-number">3.3.2</span> Market Data Example</h3>
+<p>After validating the workflow in a controlled setting, the same methodology is applied using observed market data. Historical prices for AAPL are downloaded from Yahoo Finance and used to estimate a spot price and historical volatility.</p>
+<div id="fig-market-price-series" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-market-price-series-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/market-price-series.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-market-price-series-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.4: Historical AAPL price series used in the market-data example.
+</figcaption>
+</figure>
+</div>
+<div id="fig-market-log-returns" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-market-log-returns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/market-log-returns.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-market-log-returns-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.5: Historical log returns used to estimate the volatility parameter employed in the pricing exercise.
+</figcaption>
+</figure>
+</div>
+<p>The resulting inputs are summarized in <a href="#tbl-market-inputs" class="quarto-xref">Table&nbsp;<span>3.4</span></a>.</p>
+<div id="tbl-market-inputs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-market-inputs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.4: Market-derived inputs obtained from historical AAPL data.
+</figcaption>
+<div aria-describedby="tbl-market-inputs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ticker</td>
+<td>AAPL</td>
+</tr>
+<tr class="even">
+<td>Spot Price</td>
+<td>190.3751</td>
+</tr>
+<tr class="odd">
+<td>Strike Price</td>
+<td>190.3751</td>
+</tr>
+<tr class="even">
+<td>Time to Maturity</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Risk-Free Rate</td>
+<td>0.05</td>
+</tr>
+<tr class="even">
+<td>Historical Volatility</td>
+<td>0.1992</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The objective of this second experiment is not to construct a tradable option pricing model or a production-grade calibration. Instead, it demonstrates that the same workflow can be applied using observed financial data rather than synthetic inputs.</p>
+<p>Pricing results obtained from the three methods are reported in <a href="#tbl-market-comparison" class="quarto-xref">Table&nbsp;<span>3.5</span></a> and visualized in <a href="#fig-market-pricing-comparison" class="quarto-xref">Figure&nbsp;<span>3.6</span></a>.</p>
+<div id="tbl-market-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-market-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.5: Option pricing results using market-derived inputs from AAPL historical data.
+</figcaption>
+<div aria-describedby="tbl-market-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th style="text-align: right;">Option Price</th>
+<th style="text-align: right;">Absolute Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Black-Scholes</td>
+<td style="text-align: right;">19.8397</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td>Monte Carlo</td>
+<td style="text-align: right;">19.6705</td>
+<td style="text-align: right;">0.1693</td>
+</tr>
+<tr class="odd">
+<td>Metropolis-Hastings</td>
+<td style="text-align: right;">19.5573</td>
+<td style="text-align: right;">0.2824</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<div id="fig-market-pricing-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-market-pricing-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals-figures/market-pricing-comparison.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-market-pricing-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.6: Comparison of pricing estimates obtained using market-derived inputs from AAPL historical data.
+</figcaption>
+</figure>
+</div>
+<p>The overall conclusions are consistent with those obtained in the controlled experiment. The numerical estimates remain close to the Black–Scholes benchmark, while standard Monte Carlo continues to provide the most accurate approximation among the simulation-based methods considered. At the same time, the exercise demonstrates that the implementation can be applied without modification once the required market inputs have been estimated.</p>
+<p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals.html">here</a>. The corresponding Python notebooks associated with this project are also available in the <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/3-option-pricing/python"><i class="bi bi-github"></i> repository</a>.</p>
+</section>
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">3.4</span> Results, Discussion, and Limitations</h2>
