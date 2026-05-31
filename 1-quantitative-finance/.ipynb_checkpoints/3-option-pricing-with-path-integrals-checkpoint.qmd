@@ -155,19 +155,128 @@ Despite these limitations, the project successfully demonstrates that concepts o
 
 ## Technical Appendix (Optional)
 
-This optional section contains technical details that support the project but are not essential for following the main narrative.
+### Appendix A. Black-Scholes Framework
 
-Possible contents include:
+The numerical experiments presented in this project are built upon the Black-Scholes framework developed by Black and Scholes and later extended by Merton @black1973pricing @merton1973theory. This appendix summarizes the mathematical assumptions underlying the model and connects them to the numerical implementation.
 
-- Mathematical derivations
-- Additional proofs
-- Numerical details
-- Extended equations
-- Supplementary experiments
-- Technical notes on auxiliary methods and algorithms
+The starting point is the assumption that the underlying asset follows a geometric Brownian motion. The asset price dynamics are described by
 
-The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.
+$$
+dS_t = \mu S_t,dt + \sigma S_t,dW_t
+$$ {#eq-gbm}
 
-The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.
+where $S_t$ denotes the asset price at time $t$, $\mu$ is the drift parameter, $\sigma$ is the volatility, and $W_t$ represents a standard Wiener process.
 
-The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.
+Equation @eq-gbm states that the evolution of the asset price contains both a deterministic component and a random component. The deterministic term controls the average growth of the process, while the stochastic term introduces uncertainty into future prices and generates the dispersion observed in the simulated trajectories presented in the main body of the project.
+
+Applying Itô's lemma to the logarithm of the asset price yields a stochastic process with a closed-form solution. The terminal asset price can then be written as
+
+$$
+S_T = S_0 \exp\left[\left(\mu-\frac{\sigma^2}{2}\right)T + \sigma\sqrt{T},Z\right]
+$$ {#eq-gbm-solution}
+
+where $Z \sim N(0,1)$ is a standard normal random variable.
+
+Equation @eq-gbm-solution implies that the logarithm of the terminal asset price is normally distributed,
+
+$$
+\log(S_T)
+\sim
+N
+\left(
+\log(S_0) + \left(\mu-\frac{\sigma^2}{2}\right)T,
+\sigma^2T
+\right)
+$$ {#eq-lognormal-distribution}
+
+which means that the terminal asset price itself follows a lognormal distribution.
+
+This result plays a central role throughout the project. The Monte Carlo simulations generate terminal prices using Equation @eq-gbm-solution, while the Metropolis-Hastings implementation samples from the distribution described by Equation @eq-lognormal-distribution. As discussed in the main body of the project, the payoff of a European call option depends only on the terminal asset price, making this distribution the key object of interest.
+
+Under the risk-neutral valuation framework, the expected growth rate of the asset is replaced by the risk-free interest rate $r$. The value of a European call option can then be expressed as
+
+$$
+C = e^{-rT}\mathbb{E}\left[\max(S_T-K,0)\right]
+$$ {#eq-risk-neutral-pricing}
+
+where $C$ denotes the option value and $K$ is the strike price.
+
+Evaluating Equation @eq-risk-neutral-pricing under the lognormal distribution of $S_T$ leads to the Black-Scholes formula
+
+$$
+C = S_0N(d_1) - Ke^{-rT}N(d_2)
+$$ {#eq-black-scholes}
+
+with
+
+$$
+d_1 =
+\frac{
+\ln(S_0/K) + (r+\sigma^2/2)T
+}
+{
+\sigma\sqrt{T}
+}
+$$ {#eq-d1}
+
+and
+
+$$
+d_2 = d_1 - \sigma\sqrt{T}
+$$ {#eq-d2}
+
+Here, $N(\cdot)$ denotes the cumulative distribution function of the standard normal distribution.
+
+For the purposes of this project, the availability of an analytical solution is particularly valuable. It provides a reference against which the Monte Carlo and Metropolis-Hastings estimators can be evaluated, allowing numerical errors and convergence behavior to be studied in a controlled setting. The Black-Scholes model therefore serves not only as a pricing framework, but also as a benchmark for validating the numerical methods explored throughout the chapter.
+
+### Appendix B. Monte Carlo Option Pricing
+
+The Black-Scholes pricing formula provides a closed-form solution for European call options. However, many derivatives do not admit analytical solutions, making numerical methods necessary. One of the most widely used approaches in quantitative finance is Monte Carlo simulation @rubinstein2016simulation.
+
+The starting point is the risk-neutral valuation formula introduced in Equation @eq-risk-neutral-pricing,
+
+$$
+C = e^{-rT}\mathbb{E}\left[\max(S_T-K,0)\right]
+$$ {#eq-risk-neutral-pricing-mc}
+
+This expression states that the option value is equal to the discounted expected payoff under the risk-neutral probability measure. In most practical applications, the expectation cannot be evaluated analytically and must be approximated numerically.
+
+Monte Carlo simulation replaces the theoretical expectation with an empirical average computed from a large number of simulated outcomes. If $S_T^{(1)}, S_T^{(2)}, \ldots, S_T^{(N)}$ denote $N$ independent realizations of the terminal asset price, the option value can be approximated by
+
+$$
+\hat{C}_N =
+e^{-rT}
+\frac{1}{N}
+\sum_{i=1}^{N}
+\max\left(S_T^{(i)}-K,0\right).
+$$ {#eq-monte-carlo-estimator}
+
+Equation @eq-monte-carlo-estimator is the estimator implemented in the Python notebook. Each simulation generates a possible terminal asset price according to the geometric Brownian motion model described in Appendix A, computes the corresponding payoff, and averages the results across all simulated scenarios.
+
+An important property of Monte Carlo methods is that the estimator converges to the true expected value as the number of simulations increases. Under standard regularity conditions,
+
+$$
+\hat{C}_N
+\rightarrow
+C
+\qquad
+\text{as}
+\qquad
+N \rightarrow \infty.
+$$ {#eq-monte-carlo-convergence}
+
+This result follows from the Law of Large Numbers and provides the theoretical justification for the simulation approach.
+
+The accuracy of the estimator is commonly measured through its standard error. For Monte Carlo methods, the estimation error decreases proportionally to
+
+$$
+\mathcal{O}\left(N^{-1/2}\right),
+$$ {#eq-monte-carlo-error}
+
+which implies that reducing the error by a factor of two requires approximately four times as many simulations.
+
+This characteristic is one of the principal strengths and weaknesses of Monte Carlo methods. On the one hand, the approach is conceptually simple and can be applied to a wide range of pricing problems. On the other hand, convergence can be relatively slow, particularly when high precision is required.
+
+For the European call option considered in this project, Monte Carlo simulation performs remarkably well. The results presented in the main body of the chapter show that the numerical estimates converge rapidly toward the Black-Scholes benchmark as the number of simulations increases. This behavior is expected because the terminal distribution of the underlying asset is known and can be sampled directly.
+
+The role of Monte Carlo simulation in this project is therefore twofold. First, it provides a practical numerical approximation to the Black-Scholes pricing problem. Second, it serves as a baseline against which the Metropolis-Hastings implementation can be evaluated. Since direct sampling is available in this setting, Monte Carlo represents a natural benchmark for assessing the advantages and limitations of alternative sampling-based approaches.

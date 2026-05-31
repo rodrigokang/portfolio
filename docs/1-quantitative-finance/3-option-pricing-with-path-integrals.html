@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +91,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -362,7 +411,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#market-data-example" id="toc-market-data-example" class="nav-link" data-scroll-target="#market-data-example"><span class="header-section-number">3.3.2</span> Market Data Example</a></li>
   </ul></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">3.4</span> Results, Discussion, and Limitations</a></li>
-  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">3.5</span> Technical Appendix (Optional)</a></li>
+  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">3.5</span> Technical Appendix (Optional)</a>
+  <ul class="collapse">
+  <li><a href="#appendix-a.-black-scholes-framework" id="toc-appendix-a.-black-scholes-framework" class="nav-link" data-scroll-target="#appendix-a.-black-scholes-framework"><span class="header-section-number">3.5.1</span> Appendix A. Black-Scholes Framework</a></li>
+  <li><a href="#appendix-b.-monte-carlo-option-pricing" id="toc-appendix-b.-monte-carlo-option-pricing" class="nav-link" data-scroll-target="#appendix-b.-monte-carlo-option-pricing"><span class="header-section-number">3.5.2</span> Appendix B. Monte Carlo Option Pricing</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -712,21 +765,108 @@ Figure&nbsp;3.6: Comparison of pricing estimates obtained using market-derived i
 </section>
 <section id="technical-appendix-optional" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">3.5</span> Technical Appendix (Optional)</h2>
-<p>This optional section contains technical details that support the project but are not essential for following the main narrative.</p>
-<p>Possible contents include:</p>
-<ul>
-<li>Mathematical derivations</li>
-<li>Additional proofs</li>
-<li>Numerical details</li>
-<li>Extended equations</li>
-<li>Supplementary experiments</li>
-<li>Technical notes on auxiliary methods and algorithms</li>
-</ul>
-<p>The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.</p>
-<p>The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.</p>
-<p>The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.</p>
+<section id="appendix-a.-black-scholes-framework" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="appendix-a.-black-scholes-framework"><span class="header-section-number">3.5.1</span> Appendix A. Black-Scholes Framework</h3>
+<p>The numerical experiments presented in this project are built upon the Black-Scholes framework developed by Black and Scholes and later extended by Merton <span class="citation" data-cites="black1973pricing"><a href="../references.html#ref-black1973pricing" role="doc-biblioref">[1]</a></span> <span class="citation" data-cites="merton1973theory"><a href="../references.html#ref-merton1973theory" role="doc-biblioref">[2]</a></span>. This appendix summarizes the mathematical assumptions underlying the model and connects them to the numerical implementation.</p>
+<p>The starting point is the assumption that the underlying asset follows a geometric Brownian motion. The asset price dynamics are described by</p>
+<p><span id="eq-gbm"><span class="math display">\[
+dS_t = \mu S_t,dt + \sigma S_t,dW_t
+\tag{3.1}\]</span></span></p>
+<p>where <span class="math inline">\(S_t\)</span> denotes the asset price at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\mu\)</span> is the drift parameter, <span class="math inline">\(\sigma\)</span> is the volatility, and <span class="math inline">\(W_t\)</span> represents a standard Wiener process.</p>
+<p>Equation <a href="#eq-gbm" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> states that the evolution of the asset price contains both a deterministic component and a random component. The deterministic term controls the average growth of the process, while the stochastic term introduces uncertainty into future prices and generates the dispersion observed in the simulated trajectories presented in the main body of the project.</p>
+<p>Applying Itô’s lemma to the logarithm of the asset price yields a stochastic process with a closed-form solution. The terminal asset price can then be written as</p>
+<p><span id="eq-gbm-solution"><span class="math display">\[
+S_T = S_0 \exp\left[\left(\mu-\frac{\sigma^2}{2}\right)T + \sigma\sqrt{T},Z\right]
+\tag{3.2}\]</span></span></p>
+<p>where <span class="math inline">\(Z \sim N(0,1)\)</span> is a standard normal random variable.</p>
+<p>Equation <a href="#eq-gbm-solution" class="quarto-xref">Equation&nbsp;<span>3.2</span></a> implies that the logarithm of the terminal asset price is normally distributed,</p>
+<p><span id="eq-lognormal-distribution"><span class="math display">\[
+\log(S_T)
+\sim
+N
+\left(
+\log(S_0) + \left(\mu-\frac{\sigma^2}{2}\right)T,
+\sigma^2T
+\right)
+\tag{3.3}\]</span></span></p>
+<p>which means that the terminal asset price itself follows a lognormal distribution.</p>
+<p>This result plays a central role throughout the project. The Monte Carlo simulations generate terminal prices using Equation <a href="#eq-gbm-solution" class="quarto-xref">Equation&nbsp;<span>3.2</span></a>, while the Metropolis-Hastings implementation samples from the distribution described by Equation <a href="#eq-lognormal-distribution" class="quarto-xref">Equation&nbsp;<span>3.3</span></a>. As discussed in the main body of the project, the payoff of a European call option depends only on the terminal asset price, making this distribution the key object of interest.</p>
+<p>Under the risk-neutral valuation framework, the expected growth rate of the asset is replaced by the risk-free interest rate <span class="math inline">\(r\)</span>. The value of a European call option can then be expressed as</p>
+<p><span id="eq-risk-neutral-pricing"><span class="math display">\[
+C = e^{-rT}\mathbb{E}\left[\max(S_T-K,0)\right]
+\tag{3.4}\]</span></span></p>
+<p>where <span class="math inline">\(C\)</span> denotes the option value and <span class="math inline">\(K\)</span> is the strike price.</p>
+<p>Evaluating Equation <a href="#eq-risk-neutral-pricing" class="quarto-xref">Equation&nbsp;<span>3.4</span></a> under the lognormal distribution of <span class="math inline">\(S_T\)</span> leads to the Black-Scholes formula</p>
+<p><span id="eq-black-scholes"><span class="math display">\[
+C = S_0N(d_1) - Ke^{-rT}N(d_2)
+\tag{3.5}\]</span></span></p>
+<p>with</p>
+<p><span id="eq-d1"><span class="math display">\[
+d_1 =
+\frac{
+\ln(S_0/K) + (r+\sigma^2/2)T
+}
+{
+\sigma\sqrt{T}
+}
+\tag{3.6}\]</span></span></p>
+<p>and</p>
+<p><span id="eq-d2"><span class="math display">\[
+d_2 = d_1 - \sigma\sqrt{T}
+\tag{3.7}\]</span></span></p>
+<p>Here, <span class="math inline">\(N(\cdot)\)</span> denotes the cumulative distribution function of the standard normal distribution.</p>
+<p>For the purposes of this project, the availability of an analytical solution is particularly valuable. It provides a reference against which the Monte Carlo and Metropolis-Hastings estimators can be evaluated, allowing numerical errors and convergence behavior to be studied in a controlled setting. The Black-Scholes model therefore serves not only as a pricing framework, but also as a benchmark for validating the numerical methods explored throughout the chapter.</p>
+</section>
+<section id="appendix-b.-monte-carlo-option-pricing" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="appendix-b.-monte-carlo-option-pricing"><span class="header-section-number">3.5.2</span> Appendix B. Monte Carlo Option Pricing</h3>
+<p>The Black-Scholes pricing formula provides a closed-form solution for European call options. However, many derivatives do not admit analytical solutions, making numerical methods necessary. One of the most widely used approaches in quantitative finance is Monte Carlo simulation <span class="citation" data-cites="rubinstein2016simulation"><a href="../references.html#ref-rubinstein2016simulation" role="doc-biblioref">[3]</a></span>.</p>
+<p>The starting point is the risk-neutral valuation formula introduced in Equation <a href="#eq-risk-neutral-pricing" class="quarto-xref">Equation&nbsp;<span>3.4</span></a>,</p>
+<p><span id="eq-risk-neutral-pricing-mc"><span class="math display">\[
+C = e^{-rT}\mathbb{E}\left[\max(S_T-K,0)\right]
+\tag{3.8}\]</span></span></p>
+<p>This expression states that the option value is equal to the discounted expected payoff under the risk-neutral probability measure. In most practical applications, the expectation cannot be evaluated analytically and must be approximated numerically.</p>
+<p>Monte Carlo simulation replaces the theoretical expectation with an empirical average computed from a large number of simulated outcomes. If <span class="math inline">\(S_T^{(1)}, S_T^{(2)}, \ldots, S_T^{(N)}\)</span> denote <span class="math inline">\(N\)</span> independent realizations of the terminal asset price, the option value can be approximated by</p>
+<p><span id="eq-monte-carlo-estimator"><span class="math display">\[
+\hat{C}_N =
+e^{-rT}
+\frac{1}{N}
+\sum_{i=1}^{N}
+\max\left(S_T^{(i)}-K,0\right).
+\tag{3.9}\]</span></span></p>
+<p>Equation <a href="#eq-monte-carlo-estimator" class="quarto-xref">Equation&nbsp;<span>3.9</span></a> is the estimator implemented in the Python notebook. Each simulation generates a possible terminal asset price according to the geometric Brownian motion model described in Appendix A, computes the corresponding payoff, and averages the results across all simulated scenarios.</p>
+<p>An important property of Monte Carlo methods is that the estimator converges to the true expected value as the number of simulations increases. Under standard regularity conditions,</p>
+<p><span id="eq-monte-carlo-convergence"><span class="math display">\[
+\hat{C}_N
+\rightarrow
+C
+\qquad
+\text{as}
+\qquad
+N \rightarrow \infty.
+\tag{3.10}\]</span></span></p>
+<p>This result follows from the Law of Large Numbers and provides the theoretical justification for the simulation approach.</p>
+<p>The accuracy of the estimator is commonly measured through its standard error. For Monte Carlo methods, the estimation error decreases proportionally to</p>
+<p><span id="eq-monte-carlo-error"><span class="math display">\[
+\mathcal{O}\left(N^{-1/2}\right),
+\tag{3.11}\]</span></span></p>
+<p>which implies that reducing the error by a factor of two requires approximately four times as many simulations.</p>
+<p>This characteristic is one of the principal strengths and weaknesses of Monte Carlo methods. On the one hand, the approach is conceptually simple and can be applied to a wide range of pricing problems. On the other hand, convergence can be relatively slow, particularly when high precision is required.</p>
+<p>For the European call option considered in this project, Monte Carlo simulation performs remarkably well. The results presented in the main body of the chapter show that the numerical estimates converge rapidly toward the Black-Scholes benchmark as the number of simulations increases. This behavior is expected because the terminal distribution of the underlying asset is known and can be sampled directly.</p>
+<p>The role of Monte Carlo simulation in this project is therefore twofold. First, it provides a practical numerical approximation to the Black-Scholes pricing problem. Second, it serves as a baseline against which the Metropolis-Hastings implementation can be evaluated. Since direct sampling is available in this setting, Monte Carlo represents a natural benchmark for assessing the advantages and limitations of alternative sampling-based approaches.</p>
 
 
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-black1973pricing" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">F. Black and M. Scholes, <span>“The pricing of options and corporate liabilities,”</span> <em>Journal of political economy</em>, vol. 81, no. 3, pp. 637–654, 1973.</div>
+</div>
+<div id="ref-merton1973theory" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">R. C. Merton, <span>“Theory of rational option pricing,”</span> <em>The Bell Journal of economics and management science</em>, pp. 141–183, 1973.</div>
+</div>
+<div id="ref-rubinstein2016simulation" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">R. Y. Rubinstein and D. P. Kroese, <em>Simulation and the monte carlo method</em>. John Wiley &amp; Sons, 2016.</div>
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->
