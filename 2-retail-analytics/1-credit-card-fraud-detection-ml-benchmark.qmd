@@ -1,19 +1,20 @@
 # Credit Card Fraud Detection
 
-_Work in progress._
+Every credit card transaction generates a simple decision: approve it or block it. Most of the time the answer is obvious. The difficulty lies in the small fraction of transactions that appear legitimate but are actually fraudulent. In large payment systems, these events are rare, costly, and constantly changing, creating a learning problem that differs substantially from many conventional classification tasks.
 
-## Problem Definition
+This project uses a publicly available European credit card transaction dataset containing highly anonymized transaction records. The analysis combines unsupervised learning techniques to explore the structure of fraudulent activity with a supervised benchmarking framework designed to evaluate the predictive performance of several classification algorithms.
 
-This section describes the problem being addressed and explains its relevance within the context of the domain.
+# Problem Definition
 
-Typical questions considered in this section include:
+The central difficulty in credit card fraud detection is severe class imbalance. Fraudulent transactions represent only a tiny fraction of overall activity, meaning that a model can achieve high accuracy while failing to identify most fraud cases @dal2015calibrating.
 
-- What is the objective of the project?
-- Why is the problem relevant?
-- What type of decisions or insights depend on the solution?
-- What are the main challenges associated with the problem?
+This imbalance creates an unavoidable trade-off. Missing a fraudulent transaction may result in direct financial losses, while incorrectly flagging a legitimate transaction may interrupt a customer purchase and generate unnecessary friction. Effective fraud detection therefore requires more than maximizing a single performance metric. The objective is to identify as many fraudulent transactions as possible while maintaining an acceptable level of false alarms @baesens2015fraud @dal2017credit.
 
-The emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.
+Most machine learning studies approach this problem through supervised classification, using historical examples of fraudulent and legitimate transactions to train predictive models. This approach has produced substantial improvements over traditional rule-based systems and remains the foundation of modern fraud analytics @ngai2011application @al2021financial.
+
+A less explored question is whether fraudulent transactions exhibit recognizable structures before any classification model is trained. If fraud is not a single behavior but a collection of different behaviors, clustering techniques may reveal groups of transactions that share common characteristics. Such patterns could provide additional insight into how fraudulent activity is organized within the feature space and help explain why certain classification models perform better than others @carcillo2021combining.
+
+The project therefore investigates the problem from two complementary perspectives. First, clustering methods are used to explore whether fraudulent transactions form identifiable groups within the feature space. Second, a supervised benchmarking study compares several machine learning algorithms under a common evaluation framework. The objective is not only to determine which models achieve the strongest predictive performance, but also to better understand the structure of fraudulent behavior in a highly imbalanced transaction dataset.
 
 ## Modeling Approach
 
