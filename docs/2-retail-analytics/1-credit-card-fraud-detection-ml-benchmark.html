@@ -417,16 +417,11 @@ div.csl-indent {
 <p>The project therefore investigates the problem from two complementary perspectives. First, clustering methods are used to explore whether fraudulent transactions form identifiable groups within the feature space. Second, a supervised benchmarking study compares several machine learning algorithms under a common evaluation framework. The objective is not only to determine which models achieve the strongest predictive performance, but also to better understand the structure of fraudulent behavior in a highly imbalanced transaction dataset.</p>
 <section id="modeling-approach" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">5.1</span> Modeling Approach</h2>
-<p>This section introduces the conceptual framework used to approach the problem.</p>
-<p>The discussion typically includes:</p>
-<ul>
-<li>The main modeling assumptions</li>
-<li>The reasoning behind the selected methodology</li>
-<li>The intuition behind the model or algorithm</li>
-<li>The relationship between the model and the underlying process being studied</li>
-</ul>
-<p>Mathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.</p>
-<p>The emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.</p>
+<p>The analysis combines unsupervised and supervised learning techniques to examine credit card fraud from two complementary perspectives. The first investigates whether fraudulent transactions exhibit identifiable structure within the feature space. The second evaluates the extent to which that structure can be exploited for predictive purposes.</p>
+<p>The unsupervised stage applies clustering algorithms to the transaction data in order to explore the distribution of fraudulent and legitimate transactions. K-Means, K-Medoids, and DBSCAN are used because they represent different notions of similarity and cluster formation. K-Means partitions observations around centroids, K-Medoids provides greater robustness to outliers, and DBSCAN identifies groups based on local density while explicitly accounting for noise points. Together, these methods allow the analysis to examine whether fraudulent transactions form concentrated groups, distinct fraud profiles, or isolated anomalies.</p>
+<p>The supervised stage is formulated as a benchmarking study. Rather than focusing on a single predictive model, the project compares a diverse set of classification algorithms representing different modeling philosophies. The benchmark includes Logistic Regression, Naive Bayes, Linear and Quadratic Discriminant Analysis, K-Nearest Neighbors, Support Vector Machines, Decision Trees, Random Forests, and XGBoost.</p>
+<p>Because fraudulent transactions represent only a small fraction of the observations, model evaluation focuses on metrics that remain informative under severe class imbalance. Particular attention is given to precision, recall, F1-score, ROC-AUC, Precision-Recall AUC, and the Kolmogorov-Smirnov statistic. Stratified cross-validation is used throughout the benchmark to ensure consistent comparisons across models.</p>
+<p>The underlying assumption of the project is that fraudulent transactions leave detectable signatures in the available features. If such signatures exist, clustering methods should reveal some degree of structure within the transaction space, while supervised learning algorithms should be able to exploit that structure for predictive purposes. Examining both perspectives provides a more complete view of fraud behavior than either approach in isolation.</p>
 </section>
 <section id="methodology-and-implementation" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">5.2</span> Methodology and Implementation</h2>
