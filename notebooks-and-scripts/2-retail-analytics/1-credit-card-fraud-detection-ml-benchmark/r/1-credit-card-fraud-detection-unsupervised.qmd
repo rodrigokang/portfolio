@@ -1,0 +1,277 @@
+---
+title: "Credit Card Fraud Detection"
+author: "Rodrigo Kang"
+
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-line-numbers: true
+    code-overflow: wrap
+    theme: cosmo
+    embed-resources: true
+
+execute:
+  warning: false
+  message: false
+
+editor: visual
+---
+
+## Overview
+
+This notebook accompanies the project **Credit Card Fraud Detection** and contains the computational implementation supporting the methodology, experiments, and results discussed in the portfolio chapter.
+
+The project focuses on detecting fraudulent credit card transactions using supervised machine learning. The main challenge is the strong class imbalance between legitimate and fraudulent transactions, which requires evaluation metrics that go beyond overall accuracy.
+
+The workflow includes data preparation, exploratory analysis, preprocessing, model training, evaluation, and export of figures and HTML tables used in the portfolio chapter.
+
+```{r}
+
+Sys.setenv(LANGUAGE = "en")
+
+library(tidyverse)
+library(tidymodels)
+library(gt)
+library(skimr)
+library(janitor)
+library(ranger)
+library(vip)
+```
+
+```{r}
+
+set.seed(123)
+
+outputs_dir <- "3-credit-card-fraud-detection-figures"
+tables_dir <- file.path(outputs_dir, "tables")
+
+dir.create(outputs_dir, showWarnings = FALSE)
+dir.create(tables_dir, showWarnings = FALSE)
+```
+
+## Data Loading
+
+The dataset contains anonymized credit card transactions. The variables `V1` to `V28` correspond to principal components obtained from a previous dimensionality reduction process. The variables `Time` and `Amount` are preserved in their original scale, while `Class` indicates whether a transaction is legitimate or fraudulent.
+
+The target variable is binary:
+
+- `0`: legitimate transaction
+- `1`: fraudulent transaction
+
+```{r}
+
+data_path <- "../data/creditcard.csv"
+
+fraud_data <- read_csv(data_path) |>
+  clean_names()
+
+fraud_data <- fraud_data |>
+  mutate(
+    class = factor(
+      class,
+      levels = c(0, 1),
+      labels = c("legitimate", "fraud")
+    )
+  )
+
+glimpse(fraud_data)
+```
+
+```{r}
+
+head_table <- fraud_data |>
+  head(10) |>
+  gt() |>
+  tab_header(
+    title = "Sample of Credit Card Transactions"
+  )
+
+head_table
+```
+
+```{r}
+
+gtsave(
+  data = head_table,
+  filename = file.path(tables_dir, "sample-transactions-table.html")
+)
+```
+
+## Exploratory Data Analysis
+
+The first step is to inspect the distribution of the target variable. Since fraud detection datasets are usually highly imbalanced, the proportion of fraudulent transactions is more informative than the raw count alone.
+
+```{r}
+
+class_distribution <- fraud_data |>
+  count(class) |>
+  mutate(
+    proportion = n / sum(n),
+    percentage = proportion * 100
+  )
+
+class_distribution
+```
+
+```{r}
+
+class_distribution_gt <- class_distribution |>
+  mutate(
+    proportion = round(proportion, 6),
+    percentage = round(percentage, 4)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Class Distribution"
+  ) |>
+  cols_label(
+    class = "Class",
+    n = "Transactions",
+    proportion = "Proportion",
+    percentage = "Percentage (%)"
+  )
+
+class_distribution_gt
+```
+
+```{r}
+
+gtsave(
+  data = class_distribution_gt,
+  filename = file.path(tables_dir, "class-distribution-table.html")
+)
+```
+
+```{r}
+
+class_distribution_plot <- ggplot(class_distribution, aes(x = class, y = n)) +
+  geom_col() +
+  labs(
+    title = "Class Distribution",
+    x = "Transaction Class",
+    y = "Number of Transactions"
+  ) +
+  theme_minimal()
+
+class_distribution_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "class-distribution.png"),
+  plot = class_distribution_plot,
+  width = 7,
+  height = 5,
+  dpi = 300
+)
+```
+
+## Transaction Amount Analysis
+
+The transaction amount is inspected separately for legitimate and fraudulent transactions. Since transaction amounts are usually right-skewed, the visualization uses a logarithmic transformation for readability.
+
+```{r}
+
+amount_distribution_plot <- ggplot(fraud_data, aes(x = amount, fill = class)) +
+  geom_histogram(bins = 60, alpha = 0.7, position = "identity") +
+  scale_x_log10() +
+  labs(
+    title = "Transaction Amount Distribution",
+    x = "Amount (log scale)",
+    y = "Number of Transactions",
+    fill = "Class"
+  ) +
+  theme_minimal()
+
+amount_distribution_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "amount-distribution.png"),
+  plot = amount_distribution_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+```{r}
+
+amount_summary <- fraud_data |>
+  group_by(class) |>
+  summarise(
+    observations = n(),
+    mean_amount = mean(amount),
+    median_amount = median(amount),
+    sd_amount = sd(amount),
+    min_amount = min(amount),
+    max_amount = max(amount),
+    .groups = "drop"
+  )
+
+amount_summary_gt <- amount_summary |>
+  mutate(
+    across(where(is.numeric), ~ round(.x, 4))
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Transaction Amount Summary by Class"
+  ) |>
+  cols_label(
+    class = "Class",
+    observations = "Observations",
+    mean_amount = "Mean",
+    median_amount = "Median",
+    sd_amount = "Std. Dev.",
+    min_amount = "Minimum",
+    max_amount = "Maximum"
+  )
+
+amount_summary_gt
+```
+
+```{r}
+
+gtsave(
+  data = amount_summary_gt,
+  filename = file.path(tables_dir, "amount-summary-table.html")
+)
+```
+
+## Data Splitting
+
+The dataset is split into training and testing sets using stratified sampling. This is important because the fraudulent class is rare, and both subsets must preserve the original class distribution as much as possible.
+
+```{r}
+
+data_split <- initial_split(
+  fraud_data,
+  prop = 0.8,
+  strata = class
+)
+
+train_data <- training(data_split)
+test_data <- testing(data_split)
+
+train_data |> count(class)
+test_data |> count(class)
+```
+
+## Preprocessing
+
+The preprocessing recipe removes the `time` variable, normalizes numeric predictors, and applies downsampling to reduce the effect of class imbalance during model training.
+
+The test set is not resampled. Resampling is applied only to the training data inside the modeling workflow.
+
+```{r}
+
+fraud_recipe <- recipe(class ~ ., data = train_data) |>
+  update_role(time, new_role = "id") |>
+  step_normalize(all_numeric_predictors()) |>
+  step_downsample(class)
+```
