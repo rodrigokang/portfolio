@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,15 +54,14 @@ div.csl-indent {
 <link href="../2-retail-analytics/0-overview.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -116,9 +115,7 @@ div.csl-indent {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -374,13 +371,11 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">5</span> Problem Definition</a>
-  <ul class="collapse">
-  <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">5.1</span> Modeling Approach</a></li>
-  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">5.2</span> Methodology and Implementation</a></li>
-  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">5.3</span> Results, Discussion, and Limitations</a></li>
-  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">5.4</span> Technical Appendix (Optional)</a></li>
-  </ul></li>
+  <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">4.1</span> Problem Definition</a></li>
+  <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">4.2</span> Modeling Approach</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">4.3</span> Methodology and Implementation</a></li>
+  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">4.4</span> Results, Discussion, and Limitations</a></li>
+  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">4.5</span> Technical Appendix (Optional)</a></li>
   </ul>
 </nav>
     </div>
@@ -408,23 +403,24 @@ div.csl-indent {
 
 <p>Every credit card transaction generates a simple decision: approve it or block it. Most of the time the answer is obvious. The difficulty lies in the small fraction of transactions that appear legitimate but are actually fraudulent. In large payment systems, these events are rare, costly, and constantly changing, creating a learning problem that differs substantially from many conventional classification tasks.</p>
 <p>This project uses a publicly available European credit card transaction dataset containing highly anonymized transaction records. The analysis combines unsupervised learning techniques to explore the structure of fraudulent activity with a supervised benchmarking framework designed to evaluate the predictive performance of several classification algorithms.</p>
-<section id="problem-definition" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Problem Definition</h1>
+<section id="problem-definition" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="problem-definition"><span class="header-section-number">4.1</span> Problem Definition</h2>
 <p>The central difficulty in credit card fraud detection is severe class imbalance. Fraudulent transactions represent only a tiny fraction of overall activity, meaning that a model can achieve high accuracy while failing to identify most fraud cases <span class="citation" data-cites="dal2015calibrating"><a href="../references.html#ref-dal2015calibrating" role="doc-biblioref">[1]</a></span>.</p>
 <p>This imbalance creates an unavoidable trade-off. Missing a fraudulent transaction may result in direct financial losses, while incorrectly flagging a legitimate transaction may interrupt a customer purchase and generate unnecessary friction. Effective fraud detection therefore requires more than maximizing a single performance metric. The objective is to identify as many fraudulent transactions as possible while maintaining an acceptable level of false alarms <span class="citation" data-cites="baesens2015fraud"><a href="../references.html#ref-baesens2015fraud" role="doc-biblioref">[2]</a></span> <span class="citation" data-cites="dal2017credit"><a href="../references.html#ref-dal2017credit" role="doc-biblioref">[3]</a></span>.</p>
 <p>Most machine learning studies approach this problem through supervised classification, using historical examples of fraudulent and legitimate transactions to train predictive models. This approach has produced substantial improvements over traditional rule-based systems and remains the foundation of modern fraud analytics <span class="citation" data-cites="ngai2011application"><a href="../references.html#ref-ngai2011application" role="doc-biblioref">[4]</a></span> <span class="citation" data-cites="al2021financial"><a href="../references.html#ref-al2021financial" role="doc-biblioref">[5]</a></span>.</p>
 <p>A less explored question is whether fraudulent transactions exhibit recognizable structures before any classification model is trained. If fraud is not a single behavior but a collection of different behaviors, clustering techniques may reveal groups of transactions that share common characteristics. Such patterns could provide additional insight into how fraudulent activity is organized within the feature space and help explain why certain classification models perform better than others <span class="citation" data-cites="carcillo2021combining"><a href="../references.html#ref-carcillo2021combining" role="doc-biblioref">[6]</a></span>.</p>
 <p>The project therefore investigates the problem from two complementary perspectives. First, clustering methods are used to explore whether fraudulent transactions form identifiable groups within the feature space. Second, a supervised benchmarking study compares several machine learning algorithms under a common evaluation framework. The objective is not only to determine which models achieve the strongest predictive performance, but also to better understand the structure of fraudulent behavior in a highly imbalanced transaction dataset.</p>
-<section id="modeling-approach" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">5.1</span> Modeling Approach</h2>
+</section>
+<section id="modeling-approach" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">4.2</span> Modeling Approach</h2>
 <p>The analysis combines unsupervised and supervised learning techniques to examine credit card fraud from two complementary perspectives. The first investigates whether fraudulent transactions exhibit identifiable structure within the feature space. The second evaluates the extent to which that structure can be exploited for predictive purposes.</p>
 <p>The unsupervised stage applies clustering algorithms to the transaction data in order to explore the distribution of fraudulent and legitimate transactions. K-Means, Agglomerative Clustering, and DBSCAN are used because they represent different notions of similarity and cluster formation. K-Means partitions observations around centroids, Agglomerative Clustering builds nested groups through successive merges, and DBSCAN identifies groups based on local density while explicitly accounting for noise points. Together, these methods allow the analysis to examine whether fraudulent transactions form concentrated groups, distinct fraud profiles, or isolated anomalies.</p>
-<p>The supervised stage is formulated as a benchmarking study. Rather than focusing on a single predictive model, the project compares a diverse set of classification algorithms representing different modeling philosophies. The benchmark includes Logistic Regression, Naive Bayes, Linear and Quadratic Discriminant Analysis, K-Nearest Neighbors, Support Vector Machines, Decision Trees, Random Forests, and XGBoost.</p>
+<p>The supervised stage is formulated as a benchmarking study. Rather than focusing on a single predictive model, the project compares a diverse set of classification algorithms representing different modeling philosophies. The benchmark includes Logistic Regression, Naive Bayes, Linear and Quadratic Discriminant Analysis, K-Nearest Neighbors, Linear Support Vector Machines, Decision Trees, Random Forests, and XGBoost. To examine the impact of class imbalance, the models are evaluated under three training strategies: the original transaction distribution, random undersampling, and the Synthetic Minority Oversampling Technique (SMOTE).</p>
 <p>Because fraudulent transactions represent only a small fraction of the observations, model evaluation focuses on metrics that remain informative under severe class imbalance. Particular attention is given to precision, recall, F1-score, ROC-AUC, Precision-Recall AUC, and the Kolmogorov-Smirnov statistic. Stratified cross-validation is used throughout the benchmark to ensure consistent comparisons across models.</p>
 <p>The underlying assumption of the project is that fraudulent transactions leave detectable signatures in the available features. If such signatures exist, clustering methods should reveal some degree of structure within the transaction space, while supervised learning algorithms should be able to exploit that structure for predictive purposes. Examining both perspectives provides a more complete view of fraud behavior than either approach in isolation.</p>
 </section>
-<section id="methodology-and-implementation" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">5.2</span> Methodology and Implementation</h2>
+<section id="methodology-and-implementation" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">4.3</span> Methodology and Implementation</h2>
 <p>This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.</p>
 <p>Typical topics may include:</p>
 <ul>
@@ -443,8 +439,8 @@ div.csl-indent {
 <p>Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.</p>
 <p>References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.</p>
 </section>
-<section id="results-discussion-and-limitations" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">5.3</span> Results, Discussion, and Limitations</h2>
+<section id="results-discussion-and-limitations" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">4.4</span> Results, Discussion, and Limitations</h2>
 <p>This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.</p>
 <p>Typical elements may include:</p>
 <ul>
@@ -462,8 +458,8 @@ div.csl-indent {
 </ul>
 <p>The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.</p>
 </section>
-<section id="technical-appendix-optional" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">5.4</span> Technical Appendix (Optional)</h2>
+<section id="technical-appendix-optional" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">4.5</span> Technical Appendix (Optional)</h2>
 <p>This optional section contains technical details that support the project but are not essential for following the main narrative.</p>
 <p>Possible contents include:</p>
 <ul>
@@ -499,7 +495,6 @@ div.csl-indent {
 <div class="csl-left-margin">[6] </div><div class="csl-right-inline">F. Carcillo, Y.-A. Le Borgne, O. Caelen, Y. Kessaci, F. Oblé, and G. Bontempi, <span>“Combining unsupervised and supervised learning in credit card fraud detection,”</span> <em>Information sciences</em>, vol. 557, pp. 317–331, 2021.</div>
 </div>
 </div>
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -554,14 +549,13 @@ div.csl-indent {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -4,7 +4,7 @@ Every credit card transaction generates a simple decision: approve it or block i
 
 This project uses a publicly available European credit card transaction dataset containing highly anonymized transaction records. The analysis combines unsupervised learning techniques to explore the structure of fraudulent activity with a supervised benchmarking framework designed to evaluate the predictive performance of several classification algorithms.
 
-# Problem Definition
+## Problem Definition
 
 The central difficulty in credit card fraud detection is severe class imbalance. Fraudulent transactions represent only a tiny fraction of overall activity, meaning that a model can achieve high accuracy while failing to identify most fraud cases @dal2015calibrating.
 
@@ -22,7 +22,7 @@ The analysis combines unsupervised and supervised learning techniques to examine
 
 The unsupervised stage applies clustering algorithms to the transaction data in order to explore the distribution of fraudulent and legitimate transactions. K-Means, Agglomerative Clustering, and DBSCAN are used because they represent different notions of similarity and cluster formation. K-Means partitions observations around centroids, Agglomerative Clustering builds nested groups through successive merges, and DBSCAN identifies groups based on local density while explicitly accounting for noise points. Together, these methods allow the analysis to examine whether fraudulent transactions form concentrated groups, distinct fraud profiles, or isolated anomalies.
 
-The supervised stage is formulated as a benchmarking study. Rather than focusing on a single predictive model, the project compares a diverse set of classification algorithms representing different modeling philosophies. The benchmark includes Logistic Regression, Naive Bayes, Linear and Quadratic Discriminant Analysis, K-Nearest Neighbors, Support Vector Machines, Decision Trees, Random Forests, and XGBoost.
+The supervised stage is formulated as a benchmarking study. Rather than focusing on a single predictive model, the project compares a diverse set of classification algorithms representing different modeling philosophies. The benchmark includes Logistic Regression, Naive Bayes, Linear and Quadratic Discriminant Analysis, K-Nearest Neighbors, Linear Support Vector Machines, Decision Trees, Random Forests, and XGBoost. To examine the impact of class imbalance, the models are evaluated under three training strategies: the original transaction distribution, random undersampling, and the Synthetic Minority Oversampling Technique (SMOTE).
 
 Because fraudulent transactions represent only a small fraction of the observations, model evaluation focuses on metrics that remain informative under severe class imbalance. Particular attention is given to precision, recall, F1-score, ROC-AUC, Precision-Recall AUC, and the Kolmogorov-Smirnov statistic. Stratified cross-validation is used throughout the benchmark to ensure consistent comparisons across models.
 
