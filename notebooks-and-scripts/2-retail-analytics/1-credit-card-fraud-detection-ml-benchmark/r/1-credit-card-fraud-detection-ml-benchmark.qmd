@@ -1,0 +1,183 @@
+---
+title: "Credit Card Fraud Detection"
+author: "Rodrigo Kang"
+
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-line-numbers: true
+    code-overflow: wrap
+    theme: cosmo
+    embed-resources: true
+
+editor: visual
+---
+
+## Overview
+
+This notebook accompanies the project **Credit Card Fraud Detection** and contains the computational implementation supporting the methodology, experiments, and results discussed in the portfolio chapter.  
+The material presented here focuses on practical implementation details, including data preparation, model development, training procedures, evaluation workflows, and complementary computational experiments.
+
+## Imports and Configuration
+
+This section includes the libraries, dependencies, and configuration settings required throughout the notebook.
+
+Typical elements may include:
+
+- Package imports
+
+- Random seed configuration
+
+- Visualization settings
+
+- Paths and environment configuration
+
+## Data Loading
+
+This section describes the procedures used to load and organize the data required for the analysis.
+
+Typical topics may include:
+
+- Data sources
+
+- File loading procedures
+
+- Database connections
+
+- Initial data inspection
+
+## Data Preparation
+
+This section contains the preprocessing and transformation steps applied before model development.
+
+Typical topics may include:
+
+- Data cleaning
+
+- Missing value handling
+
+- Feature engineering
+
+- Encoding and normalization
+
+- Data transformations
+
+## Exploratory Analysis (Optional)
+
+This optional section presents exploratory analyses used to better understand the structure and characteristics of the data.
+
+Typical elements may include:
+
+- Descriptive statistics
+
+- Visual exploration
+
+- Correlation analysis
+
+- Distribution analysis
+
+- Preliminary pattern identification
+
+## Methodology
+
+This section implements the methodological framework discussed in the portfolio chapter.
+
+Typical topics may include:
+
+- Model definition
+
+- Simulation procedures
+
+- Optimization methods
+
+- Statistical methodologies
+
+- Experimental design
+
+Short technical comments may be included when relevant to the implementation.
+
+## Model Development
+
+This section contains the practical implementation of the models and algorithms used throughout the project.
+
+Typical topics may include:
+
+- Model construction
+
+- Training pipelines
+
+- Hyperparameter configuration
+
+- Numerical procedures
+
+- Auxiliary algorithms
+
+## Training and Validation
+
+This section presents the procedures used to train, validate, and evaluate the models.
+
+Typical topics may include:
+
+- Training procedures
+
+- Cross-validation strategies
+
+- Performance monitoring
+
+- Error estimation
+
+- Model comparison
+
+## Results and Evaluation
+
+This section presents the main computational results obtained throughout the analysis.
+
+Typical elements may include:
+
+- Performance metrics
+
+- Visualizations and plots
+
+- Comparative analyses
+
+- Error analysis
+
+- Sensitivity analysis
+
+The emphasis is placed on understanding model behavior and interpreting the practical implications of the results.
+
+## Additional Experiments (Optional)
+
+This optional section contains complementary experiments that support or extend the main analysis.
+
+Typical topics may include:
+
+- Alternative configurations
+
+- Sensitivity studies
+
+- Robustness checks
+
+- Auxiliary simulations
+
+- Comparative experiments
+
+## Conclusions
+
+This section summarizes the main findings and computational outcomes of the notebook.
+
+The discussion may include:
+
+- Main implementation results
+
+- Practical observations
+
+- Computational considerations
+
+- Potential improvements
+
+## References (Optional)
+
+This optional section contains references relevant to the methodologies, algorithms, and computational techniques used throughout the notebook.

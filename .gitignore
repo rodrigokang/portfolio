@@ -1,2 +1,4 @@
 /.quarto/
 **/*.quarto_ipynb
+
+notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/data/creditcard.csv
