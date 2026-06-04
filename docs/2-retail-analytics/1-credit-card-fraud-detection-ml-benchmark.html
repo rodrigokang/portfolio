@@ -373,7 +373,10 @@ div.csl-indent {
   <ul>
   <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">4.1</span> Problem Definition</a></li>
   <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">4.2</span> Modeling Approach</a></li>
-  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">4.3</span> Methodology and Implementation</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">4.3</span> Methodology and Implementation</a>
+  <ul class="collapse">
+  <li><a href="#unsupervised-learning-methodology" id="toc-unsupervised-learning-methodology" class="nav-link" data-scroll-target="#unsupervised-learning-methodology"><span class="header-section-number">4.3.1</span> Unsupervised Learning Methodology</a></li>
+  </ul></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">4.4</span> Results, Discussion, and Limitations</a></li>
   <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">4.5</span> Technical Appendix (Optional)</a></li>
   </ul>
@@ -421,23 +424,204 @@ div.csl-indent {
 </section>
 <section id="methodology-and-implementation" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">4.3</span> Methodology and Implementation</h2>
-<p>This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.</p>
-<p>Typical topics may include:</p>
+<p>This project combines unsupervised and supervised learning techniques to investigate fraudulent credit card transactions. The analysis begins with an unsupervised exploration of the feature space to determine whether fraudulent transactions exhibit identifiable structure without using the target labels. Clustering algorithms are used to examine the distribution of transactions and to assess whether fraud tends to concentrate in specific regions of the data.</p>
+<p>The second stage focuses on supervised learning, where the transaction labels are incorporated to build predictive models capable of distinguishing fraudulent and legitimate transactions. Together, these two perspectives provide a broader understanding of the problem, combining exploratory analysis with predictive modeling.</p>
+<section id="unsupervised-learning-methodology" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="unsupervised-learning-methodology"><span class="header-section-number">4.3.1</span> Unsupervised Learning Methodology</h3>
+<p>The unsupervised learning stage investigates whether fraudulent transactions exhibit identifiable structure in the feature space without using the target labels during model construction. If fraudulent transactions tend to concentrate in specific regions of the transformed feature space, clustering algorithms should be able to reveal these patterns.</p>
+<p>The analysis begins with an exploratory examination of the dataset. Particular attention is given to the severe class imbalance that characterizes the fraud detection problem.</p>
+<p>The class distribution is summarized below.</p>
+<div id="tbl-target-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-target-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.1: Class distribution in the credit card transaction dataset.
+</figcaption>
+<div aria-describedby="tbl-target-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Class</th>
+<th style="text-align: center;">Transactions</th>
+<th style="text-align: center;">Percentage (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Legitimate</td>
+<td style="text-align: center;">284,315</td>
+<td style="text-align: center;">99.827</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Fraudulent</td>
+<td style="text-align: center;">492</td>
+<td style="text-align: center;">0.173</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><a href="#fig-class-distribution" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> illustrates the extreme imbalance between legitimate and fraudulent transactions. Fraudulent transactions represent less than one percent of all observations, making fraud detection a highly imbalanced classification problem.</p>
+<div id="fig-class-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-class-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/class-distribution.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-class-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: Class distribution in the credit card transaction dataset.
+</figcaption>
+</figure>
+</div>
+<p>Transaction amounts were also examined to characterize the range and concentration of transaction values.</p>
+<div id="tbl-transaction-amount-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-transaction-amount-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.2: Summary statistics for transaction amounts.
+</figcaption>
+<div aria-describedby="tbl-transaction-amount-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Statistic</th>
+<th style="text-align: center;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Minimum</td>
+<td style="text-align: center;">0.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1st Quartile</td>
+<td style="text-align: center;">5.60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Median</td>
+<td style="text-align: center;">22.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Mean</td>
+<td style="text-align: center;">88.35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3rd Quartile</td>
+<td style="text-align: center;">77.17</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Maximum</td>
+<td style="text-align: center;">25,691.16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The distribution of transaction amounts is highly right-skewed, with most transactions concentrated at relatively small values and a small number of extreme observations. This behavior can be observed in <a href="#fig-transaction-amount-distribution" class="quarto-xref">Figure&nbsp;<span>4.2</span></a>.</p>
+<div id="fig-transaction-amount-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-transaction-amount-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/transaction-amount-distribution.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-transaction-amount-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: Distribution of transaction amounts.
+</figcaption>
+</figure>
+</div>
+<p>Transaction amounts were further compared across classes. Although fraudulent and legitimate transactions overlap substantially, <a href="#fig-transaction-amount-by-class" class="quarto-xref">Figure&nbsp;<span>4.3</span></a> suggests differences in the distribution of transaction values between the two groups.</p>
+<div id="fig-transaction-amount-by-class" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-transaction-amount-by-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/transaction-amount-by-class.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-transaction-amount-by-class-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.3: Transaction amount by class.
+</figcaption>
+</figure>
+</div>
+<p>The variables V1–V28 correspond to principal components obtained through a prior anonymization process. Selected features were visualized to examine differences between fraudulent and legitimate transactions. Several variables exhibit noticeable shifts between classes, suggesting that fraudulent transactions occupy distinct regions of the transformed feature space.</p>
+<div id="fig-selected-pca-features" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-selected-pca-features-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/selected-pca-features-distribution.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-selected-pca-features-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.4: Selected PCA feature distributions by class.
+</figcaption>
+</figure>
+</div>
+<p>To complement the univariate analysis, a correlation matrix was computed using all available variables.</p>
+<div id="fig-correlation-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-correlation-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/correlation-matrix.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.5: Correlation matrix of the credit card transaction dataset.
+</figcaption>
+</figure>
+</div>
+<p>Following the exploratory analysis, the target variable was separated from the predictors and the Time variable was removed. The data was then partitioned into training and test sets using stratified sampling to preserve the original class distribution. Feature scaling was applied after the train-test split, with scaling parameters estimated exclusively from the training data.</p>
+<p>Because the training set contains more than two hundred thousand observations, a stratified sample was extracted from the training data for the clustering analysis. The sample preserves the original fraud rate while reducing computational requirements and allowing a consistent comparison across clustering algorithms.</p>
+<p>Three clustering approaches were evaluated:</p>
 <ul>
-<li>Data collection and sources</li>
-<li>Feature engineering</li>
-<li>Cleaning and preprocessing</li>
-<li>Simulation strategies</li>
-<li>Training and validation methodology</li>
-<li>Experimental setup</li>
-<li>Numerical methods and algorithms</li>
-<li>Workflow organization</li>
-<li>Pipeline structure</li>
-<li>Computational considerations</li>
+<li>K-Means Clustering</li>
+<li>Agglomerative Clustering</li>
+<li>DBSCAN</li>
 </ul>
-<p>The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.</p>
-<p>Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.</p>
-<p>References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.</p>
+<p>For K-Means, multiple values of (k) were explored. The elbow method was evaluated using the within-cluster sum of squares (inertia).</p>
+<div id="fig-kmeans-inertia" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kmeans-inertia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/kmeans-inertia.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kmeans-inertia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.6: K-Means inertia as a function of the number of clusters.
+</figcaption>
+</figure>
+</div>
+<p>The elbow plot does not reveal a clear point at which additional clusters provide diminishing returns. As a result, the number of clusters cannot be determined reliably using inertia alone. Additional validation metrics were evaluated and used as complementary diagnostic tools. Since no single criterion produced a definitive solution, the final choice was guided by interpretability and fraud concentration within the resulting clusters.</p>
+<p>A three-cluster solution was retained because it revealed the strongest concentration of fraudulent transactions while remaining straightforward to interpret.</p>
+<p>The composition of the resulting clusters was then examined by comparing cluster-level fraud rates against the baseline fraud rate observed in the clustering sample.</p>
+<div id="tbl-clustering-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-clustering-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.3: Summary of the main findings obtained from the clustering algorithms.
+</figcaption>
+<div aria-describedby="tbl-clustering-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 81%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Key Finding</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>K-Means</td>
+<td>One cluster exhibited a fraud rate approximately 21 times higher than the baseline fraud rate.</td>
+</tr>
+<tr class="even">
+<td>Agglomerative Clustering</td>
+<td>A small cluster exhibited a fraud rate approximately 490 times higher than the baseline fraud rate.</td>
+</tr>
+<tr class="odd">
+<td>DBSCAN</td>
+<td>Fraudulent transactions were primarily identified as noise points rather than members of dense clusters.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The clustering results provide complementary perspectives on the structure of fraudulent transactions. K-Means identified a relatively large region characterized by elevated fraud concentration, while Agglomerative Clustering isolated a much smaller cluster with an exceptionally high fraud rate. In contrast, DBSCAN classified fraudulent transactions primarily as noise, suggesting that some fraud patterns behave as isolated anomalies rather than members of dense groups.</p>
+<p>Taken together, these results indicate that fraudulent transactions are not uniformly distributed across the feature space. Although the exact structure varies across clustering algorithms, all three methods reveal behavior that differs substantially from the baseline distribution of legitimate transactions.</p>
+<p>These findings provide preliminary evidence that fraudulent transactions leave detectable signatures in the available feature space and motivate the supervised learning stage of the analysis.</p>
+<p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised.html">here</a>. The corresponding Python notebooks associated with this project are also available in the <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/python"><i class="bi bi-github"></i> repository</a>.</p>
+</section>
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">4.4</span> Results, Discussion, and Limitations</h2>

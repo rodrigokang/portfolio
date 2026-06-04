@@ -1,5 +1,5 @@
 ---
-title: "Credit Card Fraud Detection"
+title: "Credit Card Fraud Detection: Unsupervised Learning Analysis"
 author: "Rodrigo Kang"
 
 format:
@@ -23,28 +23,30 @@ editor: visual
 
 This notebook accompanies the project **Credit Card Fraud Detection** and contains the computational implementation supporting the methodology, experiments, and results discussed in the portfolio chapter.
 
-The project focuses on detecting fraudulent credit card transactions using supervised machine learning. The main challenge is the strong class imbalance between legitimate and fraudulent transactions, which requires evaluation metrics that go beyond overall accuracy.
+The material presented here focuses on practical implementation details, including data preparation, model development, training procedures, evaluation workflows, and complementary computational experiments.
 
-The workflow includes data preparation, exploratory analysis, preprocessing, model training, evaluation, and export of figures and HTML tables used in the portfolio chapter.
+## Imports and Configuration
+
+This section imports the libraries required throughout the analysis and defines the configuration settings used to ensure reproducibility of the experiments.
 
 ```{r}
 
 Sys.setenv(LANGUAGE = "en")
 
 library(tidyverse)
-library(tidymodels)
+library(rsample)
 library(gt)
-library(skimr)
-library(janitor)
-library(ranger)
-library(vip)
-```
+library(corrplot)
+library(cluster)
+library(clusterCrit)
+library(dbscan)
+library(patchwork)
 
-```{r}
+random_state <- 42
 
-set.seed(123)
+set.seed(random_state)
 
-outputs_dir <- "3-credit-card-fraud-detection-figures"
+outputs_dir <- "1-credit-card-fraud-detection-unsupervised-figures"
 tables_dir <- file.path(outputs_dir, "tables")
 
 dir.create(outputs_dir, showWarnings = FALSE)
@@ -53,105 +55,92 @@ dir.create(tables_dir, showWarnings = FALSE)
 
 ## Data Loading
 
-The dataset contains anonymized credit card transactions. The variables `V1` to `V28` correspond to principal components obtained from a previous dimensionality reduction process. The variables `Time` and `Amount` are preserved in their original scale, while `Class` indicates whether a transaction is legitimate or fraudulent.
-
-The target variable is binary:
-
-- `0`: legitimate transaction
-- `1`: fraudulent transaction
+This section loads the credit card transaction dataset and performs an initial inspection of its structure. The objective is to verify the number of observations, the available variables, and the distribution of the target variable before moving into exploratory analysis and preprocessing.
 
 ```{r}
 
 data_path <- "../data/creditcard.csv"
 
-fraud_data <- read_csv(data_path) |>
-  clean_names()
+df <- read_csv(data_path)
 
-fraud_data <- fraud_data |>
-  mutate(
-    class = factor(
-      class,
-      levels = c(0, 1),
-      labels = c("legitimate", "fraud")
-    )
-  )
+cat("Number of rows:", format(nrow(df), big.mark = ","), "\n")
+cat("Number of columns:", format(ncol(df), big.mark = ","), "\n")
 
-glimpse(fraud_data)
+head(df)
 ```
 
 ```{r}
 
-head_table <- fraud_data |>
-  head(10) |>
+glimpse(df)
+```
+
+```{r}
+
+class_distribution <- df |>
+  count(Class, name = "count") |>
+  arrange(Class)
+
+class_distribution_percentage <- df |>
+  count(Class, name = "count") |>
+  mutate(percentage = count / sum(count) * 100) |>
+  arrange(Class) |>
+  select(Class, percentage)
+
+target_summary <- class_distribution |>
+  left_join(class_distribution_percentage, by = "Class")
+
+target_summary
+```
+
+```{r}
+
+target_summary_gt <- target_summary |>
+  mutate(
+    percentage = round(percentage, 6)
+  ) |>
   gt() |>
   tab_header(
-    title = "Sample of Credit Card Transactions"
+    title = "Target Summary"
   )
 
-head_table
-```
-
-```{r}
+target_summary_gt
 
 gtsave(
-  data = head_table,
-  filename = file.path(tables_dir, "sample-transactions-table.html")
+  data = target_summary_gt,
+  filename = file.path(tables_dir, "target-summary.html")
 )
 ```
 
 ## Exploratory Data Analysis
 
-The first step is to inspect the distribution of the target variable. Since fraud detection datasets are usually highly imbalanced, the proportion of fraudulent transactions is more informative than the raw count alone.
+This section explores the main characteristics of the dataset. Particular attention is given to the class imbalance, transaction amounts, and the distribution of the anonymized features used throughout the analysis.
+
+### Class Distribution
+
+Credit card fraud datasets are typically characterized by a severe class imbalance. Understanding the magnitude of this imbalance is important because it influences both model training and evaluation.
 
 ```{r}
 
-class_distribution <- fraud_data |>
-  count(class) |>
+class_counts <- df |>
+  count(Class, name = "count") |>
   mutate(
-    proportion = n / sum(n),
-    percentage = proportion * 100
+    percentage = count / sum(count) * 100,
+    Class = factor(Class)
   )
 
-class_distribution
-```
-
-```{r}
-
-class_distribution_gt <- class_distribution |>
-  mutate(
-    proportion = round(proportion, 6),
-    percentage = round(percentage, 4)
-  ) |>
-  gt() |>
-  tab_header(
-    title = "Class Distribution"
-  ) |>
-  cols_label(
-    class = "Class",
-    n = "Transactions",
-    proportion = "Proportion",
-    percentage = "Percentage (%)"
-  )
-
-class_distribution_gt
-```
-
-```{r}
-
-gtsave(
-  data = class_distribution_gt,
-  filename = file.path(tables_dir, "class-distribution-table.html")
-)
-```
-
-```{r}
-
-class_distribution_plot <- ggplot(class_distribution, aes(x = class, y = n)) +
-  geom_col() +
+class_distribution_plot <- ggplot(
+  class_counts,
+  aes(x = Class, y = count)
+) +
+  geom_col(width = 0.5) +
+  geom_text(
+    aes(label = paste0(round(percentage, 3), "%")),
+    vjust = -0.5
+  ) +
   labs(
-    title = "Class Distribution",
-    x = "Transaction Class",
-    y = "Number of Transactions"
+    x = "Class",
+    y = "Number of Transactions",
+    title = "Class Distribution"
   ) +
   theme_minimal()
 
@@ -163,37 +152,6 @@ class_distribution_plot
 ggsave(
   filename = file.path(outputs_dir, "class-distribution.png"),
   plot = class_distribution_plot,
-  width = 7,
-  height = 5,
-  dpi = 300
-)
-```
-
-## Transaction Amount Analysis
-
-The transaction amount is inspected separately for legitimate and fraudulent transactions. Since transaction amounts are usually right-skewed, the visualization uses a logarithmic transformation for readability.
-
-```{r}
-
-amount_distribution_plot <- ggplot(fraud_data, aes(x = amount, fill = class)) +
-  geom_histogram(bins = 60, alpha = 0.7, position = "identity") +
-  scale_x_log10() +
-  labs(
-    title = "Transaction Amount Distribution",
-    x = "Amount (log scale)",
-    y = "Number of Transactions",
-    fill = "Class"
-  ) +
-  theme_minimal()
-
-amount_distribution_plot
-```
-
-```{r}
-
-ggsave(
-  filename = file.path(outputs_dir, "amount-distribution.png"),
-  plot = amount_distribution_plot,
   width = 8,
   height = 5,
   dpi = 300
@@ -202,76 +160,931 @@ ggsave(
 
 ```{r}
 
-amount_summary <- fraud_data |>
-  group_by(class) |>
-  summarise(
-    observations = n(),
-    mean_amount = mean(amount),
-    median_amount = median(amount),
-    sd_amount = sd(amount),
-    min_amount = min(amount),
-    max_amount = max(amount),
-    .groups = "drop"
-  )
+fraud_rate <- mean(df$Class) * 100
 
-amount_summary_gt <- amount_summary |>
-  mutate(
-    across(where(is.numeric), ~ round(.x, 4))
-  ) |>
+cat(sprintf("Fraud rate: %.4f%%", fraud_rate))
+```
+
+### Transaction Amount Analysis
+
+The transaction amount is one of the few variables presented in its original scale. Examining its distribution provides additional context regarding the range and concentration of transaction values.
+
+```{r}
+
+amount_summary <- summary(df$Amount)
+
+amount_summary
+```
+
+```{r}
+
+amount_summary_gt <- tibble(
+  statistic = names(amount_summary),
+  value = as.numeric(amount_summary)
+) |>
+  mutate(value = round(value, 4)) |>
   gt() |>
   tab_header(
-    title = "Transaction Amount Summary by Class"
-  ) |>
-  cols_label(
-    class = "Class",
-    observations = "Observations",
-    mean_amount = "Mean",
-    median_amount = "Median",
-    sd_amount = "Std. Dev.",
-    min_amount = "Minimum",
-    max_amount = "Maximum"
+    title = "Transaction Amount Summary"
   )
 
 amount_summary_gt
-```
-
-```{r}
 
 gtsave(
   data = amount_summary_gt,
-  filename = file.path(tables_dir, "amount-summary-table.html")
+  filename = file.path(tables_dir, "transaction-amount-summary.html")
 )
 ```
 
-## Data Splitting
+```{r}
 
-The dataset is split into training and testing sets using stratified sampling. This is important because the fraudulent class is rare, and both subsets must preserve the original class distribution as much as possible.
+transaction_amount_distribution_plot <- ggplot(
+  df,
+  aes(x = Amount)
+) +
+  geom_histogram(bins = 50) +
+  labs(
+    x = "Transaction Amount",
+    y = "Frequency",
+    title = "Distribution of Transaction Amounts"
+  ) +
+  theme_minimal()
+
+transaction_amount_distribution_plot
+```
 
 ```{r}
 
+ggsave(
+  filename = file.path(outputs_dir, "transaction-amount-distribution.png"),
+  plot = transaction_amount_distribution_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+```
+
+```{r}
+
+amount_p99 <- quantile(
+  df$Amount,
+  probs = 0.99,
+  na.rm = TRUE
+)
+
+transaction_amount_by_class_plot <- ggplot(
+  df,
+  aes(x = factor(Class), y = Amount)
+) +
+  geom_boxplot() +
+  coord_cartesian(
+    ylim = c(0, amount_p99)
+  ) +
+  labs(
+    x = "Class",
+    y = "Transaction Amount",
+    title = "Transaction Amount by Class"
+  ) +
+  theme_minimal()
+
+transaction_amount_by_class_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "transaction-amount-by-class.png"),
+  plot = transaction_amount_by_class_plot,
+  width = 10,
+  height = 6,
+  dpi = 300
+)
+```
+
+### Feature Distributions
+
+The variables V1–V28 correspond to principal components obtained through a prior anonymization process. Selected features are visualized to examine differences between fraudulent and legitimate transactions.
+
+```{r}
+
+selected_pca_features <- c("V4", "V10", "V11", "V14")
+```
+
+```{r}
+
+selected_pca_features <- c("V4", "V10", "V11", "V14")
+
+pca_selected_long <- df |>
+  select(all_of(selected_pca_features), Class) |>
+  pivot_longer(
+    cols = all_of(selected_pca_features),
+    names_to = "feature",
+    values_to = "value"
+  ) |>
+  mutate(Class = factor(Class))
+
+pca_selected_features_plot <- ggplot(
+  pca_selected_long,
+  aes(x = value, fill = Class)
+) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 40,
+    alpha = 0.4,
+    position = "identity"
+  ) +
+  facet_wrap(~ feature, scales = "free", ncol = 2) +
+  labs(
+    title = "Selected PCA Feature Distributions by Class",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal()
+
+pca_selected_features_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "selected-pca-features-distribution.png"),
+  plot = pca_selected_features_plot,
+  width = 10,
+  height = 7,
+  dpi = 300
+)
+```
+
+### Correlation Structure
+
+A correlation matrix is used to identify linear relationships among the available variables and to assess whether fraudulent behavior exhibits associations with specific features.
+
+```{r}
+
+correlation_matrix <- cor(df)
+
+png(
+  filename = file.path(outputs_dir, "correlation-matrix.png"),
+  width = 1400,
+  height = 1000,
+  res = 120
+)
+
+corrplot(
+  correlation_matrix,
+  method = "color",
+  type = "full",
+  tl.cex = 0.7,
+  tl.col = "black",
+  title = "Correlation Matrix",
+  mar = c(0, 0, 2, 0)
+)
+
+dev.off()
+
+corrplot(
+  correlation_matrix,
+  method = "color",
+  type = "full",
+  tl.cex = 0.7,
+  tl.col = "black",
+  title = "Correlation Matrix",
+  mar = c(0, 0, 2, 0)
+)
+```
+
+## Data Preparation
+
+This section prepares the dataset for unsupervised and supervised learning. The target variable is separated from the feature matrix, the `Time` variable is removed, and the data is split into training and test sets using stratification to preserve the original class imbalance.
+
+Feature scaling is applied after the train-test split to avoid data leakage. The scaler is fitted only on the training data and then applied to both the training and test sets.
+
+```{r}
+
+X <- df |>
+  select(-Class)
+
+y <- df$Class
+
+X <- X |>
+  select(-Time)
+
+prepared_df <- X |>
+  mutate(Class = y)
+
 data_split <- initial_split(
-  fraud_data,
-  prop = 0.8,
-  strata = class
+  prepared_df,
+  prop = 0.80,
+  strata = Class
 )
 
 train_data <- training(data_split)
 test_data <- testing(data_split)
 
-train_data |> count(class)
-test_data |> count(class)
+X_train <- train_data |>
+  select(-Class)
+
+y_train <- train_data$Class
+
+X_test <- test_data |>
+  select(-Class)
+
+y_test <- test_data$Class
+
+train_means <- map_dbl(X_train, mean)
+train_sds <- map_dbl(X_train, sd)
+
+X_train_scaled <- scale(
+  X_train,
+  center = train_means,
+  scale = train_sds
+) |>
+  as.data.frame()
+
+X_test_scaled <- scale(
+  X_test,
+  center = train_means,
+  scale = train_sds
+) |>
+  as.data.frame()
+
+cat("Training set shape:", paste(dim(X_train_scaled), collapse = " "), "\n")
+cat("Test set shape:", paste(dim(X_test_scaled), collapse = " "), "\n")
+cat(sprintf("Training fraud rate: %.4f%%\n", mean(y_train) * 100))
+cat(sprintf("Test fraud rate: %.4f%%\n", mean(y_test) * 100))
 ```
 
-## Preprocessing
+## Unsupervised Learning Analysis
 
-The preprocessing recipe removes the `time` variable, normalizes numeric predictors, and applies downsampling to reduce the effect of class imbalance during model training.
+This section examines whether fraudulent transactions exhibit detectable structure in the feature space. Clustering methods are applied to the scaled training data, and the resulting groups are evaluated by comparing their fraud concentration against the baseline fraud rate.
 
-The test set is not resampled. Resampling is applied only to the training data inside the modeling workflow.
+Because the training set contains more than two hundred thousand observations, some clustering algorithms become computationally expensive when applied to the full dataset. To ensure a consistent comparison across methods, all clustering algorithms are applied to the same stratified sample extracted from the training set. This preserves the original class distribution while keeping the analysis computationally tractable.
+
+### Stratified Sample for Clustering
+
+A stratified sample is created from the scaled training set. The sample preserves the proportion of fraudulent and legitimate transactions observed in the training data and is used consistently across K-Means, Agglomerative Clustering, and DBSCAN.
 
 ```{r}
 
-fraud_recipe <- recipe(class ~ ., data = train_data) |>
-  update_role(time, new_role = "id") |>
-  step_normalize(all_numeric_predictors()) |>
-  step_downsample(class)
+sample_size <- 20000
+
+train_sample <- X_train_scaled |>
+  mutate(Class = y_train)
+
+sample_fraction <- sample_size / nrow(train_sample)
+
+train_sample <- train_sample |>
+  group_by(Class) |>
+  slice_sample(
+    prop = sample_fraction
+  ) |>
+  ungroup()
+
+X_train_sample_scaled <- train_sample |>
+  select(-Class)
+
+y_train_sample <- train_sample$Class
+
+cat("Sample shape:", paste(dim(X_train_sample_scaled), collapse = " "), "\n")
+cat(sprintf("Training fraud rate: %.4f%%\n", mean(y_train) * 100))
+cat(sprintf("Sample fraud rate: %.4f%%\n", mean(y_train_sample) * 100))
 ```
+
+```{r}
+
+baseline_fraud_rate <- mean(y_train_sample) * 100
+
+cat(sprintf(
+  "Baseline fraud rate in clustering sample: %.4f%%",
+  baseline_fraud_rate
+))
+```
+
+### K-Means Clustering
+
+K-Means partitions observations into a predefined number of clusters by minimizing the within-cluster sum of squares. The resulting clusters are examined to determine whether fraudulent transactions are concentrated in specific regions of the feature space.
+
+Because the elbow plot does not provide a clear inflection point, additional internal validation metrics are computed for different values of `k`. The Silhouette score, Calinski-Harabasz index, and Davies-Bouldin index are used together with inertia to support the final choice of the number of clusters.
+
+```{r}
+
+compute_clustering_metrics <- function(data, labels) {
+  labels_integer <- as.integer(labels)
+  
+  silhouette_value <- mean(
+    silhouette(
+      labels_integer,
+      dist(data)
+    )[, "sil_width"]
+  )
+  
+  internal_metrics <- intCriteria(
+    as.matrix(data),
+    labels_integer,
+    c("Calinski_Harabasz", "Davies_Bouldin")
+  )
+  
+  tibble(
+    silhouette_score = silhouette_value,
+    calinski_harabasz_score = internal_metrics$calinski_harabasz,
+    davies_bouldin_score = internal_metrics$davies_bouldin
+  )
+}
+```
+
+```{r}
+
+k_values <- 2:15
+
+kmeans_results <- list()
+
+for (k in k_values) {
+  set.seed(random_state)
+  
+  kmeans_fit <- kmeans(
+    X_train_sample_scaled,
+    centers = k,
+    nstart = 10
+  )
+  
+  metrics <- compute_clustering_metrics(
+    X_train_sample_scaled,
+    kmeans_fit$cluster
+  )
+  
+  kmeans_results[[as.character(k)]] <- tibble(
+    k = k,
+    inertia = kmeans_fit$tot.withinss
+  ) |>
+    bind_cols(metrics)
+}
+
+kmeans_metrics <- bind_rows(kmeans_results)
+
+kmeans_metrics
+```
+
+```{r}
+
+kmeans_metrics_gt <- kmeans_metrics |>
+  mutate(
+    across(where(is.numeric), ~ round(.x, 6))
+  ) |>
+  gt() |>
+  tab_header(
+    title = "K-Means Clustering Metrics"
+  )
+
+kmeans_metrics_gt
+
+gtsave(
+  data = kmeans_metrics_gt,
+  filename = file.path(tables_dir, "kmeans-metrics.html")
+)
+```
+
+```{r}
+
+kmeans_inertia_plot <- ggplot(
+  kmeans_metrics,
+  aes(x = k, y = inertia)
+) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Number of Clusters",
+    y = "Inertia",
+    title = "K-Means Inertia by Number of Clusters"
+  ) +
+  theme_minimal()
+
+kmeans_inertia_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "kmeans-inertia.png"),
+  plot = kmeans_inertia_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+```{r}
+
+kmeans_silhouette_score_plot <- ggplot(
+  kmeans_metrics,
+  aes(x = k, y = silhouette_score)
+) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Number of Clusters",
+    y = "Silhouette Score",
+    title = "K-Means Silhouette Score by Number of Clusters"
+  ) +
+  theme_minimal()
+
+kmeans_silhouette_score_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "kmeans-silhouette-score.png"),
+  plot = kmeans_silhouette_score_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+```{r}
+
+kmeans_calinski_harabasz_plot <- ggplot(
+  kmeans_metrics,
+  aes(x = k, y = calinski_harabasz_score)
+) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Number of Clusters",
+    y = "Calinski-Harabasz Score",
+    title = "K-Means Calinski-Harabasz Score by Number of Clusters"
+  ) +
+  theme_minimal()
+
+kmeans_calinski_harabasz_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "kmeans-calinski-harabasz.png"),
+  plot = kmeans_calinski_harabasz_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+```{r}
+
+kmeans_davies_bouldin_plot <- ggplot(
+  kmeans_metrics,
+  aes(x = k, y = davies_bouldin_score)
+) +
+  geom_line() +
+  geom_point() +
+  labs(
+    x = "Number of Clusters",
+    y = "Davies-Bouldin Score",
+    title = "K-Means Davies-Bouldin Score by Number of Clusters"
+  ) +
+  theme_minimal()
+
+kmeans_davies_bouldin_plot
+```
+
+```{r}
+
+ggsave(
+  filename = file.path(outputs_dir, "kmeans-davies-bouldin.png"),
+  plot = kmeans_davies_bouldin_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
+
+The validation metrics are used as diagnostic tools rather than as a mechanical rule for selecting the number of clusters. Since the purpose of this stage is exploratory, the selected value of `k` should balance metric performance and interpretability.
+
+Although internal validation metrics were evaluated for multiple values of k, no single criterion provided a definitive choice. The elbow method did not reveal a clear inflection point, while different validation metrics favored different cluster configurations.
+
+From an exploratory perspective, the three-cluster solution revealed the strongest concentration of fraudulent transactions. One cluster exhibited a fraud rate approximately twenty-one times higher than the baseline fraud rate, suggesting the presence of a distinct region of the feature space associated with fraudulent behavior. For this reason, a three-cluster solution was retained for the remainder of the analysis.
+
+```{r}
+
+n_clusters <- 3
+```
+
+```{r}
+
+set.seed(random_state)
+
+kmeans_fit <- kmeans(
+  X_train_sample_scaled,
+  centers = n_clusters,
+  nstart = 10
+)
+
+kmeans_labels <- kmeans_fit$cluster - 1
+```
+
+```{r}
+
+final_kmeans_metrics <- compute_clustering_metrics(
+  X_train_sample_scaled,
+  kmeans_labels + 1
+)
+
+cat(sprintf(
+  "Silhouette score: %.4f\n",
+  final_kmeans_metrics$silhouette_score
+))
+
+cat(sprintf(
+  "Calinski-Harabasz score: %.4f\n",
+  final_kmeans_metrics$calinski_harabasz_score
+))
+
+cat(sprintf(
+  "Davies-Bouldin score: %.4f\n",
+  final_kmeans_metrics$davies_bouldin_score
+))
+```
+
+### K-Means Cluster Composition
+
+The composition of each cluster is examined by comparing its fraud rate against the baseline fraud rate in the clustering sample. The fraud lift indicates how many times higher or lower the fraud concentration of a cluster is relative to the sample baseline.
+
+```{r}
+
+kmeans_cluster_summary <- tibble(
+  cluster = kmeans_labels,
+  Class = y_train_sample
+) |>
+  group_by(cluster) |>
+  summarise(
+    transactions = n(),
+    fraud_count = sum(Class),
+    fraud_rate = mean(Class) * 100,
+    .groups = "drop"
+  ) |>
+  mutate(
+    fraud_lift = fraud_rate / baseline_fraud_rate
+  ) |>
+  arrange(desc(fraud_lift))
+
+kmeans_cluster_summary
+```
+
+```{r}
+
+kmeans_cluster_summary_gt <- kmeans_cluster_summary |>
+  mutate(
+    fraud_rate = round(fraud_rate, 6),
+    fraud_lift = round(fraud_lift, 6)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "K-Means Cluster Summary"
+  )
+
+kmeans_cluster_summary_gt
+
+gtsave(
+  data = kmeans_cluster_summary_gt,
+  filename = file.path(tables_dir, "kmeans-cluster-summary.html")
+)
+```
+
+```{r}
+
+cat(sprintf(
+  "Baseline fraud rate: %.4f%%",
+  baseline_fraud_rate
+))
+```
+
+The results indicate that the clusters are not equally associated with fraudulent activity. In particular, one cluster exhibits a substantially higher fraud rate than the baseline rate observed in the sample. This suggests that fraudulent transactions may occupy specific regions of the feature space rather than being uniformly distributed across all observations.
+
+### Agglomerative Clustering
+
+Agglomerative Clustering is a hierarchical clustering method that builds nested groups through successive merges. Unlike K-Means, which partitions observations around centroids, Agglomerative Clustering constructs clusters based on pairwise similarity relationships among observations.
+
+To facilitate comparison with K-Means, the number of clusters is fixed at three.
+
+```{r}
+
+distance_matrix <- dist(X_train_sample_scaled)
+
+agglomerative_fit <- hclust(
+  distance_matrix,
+  method = "ward.D2"
+)
+
+agglomerative_labels <- cutree(
+  agglomerative_fit,
+  k = n_clusters
+) - 1
+```
+
+```{r}
+
+agglomerative_metrics <- compute_clustering_metrics(
+  X_train_sample_scaled,
+  agglomerative_labels + 1
+)
+
+cat(sprintf(
+  "Silhouette score: %.4f\n",
+  agglomerative_metrics$silhouette_score
+))
+
+cat(sprintf(
+  "Calinski-Harabasz score: %.4f\n",
+  agglomerative_metrics$calinski_harabasz_score
+))
+
+cat(sprintf(
+  "Davies-Bouldin score: %.4f\n",
+  agglomerative_metrics$davies_bouldin_score
+))
+```
+
+### Agglomerative Cluster Composition
+
+The composition of each cluster is examined by comparing its fraud rate against the baseline fraud rate in the clustering sample. The fraud lift indicates how many times higher or lower the fraud concentration of a cluster is relative to the sample baseline.
+
+```{r}
+
+agglomerative_cluster_summary <- tibble(
+  cluster = agglomerative_labels,
+  Class = y_train_sample
+) |>
+  group_by(cluster) |>
+  summarise(
+    transactions = n(),
+    fraud_count = sum(Class),
+    fraud_rate = mean(Class) * 100,
+    .groups = "drop"
+  ) |>
+  mutate(
+    fraud_lift = fraud_rate / baseline_fraud_rate
+  ) |>
+  arrange(desc(fraud_lift))
+
+agglomerative_cluster_summary
+```
+
+```{r}
+
+agglomerative_cluster_summary_gt <- agglomerative_cluster_summary |>
+  mutate(
+    fraud_rate = round(fraud_rate, 6),
+    fraud_lift = round(fraud_lift, 6)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Agglomerative Cluster Summary"
+  )
+
+agglomerative_cluster_summary_gt
+
+gtsave(
+  data = agglomerative_cluster_summary_gt,
+  filename = file.path(tables_dir, "agglomerative-cluster-summary.html")
+)
+```
+
+```{r}
+
+cat(sprintf(
+  "Baseline fraud rate: %.4f%%",
+  baseline_fraud_rate
+))
+```
+
+The distribution of fraud across the hierarchical clusters provides an alternative perspective on the structure of the transaction space. Comparing the fraud concentration observed in these clusters with the results obtained from K-Means helps assess whether the detected patterns are robust across different clustering methodologies.
+
+### DBSCAN Clustering
+
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise) groups observations according to local density rather than predefined cluster assignments. Unlike K-Means and Agglomerative Clustering, DBSCAN can identify observations that do not belong to any cluster and label them as noise.
+
+This characteristic makes DBSCAN particularly relevant for fraud detection, where fraudulent transactions may appear as isolated or unusual observations rather than as members of large homogeneous groups.
+
+### Selection of DBSCAN Parameters
+
+DBSCAN requires two parameters:
+
+- `eps`, which defines the neighborhood radius around each observation.
+- `min_samples`, which specifies the minimum number of neighboring observations required to form a dense region.
+
+Because no universally optimal values exist, several parameter combinations are explored before fitting the final model.
+
+```{r}
+
+dbscan_results <- list()
+
+eps_values <- c(1.0, 1.5, 2.0, 2.5)
+min_samples_values <- c(5, 10, 20)
+
+counter <- 1
+
+for (eps in eps_values) {
+  for (min_samples in min_samples_values) {
+    dbscan_fit <- dbscan(
+      X_train_sample_scaled,
+      eps = eps,
+      minPts = min_samples
+    )
+    
+    labels <- dbscan_fit$cluster
+    
+    n_clusters_dbscan <- length(unique(labels[labels != 0]))
+    n_noise <- sum(labels == 0)
+    
+    dbscan_results[[counter]] <- tibble(
+      eps = eps,
+      min_samples = min_samples,
+      n_clusters = n_clusters_dbscan,
+      noise_points = n_noise
+    )
+    
+    counter <- counter + 1
+  }
+}
+
+dbscan_results <- bind_rows(dbscan_results)
+
+dbscan_results
+```
+
+```{r}
+
+dbscan_results_gt <- dbscan_results |>
+  gt() |>
+  tab_header(
+    title = "DBSCAN Parameter Search Results"
+  )
+
+dbscan_results_gt
+
+gtsave(
+  data = dbscan_results_gt,
+  filename = file.path(tables_dir, "dbscan-parameter-search-results.html")
+)
+```
+
+The results indicate that DBSCAN is highly sensitive to the choice of `eps` and `min_samples`. Smaller neighborhood radii produce a large number of clusters and classify a substantial proportion of observations as noise, while larger values yield a more compact clustering structure.
+
+For the purposes of this exploratory analysis, a configuration of `eps = 2.5` and `min_samples = 20` is retained. This specification produces a manageable number of clusters while preserving DBSCAN's ability to identify observations that do not belong to any dense region of the feature space.
+
+```{r}
+
+eps <- 2.5
+min_samples <- 20
+```
+
+```{r}
+
+dbscan_fit <- dbscan(
+  X_train_sample_scaled,
+  eps = eps,
+  minPts = min_samples
+)
+
+dbscan_labels <- if_else(
+  dbscan_fit$cluster == 0,
+  -1L,
+  dbscan_fit$cluster - 1L
+)
+```
+
+```{r}
+
+n_clusters_dbscan <- length(unique(dbscan_labels[dbscan_labels != -1]))
+n_noise <- sum(dbscan_labels == -1)
+
+cat("Number of clusters:", n_clusters_dbscan, "\n")
+cat("Noise points:", n_noise)
+```
+
+### DBSCAN Cluster Composition
+
+The composition of each cluster is examined by comparing its fraud rate against the baseline fraud rate in the clustering sample. Particular attention is given to observations classified as noise, since these transactions do not belong to any dense region identified by the algorithm.
+
+```{r}
+
+dbscan_cluster_summary <- tibble(
+  cluster = dbscan_labels,
+  Class = y_train_sample
+) |>
+  group_by(cluster) |>
+  summarise(
+    transactions = n(),
+    fraud_count = sum(Class),
+    fraud_rate = mean(Class) * 100,
+    .groups = "drop"
+  ) |>
+  mutate(
+    fraud_lift = fraud_rate / baseline_fraud_rate
+  ) |>
+  arrange(desc(fraud_lift))
+
+dbscan_cluster_summary
+```
+
+```{r}
+
+dbscan_cluster_summary_gt <- dbscan_cluster_summary |>
+  mutate(
+    fraud_rate = round(fraud_rate, 6),
+    fraud_lift = round(fraud_lift, 6)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "DBSCAN Cluster Summary"
+  )
+
+dbscan_cluster_summary_gt
+
+gtsave(
+  data = dbscan_cluster_summary_gt,
+  filename = file.path(tables_dir, "dbscan-cluster-summary.html")
+)
+```
+
+```{r}
+
+cat(sprintf(
+  "Baseline fraud rate: %.4f%%",
+  baseline_fraud_rate
+))
+```
+
+```{r}
+
+noise_points <- tibble(
+  cluster = dbscan_labels,
+  Class = y_train_sample
+) |>
+  filter(cluster == -1)
+
+noise_fraud_rate <- mean(noise_points$Class) * 100
+
+noise_fraud_lift <- noise_fraud_rate / baseline_fraud_rate
+
+cat(sprintf(
+  "Noise fraud rate: %.4f%%\n",
+  noise_fraud_rate
+))
+
+cat(sprintf(
+  "Noise fraud lift: %.4f",
+  noise_fraud_lift
+))
+```
+
+The distribution of fraud across density-based clusters provides a complementary perspective to the results obtained from K-Means and Agglomerative Clustering. In particular, the concentration of fraudulent transactions among observations classified as noise may indicate that certain fraud patterns behave as isolated anomalies rather than members of well-defined clusters.
+
+### Comparison of Clustering Results
+
+The three clustering algorithms provide complementary perspectives on the structure of fraudulent transactions. Rather than producing identical results, each method highlights a different aspect of the transaction space.
+
+K-Means identifies a relatively large region characterized by an elevated concentration of fraudulent transactions. Agglomerative Clustering isolates a much smaller group exhibiting an exceptionally high fraud rate. In contrast, DBSCAN classifies all fraudulent transactions as noise, suggesting that fraudulent behavior may appear as atypical observations rather than members of dense regions.
+
+Taken together, these results provide evidence that fraudulent transactions are not uniformly distributed across the feature space. Although the exact structure depends on the clustering methodology, all three approaches indicate that fraud occupies distinct regions that differ from the bulk of legitimate transactions.
+
+```{r}
+
+clustering_summary <- tibble(
+  method = c(
+    "K-Means",
+    "Agglomerative Clustering",
+    "DBSCAN"
+  ),
+  key_finding = c(
+    "Fraud lift ≈ 21 in one cluster",
+    "Fraud lift ≈ 490 in a micro-cluster",
+    "All frauds classified as noise"
+  )
+)
+
+clustering_summary
+```
+
+```{r}
+
+clustering_summary_gt <- clustering_summary |>
+  gt() |>
+  tab_header(
+    title = "Summary of Clustering Results"
+  )
+
+clustering_summary_gt
+
+gtsave(
+  data = clustering_summary_gt,
+  filename = file.path(tables_dir, "clustering-summary.html")
+)
+```
+
+### Summary
+
+The clustering analysis provides preliminary evidence that fraudulent transactions exhibit detectable structure within the available feature space. While the specific patterns vary across algorithms, all methods identify behavior that differs substantially from the baseline distribution of legitimate transactions.
+
+These findings support the central hypothesis of the project and motivate the supervised learning stage. If fraudulent transactions leave identifiable signatures in the feature space, predictive models should be able to exploit this structure to distinguish fraudulent and legitimate transactions more effectively.

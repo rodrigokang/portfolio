@@ -30,26 +30,93 @@ The underlying assumption of the project is that fraudulent transactions leave d
 
 ## Methodology and Implementation
 
-This section describes the data, experimental design, computational workflow, and implementation details used throughout the project.
+This project combines unsupervised and supervised learning techniques to investigate fraudulent credit card transactions. The analysis begins with an unsupervised exploration of the feature space to determine whether fraudulent transactions exhibit identifiable structure without using the target labels. Clustering algorithms are used to examine the distribution of transactions and to assess whether fraud tends to concentrate in specific regions of the data.
 
-Typical topics may include:
+The second stage focuses on supervised learning, where the transaction labels are incorporated to build predictive models capable of distinguishing fraudulent and legitimate transactions. Together, these two perspectives provide a broader understanding of the problem, combining exploratory analysis with predictive modeling.
 
-- Data collection and sources
-- Feature engineering
-- Cleaning and preprocessing
-- Simulation strategies
-- Training and validation methodology
-- Experimental setup
-- Numerical methods and algorithms
-- Workflow organization
-- Pipeline structure
-- Computational considerations
+### Unsupervised Learning Methodology
 
-The goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.
+The unsupervised learning stage investigates whether fraudulent transactions exhibit identifiable structure in the feature space without using the target labels during model construction. If fraudulent transactions tend to concentrate in specific regions of the transformed feature space, clustering algorithms should be able to reveal these patterns.
 
-Implementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.
+The analysis begins with an exploratory examination of the dataset. Particular attention is given to the severe class imbalance that characterizes the fraud detection problem.
 
-References to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.
+The class distribution is summarized below.
+
+| Class        | Transactions  | Percentage (%)  |
+| :----------: | :-----------: | :-------------: |
+| Legitimate   |      284,315  |         99.827  |
+| Fraudulent   |          492  |          0.173  |
+
+: Class distribution in the credit card transaction dataset. {#tbl-target-summary}
+
+@fig-class-distribution illustrates the extreme imbalance between legitimate and fraudulent transactions. Fraudulent transactions represent less than one percent of all observations, making fraud detection a highly imbalanced classification problem.
+
+![Class distribution in the credit card transaction dataset.](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/class-distribution.png){#fig-class-distribution}
+
+Transaction amounts were also examined to characterize the range and concentration of transaction values.
+
+|   Statistic    |     Value  |
+| :------------: | :--------: |
+| Minimum        |      0.00  |
+| 1st Quartile   |      5.60  |
+| Median         |     22.00  |
+| Mean           |     88.35  |
+| 3rd Quartile   |     77.17  |
+| Maximum        | 25,691.16  |
+
+: Summary statistics for transaction amounts. {#tbl-transaction-amount-summary}
+
+The distribution of transaction amounts is highly right-skewed, with most transactions concentrated at relatively small values and a small number of extreme observations. This behavior can be observed in @fig-transaction-amount-distribution.
+
+![Distribution of transaction amounts.](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/transaction-amount-distribution.png){#fig-transaction-amount-distribution}
+
+Transaction amounts were further compared across classes. Although fraudulent and legitimate transactions overlap substantially, @fig-transaction-amount-by-class suggests differences in the distribution of transaction values between the two groups.
+
+![Transaction amount by class.](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/transaction-amount-by-class.png){#fig-transaction-amount-by-class}
+
+The variables V1–V28 correspond to principal components obtained through a prior anonymization process. Selected features were visualized to examine differences between fraudulent and legitimate transactions. Several variables exhibit noticeable shifts between classes, suggesting that fraudulent transactions occupy distinct regions of the transformed feature space.
+
+![Selected PCA feature distributions by class.](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/selected-pca-features-distribution.png){#fig-selected-pca-features}
+
+To complement the univariate analysis, a correlation matrix was computed using all available variables.
+
+![Correlation matrix of the credit card transaction dataset.](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/correlation-matrix.png){#fig-correlation-matrix}
+
+Following the exploratory analysis, the target variable was separated from the predictors and the Time variable was removed. The data was then partitioned into training and test sets using stratified sampling to preserve the original class distribution. Feature scaling was applied after the train-test split, with scaling parameters estimated exclusively from the training data.
+
+Because the training set contains more than two hundred thousand observations, a stratified sample was extracted from the training data for the clustering analysis. The sample preserves the original fraud rate while reducing computational requirements and allowing a consistent comparison across clustering algorithms.
+
+Three clustering approaches were evaluated:
+
+* K-Means Clustering
+* Agglomerative Clustering
+* DBSCAN
+
+For K-Means, multiple values of (k) were explored. The elbow method was evaluated using the within-cluster sum of squares (inertia).
+
+![K-Means inertia as a function of the number of clusters.](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised-figures/kmeans-inertia.png){#fig-kmeans-inertia}
+
+The elbow plot does not reveal a clear point at which additional clusters provide diminishing returns. As a result, the number of clusters cannot be determined reliably using inertia alone. Additional validation metrics were evaluated and used as complementary diagnostic tools. Since no single criterion produced a definitive solution, the final choice was guided by interpretability and fraud concentration within the resulting clusters.
+
+A three-cluster solution was retained because it revealed the strongest concentration of fraudulent transactions while remaining straightforward to interpret.
+
+The composition of the resulting clusters was then examined by comparing cluster-level fraud rates against the baseline fraud rate observed in the clustering sample.
+
+| Method                   | Key Finding                                                                                              |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- |
+| K-Means                  | One cluster exhibited a fraud rate approximately 21 times higher than the baseline fraud rate.           |
+| Agglomerative Clustering | A small cluster exhibited a fraud rate approximately 490 times higher than the baseline fraud rate.      |
+| DBSCAN                   | Fraudulent transactions were primarily identified as noise points rather than members of dense clusters. |
+
+: Summary of the main findings obtained from the clustering algorithms. {#tbl-clustering-summary}
+
+The clustering results provide complementary perspectives on the structure of fraudulent transactions. K-Means identified a relatively large region characterized by elevated fraud concentration, while Agglomerative Clustering isolated a much smaller cluster with an exceptionally high fraud rate. In contrast, DBSCAN classified fraudulent transactions primarily as noise, suggesting that some fraud patterns behave as isolated anomalies rather than members of dense groups.
+
+Taken together, these results indicate that fraudulent transactions are not uniformly distributed across the feature space. Although the exact structure varies across clustering algorithms, all three methods reveal behavior that differs substantially from the baseline distribution of legitimate transactions.
+
+These findings provide preliminary evidence that fraudulent transactions leave detectable signatures in the available feature space and motivate the supervised learning stage of the analysis.
+
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised.html). The corresponding Python notebooks associated with this project are also available in the [<i class="bi bi-github"></i> repository](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/python).
 
 ## Results, Discussion, and Limitations
 
