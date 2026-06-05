@@ -30,9 +30,9 @@ The underlying assumption of the project is that fraudulent transactions leave d
 
 ## Methodology and Implementation
 
-This project combines unsupervised and supervised learning techniques to investigate fraudulent credit card transactions. The analysis begins with an unsupervised exploration of the feature space to determine whether fraudulent transactions exhibit identifiable structure without using the target labels. Clustering algorithms are used to examine the distribution of transactions and to assess whether fraud tends to concentrate in specific regions of the data.
+The analysis begins with an unsupervised exploration of the feature space to determine whether fraudulent transactions exhibit identifiable structure without using the target labels. Clustering algorithms are used to examine the distribution of transactions and to assess whether fraud tends to concentrate in specific regions of the data.
 
-The second stage focuses on supervised learning, where the transaction labels are incorporated to build predictive models capable of distinguishing fraudulent and legitimate transactions. Together, these two perspectives provide a broader understanding of the problem, combining exploratory analysis with predictive modeling.
+The second stage introduces the transaction labels and evaluates a range of supervised learning algorithms within a common benchmarking framework. Together, these two perspectives provide a broader understanding of the problem, combining exploratory analysis with predictive modeling.
 
 ### Unsupervised Learning Methodology
 
@@ -120,39 +120,4 @@ Additional implementation details are available in the companion Quarto notebook
 
 ## Results, Discussion, and Limitations
 
-This section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.
-
-Typical elements may include:
-
-- Visualizations and plots
-- Performance metrics
-- Comparisons with baseline approaches
-- Sensitivity analysis
-- Error analysis
-- Interpretation of results
-- Model assumptions and their consequences
-- Sources of uncertainty
-- Robustness and generalization
-- Trade-offs associated with the methodology
-- Potential future improvements
-
-The emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.
-
 ## Technical Appendix (Optional)
-
-This optional section contains technical details that support the project but are not essential for following the main narrative.
-
-Possible contents include:
-
-- Mathematical derivations
-- Additional proofs
-- Numerical details
-- Extended equations
-- Supplementary experiments
-- Technical notes on auxiliary methods and algorithms
-
-The appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.
-
-The main body of the project is intended to remain fully understandable without requiring consultation of the appendix.
-
-The appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.

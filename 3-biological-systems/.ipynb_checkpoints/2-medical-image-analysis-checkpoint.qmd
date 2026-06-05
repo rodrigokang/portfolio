@@ -1,4 +1,4 @@
-# Microbial Population Dynamics (Lotka–Volterra Model)
+# Medical Image Analysis
 
 _Work in progress._
 

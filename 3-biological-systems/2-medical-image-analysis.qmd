@@ -1,4 +1,4 @@
-# RFM Segmentation with K-Means
+# Medical Image Analysis
 
 _Work in progress._
 
