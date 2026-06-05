@@ -118,6 +118,18 @@ These findings provide preliminary evidence that fraudulent transactions leave d
 
 Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-unsupervised.html). The corresponding Python notebooks associated with this project are also available in the [<i class="bi bi-github"></i> repository](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/python).
 
+## Supervised Learning Benchmark
+
+The supervised benchmarking stage is complete and covers model training, cross-validation, class imbalance treatments, and comparative performance evaluation across all selected algorithms.
+
+The detailed discussion of the supervised results is currently being prepared for this chapter. In the meantime, the complete analysis, figures, and implementation details are available in the companion materials:
+
+* R / Quarto notebook: [link]
+* Python notebook: [link]
+* Project repository: [link]
+
+These materials contain the complete experimental workflow and reproducible implementation associated with this stage of the project.
+
 ## Results, Discussion, and Limitations
 
 ## Technical Appendix (Optional)

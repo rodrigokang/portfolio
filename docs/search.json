@@ -260,11 +260,22 @@
     ]
   },
   {
+    "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#supervised-learning-benchmark",
+    "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#supervised-learning-benchmark",
+    "title": "4  Credit Card Fraud Detection",
+    "section": "4.4 Supervised Learning Benchmark",
+    "text": "4.4 Supervised Learning Benchmark\nThe supervised benchmarking stage is complete and covers model training, cross-validation, class imbalance treatments, and comparative performance evaluation across all selected algorithms.\nThe detailed discussion of the supervised results is currently being prepared for this chapter. In the meantime, the complete analysis, figures, and implementation details are available in the companion materials:\n\nR / Quarto notebook: [link]\nPython notebook: [link]\nProject repository: [link]\n\nThese materials contain the complete experimental workflow and reproducible implementation associated with this stage of the project.",
+    "crumbs": [
+      "Retail Analytics",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
+    ]
+  },
+  {
     "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#results-discussion-and-limitations",
     "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#results-discussion-and-limitations",
     "title": "4  Credit Card Fraud Detection",
-    "section": "4.4 Results, Discussion, and Limitations",
-    "text": "4.4 Results, Discussion, and Limitations",
+    "section": "4.5 Results, Discussion, and Limitations",
+    "text": "4.5 Results, Discussion, and Limitations",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
@@ -274,8 +285,8 @@
     "objectID": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#technical-appendix-optional",
     "href": "2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html#technical-appendix-optional",
     "title": "4  Credit Card Fraud Detection",
-    "section": "4.5 Technical Appendix (Optional)",
-    "text": "4.5 Technical Appendix (Optional)\n\n\n\n\n[1] A. Dal Pozzolo, O. Caelen, R. A. Johnson, and G. Bontempi, “Calibrating probability with undersampling for unbalanced classification.” in SSCI, 2015, pp. 159–166.\n\n\n[2] B. Baesens, V. Van Vlasselaer, and W. Verbeke, Fraud analytics using descriptive, predictive, and social network techniques: A guide to data science for fraud detection. John Wiley & Sons, 2015.\n\n\n[3] A. Dal Pozzolo, G. Boracchi, O. Caelen, C. Alippi, and G. Bontempi, “Credit card fraud detection: A realistic modeling and a novel learning strategy,” IEEE transactions on neural networks and learning systems, vol. 29, no. 8, pp. 3784–3797, 2017.\n\n\n[4] E. W. Ngai, Y. Hu, Y. H. Wong, Y. Chen, and X. Sun, “The application of data mining techniques in financial fraud detection: A classification framework and an academic review of literature,” Decision support systems, vol. 50, no. 3, pp. 559–569, 2011.\n\n\n[5] K. G. Al-Hashedi and P. Magalingam, “Financial fraud detection applying data mining techniques: A comprehensive review from 2009 to 2019,” Computer Science Review, vol. 40, p. 100402, 2021.\n\n\n[6] F. Carcillo, Y.-A. Le Borgne, O. Caelen, Y. Kessaci, F. Oblé, and G. Bontempi, “Combining unsupervised and supervised learning in credit card fraud detection,” Information sciences, vol. 557, pp. 317–331, 2021.",
+    "section": "4.6 Technical Appendix (Optional)",
+    "text": "4.6 Technical Appendix (Optional)\n\n\n\n\n[1] A. Dal Pozzolo, O. Caelen, R. A. Johnson, and G. Bontempi, “Calibrating probability with undersampling for unbalanced classification.” in SSCI, 2015, pp. 159–166.\n\n\n[2] B. Baesens, V. Van Vlasselaer, and W. Verbeke, Fraud analytics using descriptive, predictive, and social network techniques: A guide to data science for fraud detection. John Wiley & Sons, 2015.\n\n\n[3] A. Dal Pozzolo, G. Boracchi, O. Caelen, C. Alippi, and G. Bontempi, “Credit card fraud detection: A realistic modeling and a novel learning strategy,” IEEE transactions on neural networks and learning systems, vol. 29, no. 8, pp. 3784–3797, 2017.\n\n\n[4] E. W. Ngai, Y. Hu, Y. H. Wong, Y. Chen, and X. Sun, “The application of data mining techniques in financial fraud detection: A classification framework and an academic review of literature,” Decision support systems, vol. 50, no. 3, pp. 559–569, 2011.\n\n\n[5] K. G. Al-Hashedi and P. Magalingam, “Financial fraud detection applying data mining techniques: A comprehensive review from 2009 to 2019,” Computer Science Review, vol. 40, p. 100402, 2021.\n\n\n[6] F. Carcillo, Y.-A. Le Borgne, O. Caelen, Y. Kessaci, F. Oblé, and G. Bontempi, “Combining unsupervised and supervised learning in credit card fraud detection,” Information sciences, vol. 557, pp. 317–331, 2021.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Credit Card Fraud Detection</span>"
