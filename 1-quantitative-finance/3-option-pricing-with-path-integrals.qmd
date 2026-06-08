@@ -127,7 +127,18 @@ Pricing results obtained from the three methods are reported in @tbl-market-comp
 
 The overall conclusions are consistent with those obtained in the controlled experiment. The numerical estimates remain close to the Black-Scholes benchmark, while standard Monte Carlo continues to provide the most accurate approximation among the simulation-based methods considered. At the same time, the exercise demonstrates that the implementation can be applied without modification once the required market inputs have been estimated.
 
-Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals.html). The corresponding Python notebooks associated with this project are also available in the [<i class="bi bi-github"></i> repository](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/3-option-pricing/python).
+::: {.content-visible when-format="html"}
+
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/r/1-option-pricing-with-path-integrals.html). A companion Python implementation is also available [here](../notebooks-and-scripts/1-quantitative-finance/3-option-pricing/python/1-option-pricing-with-path-integrals.html).
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository [here]
+(https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/3-option-pricing)
+
+:::
 
 ## Results, Discussion, and Limitations
 

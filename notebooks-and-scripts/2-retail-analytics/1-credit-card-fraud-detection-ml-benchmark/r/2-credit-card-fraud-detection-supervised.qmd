@@ -1,0 +1,944 @@
+---
+title: "Credit Card Fraud Detection: Supervised Learning Analysis"
+author: "Rodrigo Kang"
+
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-line-numbers: true
+    code-overflow: wrap
+    theme: cosmo
+    embed-resources: true
+
+execute:
+  warning: false
+  message: false
+
+editor: visual
+---
+
+## Overview
+
+This notebook accompanies the project **Credit Card Fraud Detection** and contains the R / Quarto implementation of the supervised learning analysis.
+
+The complete benchmark across the full set of candidate models was conducted in the Python implementation. Rather than repeating every experiment in R, this notebook focuses on the two strongest approaches retained from that benchmark:
+
+- Random Forest trained on the original class distribution.
+- XGBoost trained on a SMOTE-resampled training set.
+
+This keeps the R implementation practical to run while preserving the main comparison that matters for the project: whether a strong tree-based ensemble can perform well under the original imbalance, and how much is gained when the minority fraud class is explicitly reinforced during training.
+
+## Imports and Configuration
+
+The analysis relies on a collection of packages for data manipulation, visualization, model training, performance evaluation, and class imbalance treatment. A fixed random seed is used throughout the notebook to ensure reproducibility of the results.
+
+```{r}
+
+# Suppress warnings
+options(warn = -1)
+
+# Data manipulation
+library(dplyr)
+library(readr)
+library(tibble)
+library(tidyr)
+
+# Visualization
+library(ggplot2)
+
+# Tables
+library(gt)
+
+# Data splitting and preprocessing
+library(rsample)
+library(recipes)
+
+# Modeling and evaluation
+library(ranger)
+library(xgboost)
+library(yardstick)
+
+# Resampling
+library(themis)
+```
+
+```{r}
+# Reproducibility
+random_state <- 42
+set.seed(random_state)
+
+# Output directory
+figures_dir <- "1-credit-card-fraud-detection-supervised-figures"
+
+if (!dir.exists(figures_dir)) {
+  dir.create(figures_dir, recursive = TRUE)
+}
+```
+
+## Data Loading
+
+The dataset is loaded into memory and its dimensions are inspected before the supervised modeling workflow is prepared.
+
+```{r}
+# Load dataset
+df <- read_csv(
+  "../data/creditcard.csv",
+  show_col_types = FALSE
+)
+
+# Display dataset dimensions
+cat(
+  paste0(
+    "Dataset shape: ",
+    nrow(df),
+    " rows x ",
+    ncol(df),
+    " columns"
+  )
+)
+```
+
+## Data Preparation
+
+The target variable is converted into a factor with two levels: legitimate and fraudulent. The dataset is then split into training and testing subsets using stratified sampling, so that the rare fraud class is represented consistently in both sets.
+
+Feature scaling is applied after the train-test split. The scaling parameters are estimated from the training data only and then applied to both the training and test sets. This avoids leaking information from the test set into the model training process.
+
+```{r}
+# Convert target variable to factor
+df <- df %>%
+  mutate(
+    Class = factor(
+      Class,
+      levels = c(0, 1),
+      labels = c("legitimate", "fraudulent")
+    )
+  )
+
+# Train-test split
+data_split <- initial_split(
+  df,
+  prop = 0.80,
+  strata = Class
+)
+
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+
+cat(
+  paste0(
+    "Training observations: ",
+    nrow(train_data),
+    "\n"
+  )
+)
+
+cat(
+  paste0(
+    "Testing observations: ",
+    nrow(test_data)
+  )
+)
+```
+
+```{r}
+# Feature scaling recipe
+scaling_recipe <- recipe(
+  Class ~ .,
+  data = train_data
+) %>%
+  step_normalize(
+    all_predictors()
+  )
+
+# Estimate scaling parameters using training data only
+scaling_recipe_prep <- prep(
+  scaling_recipe,
+  training = train_data
+)
+
+# Apply scaling to training and test sets
+train_scaled <- bake(
+  scaling_recipe_prep,
+  new_data = train_data
+)
+
+test_scaled <- bake(
+  scaling_recipe_prep,
+  new_data = test_data
+)
+```
+
+```{r}
+# Separate predictors and target
+x_train <- train_scaled %>%
+  select(-Class)
+
+y_train <- train_scaled$Class
+
+x_test <- test_scaled %>%
+  select(-Class)
+
+y_test <- test_scaled$Class
+```
+
+```{r}
+# Binary target for xgboost
+y_test_binary <- ifelse(
+  y_test == "fraudulent",
+  1,
+  0
+)
+```
+
+## Class Imbalance Treatment
+
+The original training set is kept unchanged for the Random Forest model. A second training set is created using SMOTE for XGBoost. This choice follows the Python benchmark: the R notebook is not intended to repeat the full benchmark, but to reproduce the two strongest and most informative final configurations.
+
+```{r}
+# Original class distribution
+train_original <- train_scaled
+```
+
+```{r}
+# SMOTE-resampled training set
+smote_recipe <- recipe(
+  Class ~ .,
+  data = train_scaled
+) %>%
+  step_smote(
+    Class,
+    over_ratio = 1,
+    seed = random_state
+  )
+
+smote_recipe_prep <- prep(
+  smote_recipe,
+  training = train_scaled
+)
+
+train_smote <- bake(
+  smote_recipe_prep,
+  new_data = NULL
+)
+```
+
+```{r}
+# Check class distributions after resampling
+class_distribution <- bind_rows(
+  train_original %>%
+    count(Class) %>%
+    mutate(strategy = "Original"),
+
+  train_smote %>%
+    count(Class) %>%
+    mutate(strategy = "SMOTE")
+) %>%
+  group_by(strategy) %>%
+  mutate(
+    percentage = 100 * n / sum(n)
+  ) %>%
+  ungroup() %>%
+  select(
+    strategy,
+    Class,
+    n,
+    percentage
+  )
+
+class_distribution
+```
+
+```{r}
+# Save and display class distribution table
+class_distribution_table <- class_distribution %>%
+  gt() %>%
+  tab_header(
+    title = "Class Distribution by Training Strategy"
+  ) %>%
+  fmt_number(
+    columns = percentage,
+    decimals = 3
+  )
+
+gtsave(
+  class_distribution_table,
+  filename = file.path(
+    figures_dir,
+    "class-distribution-training-strategies.html"
+  )
+)
+
+class_distribution_table
+```
+
+```{r}
+# Helper function to create xgboost matrices
+create_xgb_matrix <- function(data) {
+
+  x <- data %>%
+    select(-Class) %>%
+    as.matrix()
+
+  y <- ifelse(
+    data$Class == "fraudulent",
+    1,
+    0
+  )
+
+  xgb.DMatrix(
+    data = x,
+    label = y
+  )
+}
+```
+
+```{r}
+# Matrices for XGBoost
+dtrain_smote <- create_xgb_matrix(train_smote)
+
+dtest <- xgb.DMatrix(
+  data = x_test %>% as.matrix(),
+  label = y_test_binary
+)
+```
+
+## Evaluation Functions
+
+The models are evaluated using metrics that remain informative under severe class imbalance. Accuracy is deliberately not used as the main decision criterion because a classifier can achieve a high accuracy score while missing most fraudulent transactions.
+
+The evaluation includes precision, recall, F1-score, ROC-AUC, Precision-Recall AUC, and the Kolmogorov-Smirnov statistic. Precision-Recall AUC receives particular attention because it focuses directly on the model's ability to rank the rare positive class.
+
+```{r}
+# Function to compute KS statistic
+ks_statistic <- function(truth, estimate) {
+
+  positive_scores <- estimate[truth == "fraudulent"]
+  negative_scores <- estimate[truth == "legitimate"]
+
+  ks_result <- ks.test(
+    positive_scores,
+    negative_scores
+  )
+
+  as.numeric(ks_result$statistic)
+}
+```
+
+```{r}
+# Common evaluation function
+evaluate_predictions <- function(truth, predicted_class, predicted_probability) {
+
+  evaluation_data <- tibble(
+    truth = truth,
+    predicted_class = predicted_class,
+    fraudulent = predicted_probability
+  )
+
+  precision_value <- precision(
+    evaluation_data,
+    truth = truth,
+    estimate = predicted_class,
+    event_level = "second"
+  )$.estimate
+
+  recall_value <- recall(
+    evaluation_data,
+    truth = truth,
+    estimate = predicted_class,
+    event_level = "second"
+  )$.estimate
+
+  f1_value <- f_meas(
+    evaluation_data,
+    truth = truth,
+    estimate = predicted_class,
+    event_level = "second"
+  )$.estimate
+
+  roc_auc_value <- roc_auc(
+    evaluation_data,
+    truth = truth,
+    fraudulent,
+    event_level = "second"
+  )$.estimate
+
+  pr_auc_value <- pr_auc(
+    evaluation_data,
+    truth = truth,
+    fraudulent,
+    event_level = "second"
+  )$.estimate
+
+  ks_value <- ks_statistic(
+    truth = truth,
+    estimate = predicted_probability
+  )
+
+  tibble(
+    precision = precision_value,
+    recall = recall_value,
+    f1_score = f1_value,
+    roc_auc = roc_auc_value,
+    pr_auc = pr_auc_value,
+    ks_statistic = ks_value
+  )
+}
+```
+
+```{r}
+# Helper function to convert probabilities into predicted classes
+predict_class_from_probability <- function(probability, threshold = 0.5) {
+
+  factor(
+    ifelse(
+      probability >= threshold,
+      "fraudulent",
+      "legitimate"
+    ),
+    levels = c(
+      "legitimate",
+      "fraudulent"
+    )
+  )
+}
+```
+
+## Random Forest with Original Class Distribution
+
+The first model is a Random Forest trained on the original class distribution. This configuration is useful because it tests how far a strong ensemble method can go without altering the training distribution.
+
+Random Forest is a practical baseline for this problem. It can capture nonlinear relationships among the anonymized transaction features, is relatively robust, and does not require the same level of feature engineering as simpler linear classifiers.
+
+```{r}
+# Train Random Forest model
+rf_original_model <- ranger(
+  formula = Class ~ .,
+  data = train_original,
+  num.trees = 100,
+  probability = TRUE,
+  importance = "impurity",
+  seed = random_state,
+  num.threads = parallel::detectCores()
+)
+```
+
+```{r}
+# Predict probabilities on the test set
+rf_original_predictions <- predict(
+  rf_original_model,
+  data = x_test
+)$predictions
+
+rf_original_prob <- rf_original_predictions[, "fraudulent"]
+```
+
+```{r}
+# Convert probabilities to predicted classes
+rf_original_class <- predict_class_from_probability(
+  probability = rf_original_prob,
+  threshold = 0.5
+)
+```
+
+```{r}
+# Evaluate Random Forest model
+rf_original_results <- evaluate_predictions(
+  truth = y_test,
+  predicted_class = rf_original_class,
+  predicted_probability = rf_original_prob
+) %>%
+  mutate(
+    strategy = "Original",
+    model = "Random Forest"
+  ) %>%
+  select(
+    strategy,
+    model,
+    precision,
+    recall,
+    f1_score,
+    roc_auc,
+    pr_auc,
+    ks_statistic
+  )
+
+rf_original_results
+```
+
+```{r}
+# Save and display Random Forest results table
+rf_original_results_table <- rf_original_results %>%
+  gt() %>%
+  tab_header(
+    title = "Random Forest Results: Original Class Distribution"
+  ) %>%
+  fmt_number(
+    columns = c(
+      precision,
+      recall,
+      f1_score,
+      roc_auc,
+      pr_auc,
+      ks_statistic
+    ),
+    decimals = 4
+  )
+
+gtsave(
+  rf_original_results_table,
+  filename = file.path(
+    figures_dir,
+    "random-forest-original-results.html"
+  )
+)
+
+rf_original_results_table
+```
+
+## XGBoost with SMOTE
+
+The second model is XGBoost trained on the SMOTE-resampled training set. This configuration represents the strongest imbalance-aware approach retained from the Python benchmark.
+
+SMOTE increases the representation of fraudulent transactions by generating synthetic minority-class examples. In this setting, the goal is not to make the real-world transaction stream look balanced, but to give the model a clearer view of the regions where fraudulent transactions occur.
+
+```{r}
+# Train XGBoost model using SMOTE-resampled data
+xgb_smote_model <- xgb.train(
+  data = dtrain_smote,
+  objective = "binary:logistic",
+  eval_metric = "logloss",
+  nrounds = 100,
+  max_depth = 6,
+  eta = 0.3,
+  subsample = 1,
+  colsample_bytree = 1,
+  seed = random_state,
+  verbose = 0
+)
+```
+
+```{r}
+# Predict probabilities on the test set
+xgb_smote_prob <- predict(
+  xgb_smote_model,
+  newdata = dtest
+)
+```
+
+```{r}
+# Convert probabilities to predicted classes
+xgb_smote_class <- predict_class_from_probability(
+  probability = xgb_smote_prob,
+  threshold = 0.5
+)
+```
+
+```{r}
+# Evaluate XGBoost with SMOTE
+xgb_smote_results <- evaluate_predictions(
+  truth = y_test,
+  predicted_class = xgb_smote_class,
+  predicted_probability = xgb_smote_prob
+) %>%
+  mutate(
+    strategy = "SMOTE",
+    model = "XGBoost"
+  ) %>%
+  select(
+    strategy,
+    model,
+    precision,
+    recall,
+    f1_score,
+    roc_auc,
+    pr_auc,
+    ks_statistic
+  )
+
+xgb_smote_results
+```
+
+```{r}
+# Save and display XGBoost SMOTE results table
+xgb_smote_results_table <- xgb_smote_results %>%
+  gt() %>%
+  tab_header(
+    title = "XGBoost Results: SMOTE"
+  ) %>%
+  fmt_number(
+    columns = c(
+      precision,
+      recall,
+      f1_score,
+      roc_auc,
+      pr_auc,
+      ks_statistic
+    ),
+    decimals = 4
+  )
+
+gtsave(
+  xgb_smote_results_table,
+  filename = file.path(
+    figures_dir,
+    "xgboost-smote-results.html"
+  )
+)
+
+xgb_smote_results_table
+```
+
+## Final Model Comparison
+
+The final comparison is restricted to the two retained configurations. This keeps the R notebook aligned with its purpose: reproducing the strongest final models from the broader Python benchmark without rerunning every candidate algorithm.
+
+```{r}
+# Combine final model results
+final_results <- bind_rows(
+  rf_original_results,
+  xgb_smote_results
+) %>%
+  arrange(
+    desc(pr_auc)
+  )
+
+final_results
+```
+
+```{r}
+# Save and display final comparison table
+final_results_table <- final_results %>%
+  gt() %>%
+  tab_header(
+    title = "Final Model Comparison"
+  ) %>%
+  fmt_number(
+    columns = c(
+      precision,
+      recall,
+      f1_score,
+      roc_auc,
+      pr_auc,
+      ks_statistic
+    ),
+    decimals = 4
+  )
+
+gtsave(
+  final_results_table,
+  filename = file.path(
+    figures_dir,
+    "final-model-comparison.html"
+  )
+)
+
+final_results_table
+```
+
+Precision-Recall AUC is used as the main comparison metric because the positive class is rare. In a fraud detection setting, the key question is not whether the model is usually correct on the majority class, but whether it ranks fraudulent transactions high enough to be found.
+
+```{r}
+# Final comparison plot
+final_pr_auc_plot <- final_results %>%
+  mutate(
+    model_strategy = paste(model, strategy, sep = " - "),
+    model_strategy = reorder(model_strategy, pr_auc)
+  ) %>%
+  ggplot(
+    aes(
+      x = model_strategy,
+      y = pr_auc
+    )
+  ) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Final Model Comparison by PR-AUC",
+    x = NULL,
+    y = "Precision-Recall AUC"
+  ) +
+  theme_minimal()
+
+ggsave(
+  filename = file.path(
+    figures_dir,
+    "final-model-comparison-pr-auc.png"
+  ),
+  plot = final_pr_auc_plot,
+  width = 9,
+  height = 5,
+  dpi = 300
+)
+
+final_pr_auc_plot
+```
+
+## Diagnostic Plots
+
+The following diagnostic plots compare the two retained approaches from several angles. The confusion matrices show the hard classification outcomes at the default probability threshold. The ROC and Precision-Recall curves examine ranking performance across thresholds. The Kolmogorov-Smirnov plot compares the empirical score distributions for legitimate and fraudulent transactions.
+
+```{r}
+# Prediction data used by all diagnostic plots
+prediction_data <- bind_rows(
+  tibble(
+    model = "Random Forest (Original)",
+    truth = y_test,
+    predicted_class = rf_original_class,
+    fraudulent = rf_original_prob
+  ),
+
+  tibble(
+    model = "XGBoost (SMOTE)",
+    truth = y_test,
+    predicted_class = xgb_smote_class,
+    fraudulent = xgb_smote_prob
+  )
+)
+```
+
+### Confusion Matrices
+
+```{r}
+# Confusion matrix data
+confusion_matrix_data <- prediction_data %>%
+  count(
+    model,
+    truth,
+    predicted_class,
+    name = "n"
+  ) %>%
+  complete(
+    model,
+    truth,
+    predicted_class,
+    fill = list(n = 0)
+  )
+
+confusion_matrix_plot <- confusion_matrix_data %>%
+  ggplot(
+    aes(
+      x = predicted_class,
+      y = truth,
+      fill = n
+    )
+  ) +
+  geom_tile() +
+  geom_text(
+    aes(label = n)
+  ) +
+  facet_wrap(
+    ~ model,
+    nrow = 1
+  ) +
+  labs(
+    title = "Confusion Matrices",
+    x = "Predicted class",
+    y = "Actual class"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none"
+  )
+
+ggsave(
+  filename = file.path(
+    figures_dir,
+    "confusion-matrices.png"
+  ),
+  plot = confusion_matrix_plot,
+  width = 10,
+  height = 4.5,
+  dpi = 300
+)
+
+confusion_matrix_plot
+```
+
+### Receiver Operating Characteristic Curves
+
+```{r}
+# ROC curve data
+roc_curve_data <- prediction_data %>%
+  group_by(model) %>%
+  roc_curve(
+    truth = truth,
+    fraudulent,
+    event_level = "second"
+  )
+
+roc_labels <- final_results %>%
+  mutate(
+    label = paste0(
+      model,
+      " (",
+      strategy,
+      ") AUC = ",
+      round(roc_auc, 3)
+    )
+  ) %>%
+  transmute(
+    model = paste(model, strategy, sep = " - "),
+    label
+  )
+
+roc_curve_plot <- roc_curve_data %>%
+  ggplot(
+    aes(
+      x = 1 - specificity,
+      y = sensitivity,
+      colour = model
+    )
+  ) +
+  geom_path(linewidth = 1) +
+  geom_abline(
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "ROC Curves",
+    x = "False Positive Rate",
+    y = "True Positive Rate",
+    colour = "Model"
+  ) +
+  theme_minimal()
+
+ggsave(
+  filename = file.path(
+    figures_dir,
+    "roc-curves.png"
+  ),
+  plot = roc_curve_plot,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
+
+roc_curve_plot
+```
+
+### Precision-Recall Curves
+
+```{r}
+# Precision-Recall curve data
+pr_curve_data <- prediction_data %>%
+  group_by(model) %>%
+  pr_curve(
+    truth = truth,
+    fraudulent,
+    event_level = "second"
+  )
+
+pr_curve_plot <- pr_curve_data %>%
+  ggplot(
+    aes(
+      x = recall,
+      y = precision,
+      colour = model
+    )
+  ) +
+  geom_path(linewidth = 1) +
+  labs(
+    title = "Precision-Recall Curves",
+    x = "Recall",
+    y = "Precision",
+    colour = "Model"
+  ) +
+  theme_minimal()
+
+ggsave(
+  filename = file.path(
+    figures_dir,
+    "precision-recall-curves.png"
+  ),
+  plot = pr_curve_plot,
+  width = 8,
+  height = 6,
+  dpi = 300
+)
+
+pr_curve_plot
+```
+
+### Kolmogorov-Smirnov Statistic
+
+The Kolmogorov-Smirnov statistic measures the maximum separation between the score distributions of legitimate and fraudulent transactions. A larger value indicates stronger separation between the two classes.
+
+```{r}
+# KS summary table
+ks_results <- final_results %>%
+  mutate(
+    model_strategy = paste(model, strategy, sep = " - ")
+  ) %>%
+  select(
+    model_strategy,
+    ks_statistic
+  )
+
+ks_results_table <- ks_results %>%
+  gt() %>%
+  tab_header(
+    title = "Kolmogorov-Smirnov Statistic"
+  ) %>%
+  fmt_number(
+    columns = ks_statistic,
+    decimals = 4
+  )
+
+gtsave(
+  ks_results_table,
+  filename = file.path(
+    figures_dir,
+    "kolmogorov-smirnov-statistic.html"
+  )
+)
+
+ks_results_table
+```
+
+```{r}
+# KS empirical cumulative distribution plot
+ks_plot <- prediction_data %>%
+  ggplot(
+    aes(
+      x = fraudulent,
+      colour = truth
+    )
+  ) +
+  stat_ecdf(
+    linewidth = 1
+  ) +
+  facet_wrap(
+    ~ model,
+    nrow = 1
+  ) +
+  labs(
+    title = "Kolmogorov-Smirnov Diagnostic Plot",
+    x = "Predicted probability of fraud",
+    y = "Empirical cumulative distribution",
+    colour = "Actual class"
+  ) +
+  theme_minimal()
+
+ggsave(
+  filename = file.path(
+    figures_dir,
+    "kolmogorov-smirnov-diagnostic-plot.png"
+  ),
+  plot = ks_plot,
+  width = 10,
+  height = 4.5,
+  dpi = 300
+)
+
+ks_plot
+```
+
+## Summary
+
+Two supervised learning strategies were retained in this R / Quarto implementation: Random Forest using the original class distribution and XGBoost with SMOTE.
+
+This reduced benchmark is intentional. The full Python implementation already covers the broader model comparison, while the R version focuses on the final approaches worth inspecting in more detail. The results support the main empirical conclusion of the supervised stage: tree-based ensemble methods are well suited to this problem, and explicit class imbalance treatment can improve the model's ability to rank fraudulent transactions.
+
+The diagnostic plots also show why a single metric is not enough for fraud detection. Confusion matrices describe operational outcomes at a fixed threshold, ROC curves summarise general ranking ability, Precision-Recall curves focus on the rare fraud class, and the Kolmogorov-Smirnov statistic provides an additional view of class separation in the model scores.
