@@ -297,18 +297,7 @@
     "href": "2-retail-analytics/2-customer-value-and-retention.html",
     "title": "5  Customer Value and Retention",
     "section": "",
-    "text": "5.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Retail Analytics",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Customer Value and Retention</span>"
-    ]
-  },
-  {
-    "objectID": "2-retail-analytics/2-customer-value-and-retention.html#problem-definition",
-    "href": "2-retail-analytics/2-customer-value-and-retention.html#problem-definition",
-    "title": "5  Customer Value and Retention",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "5.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Customer Value and Retention</span>"
@@ -319,7 +308,7 @@
     "href": "2-retail-analytics/2-customer-value-and-retention.html#modeling-approach",
     "title": "5  Customer Value and Retention",
     "section": "5.2 Modeling Approach",
-    "text": "5.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "5.2 Modeling Approach\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Customer Value and Retention</span>"
@@ -330,7 +319,7 @@
     "href": "2-retail-analytics/2-customer-value-and-retention.html#methodology-and-implementation",
     "title": "5  Customer Value and Retention",
     "section": "5.3 Methodology and Implementation",
-    "text": "5.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "5.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Customer Value and Retention</span>"
@@ -341,7 +330,7 @@
     "href": "2-retail-analytics/2-customer-value-and-retention.html#results-discussion-and-limitations",
     "title": "5  Customer Value and Retention",
     "section": "5.4 Results, Discussion, and Limitations",
-    "text": "5.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "5.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Customer Value and Retention</span>"
@@ -352,7 +341,7 @@
     "href": "2-retail-analytics/2-customer-value-and-retention.html#technical-appendix-optional",
     "title": "5  Customer Value and Retention",
     "section": "5.5 Technical Appendix (Optional)",
-    "text": "5.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "5.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Customer Value and Retention</span>"
@@ -363,18 +352,7 @@
     "href": "2-retail-analytics/3-customer-sentiment-and-topic-analysis.html",
     "title": "6  Customer Sentiment and Topic Analysis",
     "section": "",
-    "text": "6.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Retail Analytics",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
-    ]
-  },
-  {
-    "objectID": "2-retail-analytics/3-customer-sentiment-and-topic-analysis.html#problem-definition",
-    "href": "2-retail-analytics/3-customer-sentiment-and-topic-analysis.html#problem-definition",
-    "title": "6  Customer Sentiment and Topic Analysis",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "6.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
@@ -385,7 +363,7 @@
     "href": "2-retail-analytics/3-customer-sentiment-and-topic-analysis.html#modeling-approach",
     "title": "6  Customer Sentiment and Topic Analysis",
     "section": "6.2 Modeling Approach",
-    "text": "6.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "6.2 Modeling Approach\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
@@ -396,7 +374,7 @@
     "href": "2-retail-analytics/3-customer-sentiment-and-topic-analysis.html#methodology-and-implementation",
     "title": "6  Customer Sentiment and Topic Analysis",
     "section": "6.3 Methodology and Implementation",
-    "text": "6.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "6.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
@@ -407,7 +385,7 @@
     "href": "2-retail-analytics/3-customer-sentiment-and-topic-analysis.html#results-discussion-and-limitations",
     "title": "6  Customer Sentiment and Topic Analysis",
     "section": "6.4 Results, Discussion, and Limitations",
-    "text": "6.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "6.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
@@ -418,7 +396,7 @@
     "href": "2-retail-analytics/3-customer-sentiment-and-topic-analysis.html#technical-appendix-optional",
     "title": "6  Customer Sentiment and Topic Analysis",
     "section": "6.5 Technical Appendix (Optional)",
-    "text": "6.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "6.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Retail Analytics",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Customer Sentiment and Topic Analysis</span>"
@@ -440,18 +418,7 @@
     "href": "3-biological-systems/1-microbial-population-dynamics.html",
     "title": "7  Microbial Population Dynamics",
     "section": "",
-    "text": "7.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Biological Systems",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
-    ]
-  },
-  {
-    "objectID": "3-biological-systems/1-microbial-population-dynamics.html#problem-definition",
-    "href": "3-biological-systems/1-microbial-population-dynamics.html#problem-definition",
-    "title": "7  Microbial Population Dynamics",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "7.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
@@ -462,7 +429,7 @@
     "href": "3-biological-systems/1-microbial-population-dynamics.html#modeling-approach",
     "title": "7  Microbial Population Dynamics",
     "section": "7.2 Modeling Approach",
-    "text": "7.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "7.2 Modeling Approach\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
@@ -473,7 +440,7 @@
     "href": "3-biological-systems/1-microbial-population-dynamics.html#methodology-and-implementation",
     "title": "7  Microbial Population Dynamics",
     "section": "7.3 Methodology and Implementation",
-    "text": "7.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "7.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
@@ -484,7 +451,7 @@
     "href": "3-biological-systems/1-microbial-population-dynamics.html#results-discussion-and-limitations",
     "title": "7  Microbial Population Dynamics",
     "section": "7.4 Results, Discussion, and Limitations",
-    "text": "7.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "7.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
@@ -495,7 +462,7 @@
     "href": "3-biological-systems/1-microbial-population-dynamics.html#technical-appendix-optional",
     "title": "7  Microbial Population Dynamics",
     "section": "7.5 Technical Appendix (Optional)",
-    "text": "7.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "7.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
@@ -506,18 +473,7 @@
     "href": "3-biological-systems/2-medical-image-analysis.html",
     "title": "8  Medical Image Analysis",
     "section": "",
-    "text": "8.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Biological Systems",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
-    ]
-  },
-  {
-    "objectID": "3-biological-systems/2-medical-image-analysis.html#problem-definition",
-    "href": "3-biological-systems/2-medical-image-analysis.html#problem-definition",
-    "title": "8  Medical Image Analysis",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "8.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
@@ -528,7 +484,7 @@
     "href": "3-biological-systems/2-medical-image-analysis.html#modeling-approach",
     "title": "8  Medical Image Analysis",
     "section": "8.2 Modeling Approach",
-    "text": "8.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "8.2 Modeling Approach\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
@@ -539,7 +495,7 @@
     "href": "3-biological-systems/2-medical-image-analysis.html#methodology-and-implementation",
     "title": "8  Medical Image Analysis",
     "section": "8.3 Methodology and Implementation",
-    "text": "8.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "8.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
@@ -550,7 +506,7 @@
     "href": "3-biological-systems/2-medical-image-analysis.html#results-discussion-and-limitations",
     "title": "8  Medical Image Analysis",
     "section": "8.4 Results, Discussion, and Limitations",
-    "text": "8.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "8.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
@@ -561,7 +517,7 @@
     "href": "3-biological-systems/2-medical-image-analysis.html#technical-appendix-optional",
     "title": "8  Medical Image Analysis",
     "section": "8.5 Technical Appendix (Optional)",
-    "text": "8.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "8.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Biological Systems",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
@@ -583,18 +539,7 @@
     "href": "4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.html",
     "title": "9  Permeability Prediction in Porous Media",
     "section": "",
-    "text": "9.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Energy and Industrial Systems",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Permeability Prediction in Porous Media</span>"
-    ]
-  },
-  {
-    "objectID": "4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.html#problem-definition",
-    "href": "4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.html#problem-definition",
-    "title": "9  Permeability Prediction in Porous Media",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "9.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Permeability Prediction in Porous Media</span>"
@@ -605,7 +550,7 @@
     "href": "4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.html#modeling-approach",
     "title": "9  Permeability Prediction in Porous Media",
     "section": "9.2 Modeling Approach",
-    "text": "9.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "9.2 Modeling Approach\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Permeability Prediction in Porous Media</span>"
@@ -616,7 +561,7 @@
     "href": "4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.html#methodology-and-implementation",
     "title": "9  Permeability Prediction in Porous Media",
     "section": "9.3 Methodology and Implementation",
-    "text": "9.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "9.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Permeability Prediction in Porous Media</span>"
@@ -627,7 +572,7 @@
     "href": "4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.html#results-discussion-and-limitations",
     "title": "9  Permeability Prediction in Porous Media",
     "section": "9.4 Results, Discussion, and Limitations",
-    "text": "9.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "9.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Permeability Prediction in Porous Media</span>"
@@ -638,7 +583,7 @@
     "href": "4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.html#technical-appendix-optional",
     "title": "9  Permeability Prediction in Porous Media",
     "section": "9.5 Technical Appendix (Optional)",
-    "text": "9.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "9.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Permeability Prediction in Porous Media</span>"
@@ -649,18 +594,7 @@
     "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html",
     "title": "10  Optimal Hedging of Industrial Gas Demand",
     "section": "",
-    "text": "10.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Energy and Industrial Systems",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
-    ]
-  },
-  {
-    "objectID": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#problem-definition",
-    "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#problem-definition",
-    "title": "10  Optimal Hedging of Industrial Gas Demand",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "10.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
@@ -671,7 +605,7 @@
     "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#modeling-approach",
     "title": "10  Optimal Hedging of Industrial Gas Demand",
     "section": "10.2 Modeling Approach",
-    "text": "10.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "10.2 Modeling Approach\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
@@ -682,7 +616,7 @@
     "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#methodology-and-implementation",
     "title": "10  Optimal Hedging of Industrial Gas Demand",
     "section": "10.3 Methodology and Implementation",
-    "text": "10.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "10.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
@@ -693,7 +627,7 @@
     "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#results-discussion-and-limitations",
     "title": "10  Optimal Hedging of Industrial Gas Demand",
     "section": "10.4 Results, Discussion, and Limitations",
-    "text": "10.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "10.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
@@ -704,7 +638,7 @@
     "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#technical-appendix-optional",
     "title": "10  Optimal Hedging of Industrial Gas Demand",
     "section": "10.5 Technical Appendix (Optional)",
-    "text": "10.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "10.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
@@ -726,18 +660,7 @@
     "href": "5-climate-and-environmental-systems/1-sediment-source-modeling.html",
     "title": "11  Sediment Source Modeling",
     "section": "",
-    "text": "11.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Climate and Environmental Systems",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Sediment Source Modeling</span>"
-    ]
-  },
-  {
-    "objectID": "5-climate-and-environmental-systems/1-sediment-source-modeling.html#problem-definition",
-    "href": "5-climate-and-environmental-systems/1-sediment-source-modeling.html#problem-definition",
-    "title": "11  Sediment Source Modeling",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "11.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Sediment Source Modeling</span>"
@@ -748,7 +671,7 @@
     "href": "5-climate-and-environmental-systems/1-sediment-source-modeling.html#modeling-approach",
     "title": "11  Sediment Source Modeling",
     "section": "11.2 Modeling Approach",
-    "text": "11.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "11.2 Modeling Approach\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Sediment Source Modeling</span>"
@@ -759,7 +682,7 @@
     "href": "5-climate-and-environmental-systems/1-sediment-source-modeling.html#methodology-and-implementation",
     "title": "11  Sediment Source Modeling",
     "section": "11.3 Methodology and Implementation",
-    "text": "11.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "11.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Sediment Source Modeling</span>"
@@ -770,7 +693,7 @@
     "href": "5-climate-and-environmental-systems/1-sediment-source-modeling.html#results-discussion-and-limitations",
     "title": "11  Sediment Source Modeling",
     "section": "11.4 Results, Discussion, and Limitations",
-    "text": "11.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "11.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Sediment Source Modeling</span>"
@@ -781,7 +704,7 @@
     "href": "5-climate-and-environmental-systems/1-sediment-source-modeling.html#technical-appendix-optional",
     "title": "11  Sediment Source Modeling",
     "section": "11.5 Technical Appendix (Optional)",
-    "text": "11.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "11.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Sediment Source Modeling</span>"
@@ -792,18 +715,7 @@
     "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html",
     "title": "12  Climate Forecasting with Time Series",
     "section": "",
-    "text": "12.1 Problem Definition\nWork in progress.\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
-    "crumbs": [
-      "Climate and Environmental Systems",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
-    ]
-  },
-  {
-    "objectID": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#problem-definition",
-    "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#problem-definition",
-    "title": "12  Climate Forecasting with Time Series",
-    "section": "",
-    "text": "What is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?",
+    "text": "12.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
@@ -814,7 +726,7 @@
     "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#modeling-approach",
     "title": "12  Climate Forecasting with Time Series",
     "section": "12.2 Modeling Approach",
-    "text": "12.2 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "text": "12.2 Modeling Approach\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
@@ -825,7 +737,7 @@
     "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#methodology-and-implementation",
     "title": "12  Climate Forecasting with Time Series",
     "section": "12.3 Methodology and Implementation",
-    "text": "12.3 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "text": "12.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
@@ -836,7 +748,7 @@
     "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#results-discussion-and-limitations",
     "title": "12  Climate Forecasting with Time Series",
     "section": "12.4 Results, Discussion, and Limitations",
-    "text": "12.4 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "text": "12.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
@@ -847,7 +759,7 @@
     "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#technical-appendix-optional",
     "title": "12  Climate Forecasting with Time Series",
     "section": "12.5 Technical Appendix (Optional)",
-    "text": "12.5 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.",
+    "text": "12.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
@@ -935,29 +847,7 @@
     "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html",
     "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
     "section": "",
-    "text": "14.1 Laplace’s equation\n\\[\n\\nabla^2 \\phi = \\frac{\\partial ^2 \\phi}{\\partial x^2} +\\frac{\\partial ^2 \\phi}{\\partial y^2} + \\frac{\\partial ^2 \\phi}{\\partial z^2} = 0\n\\tag{14.1}\\]",
-    "crumbs": [
-      "Writings & Essays",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
-    ]
-  },
-  {
-    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#conformal-mappings",
-    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#conformal-mappings",
-    "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "14.2 Conformal Mappings",
-    "text": "14.2 Conformal Mappings",
-    "crumbs": [
-      "Writings & Essays",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
-    ]
-  },
-  {
-    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#problem-definition",
-    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#problem-definition",
-    "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "14.3 Problem Definition",
-    "text": "14.3 Problem Definition\nThis section describes the problem being addressed and explains its relevance within the context of the domain.\nTypical questions considered in this section include:\n\nWhat is the objective of the project?\nWhy is the problem relevant?\nWhat type of decisions or insights depend on the solution?\nWhat are the main challenges associated with the problem?\n\nThe emphasis is placed on the practical motivation and the broader context rather than on technical implementation details.",
+    "text": "14.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
@@ -967,8 +857,8 @@
     "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#modeling-approach",
     "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#modeling-approach",
     "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "14.4 Modeling Approach",
-    "text": "14.4 Modeling Approach\nThis section introduces the conceptual framework used to approach the problem.\nThe discussion typically includes:\n\nThe main modeling assumptions\nThe reasoning behind the selected methodology\nThe intuition behind the model or algorithm\nThe relationship between the model and the underlying process being studied\n\nMathematical expressions may be introduced when they help clarify the modeling decisions or the structure of the method. However, long derivations are generally avoided in the main text.\nThe emphasis is placed on communicating the logic of the approach rather than on developing a full mathematical treatment.",
+    "section": "14.2 Modeling Approach",
+    "text": "14.2 Modeling Approach\nSection.",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
@@ -978,8 +868,8 @@
     "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#methodology-and-implementation",
     "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#methodology-and-implementation",
     "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "14.5 Methodology and Implementation",
-    "text": "14.5 Methodology and Implementation\nThis section describes the data, experimental design, computational workflow, and implementation details used throughout the project.\nTypical topics may include:\n\nData collection and sources\nFeature engineering\nCleaning and preprocessing\nSimulation strategies\nTraining and validation methodology\nExperimental setup\nNumerical methods and algorithms\nWorkflow organization\nPipeline structure\nComputational considerations\n\nThe goal is to provide enough detail to understand how the analysis was conducted and implemented while maintaining a clear and readable narrative.\nImplementation details are intended to complement the conceptual discussion without turning the chapter into a software manual.\nReferences to notebooks and scripts are included throughout the project when relevant to the implementation or analysis.",
+    "section": "14.3 Methodology and Implementation",
+    "text": "14.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
@@ -989,8 +879,8 @@
     "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#results-discussion-and-limitations",
     "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#results-discussion-and-limitations",
     "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "14.6 Results, Discussion, and Limitations",
-    "text": "14.6 Results, Discussion, and Limitations\nThis section presents the main outcomes of the project together with an interpretation of the results, model behavior, and practical limitations of the approach.\nTypical elements may include:\n\nVisualizations and plots\nPerformance metrics\nComparisons with baseline approaches\nSensitivity analysis\nError analysis\nInterpretation of results\nModel assumptions and their consequences\nSources of uncertainty\nRobustness and generalization\nTrade-offs associated with the methodology\nPotential future improvements\n\nThe emphasis is placed not only on performance, but also on understanding the behavior, limitations, and practical implications of the proposed solution.",
+    "section": "14.4 Results, Discussion, and Limitations",
+    "text": "14.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
@@ -1000,8 +890,30 @@
     "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#technical-appendix-optional",
     "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#technical-appendix-optional",
     "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "14.7 Technical Appendix (Optional)",
-    "text": "14.7 Technical Appendix (Optional)\nThis optional section contains technical details that support the project but are not essential for following the main narrative.\nPossible contents include:\n\nMathematical derivations\nAdditional proofs\nNumerical details\nExtended equations\nSupplementary experiments\nTechnical notes on auxiliary methods and algorithms\n\nThe appendix may also include concise discussions of methodological concepts when they help clarify modeling decisions or support the interpretation of the results.\nThe main body of the project is intended to remain fully understandable without requiring consultation of the appendix.\nThe appendix serves as an optional technical reference for readers interested in deeper mathematical or computational details.\n\n\n\n\n\n\nFigure 14.1: Schematic representation of a conformal transformation \\(f(x,y,z)\\) mapping a region \\(R\\) with boundary \\(\\partial R\\) in the \\((x,y,z)\\) coordinate system into a transformed region \\(R'\\) with boundary \\(\\partial R'\\) in the \\((x',y',z')\\) coordinate system.\n\n\n\nAs shown in Figure 14.1, …\nSuppose we have a region \\(R\\) in \\(xyz\\) space in which a scalar field \\(\\phi\\) satisfies Laplace’s equation Equation 14.1. We want to determine what conditions a transformation \\(f: R \\rightarrow R'\\) must satisfy such that Laplace’s equation remains invariant under this transformation. For simplicity, let’s consider the simplest case in \\(\\mathbb{R}^2\\).\nApplying the chain rule we have that:\n\\[\n\\begin{aligned}\n\\frac{\\partial \\phi}{\\partial x} &=\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial x} \\\\\n\\frac{\\partial \\phi}{\\partial y} &=\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial y}\n\\end{aligned}\n\\tag{14.2}\\]",
+    "section": "14.5 Technical Appendix (Optional)",
+    "text": "14.5 Technical Appendix (Optional)\nSection.",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#laplaces-equation",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#laplaces-equation",
+    "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "14.6 Laplace’s equation",
+    "text": "14.6 Laplace’s equation\n\\[\n\\nabla^2 \\phi = \\frac{\\partial ^2 \\phi}{\\partial x^2} +\\frac{\\partial ^2 \\phi}{\\partial y^2} + \\frac{\\partial ^2 \\phi}{\\partial z^2} = 0\n\\tag{14.1}\\]",
+    "crumbs": [
+      "Writings & Essays",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
+    ]
+  },
+  {
+    "objectID": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#conformal-mappings",
+    "href": "6-writings-and-essays/2-conformal-geometry-in-3-d.html#conformal-mappings",
+    "title": "14  Conformal Geometry and Electrostatics in Three Dimensions",
+    "section": "14.7 Conformal Mappings",
+    "text": "14.7 Conformal Mappings\n\n\n\n\n\n\nFigure 14.1: Schematic representation of a conformal transformation \\(f(x,y,z)\\) mapping a region \\(R\\) with boundary \\(\\partial R\\) in the \\((x,y,z)\\) coordinate system into a transformed region \\(R'\\) with boundary \\(\\partial R'\\) in the \\((x',y',z')\\) coordinate system.\n\n\n\nAs shown in Figure 14.1, …\nSuppose we have a region \\(R\\) in \\(xyz\\) space in which a scalar field \\(\\phi\\) satisfies Laplace’s equation Equation 14.1. We want to determine what conditions a transformation \\(f: R \\rightarrow R'\\) must satisfy such that Laplace’s equation remains invariant under this transformation. For simplicity, let’s consider the simplest case in \\(\\mathbb{R}^2\\).\nApplying the chain rule we have that:\n\\[\n\\begin{aligned}\n\\frac{\\partial \\phi}{\\partial x} &=\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial x} \\\\\n\\frac{\\partial \\phi}{\\partial y} &=\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial y}\n\\end{aligned}\n\\tag{14.2}\\]",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
