@@ -118,8 +118,7 @@ Additional implementation details are available in the companion Quarto notebook
 
 ::: {.content-visible when-format="pdf"}
 
-Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository [here]
-(https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model)
+Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model}{\faGithub}
 
 :::
 
@@ -137,8 +136,7 @@ Additional implementation details are available in the companion Quarto notebook
 
 ::: {.content-visible when-format="pdf"}
 
-Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository [here]
-(https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model)
+Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model}{\faGithub}
 
 :::
 

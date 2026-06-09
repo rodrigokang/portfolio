@@ -64,23 +64,23 @@ The empirical analysis was conducted using a diversified universe of U.S. equiti
 
 The asset universe used in the study is summarized in @tbl-asset-universe.
 
-| Ticker | Sector                 |
-| ------ | ---------------------- |
-| AAPL   | Technology             |
-| MSFT   | Technology             |
-| GOOGL  | Communication Services |
-| AMZN   | Consumer Discretionary |
-| META   | Communication Services |
-| JPM    | Financials             |
-| BAC    | Financials             |
-| XOM    | Energy                 |
-| CVX    | Energy                 |
-| JNJ    | Healthcare             |
-| PFE    | Healthcare             |
-| PG     | Consumer Staples       |
-| KO     | Consumer Staples       |
-| WMT    | Retail                 |
-| HD     | Consumer Discretionary |
+|  Ticker  | Sector                   |
+| :------: | :----------------------: |
+| AAPL     | Technology               |
+| MSFT     | Technology               |
+| GOOGL    | Communication Services   |
+| AMZN     | Consumer Discretionary   |
+| META     | Communication Services   |
+| JPM      | Financials               |
+| BAC      | Financials               |
+| XOM      | Energy                   |
+| CVX      | Energy                   |
+| JNJ      | Healthcare               |
+| PFE      | Healthcare               |
+| PG       | Consumer Staples         |
+| KO       | Consumer Staples         |
+| WMT      | Retail                   |
+| HD       | Consumer Discretionary   |
 
 : Selected asset universe used throughout the portfolio construction and clustering experiments.
 {#tbl-asset-universe}
@@ -107,23 +107,23 @@ Principal Component Analysis (PCA) was then applied to study the latent structur
 
 The explained variance associated with each principal component is summarized in @tbl-pca-explained-variance.
 
-| Component | Explained Variance | Cumulative Variance |
-| --------- | -----------------: | ------------------: |
-| PC1       |             0.4638 |              0.4638 |
-| PC2       |             0.1793 |              0.6431 |
-| PC3       |             0.0740 |              0.7170 |
-| PC4       |             0.0512 |              0.7682 |
-| PC5       |             0.0466 |              0.8148 |
-| PC6       |             0.0352 |              0.8500 |
-| PC7       |             0.0297 |              0.8798 |
-| PC8       |             0.0262 |              0.9060 |
-| PC9       |             0.0230 |              0.9289 |
-| PC10      |             0.0181 |              0.9470 |
-| PC11      |             0.0144 |              0.9614 |
-| PC12      |             0.0123 |              0.9737 |
-| PC13      |             0.0102 |              0.9839 |
-| PC14      |             0.0084 |              0.9923 |
-| PC15      |             0.0077 |              1.0000 |
+|  Component  | Explained Variance  | Cumulative Variance  |
+| :---------: | :-----------------: | :------------------: |
+| PC1         |             0.4638  |              0.4638  |
+| PC2         |             0.1793  |              0.6431  |
+| PC3         |             0.0740  |              0.7170  |
+| PC4         |             0.0512  |              0.7682  |
+| PC5         |             0.0466  |              0.8148  |
+| PC6         |             0.0352  |              0.8500  |
+| PC7         |             0.0297  |              0.8798  |
+| PC8         |             0.0262  |              0.9060  |
+| PC9         |             0.0230  |              0.9289  |
+| PC10        |             0.0181  |              0.9470  |
+| PC11        |             0.0144  |              0.9614  |
+| PC12        |             0.0123  |              0.9737  |
+| PC13        |             0.0102  |              0.9839  |
+| PC14        |             0.0084  |              0.9923  |
+| PC15        |             0.0077  |              1.0000  |
 
 : Explained and cumulative variance ratios obtained from Principal Component Analysis (PCA) applied to asset returns.
 {#tbl-pca-explained-variance}
@@ -160,23 +160,23 @@ The equal-weight allocation is shown in @fig-equal-weight-portfolio.
 
 The HRP allocation produced a substantially different weighting structure. The largest portfolio weights were assigned to JNJ, KO, PG, and WMT, while exposure to several technology, financial, and energy assets was reduced relative to the equal-weight benchmark.
 
-| Asset | Weight |
-| ----- | -----: |
-| JNJ   | 0.1285 |
-| KO    | 0.1171 |
-| PG    | 0.1158 |
-| WMT   | 0.1127 |
-| GOOGL | 0.0705 |
-| HD    | 0.0689 |
-| PFE   | 0.0657 |
-| JPM   | 0.0471 |
-| MSFT  | 0.0457 |
-| AMZN  | 0.0439 |
-| AAPL  | 0.0424 |
-| BAC   | 0.0390 |
-| XOM   | 0.0386 |
-| CVX   | 0.0360 |
-| META  | 0.0282 |
+|  Asset |  Weight |
+| :----- | :-----: |
+|  JNJ   | 0.1285  |
+|  KO    | 0.1171  |
+|  PG    | 0.1158  |
+|  WMT   | 0.1127  |
+|  GOOGL | 0.0705  |
+|  HD    | 0.0689  |
+|  PFE   | 0.0657  |
+|  JPM   | 0.0471  |
+|  MSFT  | 0.0457  |
+|  AMZN  | 0.0439  |
+|  AAPL  | 0.0424  |
+|  BAC   | 0.0390  |
+|  XOM   | 0.0386  |
+|  CVX   | 0.0360  |
+|  META  | 0.0282  |
 
 : Final portfolio weights obtained using the Hierarchical Risk Parity (HRP) allocation method.
 {#tbl-hrp-weights}
@@ -191,46 +191,46 @@ The differences between the two allocations are visible both at the individual a
 
 ![Comparison between equal-weight and Hierarchical Risk Parity (HRP) portfolio allocations, highlighting how the HRP framework redistributes exposure according to the hierarchical correlation and risk structure of the asset universe.](../notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation/r/1-unsupervised-learning-for-asset-allocation-figures/portfolio-weight-comparison.png){#fig-portfolio-weight-comparison}
 
-| Asset | Equal Weight |    HRP |
-| ----- | -----------: | -----: |
-| AAPL  |       0.0667 | 0.0424 |
-| MSFT  |       0.0667 | 0.0457 |
-| GOOGL |       0.0667 | 0.0705 |
-| AMZN  |       0.0667 | 0.0439 |
-| META  |       0.0667 | 0.0282 |
-| JPM   |       0.0667 | 0.0471 |
-| BAC   |       0.0667 | 0.0390 |
-| XOM   |       0.0667 | 0.0386 |
-| CVX   |       0.0667 | 0.0360 |
-| JNJ   |       0.0667 | 0.1285 |
-| PFE   |       0.0667 | 0.0657 |
-| PG    |       0.0667 | 0.1158 |
-| KO    |       0.0667 | 0.1171 |
-| WMT   |       0.0667 | 0.1127 |
-| HD    |       0.0667 | 0.0689 |
+|  Asset  |  Equal Weight |  HRP    |
+| :-----: | :-----------: | :-----: |
+| AAPL    |       0.0667  | 0.0424  |
+| MSFT    |       0.0667  | 0.0457  |
+| GOOGL   |       0.0667  | 0.0705  |
+| AMZN    |       0.0667  | 0.0439  |
+| META    |       0.0667  | 0.0282  |
+| JPM     |       0.0667  | 0.0471  |
+| BAC     |       0.0667  | 0.0390  |
+| XOM     |       0.0667  | 0.0386  |
+| CVX     |       0.0667  | 0.0360  |
+| JNJ     |       0.0667  | 0.1285  |
+| PFE     |       0.0667  | 0.0657  |
+| PG      |       0.0667  | 0.1158  |
+| KO      |       0.0667  | 0.1171  |
+| WMT     |       0.0667  | 0.1127  |
+| HD      |       0.0667  | 0.0689  |
 
 : Comparison between equal-weight portfolio allocation and Hierarchical Risk Parity (HRP) portfolio weights.
 {#tbl-portfolio-weight-comparison}
 
 Risk contributions were also evaluated in order to study how portfolio risk was distributed across assets under the HRP framework.
 
-| Asset | Risk Contribution |
-| ----- | ----------------: |
-| KO    |          0.001158 |
-| JNJ   |          0.001111 |
-| PG    |          0.001090 |
-| GOOGL |          0.001007 |
-| WMT   |          0.000947 |
-| HD    |          0.000925 |
-| JPM   |          0.000676 |
-| MSFT  |          0.000668 |
-| PFE   |          0.000630 |
-| BAC   |          0.000620 |
-| AAPL  |          0.000615 |
-| AMZN  |          0.000562 |
-| CVX   |          0.000489 |
-| XOM   |          0.000450 |
-| META  |          0.000443 |
+|  Asset  |  Risk Contribution |
+| :-----: | :----------------: |
+| KO      |          0.001158  |
+| JNJ     |          0.001111  |
+| PG      |          0.001090  |
+| GOOGL   |          0.001007  |
+| WMT     |          0.000947  |
+| HD      |          0.000925  |
+| JPM     |          0.000676  |
+| MSFT    |          0.000668  |
+| PFE     |          0.000630  |
+| BAC     |          0.000620  |
+| AAPL    |          0.000615  |
+| AMZN    |          0.000562  |
+| CVX     |          0.000489  |
+| XOM     |          0.000450  |
+| META    |          0.000443  |
 
 : Asset-level risk contributions under the Hierarchical Risk Parity (HRP) allocation framework.
 {#tbl-hrp-risk-contribution}
@@ -253,10 +253,10 @@ Drawdown dynamics were analyzed separately in order to study the behaviour of bo
 
 The final performance summary is presented in @tbl-portfolio-performance.
 
-| Portfolio              | Annualized Return | Annualized Volatility | Sharpe Ratio | Maximum Drawdown |
-| ---------------------- | ----------------: | --------------------: | -----------: | ---------------: |
-| HRP Portfolio          |            0.1754 |                0.2021 |       0.8680 |          -0.3139 |
-| Equal Weight Portfolio |            0.1514 |                0.1808 |       0.8373 |          -0.2831 |
+| Portfolio                | Annualized Return  | Annualized Volatility  | Sharpe Ratio  | Maximum Drawdown  |
+| :----------------------: | :----------------: | :--------------------: | :-----------: | :---------------: |
+| HRP Portfolio            |            0.1754  |                0.2021  |       0.8680  |          -0.3139  |
+| Equal Weight Portfolio   |            0.1514  |                0.1808  |       0.8373  |          -0.2831  |
 
 : Performance comparison between the Hierarchical Risk Parity (HRP) portfolio and the equal-weight benchmark portfolio.
 {#tbl-portfolio-performance}
@@ -273,8 +273,7 @@ Additional implementation details are available in the companion Quarto notebook
 
 ::: {.content-visible when-format="pdf"}
 
-Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository [here]
-(https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation)
+Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-quantitative-finance/2-unsupervised-learning-for-asset-allocation}{\faGithub}
 
 :::
 

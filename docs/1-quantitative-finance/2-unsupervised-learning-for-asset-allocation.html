@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,15 +54,14 @@ div.csl-indent {
 <link href="../1-quantitative-finance/1-capm-and-fama-french-factor-model.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -105,7 +104,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -145,9 +144,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -475,70 +472,70 @@ Table&nbsp;2.1: Selected asset universe used throughout the portfolio constructi
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Ticker</th>
-<th>Sector</th>
+<th style="text-align: center;">Ticker</th>
+<th style="text-align: center;">Sector</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>AAPL</td>
-<td>Technology</td>
+<td style="text-align: center;">AAPL</td>
+<td style="text-align: center;">Technology</td>
 </tr>
 <tr class="even">
-<td>MSFT</td>
-<td>Technology</td>
+<td style="text-align: center;">MSFT</td>
+<td style="text-align: center;">Technology</td>
 </tr>
 <tr class="odd">
-<td>GOOGL</td>
-<td>Communication Services</td>
+<td style="text-align: center;">GOOGL</td>
+<td style="text-align: center;">Communication Services</td>
 </tr>
 <tr class="even">
-<td>AMZN</td>
-<td>Consumer Discretionary</td>
+<td style="text-align: center;">AMZN</td>
+<td style="text-align: center;">Consumer Discretionary</td>
 </tr>
 <tr class="odd">
-<td>META</td>
-<td>Communication Services</td>
+<td style="text-align: center;">META</td>
+<td style="text-align: center;">Communication Services</td>
 </tr>
 <tr class="even">
-<td>JPM</td>
-<td>Financials</td>
+<td style="text-align: center;">JPM</td>
+<td style="text-align: center;">Financials</td>
 </tr>
 <tr class="odd">
-<td>BAC</td>
-<td>Financials</td>
+<td style="text-align: center;">BAC</td>
+<td style="text-align: center;">Financials</td>
 </tr>
 <tr class="even">
-<td>XOM</td>
-<td>Energy</td>
+<td style="text-align: center;">XOM</td>
+<td style="text-align: center;">Energy</td>
 </tr>
 <tr class="odd">
-<td>CVX</td>
-<td>Energy</td>
+<td style="text-align: center;">CVX</td>
+<td style="text-align: center;">Energy</td>
 </tr>
 <tr class="even">
-<td>JNJ</td>
-<td>Healthcare</td>
+<td style="text-align: center;">JNJ</td>
+<td style="text-align: center;">Healthcare</td>
 </tr>
 <tr class="odd">
-<td>PFE</td>
-<td>Healthcare</td>
+<td style="text-align: center;">PFE</td>
+<td style="text-align: center;">Healthcare</td>
 </tr>
 <tr class="even">
-<td>PG</td>
-<td>Consumer Staples</td>
+<td style="text-align: center;">PG</td>
+<td style="text-align: center;">Consumer Staples</td>
 </tr>
 <tr class="odd">
-<td>KO</td>
-<td>Consumer Staples</td>
+<td style="text-align: center;">KO</td>
+<td style="text-align: center;">Consumer Staples</td>
 </tr>
 <tr class="even">
-<td>WMT</td>
-<td>Retail</td>
+<td style="text-align: center;">WMT</td>
+<td style="text-align: center;">Retail</td>
 </tr>
 <tr class="odd">
-<td>HD</td>
-<td>Consumer Discretionary</td>
+<td style="text-align: center;">HD</td>
+<td style="text-align: center;">Consumer Discretionary</td>
 </tr>
 </tbody>
 </table>
@@ -601,86 +598,86 @@ Table&nbsp;2.2: Explained and cumulative variance ratios obtained from Principal
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Component</th>
-<th style="text-align: right;">Explained Variance</th>
-<th style="text-align: right;">Cumulative Variance</th>
+<th style="text-align: center;">Component</th>
+<th style="text-align: center;">Explained Variance</th>
+<th style="text-align: center;">Cumulative Variance</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>PC1</td>
-<td style="text-align: right;">0.4638</td>
-<td style="text-align: right;">0.4638</td>
+<td style="text-align: center;">PC1</td>
+<td style="text-align: center;">0.4638</td>
+<td style="text-align: center;">0.4638</td>
 </tr>
 <tr class="even">
-<td>PC2</td>
-<td style="text-align: right;">0.1793</td>
-<td style="text-align: right;">0.6431</td>
+<td style="text-align: center;">PC2</td>
+<td style="text-align: center;">0.1793</td>
+<td style="text-align: center;">0.6431</td>
 </tr>
 <tr class="odd">
-<td>PC3</td>
-<td style="text-align: right;">0.0740</td>
-<td style="text-align: right;">0.7170</td>
+<td style="text-align: center;">PC3</td>
+<td style="text-align: center;">0.0740</td>
+<td style="text-align: center;">0.7170</td>
 </tr>
 <tr class="even">
-<td>PC4</td>
-<td style="text-align: right;">0.0512</td>
-<td style="text-align: right;">0.7682</td>
+<td style="text-align: center;">PC4</td>
+<td style="text-align: center;">0.0512</td>
+<td style="text-align: center;">0.7682</td>
 </tr>
 <tr class="odd">
-<td>PC5</td>
-<td style="text-align: right;">0.0466</td>
-<td style="text-align: right;">0.8148</td>
+<td style="text-align: center;">PC5</td>
+<td style="text-align: center;">0.0466</td>
+<td style="text-align: center;">0.8148</td>
 </tr>
 <tr class="even">
-<td>PC6</td>
-<td style="text-align: right;">0.0352</td>
-<td style="text-align: right;">0.8500</td>
+<td style="text-align: center;">PC6</td>
+<td style="text-align: center;">0.0352</td>
+<td style="text-align: center;">0.8500</td>
 </tr>
 <tr class="odd">
-<td>PC7</td>
-<td style="text-align: right;">0.0297</td>
-<td style="text-align: right;">0.8798</td>
+<td style="text-align: center;">PC7</td>
+<td style="text-align: center;">0.0297</td>
+<td style="text-align: center;">0.8798</td>
 </tr>
 <tr class="even">
-<td>PC8</td>
-<td style="text-align: right;">0.0262</td>
-<td style="text-align: right;">0.9060</td>
+<td style="text-align: center;">PC8</td>
+<td style="text-align: center;">0.0262</td>
+<td style="text-align: center;">0.9060</td>
 </tr>
 <tr class="odd">
-<td>PC9</td>
-<td style="text-align: right;">0.0230</td>
-<td style="text-align: right;">0.9289</td>
+<td style="text-align: center;">PC9</td>
+<td style="text-align: center;">0.0230</td>
+<td style="text-align: center;">0.9289</td>
 </tr>
 <tr class="even">
-<td>PC10</td>
-<td style="text-align: right;">0.0181</td>
-<td style="text-align: right;">0.9470</td>
+<td style="text-align: center;">PC10</td>
+<td style="text-align: center;">0.0181</td>
+<td style="text-align: center;">0.9470</td>
 </tr>
 <tr class="odd">
-<td>PC11</td>
-<td style="text-align: right;">0.0144</td>
-<td style="text-align: right;">0.9614</td>
+<td style="text-align: center;">PC11</td>
+<td style="text-align: center;">0.0144</td>
+<td style="text-align: center;">0.9614</td>
 </tr>
 <tr class="even">
-<td>PC12</td>
-<td style="text-align: right;">0.0123</td>
-<td style="text-align: right;">0.9737</td>
+<td style="text-align: center;">PC12</td>
+<td style="text-align: center;">0.0123</td>
+<td style="text-align: center;">0.9737</td>
 </tr>
 <tr class="odd">
-<td>PC13</td>
-<td style="text-align: right;">0.0102</td>
-<td style="text-align: right;">0.9839</td>
+<td style="text-align: center;">PC13</td>
+<td style="text-align: center;">0.0102</td>
+<td style="text-align: center;">0.9839</td>
 </tr>
 <tr class="even">
-<td>PC14</td>
-<td style="text-align: right;">0.0084</td>
-<td style="text-align: right;">0.9923</td>
+<td style="text-align: center;">PC14</td>
+<td style="text-align: center;">0.0084</td>
+<td style="text-align: center;">0.9923</td>
 </tr>
 <tr class="odd">
-<td>PC15</td>
-<td style="text-align: right;">0.0077</td>
-<td style="text-align: right;">1.0000</td>
+<td style="text-align: center;">PC15</td>
+<td style="text-align: center;">0.0077</td>
+<td style="text-align: center;">1.0000</td>
 </tr>
 </tbody>
 </table>
@@ -775,70 +772,70 @@ Table&nbsp;2.3: Final portfolio weights obtained using the Hierarchical Risk Par
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Asset</th>
-<th style="text-align: right;">Weight</th>
+<th style="text-align: left;">Asset</th>
+<th style="text-align: center;">Weight</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>JNJ</td>
-<td style="text-align: right;">0.1285</td>
+<td style="text-align: left;">JNJ</td>
+<td style="text-align: center;">0.1285</td>
 </tr>
 <tr class="even">
-<td>KO</td>
-<td style="text-align: right;">0.1171</td>
+<td style="text-align: left;">KO</td>
+<td style="text-align: center;">0.1171</td>
 </tr>
 <tr class="odd">
-<td>PG</td>
-<td style="text-align: right;">0.1158</td>
+<td style="text-align: left;">PG</td>
+<td style="text-align: center;">0.1158</td>
 </tr>
 <tr class="even">
-<td>WMT</td>
-<td style="text-align: right;">0.1127</td>
+<td style="text-align: left;">WMT</td>
+<td style="text-align: center;">0.1127</td>
 </tr>
 <tr class="odd">
-<td>GOOGL</td>
-<td style="text-align: right;">0.0705</td>
+<td style="text-align: left;">GOOGL</td>
+<td style="text-align: center;">0.0705</td>
 </tr>
 <tr class="even">
-<td>HD</td>
-<td style="text-align: right;">0.0689</td>
+<td style="text-align: left;">HD</td>
+<td style="text-align: center;">0.0689</td>
 </tr>
 <tr class="odd">
-<td>PFE</td>
-<td style="text-align: right;">0.0657</td>
+<td style="text-align: left;">PFE</td>
+<td style="text-align: center;">0.0657</td>
 </tr>
 <tr class="even">
-<td>JPM</td>
-<td style="text-align: right;">0.0471</td>
+<td style="text-align: left;">JPM</td>
+<td style="text-align: center;">0.0471</td>
 </tr>
 <tr class="odd">
-<td>MSFT</td>
-<td style="text-align: right;">0.0457</td>
+<td style="text-align: left;">MSFT</td>
+<td style="text-align: center;">0.0457</td>
 </tr>
 <tr class="even">
-<td>AMZN</td>
-<td style="text-align: right;">0.0439</td>
+<td style="text-align: left;">AMZN</td>
+<td style="text-align: center;">0.0439</td>
 </tr>
 <tr class="odd">
-<td>AAPL</td>
-<td style="text-align: right;">0.0424</td>
+<td style="text-align: left;">AAPL</td>
+<td style="text-align: center;">0.0424</td>
 </tr>
 <tr class="even">
-<td>BAC</td>
-<td style="text-align: right;">0.0390</td>
+<td style="text-align: left;">BAC</td>
+<td style="text-align: center;">0.0390</td>
 </tr>
 <tr class="odd">
-<td>XOM</td>
-<td style="text-align: right;">0.0386</td>
+<td style="text-align: left;">XOM</td>
+<td style="text-align: center;">0.0386</td>
 </tr>
 <tr class="even">
-<td>CVX</td>
-<td style="text-align: right;">0.0360</td>
+<td style="text-align: left;">CVX</td>
+<td style="text-align: center;">0.0360</td>
 </tr>
 <tr class="odd">
-<td>META</td>
-<td style="text-align: right;">0.0282</td>
+<td style="text-align: left;">META</td>
+<td style="text-align: center;">0.0282</td>
 </tr>
 </tbody>
 </table>
@@ -877,86 +874,86 @@ Table&nbsp;2.4: Comparison between equal-weight portfolio allocation and Hierarc
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Asset</th>
-<th style="text-align: right;">Equal Weight</th>
-<th style="text-align: right;">HRP</th>
+<th style="text-align: center;">Asset</th>
+<th style="text-align: center;">Equal Weight</th>
+<th style="text-align: center;">HRP</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>AAPL</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0424</td>
+<td style="text-align: center;">AAPL</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0424</td>
 </tr>
 <tr class="even">
-<td>MSFT</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0457</td>
+<td style="text-align: center;">MSFT</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0457</td>
 </tr>
 <tr class="odd">
-<td>GOOGL</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0705</td>
+<td style="text-align: center;">GOOGL</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0705</td>
 </tr>
 <tr class="even">
-<td>AMZN</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0439</td>
+<td style="text-align: center;">AMZN</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0439</td>
 </tr>
 <tr class="odd">
-<td>META</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0282</td>
+<td style="text-align: center;">META</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0282</td>
 </tr>
 <tr class="even">
-<td>JPM</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0471</td>
+<td style="text-align: center;">JPM</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0471</td>
 </tr>
 <tr class="odd">
-<td>BAC</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0390</td>
+<td style="text-align: center;">BAC</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0390</td>
 </tr>
 <tr class="even">
-<td>XOM</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0386</td>
+<td style="text-align: center;">XOM</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0386</td>
 </tr>
 <tr class="odd">
-<td>CVX</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0360</td>
+<td style="text-align: center;">CVX</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0360</td>
 </tr>
 <tr class="even">
-<td>JNJ</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.1285</td>
+<td style="text-align: center;">JNJ</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.1285</td>
 </tr>
 <tr class="odd">
-<td>PFE</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0657</td>
+<td style="text-align: center;">PFE</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0657</td>
 </tr>
 <tr class="even">
-<td>PG</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.1158</td>
+<td style="text-align: center;">PG</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.1158</td>
 </tr>
 <tr class="odd">
-<td>KO</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.1171</td>
+<td style="text-align: center;">KO</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.1171</td>
 </tr>
 <tr class="even">
-<td>WMT</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.1127</td>
+<td style="text-align: center;">WMT</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.1127</td>
 </tr>
 <tr class="odd">
-<td>HD</td>
-<td style="text-align: right;">0.0667</td>
-<td style="text-align: right;">0.0689</td>
+<td style="text-align: center;">HD</td>
+<td style="text-align: center;">0.0667</td>
+<td style="text-align: center;">0.0689</td>
 </tr>
 </tbody>
 </table>
@@ -973,70 +970,70 @@ Table&nbsp;2.5: Asset-level risk contributions under the Hierarchical Risk Parit
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Asset</th>
-<th style="text-align: right;">Risk Contribution</th>
+<th style="text-align: center;">Asset</th>
+<th style="text-align: center;">Risk Contribution</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>KO</td>
-<td style="text-align: right;">0.001158</td>
+<td style="text-align: center;">KO</td>
+<td style="text-align: center;">0.001158</td>
 </tr>
 <tr class="even">
-<td>JNJ</td>
-<td style="text-align: right;">0.001111</td>
+<td style="text-align: center;">JNJ</td>
+<td style="text-align: center;">0.001111</td>
 </tr>
 <tr class="odd">
-<td>PG</td>
-<td style="text-align: right;">0.001090</td>
+<td style="text-align: center;">PG</td>
+<td style="text-align: center;">0.001090</td>
 </tr>
 <tr class="even">
-<td>GOOGL</td>
-<td style="text-align: right;">0.001007</td>
+<td style="text-align: center;">GOOGL</td>
+<td style="text-align: center;">0.001007</td>
 </tr>
 <tr class="odd">
-<td>WMT</td>
-<td style="text-align: right;">0.000947</td>
+<td style="text-align: center;">WMT</td>
+<td style="text-align: center;">0.000947</td>
 </tr>
 <tr class="even">
-<td>HD</td>
-<td style="text-align: right;">0.000925</td>
+<td style="text-align: center;">HD</td>
+<td style="text-align: center;">0.000925</td>
 </tr>
 <tr class="odd">
-<td>JPM</td>
-<td style="text-align: right;">0.000676</td>
+<td style="text-align: center;">JPM</td>
+<td style="text-align: center;">0.000676</td>
 </tr>
 <tr class="even">
-<td>MSFT</td>
-<td style="text-align: right;">0.000668</td>
+<td style="text-align: center;">MSFT</td>
+<td style="text-align: center;">0.000668</td>
 </tr>
 <tr class="odd">
-<td>PFE</td>
-<td style="text-align: right;">0.000630</td>
+<td style="text-align: center;">PFE</td>
+<td style="text-align: center;">0.000630</td>
 </tr>
 <tr class="even">
-<td>BAC</td>
-<td style="text-align: right;">0.000620</td>
+<td style="text-align: center;">BAC</td>
+<td style="text-align: center;">0.000620</td>
 </tr>
 <tr class="odd">
-<td>AAPL</td>
-<td style="text-align: right;">0.000615</td>
+<td style="text-align: center;">AAPL</td>
+<td style="text-align: center;">0.000615</td>
 </tr>
 <tr class="even">
-<td>AMZN</td>
-<td style="text-align: right;">0.000562</td>
+<td style="text-align: center;">AMZN</td>
+<td style="text-align: center;">0.000562</td>
 </tr>
 <tr class="odd">
-<td>CVX</td>
-<td style="text-align: right;">0.000489</td>
+<td style="text-align: center;">CVX</td>
+<td style="text-align: center;">0.000489</td>
 </tr>
 <tr class="even">
-<td>XOM</td>
-<td style="text-align: right;">0.000450</td>
+<td style="text-align: center;">XOM</td>
+<td style="text-align: center;">0.000450</td>
 </tr>
 <tr class="odd">
-<td>META</td>
-<td style="text-align: right;">0.000443</td>
+<td style="text-align: center;">META</td>
+<td style="text-align: center;">0.000443</td>
 </tr>
 </tbody>
 </table>
@@ -1104,27 +1101,27 @@ Table&nbsp;2.6: Performance comparison between the Hierarchical Risk Parity (HRP
 </colgroup>
 <thead>
 <tr class="header">
-<th>Portfolio</th>
-<th style="text-align: right;">Annualized Return</th>
-<th style="text-align: right;">Annualized Volatility</th>
-<th style="text-align: right;">Sharpe Ratio</th>
-<th style="text-align: right;">Maximum Drawdown</th>
+<th style="text-align: center;">Portfolio</th>
+<th style="text-align: center;">Annualized Return</th>
+<th style="text-align: center;">Annualized Volatility</th>
+<th style="text-align: center;">Sharpe Ratio</th>
+<th style="text-align: center;">Maximum Drawdown</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>HRP Portfolio</td>
-<td style="text-align: right;">0.1754</td>
-<td style="text-align: right;">0.2021</td>
-<td style="text-align: right;">0.8680</td>
-<td style="text-align: right;">-0.3139</td>
+<td style="text-align: center;">HRP Portfolio</td>
+<td style="text-align: center;">0.1754</td>
+<td style="text-align: center;">0.2021</td>
+<td style="text-align: center;">0.8680</td>
+<td style="text-align: center;">-0.3139</td>
 </tr>
 <tr class="even">
-<td>Equal Weight Portfolio</td>
-<td style="text-align: right;">0.1514</td>
-<td style="text-align: right;">0.1808</td>
-<td style="text-align: right;">0.8373</td>
-<td style="text-align: right;">-0.2831</td>
+<td style="text-align: center;">Equal Weight Portfolio</td>
+<td style="text-align: center;">0.1514</td>
+<td style="text-align: center;">0.1808</td>
+<td style="text-align: center;">0.8373</td>
+<td style="text-align: center;">-0.2831</td>
 </tr>
 </tbody>
 </table>
@@ -1376,14 +1373,13 @@ d_{ij} = \sqrt{\frac{1-\rho_{ij}}{2}}
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
