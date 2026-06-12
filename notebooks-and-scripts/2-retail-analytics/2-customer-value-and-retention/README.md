@@ -4,9 +4,7 @@ This project uses the AdventureWorks sample database running on PostgreSQL.
 
 ### Data Source
 
-The original AdventureWorks sample database was obtained through the PostgreSQL Sample Databases catalog:
-
-https://wiki.postgresql.org/wiki/Sample_Databases
+The original AdventureWorks sample database was obtained through the [PostgreSQL Sample Databases catalog](https://wiki.postgresql.org/wiki/Sample_Databases).
 
 This catalog references the AdventureWorks PostgreSQL port, which provides a PostgreSQL-compatible implementation of Microsoft's AdventureWorks database.
 

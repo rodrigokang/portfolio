@@ -11,11 +11,7 @@ The project investigates the application of machine learning techniques to the d
 
 ## Dataset
 
-The analysis is based on the publicly available **Credit Card Fraud Detection** dataset provided by the Machine Learning Group of Université Libre de Bruxelles (ULB) and hosted on Kaggle.
-
-Dataset source:
-
-https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+The analysis is based on the publicly available **Credit Card Fraud Detection** dataset provided by the Machine Learning Group of Université Libre de Bruxelles (ULB) and hosted on [Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud).
 
 Due to repository size limitations, the dataset is not included in this repository. Users interested in reproducing the analysis should download the dataset directly from the original source and place the file in the appropriate local data directory before running the notebooks or scripts.
 
