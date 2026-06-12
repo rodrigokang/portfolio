@@ -1,6 +1,0 @@
-ProductID,Name,ProductNumber,MakeFlag,FinishedGoodsFlag,Color,SafetyStockLevel,ReorderPoint,StandardCost,ListPrice,Size,SizeUnitMeasureCode,WeightUnitMeasureCode,Weight,DaysToManufacture,ProductLine,Class,Style,ProductSubcategoryID,ProductModelID,SellStartDate,SellEndDate,DiscontinuedDate,rowguid,ModifiedDate
-1,Adjustable Race,AR-5381,0,0,,1000,750,0.0,0.0,,,,,0,,,,,,2019-04-30 00:00:00.000,,,694215B7-08F7-4C0D-ACB1-D734BA44C0C8,2025-02-07 10:01:36.827
-2,Bearing Ball,BA-8327,0,0,,1000,750,0.0,0.0,,,,,0,,,,,,2019-04-30 00:00:00.000,,,58AE3C20-4F3A-4749-A7D4-D568806CC537,2025-02-07 10:01:36.827
-3,BB Ball Bearing,BE-2349,1,0,,800,600,0.0,0.0,,,,,1,,,,,,2019-04-30 00:00:00.000,,,9C21AED2-5BFA-4F18-BCB8-F11638DC2E4E,2025-02-07 10:01:36.827
-4,Headset Ball Bearings,BE-2908,0,0,,800,600,0.0,0.0,,,,,0,,,,,,2019-04-30 00:00:00.000,,,ECFED6CB-51FF-49B5-B06C-7D8AC834DB8B,2025-02-07 10:01:36.827
-316,Blade,BL-2036,1,0,,800,600,0.0,0.0,,,,,1,,,,,,2019-04-30 00:00:00.000,,,E73E9750-603B-4131-89F5-3DD15ED5FF80,2025-02-07 10:01:36.827
