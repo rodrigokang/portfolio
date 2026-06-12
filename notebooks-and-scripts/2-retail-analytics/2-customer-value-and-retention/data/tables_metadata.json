@@ -1,0 +1,380 @@
+[
+  {
+    "source": "Person.CountryRegion",
+    "table": "person_countryregion",
+    "csv": "CountryRegion.csv",
+    "delimiter": "\\t",
+    "row_terminator": "\\n",
+    "rows": 238,
+    "columns": 3,
+    "fields_in_csv": 3,
+    "column_names": [
+      "CountryRegionCode",
+      "Name",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Sales.SalesTerritory",
+    "table": "sales_salesterritory",
+    "csv": "SalesTerritory.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 10,
+    "columns": 10,
+    "fields_in_csv": 10,
+    "column_names": [
+      "TerritoryID",
+      "Name",
+      "CountryRegionCode",
+      "Group",
+      "SalesYTD",
+      "SalesLastYear",
+      "CostYTD",
+      "CostLastYear",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Person.StateProvince",
+    "table": "person_stateprovince",
+    "csv": "StateProvince.csv",
+    "delimiter": "\\t",
+    "row_terminator": "\\n",
+    "rows": 181,
+    "columns": 8,
+    "fields_in_csv": 8,
+    "column_names": [
+      "StateProvinceID",
+      "StateProvinceCode",
+      "CountryRegionCode",
+      "IsOnlyStateProvinceFlag",
+      "Name",
+      "TerritoryID",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Person.Address",
+    "table": "person_address",
+    "csv": "Address.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 19614,
+    "columns": 9,
+    "fields_in_csv": 9,
+    "column_names": [
+      "AddressID",
+      "AddressLine1",
+      "AddressLine2",
+      "City",
+      "StateProvinceID",
+      "PostalCode",
+      "SpatialLocation",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Person.AddressType",
+    "table": "person_addresstype",
+    "csv": "AddressType.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 6,
+    "columns": 4,
+    "fields_in_csv": 4,
+    "column_names": [
+      "AddressTypeID",
+      "Name",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Person.BusinessEntityAddress",
+    "table": "person_businessentityaddress",
+    "csv": "BusinessEntityAddress.csv",
+    "delimiter": "+|",
+    "row_terminator": "&|\\n",
+    "rows": 19614,
+    "columns": 5,
+    "fields_in_csv": 5,
+    "column_names": [
+      "BusinessEntityID",
+      "AddressID",
+      "AddressTypeID",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Person.Person",
+    "table": "person_person",
+    "csv": "Person.csv",
+    "delimiter": "+|",
+    "row_terminator": "&|\\n",
+    "rows": 19972,
+    "columns": 13,
+    "fields_in_csv": 13,
+    "column_names": [
+      "BusinessEntityID",
+      "PersonType",
+      "NameStyle",
+      "Title",
+      "FirstName",
+      "MiddleName",
+      "LastName",
+      "Suffix",
+      "EmailPromotion",
+      "AdditionalContactInfo",
+      "Demographics",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Person.EmailAddress",
+    "table": "person_emailaddress",
+    "csv": "EmailAddress.csv",
+    "delimiter": "+|",
+    "row_terminator": "&|\\n",
+    "rows": 19972,
+    "columns": 5,
+    "fields_in_csv": 5,
+    "column_names": [
+      "BusinessEntityID",
+      "EmailAddressID",
+      "EmailAddress",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Sales.Store",
+    "table": "sales_store",
+    "csv": "Store.csv",
+    "delimiter": "+|",
+    "row_terminator": "&|\\n",
+    "rows": 701,
+    "columns": 6,
+    "fields_in_csv": 6,
+    "column_names": [
+      "BusinessEntityID",
+      "Name",
+      "SalesPersonID",
+      "Demographics",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Sales.Customer",
+    "table": "sales_customer",
+    "csv": "Customer.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 19820,
+    "columns": 7,
+    "fields_in_csv": 7,
+    "column_names": [
+      "CustomerID",
+      "PersonID",
+      "StoreID",
+      "TerritoryID",
+      "AccountNumber",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Purchasing.ShipMethod",
+    "table": "purchasing_shipmethod",
+    "csv": "ShipMethod.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 5,
+    "columns": 6,
+    "fields_in_csv": 6,
+    "column_names": [
+      "ShipMethodID",
+      "Name",
+      "ShipBase",
+      "ShipRate",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Sales.SpecialOffer",
+    "table": "sales_specialoffer",
+    "csv": "SpecialOffer.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 16,
+    "columns": 11,
+    "fields_in_csv": 11,
+    "column_names": [
+      "SpecialOfferID",
+      "Description",
+      "DiscountPct",
+      "Type",
+      "Category",
+      "StartDate",
+      "EndDate",
+      "MinQty",
+      "MaxQty",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Sales.SpecialOfferProduct",
+    "table": "sales_specialofferproduct",
+    "csv": "SpecialOfferProduct.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 538,
+    "columns": 4,
+    "fields_in_csv": 4,
+    "column_names": [
+      "SpecialOfferID",
+      "ProductID",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Production.ProductCategory",
+    "table": "production_productcategory",
+    "csv": "ProductCategory.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 4,
+    "columns": 4,
+    "fields_in_csv": 4,
+    "column_names": [
+      "ProductCategoryID",
+      "Name",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Production.ProductSubcategory",
+    "table": "production_productsubcategory",
+    "csv": "ProductSubcategory.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 37,
+    "columns": 5,
+    "fields_in_csv": 5,
+    "column_names": [
+      "ProductSubcategoryID",
+      "ProductCategoryID",
+      "Name",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Production.Product",
+    "table": "production_product",
+    "csv": "Product.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 504,
+    "columns": 25,
+    "fields_in_csv": 25,
+    "column_names": [
+      "ProductID",
+      "Name",
+      "ProductNumber",
+      "MakeFlag",
+      "FinishedGoodsFlag",
+      "Color",
+      "SafetyStockLevel",
+      "ReorderPoint",
+      "StandardCost",
+      "ListPrice",
+      "Size",
+      "SizeUnitMeasureCode",
+      "WeightUnitMeasureCode",
+      "Weight",
+      "DaysToManufacture",
+      "ProductLine",
+      "Class",
+      "Style",
+      "ProductSubcategoryID",
+      "ProductModelID",
+      "SellStartDate",
+      "SellEndDate",
+      "DiscontinuedDate",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Sales.SalesOrderHeader",
+    "table": "sales_salesorderheader",
+    "csv": "SalesOrderHeader.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 31465,
+    "columns": 26,
+    "fields_in_csv": 26,
+    "column_names": [
+      "SalesOrderID",
+      "RevisionNumber",
+      "OrderDate",
+      "DueDate",
+      "ShipDate",
+      "Status",
+      "OnlineOrderFlag",
+      "SalesOrderNumber",
+      "PurchaseOrderNumber",
+      "AccountNumber",
+      "CustomerID",
+      "SalesPersonID",
+      "TerritoryID",
+      "BillToAddressID",
+      "ShipToAddressID",
+      "ShipMethodID",
+      "CreditCardID",
+      "CreditCardApprovalCode",
+      "CurrencyRateID",
+      "SubTotal",
+      "TaxAmt",
+      "Freight",
+      "TotalDue",
+      "Comment",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  },
+  {
+    "source": "Sales.SalesOrderDetail",
+    "table": "sales_salesorderdetail",
+    "csv": "SalesOrderDetail.csv",
+    "delimiter": "\\t",
+    "row_terminator": "0x0a",
+    "rows": 121317,
+    "columns": 11,
+    "fields_in_csv": 11,
+    "column_names": [
+      "SalesOrderID",
+      "SalesOrderDetailID",
+      "CarrierTrackingNumber",
+      "OrderQty",
+      "ProductID",
+      "SpecialOfferID",
+      "UnitPrice",
+      "UnitPriceDiscount",
+      "LineTotal",
+      "rowguid",
+      "ModifiedDate"
+    ]
+  }
+]
