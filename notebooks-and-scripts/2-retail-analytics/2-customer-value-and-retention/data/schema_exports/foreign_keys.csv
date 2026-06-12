@@ -1,0 +1,24 @@
+table_name,fk_id,fk_sequence,column_name,referenced_table,referenced_column,on_update,on_delete,match
+person_address,0,0,StateProvinceID,person_stateprovince,StateProvinceID,NO ACTION,NO ACTION,NONE
+person_businessentityaddress,0,0,AddressTypeID,person_addresstype,AddressTypeID,NO ACTION,NO ACTION,NONE
+person_businessentityaddress,1,0,AddressID,person_address,AddressID,NO ACTION,NO ACTION,NONE
+person_emailaddress,0,0,BusinessEntityID,person_person,BusinessEntityID,NO ACTION,NO ACTION,NONE
+person_stateprovince,0,0,TerritoryID,sales_salesterritory,TerritoryID,NO ACTION,NO ACTION,NONE
+person_stateprovince,1,0,CountryRegionCode,person_countryregion,CountryRegionCode,NO ACTION,NO ACTION,NONE
+production_product,0,0,ProductSubcategoryID,production_productsubcategory,ProductSubcategoryID,NO ACTION,NO ACTION,NONE
+production_productsubcategory,0,0,ProductCategoryID,production_productcategory,ProductCategoryID,NO ACTION,NO ACTION,NONE
+sales_customer,0,0,TerritoryID,sales_salesterritory,TerritoryID,NO ACTION,NO ACTION,NONE
+sales_customer,1,0,StoreID,sales_store,BusinessEntityID,NO ACTION,NO ACTION,NONE
+sales_customer,2,0,PersonID,person_person,BusinessEntityID,NO ACTION,NO ACTION,NONE
+sales_salesorderdetail,0,0,ProductID,production_product,ProductID,NO ACTION,NO ACTION,NONE
+sales_salesorderdetail,1,0,SpecialOfferID,sales_specialofferproduct,SpecialOfferID,NO ACTION,NO ACTION,NONE
+sales_salesorderdetail,1,1,ProductID,sales_specialofferproduct,ProductID,NO ACTION,NO ACTION,NONE
+sales_salesorderdetail,2,0,SalesOrderID,sales_salesorderheader,SalesOrderID,NO ACTION,NO ACTION,NONE
+sales_salesorderheader,0,0,TerritoryID,sales_salesterritory,TerritoryID,NO ACTION,NO ACTION,NONE
+sales_salesorderheader,1,0,ShipMethodID,purchasing_shipmethod,ShipMethodID,NO ACTION,NO ACTION,NONE
+sales_salesorderheader,2,0,ShipToAddressID,person_address,AddressID,NO ACTION,NO ACTION,NONE
+sales_salesorderheader,3,0,BillToAddressID,person_address,AddressID,NO ACTION,NO ACTION,NONE
+sales_salesorderheader,4,0,CustomerID,sales_customer,CustomerID,NO ACTION,NO ACTION,NONE
+sales_salesterritory,0,0,CountryRegionCode,person_countryregion,CountryRegionCode,NO ACTION,NO ACTION,NONE
+sales_specialofferproduct,0,0,ProductID,production_product,ProductID,NO ACTION,NO ACTION,NONE
+sales_specialofferproduct,1,0,SpecialOfferID,sales_specialoffer,SpecialOfferID,NO ACTION,NO ACTION,NONE
