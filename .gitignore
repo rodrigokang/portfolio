@@ -2,3 +2,5 @@
 **/*.quarto_ipynb
 
 notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/data/creditcard.csv
+notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/python/local_config.py
+notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/data/processed
