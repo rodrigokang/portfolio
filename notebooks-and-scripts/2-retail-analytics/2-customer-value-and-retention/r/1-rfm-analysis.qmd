@@ -1,0 +1,1794 @@
+---
+title: "Customer Segmentation with RFM Analysis"
+author: "Rodrigo Kang"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+execute:
+  warning: false
+  message: false
+---
+
+## Overview
+
+This notebook accompanies the project **Customer Value and Retention** and contains the computational implementation of the customer segmentation workflow developed using transactional data from the AdventureWorks database.
+
+The objective is to identify customer groups with distinct purchasing patterns and to create a practical foundation for the churn prediction and customer lifetime value (CLV) models developed later in the project.
+
+The analysis begins with the construction of Recency, Frequency, and Monetary Value (RFM) features, followed by exploratory analysis and customer segmentation using K-Means clustering. K-Means was selected because it provides a simple and interpretable framework for grouping customers with similar purchasing behaviour, which is often more valuable in practice than pursuing incremental improvements in clustering complexity.
+
+The number of segments is not fixed in advance. Instead, several clustering diagnostics are evaluated, including inertia, silhouette score, Calinski-Harabasz score, and Davies-Bouldin score.
+
+In addition to customer segmentation, the notebook introduces a continuous intra-cluster scoring framework designed to rank customers within each segment according to their relative commercial value and purchasing behaviour. This additional layer of analysis provides a practical mechanism for prioritising customers once the broader customer groups have been identified.
+
+The notebook emphasizes reproducibility, interpretability, and practical decision-making. The focus is not only on obtaining statistically coherent segments, but also on understanding how those segments can support customer retention initiatives, customer prioritisation, and future revenue opportunities.
+
+Although this notebook uses the full transaction history to produce a current view of the customer base, the same RFM framework will later be applied within rolling observation windows when developing the churn prediction and CLV models. This distinction is important because customer segmentation is treated here as a descriptive task, whereas the subsequent models are predictive and therefore require a strict separation between observation data and future outcomes.
+
+## Libraries and Configuration
+
+This section imports the libraries required for data extraction, feature engineering, visualization, statistical transformations, and clustering analysis. A small set of configuration options is also defined to improve the readability and reproducibility of the results presented throughout the notebook. The objective is to keep the workflow transparent and easy to follow while focusing on the analytical decisions that drive the segmentation process.
+
+```{r}
+# Data manipulation
+library(tidyverse)
+library(lubridate)
+
+# Database connectivity
+library(DBI)
+library(RPostgres)
+
+# Tables
+library(gt)
+
+# Visualisation
+library(ggplot2)
+library(patchwork)
+library(scatterplot3d)
+library(plotly)
+
+# Clustering evaluation
+library(cluster)
+
+# Miscellaneous
+library(fs)
+library(rprojroot)
+```
+
+```{r}
+set.seed(42)
+
+options(
+  dplyr.width = Inf,
+  pillar.width = Inf,
+  scipen = 999
+)
+
+theme_set(theme_minimal(base_size = 11))
+
+outputs_dir <- "1-customer-value-and-retention-rfm-figures"
+tables_dir <- file.path(outputs_dir, "tables")
+processed_dir <- file.path("..", "data", "processed", "r")
+
+dir.create(outputs_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
+dir.create(processed_dir, recursive = TRUE, showWarnings = FALSE)
+```
+
+```{r}
+save_gt_table <- function(data, filename, title, subtitle = NULL, digits = 4) {
+  table_path <- file.path(tables_dir, filename)
+
+  table_data <- data |>
+    as_tibble()
+
+  integer_like_cols <- names(table_data)[
+    map_lgl(table_data, ~ is.numeric(.x) && all(is.na(.x) | .x == floor(.x)))
+  ]
+
+  decimal_cols <- names(table_data)[
+    map_lgl(table_data, is.numeric)
+  ] |>
+    setdiff(integer_like_cols)
+
+  gt_table <- table_data |>
+    gt() |>
+    tab_header(
+      title = md(title),
+      subtitle = if (!is.null(subtitle)) md(subtitle) else NULL
+    ) |>
+    fmt_number(
+      columns = any_of(decimal_cols),
+      decimals = digits
+    ) |>
+    fmt_number(
+      columns = any_of(integer_like_cols),
+      decimals = 0
+    ) |>
+    tab_options(
+      table.font.size = px(13),
+      heading.title.font.size = px(16),
+      heading.subtitle.font.size = px(12),
+      data_row.padding = px(4)
+    )
+
+  gtsave(gt_table, table_path)
+
+  gt_table
+}
+
+save_plot <- function(plot, filename, width = 10, height = 6, dpi = 300) {
+  ggsave(
+    filename = file.path(outputs_dir, filename),
+    plot = plot,
+    width = width,
+    height = height,
+    dpi = dpi
+  )
+}
+
+save_base_plot <- function(filename, width = 10, height = 8, expr) {
+  png(
+    filename = file.path(outputs_dir, filename),
+    width = width,
+    height = height,
+    units = "in",
+    res = 300
+  )
+
+  force(expr)
+  dev.off()
+}
+```
+
+## Database Connection
+
+The AdventureWorks database is hosted locally in PostgreSQL. Connection credentials are loaded from a local configuration file when available, or requested interactively at runtime otherwise. This approach avoids embedding sensitive information directly in the notebook while keeping the workflow portable across different environments.
+
+A short validation query is executed after establishing the connection to confirm that the database is accessible and correctly configured.
+
+```{r}
+source("local_config.R")
+
+con <- dbConnect(
+  RPostgres::Postgres(),
+  dbname = DB_NAME,
+  host = DB_HOST,
+  port = DB_PORT,
+  user = DB_USER,
+  password = DB_PASSWORD
+)
+```
+
+```{r}
+con <- dbConnect(
+  RPostgres::Postgres(),
+  dbname = "adventureworks",
+  host = "localhost",
+  port = 5432,
+  user = DB_USER,
+  password = DB_PASSWORD
+)
+```
+
+```{r}
+query <- "
+SELECT
+    current_database() AS database_name,
+    current_user AS user_name,
+    current_setting('server_encoding') AS server_encoding,
+    current_setting('client_encoding') AS client_encoding;
+"
+
+connection_validation <- dbGetQuery(con, query) |>
+  as_tibble()
+
+save_gt_table(
+  connection_validation,
+  "connection-validation.html",
+  "Database Connection Validation",
+  "PostgreSQL connection metadata"
+)
+```
+
+## Data Extraction
+
+The analysis is built on a simplified customer analytics model derived from the AdventureWorks transactional database.
+
+Although AdventureWorks contains a large number of operational tables, only the entities required to describe customer purchasing behaviour are included in this study. The resulting dataset combines customer information, order history, product attributes, product hierarchies, and sales territories into a single analytical view.
+
+This approach keeps the dataset focused on the business question: understanding how customers purchase, how they contribute to revenue, and how they can be grouped based on observed behaviour.
+
+### Customer Analytics Data Model
+
+The customer segmentation workflow relies on a small subset of the AdventureWorks schema centred around customers, orders, products, and sales territories.
+
+The entities included in the analytical model are:
+
+- `sales.customer`
+- `sales.salesorderheader`
+- `sales.salesorderdetail`
+- `production.product`
+- `production.productsubcategory`
+- `production.productcategory`
+- `sales.salesterritory`
+
+The simplified entity-relationship diagram below illustrates how these entities are connected and provides the foundation for the extraction process used throughout the notebook.
+
+```{r}
+root <- find_root(has_dir("data"))
+knitr::include_graphics(file.path(root, "data", "customer-analytics-erd.png"))
+```
+
+### Extract Transactional Data
+
+The query below extracts transaction data at the order-line level.
+
+Each row represents one product purchased within a customer order. This level of detail is useful because it keeps the dataset flexible: customer behaviour can later be aggregated by total spend, number of orders, quantity purchased, product category diversity, territory, or time period.
+
+The extraction query follows the simplified data model introduced above, joining customer, order, product, category, and territory information into a single analytical dataset.
+
+```{r}
+query <- "
+SELECT
+    c.customerid AS customer_id,
+    soh.salesorderid AS sales_order_id,
+    soh.orderdate AS order_date,
+    soh.duedate AS due_date,
+    soh.shipdate AS ship_date,
+    soh.status AS order_status,
+    soh.territoryid AS territory_id,
+    st.name AS territory_name,
+    st.countryregioncode AS country_region_code,
+    sod.salesorderdetailid AS sales_order_detail_id,
+    sod.productid AS product_id,
+    p.name AS product_name,
+    pc.name AS product_category,
+    ps.name AS product_subcategory,
+    sod.orderqty AS order_quantity,
+    sod.unitprice AS unit_price,
+    sod.unitpricediscount AS unit_price_discount,
+    (
+        sod.orderqty
+        * sod.unitprice
+        * (1 - sod.unitpricediscount)
+    ) AS line_total
+FROM sales.customer AS c
+INNER JOIN sales.salesorderheader AS soh
+    ON c.customerid = soh.customerid
+INNER JOIN sales.salesorderdetail AS sod
+    ON soh.salesorderid = sod.salesorderid
+INNER JOIN production.product AS p
+    ON sod.productid = p.productid
+LEFT JOIN production.productsubcategory AS ps
+    ON p.productsubcategoryid = ps.productsubcategoryid
+LEFT JOIN production.productcategory AS pc
+    ON ps.productcategoryid = pc.productcategoryid
+LEFT JOIN sales.salesterritory AS st
+    ON soh.territoryid = st.territoryid;
+"
+
+transactions <- dbGetQuery(con, query) |>
+  as_tibble() |>
+  mutate(
+    across(
+      c(order_date, due_date, ship_date),
+      as.Date
+    )
+  )
+```
+
+```{r}
+save_gt_table(
+  head(transactions),
+  "transactions-head.html",
+  "Transactional Data Preview",
+  "First rows of the extracted order-line dataset"
+)
+```
+
+```{r}
+transactions_shape <- tibble(
+  rows = nrow(transactions),
+  columns = ncol(transactions)
+)
+
+save_gt_table(
+  transactions_shape,
+  "transactions-shape.html",
+  "Transactional Dataset Shape",
+  "Number of rows and columns"
+)
+```
+
+The extracted dataset contains 121,317 order lines and 18 fields. At this stage, the data is still transactional rather than customer-level. Customer-level RFM features are constructed later by aggregating these transactions by customer.
+
+### Initial Data Inspection
+
+The extracted dataset contains one row per product purchased within a customer order.
+
+Before constructing customer-level features, a series of validation checks is performed to confirm that the data is suitable for analysis. These checks include dataset dimensions, data types, missing values, duplicate records, temporal coverage, and high-level transaction metrics.
+
+Although these validations are relatively simple, they help identify potential data quality issues before customer behaviour is aggregated into RFM features.
+
+```{r}
+transactions_info <- tibble(
+  variable = names(transactions),
+  type = map_chr(transactions, ~ class(.x)[1]),
+  missing_values = map_int(transactions, ~ sum(is.na(.x))),
+  unique_values = map_int(transactions, n_distinct)
+)
+
+save_gt_table(
+  transactions_info,
+  "transactions-info.html",
+  "Transactional Data Structure",
+  "Variable types, missing values, and unique values"
+)
+```
+
+The extracted dataset contains 121,317 transaction lines and 18 variables covering customers, orders, products, territories, and transaction values. Date fields have been correctly imported as datetime objects, which will be required for the recency calculations performed later in the analysis.
+
+```{r}
+missing_values <- transactions |>
+  summarise(across(everything(), ~ sum(is.na(.x)))) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "missing_values") |>
+  arrange(desc(missing_values))
+
+save_gt_table(
+  missing_values,
+  "missing-values.html",
+  "Missing Values by Variable",
+  "Transactional dataset validation"
+)
+```
+
+```{r}
+duplicate_records <- tibble(
+  duplicated_rows = sum(duplicated(transactions))
+)
+
+save_gt_table(
+  duplicate_records,
+  "duplicate-records.html",
+  "Duplicated Records",
+  "Transactional dataset validation"
+)
+```
+
+No missing values or duplicated records were identified in the extracted dataset. As a result, no additional cleaning steps are required before proceeding with the analysis.
+
+```{r}
+temporal_coverage <- transactions |>
+  summarise(
+    min_order_date = min(order_date),
+    max_order_date = max(order_date)
+  )
+
+save_gt_table(
+  temporal_coverage,
+  "temporal-coverage.html",
+  "Temporal Coverage",
+  "Observed order date range"
+)
+```
+
+The transaction history spans from May 2022 to June 2025, providing slightly more than three years of purchasing activity. This observation window is sufficiently long to support both customer segmentation and the future development of churn and CLV models.
+
+```{r}
+inspection_summary <- tibble(
+  Metric = c(
+    "Order Lines",
+    "Customers",
+    "Orders",
+    "Products",
+    "Territories",
+    "Total Revenue"
+  ),
+  Value = c(
+    nrow(transactions),
+    n_distinct(transactions$customer_id),
+    n_distinct(transactions$sales_order_id),
+    n_distinct(transactions$product_id),
+    n_distinct(transactions$territory_id),
+    round(sum(transactions$line_total), 2)
+  )
+)
+
+save_gt_table(
+  inspection_summary,
+  "inspection-summary.html",
+  "Inspection Summary",
+  "High-level transactional metrics",
+  digits = 2
+)
+```
+
+The extracted dataset contains 19,119 customers, 31,465 orders, and more than 121,000 transaction lines distributed across ten sales territories.
+
+At the transaction level, the dataset represents approximately \$109.8 million in revenue and provides sufficient behavioural variation to support customer segmentation based on purchasing patterns.
+
+## Exploratory Data Analysis
+
+Before constructing customer-level features, it is useful to understand the overall structure of the transactional data.
+
+This exploratory analysis focuses on three questions:
+
+- How have sales evolved over time?
+- How are purchases distributed across customers?
+- Which products and territories contribute most to revenue?
+
+The goal is not to perform an exhaustive exploratory analysis, but rather to develop a practical understanding of the customer base before building segmentation features.
+
+### Sales Overview
+
+The first step is to examine the evolution of sales activity over time.
+
+Monthly revenue, order volume, and customer activity provide a useful high-level view of the business and help identify potential seasonality, growth patterns, or structural changes in purchasing behaviour.
+
+Although the primary objective of this project is customer segmentation, understanding how the customer base evolves through time provides valuable context for interpreting the RFM metrics constructed later in the analysis.
+
+```{r}
+monthly_sales <- transactions |>
+  mutate(order_month = floor_date(order_date, unit = "month")) |>
+  group_by(order_month) |>
+  summarise(
+    revenue = sum(line_total),
+    orders = n_distinct(sales_order_id),
+    customers = n_distinct(customer_id),
+    .groups = "drop"
+  )
+
+save_gt_table(
+  head(monthly_sales),
+  "monthly-sales-head.html",
+  "Monthly Sales Preview",
+  "Revenue, orders, and active customers by month",
+  digits = 2
+)
+```
+
+```{r}
+monthly_sales_summary <- monthly_sales |>
+  summarise(
+    across(
+      c(revenue, orders, customers),
+      list(
+        count = ~ sum(!is.na(.x)),
+        mean = mean,
+        sd = sd,
+        min = min,
+        q25 = ~ quantile(.x, 0.25),
+        median = median,
+        q75 = ~ quantile(.x, 0.75),
+        max = max
+      ),
+      .names = "{.col}_{.fn}"
+    )
+  ) |>
+  pivot_longer(
+    everything(),
+    names_to = c("metric", ".value"),
+    names_pattern = "(.+)_(count|mean|sd|min|q25|median|q75|max)"
+  )
+
+save_gt_table(
+  monthly_sales_summary,
+  "monthly-sales-summary.html",
+  "Monthly Sales Summary",
+  "Descriptive statistics by monthly metric",
+  digits = 2
+)
+```
+
+```{r}
+monthly_sales_plot <- monthly_sales |>
+  filter(order_month < as.Date("2025-06-01")) |>
+  pivot_longer(
+    cols = c(revenue, orders, customers),
+    names_to = "metric",
+    values_to = "value"
+  ) |>
+  mutate(
+    metric = recode(
+      metric,
+      revenue = "Monthly Revenue",
+      orders = "Monthly Orders",
+      customers = "Monthly Active Customers"
+    ),
+    metric = factor(
+      metric,
+      levels = c("Monthly Revenue", "Monthly Orders", "Monthly Active Customers")
+    )
+  )
+
+p_monthly_sales <- ggplot(monthly_sales_plot, aes(x = order_month, y = value)) +
+  geom_line(linewidth = 1) +
+  facet_wrap(~ metric, ncol = 1, scales = "free_y") +
+  labs(x = NULL, y = NULL, title = "Monthly Sales Activity") +
+  theme(
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold")
+  )
+
+save_plot(p_monthly_sales, "monthly-sales-activity.png", width = 12, height = 10)
+p_monthly_sales
+```
+
+The three series show a broadly consistent upward trend throughout the observation period. Revenue, order volume, and active customers all increase over time, suggesting an expanding customer base and growing transaction activity.
+
+A noticeable increase in orders and active customers occurs during the second half of 2024. This pattern is likely related to the structure of the AdventureWorks dataset rather than a real-world business event, but it remains important to acknowledge because it may influence the distribution of customer-level metrics used later in the segmentation process.
+
+### Customer Composition
+
+Before constructing customer-level features, it is useful to understand the composition of the customer base.
+
+AdventureWorks contains both individual consumers and commercial customers. Although customer type is not directly used in the RFM framework, it provides useful context for interpreting purchasing behaviour and the resulting customer segments.
+
+The distribution below shows the relative size of each customer group within the dataset.
+
+```{r}
+query <- "
+SELECT
+    CASE
+        WHEN personid IS NOT NULL THEN 'Individual'
+        WHEN storeid IS NOT NULL THEN 'Store'
+        ELSE 'Unknown'
+    END AS customer_type,
+    COUNT(*) AS customers
+FROM sales.customer
+GROUP BY customer_type
+ORDER BY customers DESC;
+"
+
+customer_types <- dbGetQuery(con, query) |>
+  as_tibble() |>
+  mutate(customers = as.numeric(customers))
+
+save_gt_table(
+  customer_types,
+  "customer-types.html",
+  "Customer Composition",
+  "Customer type counts"
+)
+```
+
+```{r}
+customer_types <- customer_types |>
+  mutate(
+    customers = as.numeric(customers),
+    percentage = 100 * customers / sum(customers),
+    customer_type = fct_reorder(customer_type, customers)
+  )
+
+p_customer_types <- ggplot(customer_types, aes(x = customers, y = customer_type)) +
+  geom_col(width = 0.65) +
+  geom_text(
+    aes(label = paste0(format(round(customers, 0), big.mark = ","), " (", round(percentage, 1), "%)")),
+    hjust = -0.08,
+    size = 3.5
+  ) +
+  scale_x_continuous(
+    labels = scales::label_comma(),
+    expand = expansion(mult = c(0, 0.12))
+  ) +
+  labs(
+    title = "Customer Composition",
+    x = "Customers",
+    y = NULL
+  ) +
+  coord_cartesian(clip = "off") +
+  theme(
+    plot.margin = margin(5.5, 30, 5.5, 5.5)
+  )
+
+save_plot(p_customer_types, "customer-composition.png", width = 8, height = 4)
+p_customer_types
+```
+
+Individual customers account for the vast majority of the customer base, representing more than 96% of all records in the dataset. Commercial customers (stores) make up only a small fraction of the population.
+
+This imbalance suggests that the segmentation results will primarily reflect individual purchasing behaviour. While customer type may still be useful as a descriptive attribute, it is unlikely to be a major driver of the clustering structure.
+
+## RFM Feature Engineering
+
+Customer segmentation begins with the construction of Recency, Frequency, and Monetary Value (RFM) variables.
+
+RFM analysis is one of the most widely used approaches for customer segmentation because it captures three fundamental dimensions of purchasing behaviour:
+
+- Recency measures how recently a customer has placed an order.
+- Frequency measures how often a customer purchases.
+- Monetary Value measures the total revenue generated by the customer.
+
+Together, these variables provide a compact and interpretable representation of customer activity, making them a practical starting point for segmentation analysis.
+
+### Reference Date
+
+Recency is calculated relative to a fixed reference date corresponding to the most recent transaction observed in the dataset.
+
+Using a common reference date ensures that recency values are comparable across all customers.
+
+```{r}
+reference_date <- max(transactions$order_date) + days(1)
+
+reference_date_table <- tibble(reference_date = reference_date)
+
+save_gt_table(
+  reference_date_table,
+  "reference-date.html",
+  "Reference Date",
+  "Date used to calculate customer recency"
+)
+```
+
+### Customer-Level Aggregation
+
+The transactional dataset is aggregated at the customer level to construct the Recency, Frequency, and Monetary Value variables.
+
+The resulting dataset contains one row per customer and forms the basis for all subsequent segmentation analyses.
+
+```{r}
+rfm <- transactions |>
+  group_by(customer_id) |>
+  summarise(
+    recency = as.integer(reference_date - max(order_date)),
+    frequency = n_distinct(sales_order_id),
+    monetary = sum(line_total),
+    .groups = "drop"
+  )
+
+save_gt_table(
+  head(rfm),
+  "rfm-head.html",
+  "RFM Data Preview",
+  "Customer-level Recency, Frequency, and Monetary features",
+  digits = 2
+)
+```
+
+```{r}
+rfm_shape <- tibble(rows = nrow(rfm), columns = ncol(rfm))
+
+save_gt_table(
+  rfm_shape,
+  "rfm-shape.html",
+  "RFM Dataset Shape",
+  "Number of customers and variables"
+)
+```
+
+### Exploratory Analysis of RFM Variables
+
+Before applying transformations and clustering algorithms, it is useful to examine the statistical properties of the RFM variables.
+
+The objective of this analysis is to understand the distribution of recency, frequency, and monetary value, identify potential outliers, evaluate relationships between variables, and assess the degree of skewness present in the data.
+
+These diagnostics help determine whether additional preprocessing steps are required before constructing customer segments.
+
+```{r}
+number_bins <- 1 + floor(log2(nrow(rfm)))
+
+rfm_long <- rfm |>
+  pivot_longer(
+    cols = c(recency, frequency, monetary),
+    names_to = "variable",
+    values_to = "value"
+  ) |>
+  mutate(
+    variable = str_to_title(variable)
+  )
+
+p_rfm_histograms <- ggplot(rfm_long, aes(x = value)) +
+  geom_histogram(bins = number_bins, colour = "black") +
+  facet_wrap(~ variable, scales = "free", nrow = 1) +
+  labs(
+    title = "Distribution of RFM Variables",
+    x = NULL,
+    y = "Frequency"
+  )
+
+save_plot(p_rfm_histograms, "rfm-variable-distributions.png", width = 15, height = 4)
+p_rfm_histograms
+```
+
+The distributions exhibit substantial positive skewness, particularly for Frequency and Monetary Value.
+
+Most customers place only a small number of orders and generate relatively modest revenue, while a small subset of customers contributes disproportionately large purchasing volumes. This behaviour is typical of transactional datasets and is often observed in retail and e-commerce environments.
+
+```{r}
+p_recency_frequency <- ggplot(rfm, aes(x = recency, y = frequency)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Recency vs. Frequency", x = "Recency", y = "Frequency")
+
+p_recency_monetary <- ggplot(rfm, aes(x = recency, y = monetary)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Recency vs. Monetary Value", x = "Recency", y = "Monetary Value")
+
+p_frequency_monetary <- ggplot(rfm, aes(x = frequency, y = monetary)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Frequency vs. Monetary Value", x = "Frequency", y = "Monetary Value")
+
+p_rfm_scatter <- p_recency_frequency + p_recency_monetary + p_frequency_monetary
+
+save_plot(p_rfm_scatter, "rfm-pairwise-scatterplots.png", width = 15, height = 5)
+p_rfm_scatter
+```
+
+The pairwise relationships reveal several characteristics of the customer base.
+
+Customers with higher purchase frequency generally generate higher revenue, although considerable variability remains within each frequency level. In contrast, recency appears to be less strongly associated with monetary value, suggesting that both dimensions capture different aspects of customer behaviour.
+
+These patterns support the use of all three RFM variables in the segmentation process, as each contributes distinct information.
+
+A three-dimensional representation of the RFM feature space is also included. Although the structure is difficult to interpret directly due to the extreme scale differences between variables, the visualization provides a useful baseline for comparison after the transformation and scaling steps applied later in the workflow.
+
+```{r}
+save_base_plot(
+  "rfm-3d-feature-space.png",
+  width = 10,
+  height = 8,
+  expr = scatterplot3d(
+    x = rfm$recency,
+    y = rfm$frequency,
+    z = rfm$monetary,
+    xlab = "Recency",
+    ylab = "Frequency",
+    zlab = "Monetary Value",
+    main = "3D Plot of Recency, Frequency, and Monetary Value",
+    pch = 16
+  )
+)
+
+scatterplot3d(
+  x = rfm$recency,
+  y = rfm$frequency,
+  z = rfm$monetary,
+  xlab = "Recency",
+  ylab = "Frequency",
+  zlab = "Monetary Value",
+  main = "3D Plot of Recency, Frequency, and Monetary Value",
+  pch = 16
+)
+```
+
+```{r}
+skewness <- function(x) {
+  x <- x[!is.na(x)]
+  mean((x - mean(x))^3) / sd(x)^3
+}
+
+rfm_summary <- tibble(
+  Variable = c("Recency", "Frequency", "Monetary"),
+  Mean = c(mean(rfm$recency), mean(rfm$frequency), mean(rfm$monetary)),
+  `Standard Deviation` = c(sd(rfm$recency), sd(rfm$frequency), sd(rfm$monetary)),
+  Skewness = c(skewness(rfm$recency), skewness(rfm$frequency), skewness(rfm$monetary))
+)
+
+save_gt_table(
+  rfm_summary,
+  "rfm-summary-statistics.html",
+  "RFM Summary Statistics",
+  "Mean, standard deviation, and skewness",
+  digits = 4
+)
+```
+
+The summary statistics confirm the visual impression obtained from the histograms and scatter plots. All three variables exhibit positive skewness, with Frequency and Monetary Value showing particularly extreme asymmetry.
+
+Such distributions can adversely affect distance-based clustering algorithms because a small number of high-value observations may dominate the clustering structure. To mitigate this effect and improve cluster stability, the RFM variables will be transformed before applying K-Means.
+
+### RFM Transformation and Scaling
+
+The raw RFM variables are strongly skewed and measured on very different scales. This matters because K-Means is a distance-based algorithm: variables with larger ranges or extreme values can dominate the clustering result.
+
+To reduce this effect, the RFM variables are first transformed using the Box-Cox transformation and then standardized using `scale()`.
+
+Box-Cox is applied after adding one to each variable, ensuring that all values are strictly positive. The transformed variables are then scaled to have approximately zero mean and unit variance.
+
+The goal is not to force the data to be perfectly normal, but to create a more balanced feature space for clustering.
+
+```{r}
+boxcox_transform <- function(x) {
+  x <- x + 1
+
+  log_likelihood <- function(lambda) {
+    if (abs(lambda) < 1e-8) {
+      y <- log(x)
+    } else {
+      y <- (x^lambda - 1) / lambda
+    }
+
+    n <- length(x)
+    -n / 2 * log(mean((y - mean(y))^2)) + (lambda - 1) * sum(log(x))
+  }
+
+  fitted_lambda <- optimize(
+    f = log_likelihood,
+    interval = c(-5, 5),
+    maximum = TRUE
+  )$maximum
+
+  if (abs(fitted_lambda) < 1e-8) {
+    transformed_values <- log(x)
+  } else {
+    transformed_values <- (x^fitted_lambda - 1) / fitted_lambda
+  }
+
+  list(
+    values = transformed_values,
+    lambda = fitted_lambda
+  )
+}
+
+rfm_features <- c("recency", "frequency", "monetary")
+
+boxcox_results <- map(rfm_features, ~ boxcox_transform(rfm[[.x]]))
+names(boxcox_results) <- rfm_features
+
+rfm_transformed <- rfm
+
+for (feature in rfm_features) {
+  rfm_transformed[[paste0(feature, "_boxcox")]] <- boxcox_results[[feature]]$values
+}
+
+boxcox_lambdas <- tibble(
+  feature = rfm_features,
+  lambda = map_dbl(boxcox_results, "lambda")
+)
+
+save_gt_table(
+  boxcox_lambdas,
+  "boxcox-lambdas.html",
+  "Box-Cox Lambdas",
+  "Fitted transformation parameters",
+  digits = 4
+)
+```
+
+```{r}
+score_columns <- c("score_recency", "score_frequency", "score_monetary")
+boxcox_columns <- c("recency_boxcox", "frequency_boxcox", "monetary_boxcox")
+
+scaled_scores <- rfm_transformed |>
+  select(all_of(boxcox_columns)) |>
+  scale() |>
+  as_tibble()
+
+names(scaled_scores) <- score_columns
+
+rfm_transformed <- bind_cols(
+  rfm_transformed,
+  scaled_scores
+)
+
+save_gt_table(
+  head(rfm_transformed),
+  "rfm-transformed-head.html",
+  "Transformed RFM Data Preview",
+  "Box-Cox transformed and standardised RFM variables",
+  digits = 4
+)
+```
+
+```{r}
+number_bins <- 1 + floor(log2(nrow(rfm_transformed)))
+
+score_long <- rfm_transformed |>
+  select(all_of(score_columns)) |>
+  pivot_longer(everything(), names_to = "variable", values_to = "value") |>
+  mutate(
+    variable = recode(
+      variable,
+      score_recency = "Recency Score",
+      score_frequency = "Frequency Score",
+      score_monetary = "Monetary Score"
+    )
+  )
+
+p_score_histograms <- ggplot(score_long, aes(x = value)) +
+  geom_histogram(bins = number_bins, colour = "black") +
+  facet_wrap(~ variable, scales = "free", nrow = 1) +
+  labs(
+    title = "Distribution of Transformed RFM Scores",
+    x = NULL,
+    y = "Frequency"
+  )
+
+save_plot(p_score_histograms, "transformed-rfm-score-distributions.png", width = 15, height = 4)
+p_score_histograms
+```
+
+```{r}
+p_score_recency_frequency <- ggplot(rfm_transformed, aes(x = score_recency, y = score_frequency)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Recency Score vs. Frequency Score", x = "Recency Score", y = "Frequency Score")
+
+p_score_recency_monetary <- ggplot(rfm_transformed, aes(x = score_recency, y = score_monetary)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Recency Score vs. Monetary Score", x = "Recency Score", y = "Monetary Score")
+
+p_score_frequency_monetary <- ggplot(rfm_transformed, aes(x = score_frequency, y = score_monetary)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Frequency Score vs. Monetary Score", x = "Frequency Score", y = "Monetary Score")
+
+p_score_scatter <- p_score_recency_frequency + p_score_recency_monetary + p_score_frequency_monetary
+
+save_plot(p_score_scatter, "transformed-rfm-pairwise-scatterplots.png", width = 15, height = 5)
+p_score_scatter
+```
+
+```{r}
+save_base_plot(
+  "transformed-rfm-3d-feature-space.png",
+  width = 10,
+  height = 8,
+  expr = scatterplot3d(
+    x = rfm_transformed$score_recency,
+    y = rfm_transformed$score_frequency,
+    z = rfm_transformed$score_monetary,
+    xlab = "Recency Score",
+    ylab = "Frequency Score",
+    zlab = "Monetary Score",
+    main = "3D RFM Feature Space After Transformation and Scaling",
+    pch = 16
+  )
+)
+
+scatterplot3d(
+  x = rfm_transformed$score_recency,
+  y = rfm_transformed$score_frequency,
+  z = rfm_transformed$score_monetary,
+  xlab = "Recency Score",
+  ylab = "Frequency Score",
+  zlab = "Monetary Score",
+  main = "3D RFM Feature Space After Transformation and Scaling",
+  pch = 16
+)
+```
+
+```{r}
+rfm_score_summary <- tibble(
+  Variable = c("Recency Score", "Frequency Score", "Monetary Score"),
+  Mean = c(mean(rfm_transformed$score_recency), mean(rfm_transformed$score_frequency), mean(rfm_transformed$score_monetary)),
+  `Standard Deviation` = c(sd(rfm_transformed$score_recency), sd(rfm_transformed$score_frequency), sd(rfm_transformed$score_monetary)),
+  Skewness = c(skewness(rfm_transformed$score_recency), skewness(rfm_transformed$score_frequency), skewness(rfm_transformed$score_monetary))
+)
+
+save_gt_table(
+  rfm_score_summary,
+  "rfm-score-summary-statistics.html",
+  "Transformed RFM Score Summary",
+  "Mean, standard deviation, and skewness",
+  digits = 4
+)
+```
+
+The transformed and scaled variables are now centred around zero and have comparable variance. The skewness values are also substantially lower than in the raw RFM variables, especially for Recency and Monetary Value.
+
+Frequency remains discrete because it is based on the number of distinct orders. Even after transformation, this variable retains visible bands in the plots, which is expected for low-count purchase data.
+
+## Selection of the Number of Clusters
+
+Unlike traditional RFM approaches that define customer groups using predefined business rules, the objective here is to allow the clustering structure to emerge from the data.
+
+Because no single metric provides a complete assessment of clustering quality, several complementary diagnostics are evaluated across a range of candidate values for $K$.
+
+The analysis considers:
+
+- Within-cluster inertia (Elbow Method).
+- Silhouette Score.
+- Calinski-Harabasz Index.
+- Davies-Bouldin Index.
+
+Each metric emphasizes a different aspect of cluster quality. Rather than relying on a single criterion, the final choice of $K$ is based on the combined evidence provided by all four diagnostics.
+
+```{r}
+clustering_features <- c("score_recency", "score_frequency", "score_monetary")
+clustering_matrix <- rfm_transformed |>
+  select(all_of(clustering_features)) |>
+  as.matrix()
+
+calculate_inertia <- function(data, labels, centers) {
+  sum(map_dbl(seq_len(nrow(data)), function(i) {
+    cluster_id <- labels[i]
+    sum((data[i, ] - centers[cluster_id, ])^2)
+  }))
+}
+
+calculate_calinski_harabasz <- function(data, labels) {
+  n <- nrow(data)
+  k <- length(unique(labels))
+  overall_mean <- colMeans(data)
+
+  between_ss <- sum(map_dbl(unique(labels), function(cluster_id) {
+    cluster_data <- data[labels == cluster_id, , drop = FALSE]
+    n_cluster <- nrow(cluster_data)
+    n_cluster * sum((colMeans(cluster_data) - overall_mean)^2)
+  }))
+
+  within_ss <- sum(map_dbl(unique(labels), function(cluster_id) {
+    cluster_data <- data[labels == cluster_id, , drop = FALSE]
+    center <- colMeans(cluster_data)
+    sum(rowSums((cluster_data - matrix(center, nrow(cluster_data), ncol(data), byrow = TRUE))^2))
+  }))
+
+  (between_ss / (k - 1)) / (within_ss / (n - k))
+}
+
+calculate_davies_bouldin <- function(data, labels) {
+  cluster_ids <- sort(unique(labels))
+
+  centers <- map(cluster_ids, ~ colMeans(data[labels == .x, , drop = FALSE]))
+  names(centers) <- cluster_ids
+
+  scatter <- map_dbl(cluster_ids, function(cluster_id) {
+    cluster_data <- data[labels == cluster_id, , drop = FALSE]
+    center <- centers[[as.character(cluster_id)]]
+    mean(sqrt(rowSums((cluster_data - matrix(center, nrow(cluster_data), ncol(data), byrow = TRUE))^2)))
+  })
+
+  db_values <- map_dbl(seq_along(cluster_ids), function(i) {
+    ratios <- map_dbl(seq_along(cluster_ids), function(j) {
+      if (i == j) {
+        return(NA_real_)
+      }
+
+      center_distance <- sqrt(sum((centers[[i]] - centers[[j]])^2))
+      (scatter[i] + scatter[j]) / center_distance
+    })
+
+    max(ratios, na.rm = TRUE)
+  })
+
+  mean(db_values)
+}
+
+k_values <- 2:10
+
+cluster_metrics <- map_dfr(k_values, function(k) {
+  model <- kmeans(
+    x = clustering_matrix,
+    centers = k,
+    nstart = 20,
+    iter.max = 100
+  )
+
+  labels <- model$cluster
+
+  tibble(
+    k = k,
+    inertia = model$tot.withinss,
+    silhouette = mean(silhouette(labels, dist(clustering_matrix))[, "sil_width"]),
+    calinski_harabasz = calculate_calinski_harabasz(clustering_matrix, labels),
+    davies_bouldin = calculate_davies_bouldin(clustering_matrix, labels)
+  )
+})
+
+save_gt_table(
+  cluster_metrics,
+  "cluster-metrics.html",
+  "Clustering Diagnostics",
+  "Evaluation metrics across candidate values of K",
+  digits = 4
+)
+```
+
+```{r}
+cluster_metrics_long <- cluster_metrics |>
+  pivot_longer(
+    cols = c(inertia, silhouette, calinski_harabasz, davies_bouldin),
+    names_to = "metric",
+    values_to = "value"
+  ) |>
+  mutate(
+    metric = recode(
+      metric,
+      inertia = "Elbow Method",
+      silhouette = "Silhouette Score",
+      calinski_harabasz = "Calinski-Harabasz Index",
+      davies_bouldin = "Davies-Bouldin Index"
+    ),
+    metric = factor(
+      metric,
+      levels = c("Elbow Method", "Silhouette Score", "Calinski-Harabasz Index", "Davies-Bouldin Index")
+    )
+  )
+
+p_cluster_metrics <- ggplot(cluster_metrics_long, aes(x = k, y = value)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  facet_wrap(~ metric, scales = "free_y", ncol = 2) +
+  scale_x_continuous(breaks = k_values) +
+  labs(
+    title = "Clustering Diagnostics",
+    x = "Number of Clusters",
+    y = NULL
+  ) +
+  theme(strip.text = element_text(face = "bold"))
+
+save_plot(p_cluster_metrics, "clustering-diagnostics.png", width = 12, height = 8)
+p_cluster_metrics
+```
+
+The clustering diagnostics indicate that customer structure continues to improve as additional clusters are introduced. In particular, the Silhouette Score reaches its highest value at $K = 9$, while the Davies-Bouldin Index reaches its minimum value at the same point.
+
+Although the statistical evidence slightly favours nine clusters, customer segmentation also requires practical interpretability. For this reason, the final decision will consider both clustering quality and the business meaning of the resulting customer groups.
+
+The next step is therefore to examine the cluster profiles and determine whether the additional complexity introduced by larger values of $K$ produces genuinely distinct customer segments.
+
+### Cluster Profile Analysis
+
+Clustering diagnostics provide useful statistical guidance, but the final choice of $K$ should also be evaluated from a business perspective.
+
+In customer segmentation, the objective is not only to maximize clustering metrics, but also to identify groups that are sufficiently distinct, interpretable, and actionable.
+
+To support the final selection, the candidate solutions are examined through their cluster profiles, including cluster size and average RFM characteristics. This analysis helps determine whether additional clusters reveal genuinely different customer behaviours or simply subdivide existing groups.
+
+#### Candidate Solution: K = 8
+
+The first candidate solution uses eight clusters. The distribution of customers across clusters is examined first, followed by the average RFM characteristics of each segment.
+
+```{r}
+k_candidate <- 8
+
+kmeans_8 <- kmeans(
+  x = clustering_matrix,
+  centers = k_candidate,
+  nstart = 20,
+  iter.max = 100
+)
+
+rfm <- rfm |>
+  mutate(cluster_8 = kmeans_8$cluster - 1)
+```
+
+The first step is to evaluate the number of customers assigned to each cluster. Extremely small clusters may indicate outliers or excessive fragmentation.
+
+```{r}
+cluster_sizes_8 <- rfm |>
+  count(cluster_8, name = "customers") |>
+  arrange(desc(customers))
+
+save_gt_table(
+  cluster_sizes_8,
+  "cluster-sizes-k8.html",
+  "Cluster Sizes: K = 8",
+  "Number of customers assigned to each candidate cluster"
+)
+```
+
+The behavioural characteristics of each segment can be examined using the original RFM variables.
+
+```{r}
+cluster_profile_8 <- rfm |>
+  group_by(cluster_8) |>
+  summarise(
+    customers = n(),
+    recency = mean(recency),
+    frequency = mean(frequency),
+    monetary = mean(monetary),
+    .groups = "drop"
+  ) |>
+  mutate(across(c(recency, frequency, monetary), ~ round(.x, 2))) |>
+  arrange(desc(monetary))
+
+save_gt_table(
+  cluster_profile_8,
+  "cluster-profile-k8.html",
+  "Cluster Profile: K = 8",
+  "Average RFM characteristics by candidate cluster",
+  digits = 2
+)
+```
+
+#### Candidate Solution: K = 9
+
+The same analysis is repeated using nine clusters in order to determine whether the additional segment captures genuinely different customer behaviour.
+
+```{r}
+k_candidate <- 9
+
+kmeans_9 <- kmeans(
+  x = clustering_matrix,
+  centers = k_candidate,
+  nstart = 20,
+  iter.max = 100
+)
+
+rfm <- rfm |>
+  mutate(cluster_9 = kmeans_9$cluster - 1)
+```
+
+```{r}
+cluster_sizes_9 <- rfm |>
+  count(cluster_9, name = "customers") |>
+  arrange(desc(customers))
+
+save_gt_table(
+  cluster_sizes_9,
+  "cluster-sizes-k9.html",
+  "Cluster Sizes: K = 9",
+  "Number of customers assigned to each candidate cluster"
+)
+```
+
+```{r}
+cluster_profile_9 <- rfm |>
+  group_by(cluster_9) |>
+  summarise(
+    customers = n(),
+    recency = mean(recency),
+    frequency = mean(frequency),
+    monetary = mean(monetary),
+    .groups = "drop"
+  ) |>
+  mutate(across(c(recency, frequency, monetary), ~ round(.x, 2))) |>
+  arrange(desc(monetary))
+
+save_gt_table(
+  cluster_profile_9,
+  "cluster-profile-k9.html",
+  "Cluster Profile: K = 9",
+  "Average RFM characteristics by candidate cluster",
+  digits = 2
+)
+```
+
+The comparison between the eight-cluster and nine-cluster solutions suggests that the additional cluster introduced at $K = 9$ captures a meaningful behavioural distinction rather than simply fragmenting an existing segment.
+
+In the eight-cluster solution, a group of low-spending but relatively frequent customers appears as a single segment. When the number of clusters is increased to nine, this group separates into two distinct profiles: one characterised by recent purchasing activity and higher order frequency, and another characterised by older purchasing activity and lower engagement.
+
+This additional separation is consistent with the underlying business behaviour and improves the interpretability of the segmentation. Combined with the favourable clustering diagnostics observed earlier, these results support the selection of $K = 9$ as the final segmentation solution.
+
+## Final Customer Segmentation
+
+Based on the combined evidence provided by the clustering diagnostics and the cluster profile analysis, the final segmentation model uses nine customer segments.
+
+The model is estimated using the transformed and standardized RFM variables. Once the clusters are assigned, the results are interpreted using the original RFM metrics to preserve their business meaning.
+
+```{r}
+k_final <- 9
+
+kmeans_final <- kmeans(
+  x = clustering_matrix,
+  centers = k_final,
+  nstart = 20,
+  iter.max = 100
+)
+
+rfm <- rfm |>
+  mutate(cluster = kmeans_final$cluster - 1)
+```
+
+### Cluster Distribution
+
+The first step is to examine how customers are distributed across the nine segments.
+
+Large imbalances may indicate that some segments represent niche customer groups, while others capture broad behavioural patterns within the customer base.
+
+```{r}
+cluster_distribution <- rfm |>
+  count(cluster, name = "customers") |>
+  arrange(cluster) |>
+  mutate(percentage = 100 * customers / sum(customers))
+
+save_gt_table(
+  cluster_distribution,
+  "cluster-distribution.html",
+  "Customer Distribution by Cluster",
+  "Final K-Means solution with nine clusters",
+  digits = 2
+)
+```
+
+```{r}
+p_cluster_distribution <- ggplot(cluster_distribution, aes(x = factor(cluster), y = customers)) +
+  geom_col() +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), vjust = -0.3) +
+  labs(
+    title = "Customer Distribution by Cluster",
+    x = "Cluster",
+    y = "Customers"
+  ) +
+  coord_cartesian(ylim = c(0, max(cluster_distribution$customers) * 1.12))
+
+save_plot(p_cluster_distribution, "customer-distribution-by-cluster.png", width = 10, height = 5)
+p_cluster_distribution
+```
+
+### Cluster Profiles
+
+The behavioural characteristics of each segment are evaluated using the original RFM variables.
+
+Average recency, frequency, and monetary value provide an initial description of the customers contained within each cluster and form the basis for the interpretation of the resulting segments.
+
+```{r}
+cluster_profiles <- rfm |>
+  group_by(cluster) |>
+  summarise(
+    customers = n(),
+    recency = mean(recency),
+    frequency = mean(frequency),
+    monetary = mean(monetary),
+    .groups = "drop"
+  ) |>
+  mutate(across(c(recency, frequency, monetary), ~ round(.x, 2))) |>
+  arrange(desc(monetary))
+
+save_gt_table(
+  cluster_profiles,
+  "cluster-profiles.html",
+  "Cluster Profiles",
+  "Average RFM characteristics by final cluster",
+  digits = 2
+)
+```
+
+## Customer Prioritisation Within Clusters
+
+The cluster assignment identifies groups of customers with similar purchasing behaviour. However, customers belonging to the same segment may still differ substantially in their relative importance.
+
+To support prioritisation within each cluster, an additional RFM score is calculated for every customer. The score combines the transformed and standardized Recency, Frequency, and Monetary variables into a single continuous measure.
+
+Since lower recency indicates more recent activity, the Recency component enters the score with a negative sign, while Frequency and Monetary contribute positively.
+
+Rather than replacing the cluster labels, the score provides a ranking mechanism that helps identify the strongest and weakest customers within each segment.
+
+### Cluster-Specific Weighting
+
+The contribution of each RFM component is allowed to vary across clusters.
+
+Weights are derived from the within-cluster variance of the transformed RFM variables. Variables exhibiting greater variation receive larger weights because they contribute more strongly to differentiating customers within that particular segment.
+
+This approach produces a cluster-specific prioritisation score while preserving the overall segmentation structure.
+
+```{r}
+calculate_cluster_weights <- function(data, cluster_column, score_columns) {
+  variance_by_cluster <- data |>
+    group_by(.data[[cluster_column]]) |>
+    summarise(
+      across(all_of(score_columns), var),
+      .groups = "drop"
+    )
+
+  weights <- variance_by_cluster |>
+    mutate(
+      total_variance = rowSums(across(all_of(score_columns)))
+    ) |>
+    mutate(
+      across(
+        all_of(score_columns),
+        ~ .x / total_variance
+      )
+    ) |>
+    select(-total_variance)
+
+  weights
+}
+```
+
+```{r}
+assign_rfm_score <- function(data, cluster_column, score_columns, cluster_weights) {
+  recency_col <- score_columns[1]
+  frequency_col <- score_columns[2]
+  monetary_col <- score_columns[3]
+
+  output <- data |>
+    left_join(
+      cluster_weights |>
+        rename(
+          omega_recency = all_of(recency_col),
+          omega_frequency = all_of(frequency_col),
+          omega_monetary = all_of(monetary_col)
+        ),
+      by = cluster_column
+    ) |>
+    mutate(
+      rfm_score =
+        - .data[[recency_col]] * omega_recency +
+        .data[[frequency_col]] * omega_frequency +
+        .data[[monetary_col]] * omega_monetary,
+      rfm_normalized_score =
+        (rfm_score - min(rfm_score)) /
+        (max(rfm_score) - min(rfm_score))
+    )
+
+  output
+}
+```
+
+```{r}
+score_columns <- c("score_recency", "score_frequency", "score_monetary")
+
+scoring_data <- rfm |>
+  left_join(
+    rfm_transformed |>
+      select(customer_id, all_of(score_columns)),
+    by = "customer_id"
+  )
+```
+
+```{r}
+cluster_weights <- calculate_cluster_weights(
+  data = scoring_data,
+  cluster_column = "cluster",
+  score_columns = score_columns
+)
+
+save_gt_table(
+  cluster_weights,
+  "cluster-weights.html",
+  "Cluster-Specific RFM Weights",
+  "Weights derived from within-cluster variance",
+  digits = 4
+)
+```
+
+The resulting weights vary across clusters, reflecting the different sources of behavioural variation present within each customer segment.
+
+For example, some clusters are primarily differentiated by recency, while others are more strongly influenced by spending behaviour or purchase frequency. As a result, the prioritisation score adapts to the characteristics of each segment rather than applying a single weighting scheme to the entire customer base.
+
+```{r}
+rfm_scored <- assign_rfm_score(
+  data = scoring_data,
+  cluster_column = "cluster",
+  score_columns = score_columns,
+  cluster_weights = cluster_weights
+)
+```
+
+```{r}
+rfm_scored_preview <- rfm_scored |>
+  select(
+    customer_id,
+    recency,
+    frequency,
+    monetary,
+    cluster,
+    omega_recency,
+    omega_frequency,
+    omega_monetary,
+    score_recency,
+    score_frequency,
+    score_monetary,
+    rfm_score,
+    rfm_normalized_score
+  ) |>
+  head()
+
+save_gt_table(
+  rfm_scored_preview,
+  "rfm-scored-head.html",
+  "RFM Scored Data Preview",
+  "Customer-level prioritisation score with cluster-specific weights",
+  digits = 4
+)
+```
+
+The normalized RFM score ranges from 0 to 1 and can be interpreted as a relative ranking within the customer base.
+
+Customers with higher scores generally exhibit more favourable combinations of recency, frequency, and monetary value, while lower scores indicate weaker engagement and commercial contribution.
+
+This score complements the clustering results by introducing a continuous prioritisation measure that can support marketing, retention, and customer management initiatives.
+
+## Segment Interpretation
+
+The clustering algorithm identifies groups of customers with similar purchasing behaviour, but the resulting cluster labels have no inherent business meaning.
+
+To make the segmentation actionable, each cluster is interpreted using its average Recency, Frequency, and Monetary characteristics. The objective is to translate the statistical output of the clustering algorithm into customer segments that can support retention, marketing, and customer development initiatives.
+
+The table below summarizes the behavioural profile of each segment.
+
+```{r}
+segment_summary_initial <- rfm_scored |>
+  group_by(cluster) |>
+  summarise(
+    customers = n(),
+    recency = mean(recency),
+    frequency = mean(frequency),
+    monetary = mean(monetary),
+    avg_score = mean(rfm_normalized_score),
+    .groups = "drop"
+  ) |>
+  mutate(across(c(recency, frequency, monetary, avg_score), ~ round(.x, 2))) |>
+  arrange(desc(monetary))
+
+save_gt_table(
+  segment_summary_initial,
+  "segment-summary-initial.html",
+  "Segment Summary Before Labelling",
+  "Average RFM characteristics and prioritisation score by cluster",
+  digits = 2
+)
+```
+
+```{r}
+segment_names <- c(
+  `2` = "Champions",
+  `7` = "High Value but Cooling",
+  `5` = "Lost Customers",
+  `1` = "Recent Low-Value Customers",
+  `3` = "Inactive Low-Value Customers",
+  `4` = "Frequent Low-Spend Customers",
+  `6` = "Declining Frequent Buyers",
+  `8` = "Active Minimal Buyers",
+  `0` = "Inactive Minimal Buyers"
+)
+
+segment_order <- c(
+  "Champions",
+  "High Value but Cooling",
+  "Frequent Low-Spend Customers",
+  "Recent Low-Value Customers",
+  "Active Minimal Buyers",
+  "Declining Frequent Buyers",
+  "Inactive Low-Value Customers",
+  "Inactive Minimal Buyers",
+  "Lost Customers"
+)
+
+segment_summary <- rfm_scored |>
+  group_by(cluster) |>
+  summarise(
+    customers = n(),
+    recency = mean(recency),
+    frequency = mean(frequency),
+    monetary = mean(monetary),
+    avg_score = mean(rfm_normalized_score),
+    .groups = "drop"
+  ) |>
+  mutate(
+    across(c(recency, frequency, monetary, avg_score), ~ round(.x, 2)),
+    segment = recode(as.character(cluster), !!!segment_names),
+    segment = factor(segment, levels = segment_order, ordered = TRUE)
+  ) |>
+  arrange(segment)
+
+save_gt_table(
+  segment_summary,
+  "segment-summary.html",
+  "Segment Summary",
+  "Final customer segment labels and average RFM profile",
+  digits = 2
+)
+```
+
+Several distinct customer behaviours emerge from the segmentation.
+
+The most valuable segment consists of customers who purchase relatively frequently and generate substantially higher revenue than the rest of the customer base. These customers represent a natural target for retention and relationship management initiatives.
+
+At the opposite end of the spectrum, several segments are characterised by low spending levels and limited purchasing activity. The distinction between active and inactive low-value customers is primarily driven by recency, suggesting different levels of future engagement.
+
+The segmentation also reveals an intermediate group of customers who purchase frequently but generate relatively low revenue. These customers may represent opportunities for cross-selling, up-selling, or product mix optimisation.
+
+### Segment Positioning in RFM Space
+
+The segment profiles can be visualized using their average Recency, Frequency, and Monetary characteristics.
+
+Because customer segmentation was performed using all three RFM dimensions, a three-dimensional representation provides a more complete view of the differences between segments than a two-dimensional projection. In particular, it highlights how recency separates customer groups that may appear similar when only frequency and monetary value are considered.
+
+```{r}
+segment_sizes <- segment_summary$customers / max(segment_summary$customers) * 2
+
+save_base_plot(
+  "customer-segments-rfm-space.png",
+  width = 10,
+  height = 8,
+  expr = {
+    s3d <- scatterplot3d(
+      x = segment_summary$recency,
+      y = segment_summary$frequency,
+      z = segment_summary$monetary,
+      xlab = "Average Recency",
+      ylab = "Average Frequency",
+      zlab = "Average Monetary",
+      main = "Customer Segments in RFM Space",
+      pch = 16,
+      cex.symbols = segment_sizes
+    )
+    
+    text(
+      s3d$xyz.convert(
+        segment_summary$recency,
+        segment_summary$frequency,
+        segment_summary$monetary
+      ),
+      labels = segment_summary$segment,
+      pos = 4,
+      cex = 0.7
+    )
+  }
+)
+
+s3d <- scatterplot3d(
+  x = segment_summary$recency,
+  y = segment_summary$frequency,
+  z = segment_summary$monetary,
+  xlab = "Average Recency",
+  ylab = "Average Frequency",
+  zlab = "Average Monetary",
+  main = "Customer Segments in RFM Space",
+  pch = 16,
+  cex.symbols = segment_sizes
+)
+
+text(
+  s3d$xyz.convert(
+    segment_summary$recency,
+    segment_summary$frequency,
+    segment_summary$monetary
+  ),
+  labels = segment_summary$segment,
+  pos = 4,
+  cex = 0.7
+)
+```
+
+### RFM Component Weights by Segment
+
+The weighting scheme can be inspected at the segment level to understand which RFM component contributes most strongly to customer prioritisation within each group.
+
+This view is useful because the same variable does not necessarily play the same role across all segments. In some groups, recency is the main source of variation; in others, monetary value or frequency provides greater separation between customers.
+
+```{r}
+cluster_weights_plot <- cluster_weights |>
+  mutate(
+    segment = recode(as.character(cluster), !!!segment_names),
+    segment = factor(segment, levels = segment_order, ordered = TRUE)
+  ) |>
+  arrange(segment) |>
+  select(segment, score_recency, score_frequency, score_monetary) |>
+  rename(
+    Recency = score_recency,
+    Frequency = score_frequency,
+    Monetary = score_monetary
+  ) |>
+  pivot_longer(
+    cols = c(Recency, Frequency, Monetary),
+    names_to = "component",
+    values_to = "weight"
+  )
+
+p_cluster_weights <- ggplot(cluster_weights_plot, aes(x = segment, y = weight, fill = component)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "RFM Component Weights by Segment",
+    x = NULL,
+    y = "Weight",
+    fill = NULL
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+save_plot(p_cluster_weights, "rfm-component-weights-by-segment.png", width = 12, height = 6)
+p_cluster_weights
+```
+
+The weights show that recency is the dominant source of within-segment variation for several customer groups, while monetary value plays a stronger role in high-value segments. This reinforces the idea that the prioritisation score adapts to the structure of each segment rather than applying a single rule across the entire customer base.
+
+### Distribution of Prioritisation Scores
+
+The normalized RFM score provides a customer ranking within each segment.
+
+While the clustering model identifies groups of customers with similar behavioural characteristics, customers within the same segment are not necessarily identical. Some customers occupy stronger positions than others, even when they belong to the same cluster.
+
+To better understand this internal variation, the distribution of normalized RFM scores is examined for each segment. This provides a practical view of how much differentiation exists within the customer groups identified by the clustering process.
+
+```{r}
+rfm_scored <- rfm_scored |>
+  mutate(
+    segment = recode(as.character(cluster), !!!segment_names),
+    segment = factor(segment, levels = segment_order, ordered = TRUE)
+  )
+
+p_score_distribution <- ggplot(rfm_scored, aes(x = segment, y = rfm_normalized_score)) +
+  geom_boxplot() +
+  labs(
+    title = "Distribution of Normalized RFM Score by Segment",
+    x = NULL,
+    y = "Normalized RFM Score"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+save_plot(p_score_distribution, "normalized-rfm-score-by-segment.png", width = 12, height = 6)
+p_score_distribution
+```
+
+The score distributions reveal meaningful differences across segments.
+
+Champions and Frequent Low-Spend Customers exhibit the highest score levels, indicating the presence of customers that are particularly strong relative to others within their respective groups. Although both segments achieve similar score ranges, their business interpretation differs substantially because their average monetary values are very different.
+
+Several intermediate segments, including High Value but Cooling and Declining Frequent Buyers, display moderate score distributions. These groups may contain customers with retention or development potential depending on the business objective.
+
+At the opposite end of the spectrum, Lost Customers exhibit the lowest scores and the smallest prioritisation potential. Their long inactivity periods make them less attractive targets for immediate retention efforts.
+
+Importantly, the normalized RFM score should be interpreted as a segment-specific prioritisation metric rather than a global measure of customer value. A customer with a high score in a low-value segment may still generate less revenue than a customer with a moderate score in a high-value segment.
+
+## Final Customer Segmentation Dataset
+
+The final output of the segmentation workflow is a customer-level dataset containing the original RFM variables, cluster assignments, segment labels, cluster-specific weights, and the normalized RFM score.
+
+The score should be interpreted primarily as a ranking mechanism within segments rather than as a global measure of customer value. Customers with higher scores occupy stronger positions relative to other customers in the same segment and may represent higher-priority targets for retention, development, or marketing initiatives.
+
+This dataset provides the foundation for the churn prediction and customer lifetime value analyses developed later in the project.
+
+```{r}
+final_segmentation <- rfm_scored |>
+  select(
+    customer_id,
+    recency,
+    frequency,
+    monetary,
+    cluster,
+    segment,
+    omega_recency,
+    omega_frequency,
+    omega_monetary,
+    rfm_score,
+    rfm_normalized_score
+  ) |>
+  arrange(desc(rfm_normalized_score))
+
+save_gt_table(
+  head(final_segmentation),
+  "final-segmentation-head.html",
+  "Final Customer Segmentation Preview",
+  "Highest-ranked customers by normalized RFM score",
+  digits = 4
+)
+```
+
+```{r}
+final_segmentation_shape <- tibble(
+  rows = nrow(final_segmentation),
+  columns = ncol(final_segmentation)
+)
+
+save_gt_table(
+  final_segmentation_shape,
+  "final-segmentation-shape.html",
+  "Final Segmentation Dataset Shape",
+  "Number of customers and variables"
+)
+```
+
+```{r}
+final_segmentation_top_20 <- final_segmentation |>
+  arrange(desc(rfm_normalized_score)) |>
+  head(20)
+
+save_gt_table(
+  final_segmentation_top_20,
+  "final-segmentation-top-20.html",
+  "Top 20 Customers by Normalized RFM Score",
+  "Customer prioritisation output",
+  digits = 4
+)
+```
+
+```{r}
+write_csv(
+  final_segmentation,
+  file.path(processed_dir, "customer-segmentation.csv")
+)
+```
+
+## Conclusions
+
+Using transactional data from AdventureWorks, customers were segmented through a combination of RFM analysis and K-Means clustering.
+
+The analysis identified nine customer segments exhibiting distinct behavioural patterns and commercial characteristics. Beyond the cluster assignment, a segment-specific prioritisation score was developed to rank customers within each group.
+
+The resulting segmentation provides a practical framework for customer targeting, retention initiatives, and resource allocation. It also serves as the foundation for the churn prediction and customer lifetime value models developed later in this project.
+
+The final output is a customer-level dataset containing behavioural metrics, segment assignments, and prioritisation scores that can be integrated into downstream analytical workflows.
+
+```{r}
+dbDisconnect(con)
+```
