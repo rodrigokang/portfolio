@@ -414,113 +414,113 @@
     ]
   },
   {
-    "objectID": "3-biological-systems/1-microbial-population-dynamics.html",
-    "href": "3-biological-systems/1-microbial-population-dynamics.html",
-    "title": "7  Microbial Population Dynamics",
+    "objectID": "3-biological-systems/1-crop-performance-soil-microbiomes.html",
+    "href": "3-biological-systems/1-crop-performance-soil-microbiomes.html",
+    "title": "7  Predicting Crop Performance from Soil Microbial Communities",
     "section": "",
     "text": "7.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Predicting Crop Performance from Soil Microbial Communities</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/1-microbial-population-dynamics.html#modeling-approach",
-    "href": "3-biological-systems/1-microbial-population-dynamics.html#modeling-approach",
-    "title": "7  Microbial Population Dynamics",
+    "objectID": "3-biological-systems/1-crop-performance-soil-microbiomes.html#modeling-approach",
+    "href": "3-biological-systems/1-crop-performance-soil-microbiomes.html#modeling-approach",
+    "title": "7  Predicting Crop Performance from Soil Microbial Communities",
     "section": "7.2 Modeling Approach",
     "text": "7.2 Modeling Approach\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Predicting Crop Performance from Soil Microbial Communities</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/1-microbial-population-dynamics.html#methodology-and-implementation",
-    "href": "3-biological-systems/1-microbial-population-dynamics.html#methodology-and-implementation",
-    "title": "7  Microbial Population Dynamics",
+    "objectID": "3-biological-systems/1-crop-performance-soil-microbiomes.html#methodology-and-implementation",
+    "href": "3-biological-systems/1-crop-performance-soil-microbiomes.html#methodology-and-implementation",
+    "title": "7  Predicting Crop Performance from Soil Microbial Communities",
     "section": "7.3 Methodology and Implementation",
     "text": "7.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Predicting Crop Performance from Soil Microbial Communities</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/1-microbial-population-dynamics.html#results-discussion-and-limitations",
-    "href": "3-biological-systems/1-microbial-population-dynamics.html#results-discussion-and-limitations",
-    "title": "7  Microbial Population Dynamics",
+    "objectID": "3-biological-systems/1-crop-performance-soil-microbiomes.html#results-discussion-and-limitations",
+    "href": "3-biological-systems/1-crop-performance-soil-microbiomes.html#results-discussion-and-limitations",
+    "title": "7  Predicting Crop Performance from Soil Microbial Communities",
     "section": "7.4 Results, Discussion, and Limitations",
     "text": "7.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Predicting Crop Performance from Soil Microbial Communities</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/1-microbial-population-dynamics.html#technical-appendix-optional",
-    "href": "3-biological-systems/1-microbial-population-dynamics.html#technical-appendix-optional",
-    "title": "7  Microbial Population Dynamics",
+    "objectID": "3-biological-systems/1-crop-performance-soil-microbiomes.html#technical-appendix-optional",
+    "href": "3-biological-systems/1-crop-performance-soil-microbiomes.html#technical-appendix-optional",
+    "title": "7  Predicting Crop Performance from Soil Microbial Communities",
     "section": "7.5 Technical Appendix (Optional)",
     "text": "7.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Microbial Population Dynamics</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Predicting Crop Performance from Soil Microbial Communities</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/2-medical-image-analysis.html",
-    "href": "3-biological-systems/2-medical-image-analysis.html",
-    "title": "8  Medical Image Analysis",
+    "objectID": "3-biological-systems/2-skin-lesion-triage.html",
+    "href": "3-biological-systems/2-skin-lesion-triage.html",
+    "title": "8  Medical Image Analysis for Skin Lesion Triage",
     "section": "",
     "text": "8.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis for Skin Lesion Triage</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/2-medical-image-analysis.html#modeling-approach",
-    "href": "3-biological-systems/2-medical-image-analysis.html#modeling-approach",
-    "title": "8  Medical Image Analysis",
+    "objectID": "3-biological-systems/2-skin-lesion-triage.html#modeling-approach",
+    "href": "3-biological-systems/2-skin-lesion-triage.html#modeling-approach",
+    "title": "8  Medical Image Analysis for Skin Lesion Triage",
     "section": "8.2 Modeling Approach",
     "text": "8.2 Modeling Approach\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis for Skin Lesion Triage</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/2-medical-image-analysis.html#methodology-and-implementation",
-    "href": "3-biological-systems/2-medical-image-analysis.html#methodology-and-implementation",
-    "title": "8  Medical Image Analysis",
+    "objectID": "3-biological-systems/2-skin-lesion-triage.html#methodology-and-implementation",
+    "href": "3-biological-systems/2-skin-lesion-triage.html#methodology-and-implementation",
+    "title": "8  Medical Image Analysis for Skin Lesion Triage",
     "section": "8.3 Methodology and Implementation",
     "text": "8.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis for Skin Lesion Triage</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/2-medical-image-analysis.html#results-discussion-and-limitations",
-    "href": "3-biological-systems/2-medical-image-analysis.html#results-discussion-and-limitations",
-    "title": "8  Medical Image Analysis",
+    "objectID": "3-biological-systems/2-skin-lesion-triage.html#results-discussion-and-limitations",
+    "href": "3-biological-systems/2-skin-lesion-triage.html#results-discussion-and-limitations",
+    "title": "8  Medical Image Analysis for Skin Lesion Triage",
     "section": "8.4 Results, Discussion, and Limitations",
     "text": "8.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis for Skin Lesion Triage</span>"
     ]
   },
   {
-    "objectID": "3-biological-systems/2-medical-image-analysis.html#technical-appendix-optional",
-    "href": "3-biological-systems/2-medical-image-analysis.html#technical-appendix-optional",
-    "title": "8  Medical Image Analysis",
+    "objectID": "3-biological-systems/2-skin-lesion-triage.html#technical-appendix-optional",
+    "href": "3-biological-systems/2-skin-lesion-triage.html#technical-appendix-optional",
+    "title": "8  Medical Image Analysis for Skin Lesion Triage",
     "section": "8.5 Technical Appendix (Optional)",
     "text": "8.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Biological Systems",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Medical Image Analysis for Skin Lesion Triage</span>"
     ]
   },
   {
@@ -590,58 +590,58 @@
     ]
   },
   {
-    "objectID": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html",
-    "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html",
-    "title": "10  Optimal Hedging of Industrial Gas Demand",
+    "objectID": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html",
+    "href": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html",
+    "title": "10  Predicting Pipeline Corrosion for Asset Integrity Management",
     "section": "",
     "text": "10.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Predicting Pipeline Corrosion for Asset Integrity Management</span>"
     ]
   },
   {
-    "objectID": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#modeling-approach",
-    "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#modeling-approach",
-    "title": "10  Optimal Hedging of Industrial Gas Demand",
+    "objectID": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#modeling-approach",
+    "href": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#modeling-approach",
+    "title": "10  Predicting Pipeline Corrosion for Asset Integrity Management",
     "section": "10.2 Modeling Approach",
     "text": "10.2 Modeling Approach\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Predicting Pipeline Corrosion for Asset Integrity Management</span>"
     ]
   },
   {
-    "objectID": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#methodology-and-implementation",
-    "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#methodology-and-implementation",
-    "title": "10  Optimal Hedging of Industrial Gas Demand",
+    "objectID": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#methodology-and-implementation",
+    "href": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#methodology-and-implementation",
+    "title": "10  Predicting Pipeline Corrosion for Asset Integrity Management",
     "section": "10.3 Methodology and Implementation",
     "text": "10.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Predicting Pipeline Corrosion for Asset Integrity Management</span>"
     ]
   },
   {
-    "objectID": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#results-discussion-and-limitations",
-    "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#results-discussion-and-limitations",
-    "title": "10  Optimal Hedging of Industrial Gas Demand",
+    "objectID": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#results-discussion-and-limitations",
+    "href": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#results-discussion-and-limitations",
+    "title": "10  Predicting Pipeline Corrosion for Asset Integrity Management",
     "section": "10.4 Results, Discussion, and Limitations",
     "text": "10.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Predicting Pipeline Corrosion for Asset Integrity Management</span>"
     ]
   },
   {
-    "objectID": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#technical-appendix-optional",
-    "href": "4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.html#technical-appendix-optional",
-    "title": "10  Optimal Hedging of Industrial Gas Demand",
+    "objectID": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#technical-appendix-optional",
+    "href": "4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.html#technical-appendix-optional",
+    "title": "10  Predicting Pipeline Corrosion for Asset Integrity Management",
     "section": "10.5 Technical Appendix (Optional)",
     "text": "10.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Energy and Industrial Systems",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Optimal Hedging of Industrial Gas Demand</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Predicting Pipeline Corrosion for Asset Integrity Management</span>"
     ]
   },
   {
@@ -711,58 +711,58 @@
     ]
   },
   {
-    "objectID": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html",
-    "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html",
-    "title": "12  Climate Forecasting with Time Series",
+    "objectID": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html",
+    "href": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html",
+    "title": "12  Forecasting Drought Risk from Climate Time Series",
     "section": "",
     "text": "12.1 Problem Definition\nHeader.\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Forecasting Drought Risk from Climate Time Series</span>"
     ]
   },
   {
-    "objectID": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#modeling-approach",
-    "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#modeling-approach",
-    "title": "12  Climate Forecasting with Time Series",
+    "objectID": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#modeling-approach",
+    "href": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#modeling-approach",
+    "title": "12  Forecasting Drought Risk from Climate Time Series",
     "section": "12.2 Modeling Approach",
     "text": "12.2 Modeling Approach\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Forecasting Drought Risk from Climate Time Series</span>"
     ]
   },
   {
-    "objectID": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#methodology-and-implementation",
-    "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#methodology-and-implementation",
-    "title": "12  Climate Forecasting with Time Series",
+    "objectID": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#methodology-and-implementation",
+    "href": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#methodology-and-implementation",
+    "title": "12  Forecasting Drought Risk from Climate Time Series",
     "section": "12.3 Methodology and Implementation",
     "text": "12.3 Methodology and Implementation\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Forecasting Drought Risk from Climate Time Series</span>"
     ]
   },
   {
-    "objectID": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#results-discussion-and-limitations",
-    "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#results-discussion-and-limitations",
-    "title": "12  Climate Forecasting with Time Series",
+    "objectID": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#results-discussion-and-limitations",
+    "href": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#results-discussion-and-limitations",
+    "title": "12  Forecasting Drought Risk from Climate Time Series",
     "section": "12.4 Results, Discussion, and Limitations",
     "text": "12.4 Results, Discussion, and Limitations\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Forecasting Drought Risk from Climate Time Series</span>"
     ]
   },
   {
-    "objectID": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#technical-appendix-optional",
-    "href": "5-climate-and-environmental-systems/2-climate-forecasting-time-series.html#technical-appendix-optional",
-    "title": "12  Climate Forecasting with Time Series",
+    "objectID": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#technical-appendix-optional",
+    "href": "5-climate-and-environmental-systems/2-drought-risk-climate-time-series.html#technical-appendix-optional",
+    "title": "12  Forecasting Drought Risk from Climate Time Series",
     "section": "12.5 Technical Appendix (Optional)",
     "text": "12.5 Technical Appendix (Optional)\nSection.",
     "crumbs": [
       "Climate and Environmental Systems",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Climate Forecasting with Time Series</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Forecasting Drought Risk from Climate Time Series</span>"
     ]
   },
   {

@@ -3,6 +3,11 @@
 
 notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/data/creditcard.csv
 notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/python/local_config.py
+notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/r/local_config.R
 notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/data/processed/python
 notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/data/processed/r
-notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/r/local_config.R
+notebooks-and-scripts/3-biological-systems/1-crop-performance-soil-microbiomes/data
+notebooks-and-scripts/3-biological-systems/2-skin-lesion-triage/data
+notebooks-and-scripts/4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media/data
+notebooks-and-scripts/4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity/data
+notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/data

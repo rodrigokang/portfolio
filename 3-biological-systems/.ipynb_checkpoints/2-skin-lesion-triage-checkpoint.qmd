@@ -1,4 +1,4 @@
-# Microbial Population Dynamics
+# Medical Image Analysis for Skin Lesion Triage
 
 _Header._
 

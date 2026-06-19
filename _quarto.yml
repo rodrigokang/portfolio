@@ -45,20 +45,20 @@ book:
     - part: "Biological Systems"
       chapters:
         - 3-biological-systems/0-overview.qmd
-        - 3-biological-systems/1-microbial-population-dynamics.qmd
-        - 3-biological-systems/2-medical-image-analysis.qmd
+        - 3-biological-systems/1-crop-performance-soil-microbiomes.qmd
+        - 3-biological-systems/2-skin-lesion-triage.qmd
 
     - part: "Energy and Industrial Systems"
       chapters:
         - 4-energy-and-industrial-systems/0-overview.qmd
         - 4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.qmd
-        - 4-energy-and-industrial-systems/2-optimal-hedging-industrial-gas-demand.qmd
+        - 4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.qmd
 
     - part: "Climate and Environmental Systems"
       chapters:
         - 5-climate-and-environmental-systems/0-overview.qmd
         - 5-climate-and-environmental-systems/1-sediment-source-modeling.qmd
-        - 5-climate-and-environmental-systems/2-climate-forecasting-time-series.qmd
+        - 5-climate-and-environmental-systems/2-drought-risk-climate-time-series.qmd
 
     - part: "Writings & Essays"
       chapters:
