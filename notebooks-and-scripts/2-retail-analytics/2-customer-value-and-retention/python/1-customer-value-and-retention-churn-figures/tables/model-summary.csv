@@ -1,0 +1,10 @@
+metric,value
+ROC AUC,0.9996
+Average Precision,0.9707
+Accuracy,0.9973
+Balanced Accuracy,0.9986
+Precision,0.8
+Recall,1.0
+F1 Score,0.8889
+KS Statistic,0.9973
+Decision Threshold,0.5

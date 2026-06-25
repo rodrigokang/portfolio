@@ -1,0 +1,33 @@
+feature,importance,importance_type,importance_share
+delta_recency_latency,0.20351,model_feature_importance,0.20351
+cluster_3,0.128074,model_feature_importance,0.128074
+segment_Inactive Low-Value Customers,0.114484,model_feature_importance,0.114484
+score_monetary,0.093485,model_feature_importance,0.093485
+monetary,0.091171,model_feature_importance,0.091171
+score_frequency,0.08077,model_feature_importance,0.08077
+total_quantity,0.056191,model_feature_importance,0.056191
+observed_intervals,0.049958,model_feature_importance,0.049958
+frequency,0.04192,model_feature_importance,0.04192
+product_diversity,0.035257,model_feature_importance,0.035257
+category_diversity,0.024469,model_feature_importance,0.024469
+average_latency,0.01713,model_feature_importance,0.01713
+rfm_score,0.015453,model_feature_importance,0.015453
+score_recency,0.01395,model_feature_importance,0.01395
+rfm_normalized_score,0.013527,model_feature_importance,0.013527
+recency,0.012299,model_feature_importance,0.012299
+cluster_0,0.003582,model_feature_importance,0.003582
+segment_Active Minimal Buyers,0.002179,model_feature_importance,0.002179
+cluster_1,0.000695,model_feature_importance,0.000695
+segment_High Value but Cooling,0.000461,model_feature_importance,0.000461
+cluster_4,0.000359,model_feature_importance,0.000359
+segment_Declining Frequent Buyers,0.000314,model_feature_importance,0.000314
+cluster_6,0.000309,model_feature_importance,0.000309
+cluster_7,0.00022,model_feature_importance,0.00022
+segment_Inactive Minimal Buyers,0.000201,model_feature_importance,0.000201
+segment_Lost Customers,3.1e-05,model_feature_importance,3.1e-05
+segment_Frequent Low-Spend Customers,0.0,model_feature_importance,0.0
+segment_Champions,0.0,model_feature_importance,0.0
+segment_Recent Low-Value Customers,0.0,model_feature_importance,0.0
+cluster_2,0.0,model_feature_importance,0.0
+cluster_5,0.0,model_feature_importance,0.0
+cluster_8,0.0,model_feature_importance,0.0

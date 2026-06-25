@@ -1,0 +1,6 @@
+,precision,recall,f1-score,support
+Retention,1.0,0.9973,0.9986,1842.0
+Churn,0.8,1.0,0.8889,20.0
+accuracy,0.9973,0.9973,0.9973,0.9973
+macro avg,0.9,0.9986,0.9438,1862.0
+weighted avg,0.9979,0.9973,0.9975,1862.0

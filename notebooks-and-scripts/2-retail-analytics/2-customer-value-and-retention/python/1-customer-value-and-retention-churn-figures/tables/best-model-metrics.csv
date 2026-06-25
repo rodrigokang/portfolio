@@ -1,0 +1,2 @@
+roc_auc,average_precision,accuracy,balanced_accuracy,precision,recall,f1
+0.9996,0.9707,0.9973,0.9986,0.8,1.0,0.8889
