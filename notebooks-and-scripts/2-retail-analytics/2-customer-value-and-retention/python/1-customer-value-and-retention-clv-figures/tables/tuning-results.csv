@@ -1,5 +1,5 @@
 model,cv_rmse,best_params
-Random Forest,3035.6849827465508,"{'model__n_estimators': 200, 'model__min_samples_leaf': 2, 'model__max_features': 0.8, 'model__max_depth': None}"
+Random Forest,3035.6849827465503,"{'model__n_estimators': 200, 'model__min_samples_leaf': 2, 'model__max_features': 0.8, 'model__max_depth': None}"
 XGBoost,3358.5305800360993,"{'model__subsample': 1.0, 'model__n_estimators': 500, 'model__max_depth': 5, 'model__learning_rate': 0.05, 'model__colsample_bytree': 0.85}"
 K-Nearest Neighbors Regression,4411.324270012903,"{'model__weights': 'distance', 'model__p': 2, 'model__n_neighbors': 5}"
 Regression Tree,5283.394370095251,"{'model__min_samples_split': 25, 'model__min_samples_leaf': 5, 'model__max_depth': 8}"
