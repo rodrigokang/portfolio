@@ -1,0 +1,10 @@
+cluster,segment,beta,segment_discount_rate,observed_months
+0,Active Minimal Buyers,1.274,0.1637,13
+7,Lost Customers,1.0,0.15,1
+1,High Value but Cooling,0.4828,0.1241,25
+5,Champions,0.4595,0.123,7
+8,Recent Low-Value Customers,0.276,0.1138,6
+3,Inactive Low-Value Customers,0.158,0.1079,25
+2,Inactive Minimal Buyers,0.059,0.1029,20
+4,Frequent Low-Spend Customers,-0.4453,0.0777,5
+6,Declining Frequent Buyers,-1.8314,0.01,9

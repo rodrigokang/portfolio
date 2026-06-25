@@ -1,0 +1,3 @@
+period,order_lines,customers,orders,revenue,cost
+Calibration,43033,6206,8263,64841795.92,61705272.66
+Validation,78284,18069,23202,45004585.48,38769205.11

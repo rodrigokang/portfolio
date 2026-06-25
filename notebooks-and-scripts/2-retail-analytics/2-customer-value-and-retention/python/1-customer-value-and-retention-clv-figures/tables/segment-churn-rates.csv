@@ -1,0 +1,10 @@
+cluster,segment,customers,churners,segment_churn_rate,avg_churn_probability,returned_rate
+3,Inactive Low-Value Customers,273,65,0.2381,0.2828,0.685
+0,Active Minimal Buyers,1767,0,0.0,0.0,0.8557
+1,High Value but Cooling,454,0,0.0,0.0062,0.5088
+2,Inactive Minimal Buyers,686,0,0.0,0.0009,0.9461
+4,Frequent Low-Spend Customers,928,0,0.0,0.0,0.8006
+5,Champions,41,0,0.0,0.0012,0.4878
+6,Declining Frequent Buyers,1395,0,0.0,0.0,0.9154
+7,Lost Customers,53,0,0.0,0.0026,1.0
+8,Recent Low-Value Customers,609,0,0.0,0.0,0.7947

@@ -1,0 +1,5 @@
+assumption,value
+Baseline discount rate,0.1
+Risk premium multiplier,0.05
+Minimum discount rate,0.01
+Return winsorisation,5th to 95th percentile
