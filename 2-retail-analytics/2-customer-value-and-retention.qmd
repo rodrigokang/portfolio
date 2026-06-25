@@ -14,6 +14,52 @@ _Section._
 
 _Section._
 
+### Customer Segmentation with RFM Analysis
+
+::: {.content-visible when-format="html"}
+
+Additional implementation details are available in the companion Quarto notebook [here](../notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/r/1-rfm-analysis.html). A companion Python implementation is also available [here](../notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/python/1-rfm-analysis.html).
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention).
+
+:::
+
+### Churn Prediction in Non-Contractual Relationships Based on RFM Analysis
+
+::: {.content-visible when-format="html"}
+
+Additional implementation details are available in the companion Jupyter notebook [here](../notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/python/2-churn-prediction.html).
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention).
+
+:::
+
+### Risk-Adjusted Customer Lifetime Value Prediction
+
+::: {.content-visible when-format="html"}
+
+Additional implementation details are available in the companion Jupyter notebook [here](../notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/python/3-clv-prediction.html).
+
+An interactive Streamlit application based on the methods presented in this chapter is available [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/dashboard).
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+Additional implementation details, including the companion Quarto and Python notebooks, are available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention).
+
+An interactive Streamlit application based on the methods presented in this chapter is available [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/2-retail-analytics/2-customer-value-and-retention/dashboard).
+
+:::
+
 ## Results, Discussion, and Limitations
 
 _Section._
