@@ -1,0 +1,219 @@
+/* =======================================================================
+   Dashboard MIC — estilos globales
+   ======================================================================= */
+
+/* ===========================
+   Encabezado (título + barra)
+   =========================== */
+
+.mic-header {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+/* Título del dashboard (blanco) */
+.mic-header-title {
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  font-size: 2.3rem;
+  margin: 0;               /* el centrado vertical lo maneja la barra */
+  color: white;
+}
+
+/* Barra ancha debajo del título (verde agua) */
+.mic-header-bar {
+  width: 100%;
+  height: 96px;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    90deg,
+    #2BB3A3 0%,
+    #3CCFC0 60%,
+    #2BB3A3 100%
+  );
+
+  box-shadow: 0 8px 22px rgba(0,0,0,0.14);
+  margin-bottom: 14px;
+
+  display: flex;
+  align-items: center;       /* centra verticalmente */
+  justify-content: center;   /* centra horizontalmente */
+}
+
+/* ==============
+   Tabs (solapas)
+   ============== */
+
+/* Separación y alineación general */
+div[data-baseweb="tab-list"] {
+  gap: 10px;
+  margin-top: 2px;
+  margin-bottom: 10px;
+}
+
+/* Solapas: tamaño + legibilidad (estado normal) */
+button[data-baseweb="tab"] {
+  border-radius: 14px !important;
+  padding: 14px 22px !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+
+  /* Verde–azulado suave */
+  background: rgba(43, 179, 163, 0.14) !important;
+  border: 1px solid rgba(43, 179, 163, 0.38) !important;
+  color: #0f3f3a !important;
+}
+
+/* Hover */
+button[data-baseweb="tab"]:hover {
+  background: rgba(43, 179, 163, 0.22) !important;
+  border: 1px solid rgba(43, 179, 163, 0.55) !important;
+}
+
+/* Solapa activa */
+button[data-baseweb="tab"][aria-selected="true"] {
+  background: #2BB3A3 !important;
+  color: #ffffff !important;
+  border: 1px solid #249A8D !important;
+}
+
+/* Oculta el subrayado/línea típica de tabs */
+div[data-baseweb="tab-highlight"] {
+  display: none !important;
+}
+
+/* ==================================================================
+   Botón "Cerrar sesión" — estilo robusto (marker + bloque Streamlit)
+   ================================================================== */
+
+/* El bloque real de Streamlit que contiene el marker del logout */
+div[data-testid="stVerticalBlock"]:has(#mic-logout-marker) {
+  width: 100% !important;
+
+  /* Centrado y separación respecto al contenido */
+  display: flex !important;
+  justify-content: center !important;
+
+  margin: 48px 0 24px 0 !important;
+  padding: 0 !important;
+
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Estilo del botón */
+div[data-testid="stVerticalBlock"]:has(#mic-logout-marker)
+button[data-testid^="baseButton"] {
+  background-color: #1F7F8F !important;
+  color: #ffffff !important;
+
+  border: none !important;
+  border-radius: 16px !important;
+
+  /* Tamaño del botón */
+  padding: 0.9rem 3rem !important;
+  min-width: 240px !important;
+
+  box-shadow: 0 12px 26px rgba(0,0,0,0.22) !important;
+}
+
+/* Texto interno del botón*/
+div[data-testid="stVerticalBlock"]:has(#mic-logout-marker)
+button[data-testid^="baseButton"] * {
+  font-size: 1.12rem !important;
+  font-weight: 850 !important;
+  line-height: 1.1 !important;
+}
+
+/* Hover */
+div[data-testid="stVerticalBlock"]:has(#mic-logout-marker)
+button[data-testid^="baseButton"]:hover {
+  background-color: #166E65 !important;
+}
+
+/* ===========================
+   KPI Cards (Resultados)
+   =========================== */
+
+.mic-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+.mic-kpi-card {
+  border-radius: 16px;
+  padding: 14px 14px 12px 14px;
+
+  background: rgba(43, 179, 163, 0.10);
+  border: 1px solid rgba(43, 179, 163, 0.35);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 92px;
+  text-align: center;
+}
+
+.mic-kpi-label {
+  font-size: 0.95rem;
+  font-weight: 850;
+  color: #0f3f3a;
+  opacity: 0.92;
+  margin-bottom: 6px;
+  letter-spacing: 0.15px;
+}
+
+.mic-kpi-value {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #0b2e2a;
+  line-height: 1.05;
+}
+
+.mic-kpi-sub {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(15,63,58,0.75);
+}
+
+/* Responsive: en pantallas chicas, 2 columnas */
+@media (max-width: 1100px) {
+  .mic-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* =======================================================================
+   Portfolio dashboard additions
+   ======================================================================= */
+
+.portfolio-header-subtitle {
+  text-align: center;
+  color: rgba(255,255,255,0.92);
+  font-weight: 700;
+  font-size: 1.02rem;
+  margin-top: 6px;
+}
+
+section[data-testid="stSidebar"] {
+  background: #f7f9fb;
+}
+
+.block-container {
+  padding-top: 1.6rem;
+  padding-bottom: 2.5rem;
+}
+
+[data-testid="stDataFrame"] {
+  border-radius: 14px;
+  overflow: hidden;
+}
