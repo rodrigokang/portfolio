@@ -1,0 +1,3 @@
+sample,customers,target_mean,target_median
+Train,4344,21636.3793,10001.9081
+Test,1862,21846.3794,10001.9081

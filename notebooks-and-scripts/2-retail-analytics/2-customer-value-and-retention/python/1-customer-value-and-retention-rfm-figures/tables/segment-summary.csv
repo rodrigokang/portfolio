@@ -1,0 +1,10 @@
+cluster,customers,recency,frequency,monetary,avg_score,segment
+5,2767,87.12,3.05,28042.23,0.74,Champions
+1,2832,263.95,2.27,8903.23,0.51,High Value but Cooling
+4,791,35.7,3.2,169.96,0.76,Frequent Low-Spend Customers
+8,1724,87.29,1.0,1397.58,0.66,Recent Low-Value Customers
+0,2463,63.88,1.0,48.78,0.63,Active Minimal Buyers
+6,1075,169.31,2.23,115.39,0.53,Declining Frequent Buyers
+3,2046,274.7,1.0,1352.75,0.45,Inactive Low-Value Customers
+2,4987,244.87,1.0,49.33,0.36,Inactive Minimal Buyers
+7,434,845.57,1.01,2852.05,0.13,Lost Customers

@@ -1,9 +1,0 @@
-model,rmse,mae,r2
-Random Forest,1936.5286,345.9793,0.9966
-XGBoost,2178.4778,473.2691,0.9957
-Regression Tree,2607.8713,456.9903,0.9938
-K-Nearest Neighbors Regression,4066.1658,880.0326,0.985
-Ridge Regression,8251.9469,4268.8566,0.9384
-LASSO Regression,8300.8116,4313.9835,0.9377
-Linear Regression,8316.9955,4332.1693,0.9374
-Support Vector Regression,35181.7991,19710.3313,-0.1193

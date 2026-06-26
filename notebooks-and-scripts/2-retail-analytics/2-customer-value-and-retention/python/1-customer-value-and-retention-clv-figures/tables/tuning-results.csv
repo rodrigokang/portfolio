@@ -1,8 +1,0 @@
-model,cv_rmse,best_params
-Random Forest,3024.75559909093,"{'model__n_estimators': 200, 'model__min_samples_leaf': 2, 'model__max_features': 0.8, 'model__max_depth': None}"
-XGBoost,3346.9924504315254,"{'model__subsample': 0.85, 'model__n_estimators': 500, 'model__max_depth': 3, 'model__learning_rate': 0.1, 'model__colsample_bytree': 0.85}"
-K-Nearest Neighbors Regression,4387.396362325724,"{'model__weights': 'distance', 'model__p': 2, 'model__n_neighbors': 5}"
-Regression Tree,4859.722601624997,"{'model__min_samples_split': 25, 'model__min_samples_leaf': 5, 'model__max_depth': 12}"
-Ridge Regression,9055.991117914533,{'model__alpha': np.float64(0.3359818286283781)}
-LASSO Regression,9060.81961005919,{'model__alpha': np.float64(2.9763514416313193)}
-Support Vector Regression,33184.03106810945,"{'model__gamma': 'scale', 'model__epsilon': 1.0, 'model__C': 50}"

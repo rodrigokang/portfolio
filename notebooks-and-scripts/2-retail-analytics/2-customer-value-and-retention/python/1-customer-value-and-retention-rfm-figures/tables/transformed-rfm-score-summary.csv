@@ -1,0 +1,4 @@
+Variable,Mean,Standard Deviation,Skewness
+Recency Score,-0.0,1.0,0.0333
+Frequency Score,-0.0,1.0,0.5461
+Monetary Score,0.0,1.0,0.0201
