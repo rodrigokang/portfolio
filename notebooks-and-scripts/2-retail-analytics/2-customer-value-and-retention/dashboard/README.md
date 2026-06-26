@@ -22,7 +22,7 @@ streamlit run app.py
 
 ## Data inputs
 
-The app reads CSV files automatically from the `datos/` folder:
+The app reads CSV files automatically from the local data folder named `datos/`:
 
 ```text
 datos/
@@ -37,7 +37,7 @@ No file uploader is included. The dashboard does not retrain models or rerun mac
 
 ```text
 app.py
-funciones_auxiliares.py
+auth_helpers.py
 requirements.txt
 
 assets/

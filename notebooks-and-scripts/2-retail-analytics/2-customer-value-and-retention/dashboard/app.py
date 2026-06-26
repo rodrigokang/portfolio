@@ -11,7 +11,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from funciones_auxiliares import logout, proteger_dashboard
+from auth_helpers import logout, protect_dashboard
 from ui import load_css
 from utils.charts import bar_chart, histogram, scatter_chart
 from utils.data_loader import load_all_data
@@ -23,7 +23,7 @@ st.set_page_config(
     layout="wide",
 )
 
-proteger_dashboard()
+protect_dashboard()
 load_css("assets/styles.css")
 
 
@@ -476,6 +476,6 @@ with clv_tab:
 st.divider()
 with st.container():
     st.markdown('<span id="mic-logout-marker"></span>', unsafe_allow_html=True)
-    if st.button("Cerrar sesión", key="mic_logout"):
+    if st.button("Sign Out", key="mic_logout"):
         logout()
         st.rerun()

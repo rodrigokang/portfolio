@@ -1,8 +1,8 @@
 """
-Funciones auxiliares de autenticación para el dashboard de portfolio.
+Authentication helpers for the portfolio dashboard.
 
-La autenticación es deliberadamente simple porque esta aplicación es una
-analytical demo: no usa variables de entorno, secrets ni base de datos.
+Authentication is intentionally simple because this application is an
+analytical demo. It does not use environment variables, secrets, or databases.
 """
 
 import hmac
@@ -13,15 +13,15 @@ DEMO_USERNAME = "demo"
 DEMO_PASSWORD = "portfolio"
 
 
-def autenticar_usuario(username: str, password: str) -> bool:
-    """Valida las credenciales del usuario demo."""
-    username_valido = hmac.compare_digest(str(username).strip(), DEMO_USERNAME)
-    password_valido = hmac.compare_digest(str(password).strip(), DEMO_PASSWORD)
-    return username_valido and password_valido
+def authenticate_user(username: str, password: str) -> bool:
+    """Validate demo user credentials."""
+    valid_username = hmac.compare_digest(str(username).strip(), DEMO_USERNAME)
+    valid_password = hmac.compare_digest(str(password).strip(), DEMO_PASSWORD)
+    return valid_username and valid_password
 
 
 def login() -> None:
-    """Renderiza la pantalla de ingreso."""
+    """Render the sign-in screen."""
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = False
 
@@ -82,33 +82,33 @@ def login() -> None:
     st.markdown('<span id="mic-login-marker"></span>', unsafe_allow_html=True)
     st.markdown('<div class="mic-login-title">Customer Value and Retention</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="mic-login-desc">Analytical demo for exploring segmentation, churn risk and customer lifetime value.</div>',
+        '<div class="mic-login-desc">Analytical demo for exploring segmentation, churn risk, and customer lifetime value.</div>',
         unsafe_allow_html=True,
     )
     st.markdown('<div class="mic-login-separator"></div>', unsafe_allow_html=True)
 
     with st.form("login_form"):
-        username = st.text_input("Usuario")
-        password = st.text_input("Contraseña", type="password")
-        submitted = st.form_submit_button("Ingresar")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submitted = st.form_submit_button("Sign In")
 
     if submitted:
-        if autenticar_usuario(username, password):
+        if authenticate_user(username, password):
             st.session_state["logged_in"] = True
             st.session_state["authenticated_user"] = username
             st.rerun()
         else:
-            st.error("Usuario o contraseña incorrectos.")
+            st.error("Invalid username or password.")
 
 
 def logout() -> None:
-    """Cierra la sesión actual."""
+    """Sign out the current user."""
     st.session_state["logged_in"] = False
     st.session_state["authenticated_user"] = None
 
 
-def proteger_dashboard() -> None:
-    """Detiene la app si el usuario no inició sesión."""
+def protect_dashboard() -> None:
+    """Stop the app if the user has not signed in."""
     if "logged_in" not in st.session_state:
         st.session_state["logged_in"] = False
 
