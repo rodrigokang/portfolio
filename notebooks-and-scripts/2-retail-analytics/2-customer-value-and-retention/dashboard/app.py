@@ -129,7 +129,7 @@ clv_df = prepare_clv_data(clv_raw_df)
 render_header()
 st.caption(
     "Interactive analytical demo based on precomputed notebook outputs. "
-    "The app reads local CSV files from the `datos/` folder and does not retrain models."
+    "The app reads local CSV files from the `data/` folder and does not retrain models."
 )
 
 seg_tab, churn_tab, clv_tab = st.tabs(
