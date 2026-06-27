@@ -2,8 +2,8 @@ model,sampling_strategy,roc_auc,average_precision,accuracy,balanced_accuracy,pre
 Random Forest,SMOTE,0.9996,0.9707,0.9973,0.9986,0.8,1.0,0.8889
 XGBoost,Undersampling,0.9995,0.9506,0.9871,0.9935,0.4545,1.0,0.625
 Random Forest,Original,0.9995,0.9585,0.9973,0.9492,0.8571,0.9,0.878
-XGBoost,SMOTE,0.9994,0.9631,0.9973,0.9492,0.8571,0.9,0.878
-XGBoost,Original,0.9993,0.9516,0.9979,0.9495,0.9,0.9,0.9
+XGBoost,SMOTE,0.9993,0.9604,0.9973,0.9492,0.8571,0.9,0.878
+XGBoost,Original,0.9993,0.9511,0.9979,0.9495,0.9,0.9,0.9
 Random Forest,Undersampling,0.9993,0.9387,0.9646,0.9821,0.2326,1.0,0.3774
 Logistic Regression,SMOTE,0.9986,0.8923,0.9871,0.9935,0.4545,1.0,0.625
 Logistic Regression,Original,0.998,0.8706,0.9957,0.8495,0.875,0.7,0.7778

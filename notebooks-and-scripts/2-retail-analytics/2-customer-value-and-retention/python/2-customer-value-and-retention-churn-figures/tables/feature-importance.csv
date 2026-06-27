@@ -26,8 +26,8 @@ cluster_7,0.00022,model_feature_importance,0.00022
 segment_Inactive Minimal Buyers,0.000201,model_feature_importance,0.000201
 segment_Lost Customers,3.1e-05,model_feature_importance,3.1e-05
 segment_Frequent Low-Spend Customers,0.0,model_feature_importance,0.0
+segment_Champions,0.0,model_feature_importance,0.0
 segment_Recent Low-Value Customers,0.0,model_feature_importance,0.0
 cluster_2,0.0,model_feature_importance,0.0
-segment_Champions,0.0,model_feature_importance,0.0
 cluster_5,0.0,model_feature_importance,0.0
 cluster_8,0.0,model_feature_importance,0.0
