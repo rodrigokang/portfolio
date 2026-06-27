@@ -85,6 +85,10 @@ def login() -> None:
         '<div class="mic-login-desc">Analytical demo for exploring segmentation, churn risk, and customer lifetime value.</div>',
         unsafe_allow_html=True,
     )
+    st.markdown(
+        '<div class="mic-login-desc"><strong>Demo access</strong><br>User: <code>demo</code> · Password: <code>portfolio</code></div>',
+        unsafe_allow_html=True,
+    )
     st.markdown('<div class="mic-login-separator"></div>', unsafe_allow_html=True)
 
     with st.form("login_form"):

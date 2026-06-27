@@ -6,7 +6,21 @@ import pandas as pd
 import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = PROJECT_ROOT / "datos"
+
+
+def _resolve_data_dir() -> Path:
+    """Return the data directory used by the dashboard.
+
+    The project currently ships with a ``data/`` folder. A ``datos/`` fallback is
+    kept for backwards compatibility with earlier local versions of the app.
+    """
+    for candidate in (PROJECT_ROOT / "data", PROJECT_ROOT / "datos"):
+        if candidate.exists():
+            return candidate
+    return PROJECT_ROOT / "data"
+
+
+DATA_DIR = _resolve_data_dir()
 
 
 @st.cache_data
