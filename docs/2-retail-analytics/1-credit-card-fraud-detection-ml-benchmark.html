@@ -399,7 +399,12 @@ window.Quarto = {
   </ul></li>
   <li><a href="#supervised-learning-benchmark" id="toc-supervised-learning-benchmark" class="nav-link" data-scroll-target="#supervised-learning-benchmark"><span class="header-section-number">4.4</span> Supervised Learning Benchmark</a></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">4.5</span> Results, Discussion, and Limitations</a></li>
-  <li><a href="#technical-appendix" id="toc-technical-appendix" class="nav-link" data-scroll-target="#technical-appendix"><span class="header-section-number">4.6</span> Technical Appendix</a></li>
+  <li><a href="#technical-appendix" id="toc-technical-appendix" class="nav-link" data-scroll-target="#technical-appendix"><span class="header-section-number">4.6</span> Technical Appendix</a>
+  <ul class="collapse">
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest"><span class="header-section-number">4.6.1</span> Random Forest</a></li>
+  <li><a href="#xgboost" id="toc-xgboost" class="nav-link" data-scroll-target="#xgboost"><span class="header-section-number">4.6.2</span> XGBoost</a></li>
+  <li><a href="#handling-class-imbalance" id="toc-handling-class-imbalance" class="nav-link" data-scroll-target="#handling-class-imbalance"><span class="header-section-number">4.6.3</span> Handling Class Imbalance</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -858,20 +863,69 @@ Figure&nbsp;4.11: Kolmogorov-Smirnov diagnostic plot for the retained supervised
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">4.5</span> Results, Discussion, and Limitations</h2>
-<p>The results support the original hypothesis of the project: fraudulent transactions are not randomly scattered across the transaction space. The unsupervised analysis showed that fraud tends to concentrate in specific regions or appear as anomalous behaviour, depending on the clustering method used. K-Means found a broader cluster with elevated fraud concentration, Agglomerative Clustering isolated a very small high-risk group, and DBSCAN treated fraudulent observations mainly as noise. These are not identical descriptions of the same phenomenon, but they point in the same direction. Fraudulent transactions leave a detectable signature in the available features.</p>
-<p>The supervised benchmark then tested whether that structure could be used predictively. The answer is yes, but with the usual caveat that fraud detection is a decision problem, not only a classification problem. Random Forest trained on the original class distribution produced the strongest Precision-Recall AUC and the highest precision. XGBoost with SMOTE produced higher recall and ROC-AUC, but at the cost of more false positives. Neither result is universally better. The appropriate model depends on how the organization values missed fraud, customer friction, and manual review capacity.</p>
-<p>For a retail or payments setting, this distinction is not cosmetic. A model with high recall may look attractive because it catches more fraudulent transactions, but it may also interrupt many legitimate customers. A model with high precision may be easier to operationalize because alerts are more trustworthy, but it may miss a larger share of fraud. In a New Zealand business context, where customer trust, fair treatment, and pragmatic implementation matter, the more credible recommendation is not to claim that one model “solves” fraud detection. A better recommendation is to deploy a calibrated scoring system, select thresholds according to operational capacity, and monitor the model continuously as transaction behaviour changes.</p>
-<p>The project also illustrates why evaluation should not rely on accuracy. With such a low fraud rate, accuracy would mostly measure how well the model recognizes legitimate transactions. Precision, recall, PR-AUC, and score-separation diagnostics provide a more honest view of performance. The confusion matrices then translate those metrics back into operational outcomes: how many fraud cases are caught, how many are missed, and how many legitimate customers are affected.</p>
-<p>There are several limitations. First, the dataset is anonymized. The PCA-transformed variables are useful for modelling, but they limit business interpretation. In a real implementation, analysts would want to understand which transaction attributes contribute to risk and whether those attributes are stable, fair, and compliant with internal policy. Second, the dataset is static. Fraud patterns change over time, so a model trained once on historical data may degrade as fraudsters adapt. Third, the analysis uses a default classification threshold. In production, the threshold would need to be tuned against business costs, review capacity, and customer impact rather than fixed at <span class="math inline">\(0.5\)</span>.</p>
-<p>Another limitation is that the project does not include cost-sensitive learning, probability calibration, or temporal validation. These would be natural extensions. A cost-sensitive model could assign different penalties to false negatives and false positives. Calibration would make predicted probabilities easier to interpret as risk scores. Temporal validation would be closer to production, where the model is trained on past transactions and evaluated on future transactions rather than on a random split.</p>
-<p>Despite these limitations, the project provides a useful end-to-end benchmark. It moves from exploratory structure to supervised prediction, compares multiple modelling strategies, avoids accuracy as the main success criterion, and discusses the operational implications of the results. For portfolio purposes, the main value is not only the final model score, but the modelling judgement shown along the way.</p>
+<p>The benchmark highlights two consistent findings. First, tree-based ensemble methods provided the most reliable discrimination between legitimate and fraudulent transactions. Second, explicitly addressing the class imbalance produced substantial improvements across almost every classifier.</p>
+<p>Random Forest and XGBoost achieved the strongest overall performance because both algorithms are well suited to heterogeneous tabular data containing complex, nonlinear relationships. Rather than relying on a single global decision boundary, they partition the predictor space into many local decision rules, allowing subtle interactions among the anonymized variables to be captured. This flexibility is particularly valuable in fraud detection, where fraudulent transactions rarely follow a single, easily separable pattern.</p>
+<p>The severe class imbalance proved to be the central modelling challenge. With fraudulent transactions representing less than 0.2% of the observations, models trained on the original data naturally favored the majority class. Under these conditions, high overall accuracy can be achieved while missing a substantial fraction of fraudulent operations, making accuracy a poor indicator of practical performance.</p>
+<p>Applying resampling strategies before training shifted the learning process toward the minority class. Random oversampling increased the exposure of fraudulent examples, while SMOTE generated additional synthetic observations that expanded the minority decision region instead of simply duplicating existing cases. Although the magnitude of the improvement varied across algorithms, the overall effect was consistent: recall increased markedly, while precision typically declined because more legitimate transactions were classified as suspicious.</p>
+<p>This trade-off between precision and recall is unavoidable in operational fraud detection. A model optimized for precision reduces the number of false alarms but may fail to detect fraudulent transactions. A model optimized for recall identifies a larger proportion of fraud at the expense of investigating more legitimate payments. The preferred operating point ultimately depends on business costs, including the financial impact of missed fraud, investigation capacity, customer experience, and regulatory considerations.</p>
+<p>For this reason, the Precision-Recall AUC provides a more informative summary than the traditional ROC AUC. When the positive class is extremely rare, ROC curves may appear optimistic because the false positive rate changes only slightly even after many legitimate transactions are incorrectly flagged. Precision-Recall curves focus exclusively on the minority class by evaluating how many detected alerts are actually fraudulent and how many fraudulent transactions are successfully recovered. As a result, they offer a more realistic assessment of model quality under extreme class imbalance.</p>
+<p>Several limitations should be considered when interpreting these results. The predictors available in the public dataset were anonymized through Principal Component Analysis before release, preventing any interpretation of which original transaction characteristics contributed most to the predictions. The analysis also relies on a single historical collection of European card transactions observed over a limited time window. Fraud patterns evolve continuously as attackers adapt to existing detection systems, meaning that a model calibrated on historical behaviour may gradually lose predictive power through concept drift. In practice, production systems require continuous monitoring, periodic recalibration of decision thresholds, and regular retraining as new labelled transactions become available. Consequently, the benchmark should be viewed as a comparison of modelling strategies under controlled conditions rather than as a final fraud detection system ready for deployment.</p>
 </section>
 <section id="technical-appendix" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="technical-appendix"><span class="header-section-number">4.6</span> Technical Appendix</h2>
-<p>The project is implemented in both Python and R / Quarto. The Python notebooks provide the broader experimental benchmark, including the full set of candidate supervised models and imbalance strategies. The R / Quarto notebooks reproduce the core analysis and generate the figures and tables used in this chapter.</p>
-<p>The dataset contains <span class="math inline">\(284{,}807\)</span> transactions, of which <span class="math inline">\(492\)</span> are fraudulent. The predictors include <code>Amount</code>, <code>Time</code>, and anonymized variables <code>V1</code> to <code>V28</code>, which correspond to principal components produced before the dataset was released. For the modelling workflow, the target variable is separated from the predictors, the <code>Time</code> variable is removed in the unsupervised stage, and the predictors are scaled after the train-test split.</p>
-<p>The unsupervised analysis uses a stratified sample from the scaled training data to keep the clustering experiments computationally manageable while preserving the fraud rate. K-Means is evaluated over multiple values of <span class="math inline">\(k\)</span>, Agglomerative Clustering is used as a hierarchical alternative, and DBSCAN is used to test whether fraudulent transactions behave more like density-based clusters or isolated noise points.</p>
-<p>The supervised benchmark evaluates Logistic Regression, Naive Bayes, Linear Discriminant Analysis, Quadratic Discriminant Analysis, K-Nearest Neighbors, Linear Support Vector Machines, Decision Trees, Random Forests, and XGBoost. The imbalance strategies are the original training distribution, random undersampling, and SMOTE. The final chapter discussion focuses on Random Forest with the original class distribution and XGBoost with SMOTE because these models provide the clearest operational comparison between precision-oriented and recall-oriented behaviour.</p>
+<p>This appendix summarizes the methodological concepts required to understand the modelling decisions presented in the benchmark. The objective is to provide enough theoretical background to interpret the results without developing the algorithms in full mathematical detail.</p>
+<section id="random-forest" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">4.6.1</span> Random Forest</h3>
+<p>Random Forest is an ensemble learning algorithm that combines the predictions of many decision trees. Rather than relying on a single tree, the model aggregates a collection of independently constructed trees, producing predictions that are typically more stable and less sensitive to random fluctuations in the training data.</p>
+<section id="decision-trees" class="level4" data-number="4.6.1.1">
+<h4 data-number="4.6.1.1" class="anchored" data-anchor-id="decision-trees"><span class="header-section-number">4.6.1.1</span> Decision Trees</h4>
+<p>A decision tree partitions the predictor space into a sequence of increasingly homogeneous regions. Starting from the root node, the algorithm repeatedly selects the feature and split point that best separate the observations according to a chosen impurity criterion. The final leaves contain observations with similar characteristics, and each leaf is assigned a class probability based on the proportion of fraudulent transactions it contains.</p>
+<p>For a binary classification problem, the estimated probability of fraud at a terminal node is simply</p>
+<p><span class="math display">\[
+\hat{p}=\frac{\text{Number of fraudulent observations}}{\text{Total observations in the node}}.
+\]</span></p>
+<p>Although decision trees are easy to interpret and naturally capture nonlinear relationships and feature interactions, a single tree is usually unstable. Small changes in the training data may produce substantially different tree structures.</p>
+</section>
+<section id="ensemble-prediction" class="level4" data-number="4.6.1.2">
+<h4 data-number="4.6.1.2" class="anchored" data-anchor-id="ensemble-prediction"><span class="header-section-number">4.6.1.2</span> Ensemble Prediction</h4>
+<p>Random Forest addresses this instability by combining many trees built from slightly different versions of the training data while also considering random subsets of predictors at each split. The final prediction is obtained through majority voting,</p>
+<p><span class="math display">\[
+\hat{y}=\operatorname*{mode}\left(\hat{y}_1,\hat{y}_2,\ldots,\hat{y}_B\right),
+\]</span></p>
+<p>where <span class="math inline">\(\hat{y}_b\)</span> denotes the prediction of the <span class="math inline">\(b\)</span>-th tree.</p>
+<p>Class probabilities are estimated by averaging the probabilities produced by the individual trees,</p>
+<p><span class="math display">\[
+\hat{P}(y=1\mid x)=\frac{1}{B}\sum_{b=1}^{B}\hat{P}_b(y=1\mid x).
+\]</span></p>
+<p>Because prediction is based on many independent trees rather than a single model, Random Forest generally achieves lower variance and better generalization. These characteristics explain why it consistently performs well on structured tabular datasets such as credit card transaction records. Its main limitations are reduced interpretability compared with a single decision tree and larger computational requirements as the number of trees increases.</p>
+</section>
+</section>
+<section id="xgboost" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">4.6.2</span> XGBoost</h3>
+<p>XGBoost is an optimized implementation of Gradient Boosting in which trees are added sequentially instead of independently. Each new tree is trained to reduce the prediction errors made by the ensemble constructed so far, allowing the model to progressively refine its representation of complex decision boundaries.</p>
+<p>If the prediction after <span class="math inline">\(t-1\)</span> trees is <span class="math inline">\(\hat{y}^{(t-1)}\)</span>, the next tree contributes a correction,</p>
+<p><span class="math display">\[
+\hat{y}^{(t)}=\hat{y}^{(t-1)}+f_t(x),
+\]</span></p>
+<p>where <span class="math inline">\(f_t\)</span> represents the new decision tree.</p>
+<p>Rather than minimizing only the training loss, XGBoost optimizes a regularized objective function,</p>
+<p><span class="math display">\[
+\mathcal{L}=\sum_{i=1}^{n}l(y_i,\hat{y}_i)+\sum_{t}\Omega(f_t),
+\]</span></p>
+<p>where <span class="math inline">\(l(\cdot)\)</span> measures the prediction error and <span class="math inline">\(\Omega(\cdot)\)</span> penalizes overly complex trees.</p>
+<p>The regularization term discourages unnecessarily deep or highly specialized trees, reducing the risk of overfitting while preserving predictive accuracy. Together with efficient optimization procedures and effective handling of nonlinear feature interactions, this design explains why XGBoost frequently ranks among the strongest performers on structured tabular datasets.</p>
+</section>
+<section id="handling-class-imbalance" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="handling-class-imbalance"><span class="header-section-number">4.6.3</span> Handling Class Imbalance</h3>
+<p>Fraud detection datasets are naturally imbalanced because fraudulent transactions represent only a very small fraction of all operations. Standard classification algorithms are designed to minimize overall prediction error, so they tend to prioritize the majority class unless corrective measures are introduced during training.</p>
+<p>One widely used approach is the Synthetic Minority Over-sampling Technique (SMOTE). Instead of duplicating existing minority observations, SMOTE generates new synthetic examples by interpolating between neighboring fraudulent transactions in the feature space.</p>
+<p>For each minority observation, the algorithm selects one of its nearest minority neighbours and creates a synthetic sample along the line joining the two observations,</p>
+<p><span class="math display">\[
+x_{\mathrm{new}}=x_i+\lambda(x_j-x_i),
+\]</span></p>
+<p>where <span class="math inline">\(x_i\)</span> is an existing minority observation, <span class="math inline">\(x_j\)</span> is one of its nearest minority neighbours, and <span class="math inline">\(\lambda\in[0,1]\)</span> is a random interpolation factor.</p>
+<p>By populating the minority region with plausible synthetic observations, SMOTE encourages the classifier to learn broader decision boundaries instead of focusing on a handful of isolated fraud cases. This generally improves the ability to recover fraudulent transactions while avoiding the excessive duplication that can occur with simple random oversampling.</p>
+<p>Several extensions combine synthetic oversampling with subsequent cleaning procedures that remove ambiguous or overlapping observations near the class boundary. Although such hybrid methods can further improve performance in some applications, the benchmark presented in this chapter focuses on the standard resampling strategies needed to evaluate the effect of class imbalance on the candidate classifiers.</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -894,6 +948,7 @@ Figure&nbsp;4.11: Kolmogorov-Smirnov diagnostic plot for the retained supervised
 <div class="csl-left-margin">[6] </div><div class="csl-right-inline">F. Carcillo, Y.-A. Le Borgne, O. Caelen, Y. Kessaci, F. Oblé, and G. Bontempi, <span>“Combining unsupervised and supervised learning in credit card fraud detection,”</span> <em>Information sciences</em>, vol. 557, pp. 317–331, 2021.</div>
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
