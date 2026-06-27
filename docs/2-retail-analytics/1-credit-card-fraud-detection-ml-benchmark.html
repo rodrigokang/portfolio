@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,14 +54,15 @@ div.csl-indent {
 <link href="../2-retail-analytics/0-overview.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,6 +91,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -115,7 +145,9 @@ div.csl-indent {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -367,7 +399,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#supervised-learning-benchmark" id="toc-supervised-learning-benchmark" class="nav-link" data-scroll-target="#supervised-learning-benchmark"><span class="header-section-number">4.4</span> Supervised Learning Benchmark</a></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">4.5</span> Results, Discussion, and Limitations</a></li>
-  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">4.6</span> Technical Appendix (Optional)</a></li>
+  <li><a href="#technical-appendix" id="toc-technical-appendix" class="nav-link" data-scroll-target="#technical-appendix"><span class="header-section-number">4.6</span> Technical Appendix</a></li>
   </ul>
 </nav>
     </div>
@@ -614,13 +646,232 @@ Table&nbsp;4.3: Summary of the main findings obtained from the clustering algori
 </section>
 <section id="supervised-learning-benchmark" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="supervised-learning-benchmark"><span class="header-section-number">4.4</span> Supervised Learning Benchmark</h2>
+<p>The supervised stage uses the transaction labels to evaluate how well different classification models can identify fraudulent transactions. The purpose is not to find a model that looks good under a single metric, but to compare modelling choices under conditions that resemble the operational reality of fraud detection: the positive class is rare, the cost of missed fraud is not the same as the cost of a false alarm, and a model that performs well on average may still be unhelpful if it fails to rank suspicious transactions near the top.</p>
+<p>The benchmark was implemented in two complementary forms. The Python notebook runs the full comparison across the complete set of candidate algorithms and class imbalance strategies. The R / Quarto notebook focuses on the two retained configurations that are most useful for the final discussion: a Random Forest trained on the original class distribution, and an XGBoost model trained after applying SMOTE. This split keeps the implementation practical while preserving the main modelling comparison.</p>
+<p>The training and test sets were created using stratified sampling so that the rare fraud class remained represented in both subsets. Scaling was estimated from the training data only and then applied to the test data, avoiding leakage from unseen transactions into the model preparation step. This is especially important in fraud detection, where small forms of leakage can make a model appear much stronger than it would be in deployment.</p>
+<p>The original training distribution is shown in <a href="#tbl-class-distribution-training-strategies" class="quarto-xref">Table&nbsp;<span>4.4</span></a>. The table also shows the SMOTE-resampled version used by the XGBoost model. The resampled dataset is balanced for training purposes only; the test set remains in the original imbalanced distribution.</p>
+<div id="tbl-class-distribution-training-strategies" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-class-distribution-training-strategies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.4: Class distribution by training strategy.
+</figcaption>
+<div aria-describedby="tbl-class-distribution-training-strategies-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Strategy</th>
+<th style="text-align: left;">Class</th>
+<th style="text-align: right;">Transactions</th>
+<th style="text-align: right;">Percentage (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Original</td>
+<td style="text-align: left;">Legitimate</td>
+<td style="text-align: right;">227,446</td>
+<td style="text-align: right;">99.825</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Original</td>
+<td style="text-align: left;">Fraudulent</td>
+<td style="text-align: right;">399</td>
+<td style="text-align: right;">0.175</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SMOTE</td>
+<td style="text-align: left;">Legitimate</td>
+<td style="text-align: right;">227,446</td>
+<td style="text-align: right;">50.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SMOTE</td>
+<td style="text-align: left;">Fraudulent</td>
+<td style="text-align: right;">227,446</td>
+<td style="text-align: right;">50.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Three imbalance strategies were considered in the broader supervised benchmark: the original class distribution, random undersampling, and SMOTE. The original distribution preserves the natural frequency of fraud, which is useful because it reflects the problem as it is encountered in practice. Random undersampling creates a balanced training set by removing legitimate transactions, which may help some models learn the minority class but also discards a large amount of information. SMOTE creates synthetic minority-class observations, allowing the model to see a denser representation of the fraud region without removing legitimate transactions.</p>
+<p>The evaluation framework uses precision, recall, F1-score, ROC-AUC, Precision-Recall AUC, and the Kolmogorov-Smirnov statistic. In this setting, accuracy is deliberately avoided as a headline metric. With fraud representing only <span class="math inline">\(0.173\%\)</span> of transactions, a classifier could obtain high accuracy by predicting almost everything as legitimate.</p>
+<p>Precision measures how many flagged transactions are actually fraudulent:</p>
+<p><span class="math display">\[
+\text{Precision} = \frac{TP}{TP + FP}
+\]</span></p>
+<p>Recall measures how many fraudulent transactions are successfully identified:</p>
+<p><span class="math display">\[
+\text{Recall} = \frac{TP}{TP + FN}
+\]</span></p>
+<p>The F1-score combines both quantities into a single summary:</p>
+<p><span class="math display">\[
+F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\]</span></p>
+<p>For model selection, Precision-Recall AUC is particularly important because it focuses on the minority class. ROC-AUC remains useful, but under severe imbalance it can sometimes look reassuring even when the model generates too many false positives for practical use. The KS statistic adds a further diagnostic view by measuring the maximum separation between the empirical score distributions of legitimate and fraudulent transactions.</p>
+<p>The broader Python benchmark selected one leading model from each imbalance strategy. Random Forest performed best under the original class distribution, while XGBoost was the strongest model under both undersampling and SMOTE. The final test-set inspection then focused on whether those benchmark findings translated to unseen transactions.</p>
+<p>In the final R / Quarto implementation, the comparison was narrowed to the two most informative retained configurations. Random Forest trained on the original class distribution represents the best-performing model that does not alter the training distribution. XGBoost with SMOTE represents the strongest imbalance-aware alternative. The undersampling-based XGBoost model was not retained for the final comparison because, despite strong cross-validation results on the balanced training data, its test-set behaviour produced too many false positives to be attractive as a practical fraud-screening model.</p>
+<p>The final comparison is summarized in <a href="#tbl-final-model-comparison" class="quarto-xref">Table&nbsp;<span>4.5</span></a>.</p>
+<div id="tbl-final-model-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-final-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.5: Final model comparison on the test set.
+</figcaption>
+<div aria-describedby="tbl-final-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Strategy</th>
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">Precision</th>
+<th style="text-align: right;">Recall</th>
+<th style="text-align: right;">F1-score</th>
+<th style="text-align: right;">ROC-AUC</th>
+<th style="text-align: right;">PR-AUC</th>
+<th style="text-align: right;">KS statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Original</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: right;">0.9625</td>
+<td style="text-align: right;">0.8280</td>
+<td style="text-align: right;">0.8902</td>
+<td style="text-align: right;">0.9656</td>
+<td style="text-align: right;">0.8782</td>
+<td style="text-align: right;">0.9056</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SMOTE</td>
+<td style="text-align: left;">XGBoost</td>
+<td style="text-align: right;">0.7080</td>
+<td style="text-align: right;">0.8602</td>
+<td style="text-align: right;">0.7767</td>
+<td style="text-align: right;">0.9823</td>
+<td style="text-align: right;">0.8594</td>
+<td style="text-align: right;">0.9040</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The two models make a useful trade-off visible. Random Forest is more conservative. It achieves higher precision, a higher F1-score, and the strongest Precision-Recall AUC. In practical terms, when it flags a transaction as fraudulent, it is more likely to be correct. This matters because false alarms are not free: they can block legitimate purchases, inconvenience customers, and create manual review work.</p>
+<p>XGBoost with SMOTE is more aggressive. It achieves higher recall and a higher ROC-AUC, meaning it captures a larger share of the fraudulent transactions and ranks the two classes well across thresholds. The cost is lower precision: more legitimate transactions are pulled into the fraud queue. Depending on the operational context, this may still be acceptable. A bank or payment provider with a low-friction review process may prefer higher recall, while a retailer or platform with a strong customer-experience focus may place greater weight on precision.</p>
+<p><a href="#fig-final-model-comparison-pr-auc" class="quarto-xref">Figure&nbsp;<span>4.7</span></a> compares the retained models using Precision-Recall AUC. The difference is not large, but Random Forest remains slightly ahead on the metric that is most directly aligned with rare-event detection.</p>
+<div id="fig-final-model-comparison-pr-auc" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-final-model-comparison-pr-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-supervised-figures/final-model-comparison-pr-auc.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final-model-comparison-pr-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.7: Final model comparison by Precision-Recall AUC.
+</figcaption>
+</figure>
+</div>
+<p>The confusion matrices in <a href="#fig-confusion-matrices" class="quarto-xref">Figure&nbsp;<span>4.8</span></a> show the same trade-off from an operational perspective. Random Forest produces fewer false positives, while XGBoost with SMOTE detects slightly more fraudulent cases at the default threshold. This is the kind of result where the “best” model depends less on the leaderboard and more on the business rule attached to the score.</p>
+<div id="fig-confusion-matrices" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confusion-matrices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-supervised-figures/confusion-matrices.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-matrices-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.8: Confusion matrices for the retained supervised models.
+</figcaption>
+</figure>
+</div>
+<p>The ROC curves in <a href="#fig-roc-curves" class="quarto-xref">Figure&nbsp;<span>4.9</span></a> show that both models have strong ranking ability across classification thresholds. XGBoost with SMOTE has the higher ROC-AUC, which is consistent with its stronger recall. However, ROC curves should be read carefully in this problem because the number of legitimate transactions is so large that a small false positive rate can still translate into many legitimate transactions being flagged.</p>
+<div id="fig-roc-curves" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-roc-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-supervised-figures/roc-curves.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.9: ROC curves for the retained supervised models.
+</figcaption>
+</figure>
+</div>
+<p>The Precision-Recall curves in <a href="#fig-precision-recall-curves" class="quarto-xref">Figure&nbsp;<span>4.10</span></a> provide a more direct view of rare-class performance. They show how precision changes as recall increases, which is often closer to the decision that a fraud team needs to make: how many alerts can be reviewed, and how many missed frauds are acceptable?</p>
+<div id="fig-precision-recall-curves" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-precision-recall-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-supervised-figures/precision-recall-curves.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-precision-recall-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.10: Precision-Recall curves for the retained supervised models.
+</figcaption>
+</figure>
+</div>
+<p>The KS statistic provides another way to assess whether the model scores separate legitimate and fraudulent transactions. The values in <a href="#tbl-kolmogorov-smirnov-statistic" class="quarto-xref">Table&nbsp;<span>4.6</span></a> are almost identical for the two retained models.</p>
+<div id="tbl-kolmogorov-smirnov-statistic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-kolmogorov-smirnov-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.6: Kolmogorov-Smirnov statistic for the retained supervised models.
+</figcaption>
+<div aria-describedby="tbl-kolmogorov-smirnov-statistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model strategy</th>
+<th style="text-align: right;">KS statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Random Forest - Original</td>
+<td style="text-align: right;">0.9056</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">XGBoost - SMOTE</td>
+<td style="text-align: right;">0.9040</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The diagnostic plot in <a href="#fig-kolmogorov-smirnov-diagnostic-plot" class="quarto-xref">Figure&nbsp;<span>4.11</span></a> shows the empirical cumulative distributions of the predicted fraud probabilities for the two classes. A wider separation between the curves indicates stronger discrimination. The near-identical KS values suggest that both models assign noticeably different score distributions to legitimate and fraudulent transactions, even though their default-threshold behaviour differs.</p>
+<div id="fig-kolmogorov-smirnov-diagnostic-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kolmogorov-smirnov-diagnostic-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/1-credit-card-fraud-detection-supervised-figures/kolmogorov-smirnov-diagnostic-plot.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kolmogorov-smirnov-diagnostic-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.11: Kolmogorov-Smirnov diagnostic plot for the retained supervised models.
+</figcaption>
+</figure>
+</div>
+<p>From a modelling point of view, the main conclusion is that tree-based ensemble methods are well suited to this dataset. They can capture nonlinear relationships among the anonymized PCA features without requiring a large amount of manual feature engineering. The original Random Forest is a strong and stable option, while SMOTE makes XGBoost more sensitive to fraudulent transactions. The stronger choice depends on the preferred operating point. For a portfolio project aimed at a practical analytics audience, this is an important distinction: the model is not simply selected because it has the largest headline score, but because its error profile fits the decision context.</p>
 <p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/r/2-credit-card-fraud-detection-supervised.html">here</a>. A companion Python implementation is also available <a href="../notebooks-and-scripts/2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark/python/2-credit-card-fraud-detection-supervised.html">here</a>.</p>
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">4.5</span> Results, Discussion, and Limitations</h2>
+<p>The results support the original hypothesis of the project: fraudulent transactions are not randomly scattered across the transaction space. The unsupervised analysis showed that fraud tends to concentrate in specific regions or appear as anomalous behaviour, depending on the clustering method used. K-Means found a broader cluster with elevated fraud concentration, Agglomerative Clustering isolated a very small high-risk group, and DBSCAN treated fraudulent observations mainly as noise. These are not identical descriptions of the same phenomenon, but they point in the same direction. Fraudulent transactions leave a detectable signature in the available features.</p>
+<p>The supervised benchmark then tested whether that structure could be used predictively. The answer is yes, but with the usual caveat that fraud detection is a decision problem, not only a classification problem. Random Forest trained on the original class distribution produced the strongest Precision-Recall AUC and the highest precision. XGBoost with SMOTE produced higher recall and ROC-AUC, but at the cost of more false positives. Neither result is universally better. The appropriate model depends on how the organization values missed fraud, customer friction, and manual review capacity.</p>
+<p>For a retail or payments setting, this distinction is not cosmetic. A model with high recall may look attractive because it catches more fraudulent transactions, but it may also interrupt many legitimate customers. A model with high precision may be easier to operationalize because alerts are more trustworthy, but it may miss a larger share of fraud. In a New Zealand business context, where customer trust, fair treatment, and pragmatic implementation matter, the more credible recommendation is not to claim that one model “solves” fraud detection. A better recommendation is to deploy a calibrated scoring system, select thresholds according to operational capacity, and monitor the model continuously as transaction behaviour changes.</p>
+<p>The project also illustrates why evaluation should not rely on accuracy. With such a low fraud rate, accuracy would mostly measure how well the model recognizes legitimate transactions. Precision, recall, PR-AUC, and score-separation diagnostics provide a more honest view of performance. The confusion matrices then translate those metrics back into operational outcomes: how many fraud cases are caught, how many are missed, and how many legitimate customers are affected.</p>
+<p>There are several limitations. First, the dataset is anonymized. The PCA-transformed variables are useful for modelling, but they limit business interpretation. In a real implementation, analysts would want to understand which transaction attributes contribute to risk and whether those attributes are stable, fair, and compliant with internal policy. Second, the dataset is static. Fraud patterns change over time, so a model trained once on historical data may degrade as fraudsters adapt. Third, the analysis uses a default classification threshold. In production, the threshold would need to be tuned against business costs, review capacity, and customer impact rather than fixed at <span class="math inline">\(0.5\)</span>.</p>
+<p>Another limitation is that the project does not include cost-sensitive learning, probability calibration, or temporal validation. These would be natural extensions. A cost-sensitive model could assign different penalties to false negatives and false positives. Calibration would make predicted probabilities easier to interpret as risk scores. Temporal validation would be closer to production, where the model is trained on past transactions and evaluated on future transactions rather than on a random split.</p>
+<p>Despite these limitations, the project provides a useful end-to-end benchmark. It moves from exploratory structure to supervised prediction, compares multiple modelling strategies, avoids accuracy as the main success criterion, and discusses the operational implications of the results. For portfolio purposes, the main value is not only the final model score, but the modelling judgement shown along the way.</p>
 </section>
-<section id="technical-appendix-optional" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">4.6</span> Technical Appendix (Optional)</h2>
+<section id="technical-appendix" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="technical-appendix"><span class="header-section-number">4.6</span> Technical Appendix</h2>
+<p>The project is implemented in both Python and R / Quarto. The Python notebooks provide the broader experimental benchmark, including the full set of candidate supervised models and imbalance strategies. The R / Quarto notebooks reproduce the core analysis and generate the figures and tables used in this chapter.</p>
+<p>The dataset contains <span class="math inline">\(284{,}807\)</span> transactions, of which <span class="math inline">\(492\)</span> are fraudulent. The predictors include <code>Amount</code>, <code>Time</code>, and anonymized variables <code>V1</code> to <code>V28</code>, which correspond to principal components produced before the dataset was released. For the modelling workflow, the target variable is separated from the predictors, the <code>Time</code> variable is removed in the unsupervised stage, and the predictors are scaled after the train-test split.</p>
+<p>The unsupervised analysis uses a stratified sample from the scaled training data to keep the clustering experiments computationally manageable while preserving the fraud rate. K-Means is evaluated over multiple values of <span class="math inline">\(k\)</span>, Agglomerative Clustering is used as a hierarchical alternative, and DBSCAN is used to test whether fraudulent transactions behave more like density-based clusters or isolated noise points.</p>
+<p>The supervised benchmark evaluates Logistic Regression, Naive Bayes, Linear Discriminant Analysis, Quadratic Discriminant Analysis, K-Nearest Neighbors, Linear Support Vector Machines, Decision Trees, Random Forests, and XGBoost. The imbalance strategies are the original training distribution, random undersampling, and SMOTE. The final chapter discussion focuses on Random Forest with the original class distribution and XGBoost with SMOTE because these models provide the clearest operational comparison between precision-oriented and recall-oriented behaviour.</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -697,13 +948,14 @@ Table&nbsp;4.3: Summary of the main findings obtained from the clustering algori
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
