@@ -703,17 +703,17 @@ Table&nbsp;4.4: Class distribution by training strategy.
 <p>Three imbalance strategies were considered in the broader supervised benchmark: the original class distribution, random undersampling, and SMOTE. The original distribution preserves the natural frequency of fraud, which is useful because it reflects the problem as it is encountered in practice. Random undersampling creates a balanced training set by removing legitimate transactions, which may help some models learn the minority class but also discards a large amount of information. SMOTE creates synthetic minority-class observations, allowing the model to see a denser representation of the fraud region without removing legitimate transactions.</p>
 <p>The evaluation framework uses precision, recall, F1-score, ROC-AUC, Precision-Recall AUC, and the Kolmogorov-Smirnov statistic. In this setting, accuracy is deliberately avoided as a headline metric. With fraud representing only <span class="math inline">\(0.173\%\)</span> of transactions, a classifier could obtain high accuracy by predicting almost everything as legitimate.</p>
 <p>Precision measures how many flagged transactions are actually fraudulent:</p>
-<p><span class="math display">\[
+<p><span id="eq-precision"><span class="math display">\[
 \text{Precision} = \frac{TP}{TP + FP}
-\]</span></p>
+\tag{4.1}\]</span></span></p>
 <p>Recall measures how many fraudulent transactions are successfully identified:</p>
-<p><span class="math display">\[
+<p><span id="eq-recall"><span class="math display">\[
 \text{Recall} = \frac{TP}{TP + FN}
-\]</span></p>
+\tag{4.2}\]</span></span></p>
 <p>The F1-score combines both quantities into a single summary:</p>
-<p><span class="math display">\[
+<p><span id="eq-f1-score"><span class="math display">\[
 F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
-\]</span></p>
+\tag{4.3}\]</span></span></p>
 <p>For model selection, Precision-Recall AUC is particularly important because it focuses on the minority class. ROC-AUC remains useful, but under severe imbalance it can sometimes look reassuring even when the model generates too many false positives for practical use. The KS statistic adds a further diagnostic view by measuring the maximum separation between the empirical score distributions of legitimate and fraudulent transactions.</p>
 <p>The broader Python benchmark selected one leading model from each imbalance strategy. Random Forest performed best under the original class distribution, while XGBoost was the strongest model under both undersampling and SMOTE. The final test-set inspection then focused on whether those benchmark findings translated to unseen transactions.</p>
 <p>In the final R / Quarto implementation, the comparison was narrowed to the two most informative retained configurations. Random Forest trained on the original class distribution represents the best-performing model that does not alter the training distribution. XGBoost with SMOTE represents the strongest imbalance-aware alternative. The undersampling-based XGBoost model was not retained for the final comparison because, despite strong cross-validation results on the balanced training data, its test-set behaviour produced too many false positives to be attractive as a practical fraud-screening model.</p>
@@ -881,22 +881,22 @@ Figure&nbsp;4.11: Kolmogorov-Smirnov diagnostic plot for the retained supervised
 <h4 data-number="4.6.1.1" class="anchored" data-anchor-id="decision-trees"><span class="header-section-number">4.6.1.1</span> Decision Trees</h4>
 <p>A decision tree partitions the predictor space into a sequence of increasingly homogeneous regions. Starting from the root node, the algorithm repeatedly selects the feature and split point that best separate the observations according to a chosen impurity criterion. The final leaves contain observations with similar characteristics, and each leaf is assigned a class probability based on the proportion of fraudulent transactions it contains.</p>
 <p>For a binary classification problem, the estimated probability of fraud at a terminal node is simply</p>
-<p><span class="math display">\[
+<p><span id="eq-rf-probability"><span class="math display">\[
 \hat{p}=\frac{\text{Number of fraudulent observations}}{\text{Total observations in the node}}.
-\]</span></p>
+\tag{4.4}\]</span></span></p>
 <p>Although decision trees are easy to interpret and naturally capture nonlinear relationships and feature interactions, a single tree is usually unstable. Small changes in the training data may produce substantially different tree structures.</p>
 </section>
 <section id="ensemble-prediction" class="level4" data-number="4.6.1.2">
 <h4 data-number="4.6.1.2" class="anchored" data-anchor-id="ensemble-prediction"><span class="header-section-number">4.6.1.2</span> Ensemble Prediction</h4>
 <p>Random Forest addresses this instability by combining many trees built from slightly different versions of the training data while also considering random subsets of predictors at each split. The final prediction is obtained through majority voting,</p>
-<p><span class="math display">\[
+<p><span id="eq-rf-majority-vote"><span class="math display">\[
 \hat{y}=\operatorname*{mode}\left(\hat{y}_1,\hat{y}_2,\ldots,\hat{y}_B\right),
-\]</span></p>
+\tag{4.5}\]</span></span></p>
 <p>where <span class="math inline">\(\hat{y}_b\)</span> denotes the prediction of the <span class="math inline">\(b\)</span>-th tree.</p>
 <p>Class probabilities are estimated by averaging the probabilities produced by the individual trees,</p>
-<p><span class="math display">\[
+<p><span id="eq-rf-probability-ensemble"><span class="math display">\[
 \hat{P}(y=1\mid x)=\frac{1}{B}\sum_{b=1}^{B}\hat{P}_b(y=1\mid x).
-\]</span></p>
+\tag{4.6}\]</span></span></p>
 <p>Because prediction is based on many independent trees rather than a single model, Random Forest generally achieves lower variance and better generalization. These characteristics explain why it consistently performs well on structured tabular datasets such as credit card transaction records. Its main limitations are reduced interpretability compared with a single decision tree and larger computational requirements as the number of trees increases.</p>
 </section>
 </section>
@@ -904,14 +904,14 @@ Figure&nbsp;4.11: Kolmogorov-Smirnov diagnostic plot for the retained supervised
 <h3 data-number="4.6.2" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">4.6.2</span> XGBoost</h3>
 <p>XGBoost is an optimized implementation of Gradient Boosting in which trees are added sequentially instead of independently. Each new tree is trained to reduce the prediction errors made by the ensemble constructed so far, allowing the model to progressively refine its representation of complex decision boundaries.</p>
 <p>If the prediction after <span class="math inline">\(t-1\)</span> trees is <span class="math inline">\(\hat{y}^{(t-1)}\)</span>, the next tree contributes a correction,</p>
-<p><span class="math display">\[
+<p><span id="eq-xgb-additive-model"><span class="math display">\[
 \hat{y}^{(t)}=\hat{y}^{(t-1)}+f_t(x),
-\]</span></p>
+\tag{4.7}\]</span></span></p>
 <p>where <span class="math inline">\(f_t\)</span> represents the new decision tree.</p>
 <p>Rather than minimizing only the training loss, XGBoost optimizes a regularized objective function,</p>
-<p><span class="math display">\[
+<p><span id="eq-xgb-objective"><span class="math display">\[
 \mathcal{L}=\sum_{i=1}^{n}l(y_i,\hat{y}_i)+\sum_{t}\Omega(f_t),
-\]</span></p>
+\tag{4.8}\]</span></span></p>
 <p>where <span class="math inline">\(l(\cdot)\)</span> measures the prediction error and <span class="math inline">\(\Omega(\cdot)\)</span> penalizes overly complex trees.</p>
 <p>The regularization term discourages unnecessarily deep or highly specialized trees, reducing the risk of overfitting while preserving predictive accuracy. Together with efficient optimization procedures and effective handling of nonlinear feature interactions, this design explains why XGBoost frequently ranks among the strongest performers on structured tabular datasets.</p>
 </section>
@@ -920,9 +920,9 @@ Figure&nbsp;4.11: Kolmogorov-Smirnov diagnostic plot for the retained supervised
 <p>Fraud detection datasets are naturally imbalanced because fraudulent transactions represent only a very small fraction of all operations. Standard classification algorithms are designed to minimize overall prediction error, so they tend to prioritize the majority class unless corrective measures are introduced during training.</p>
 <p>One widely used approach is the Synthetic Minority Over-sampling Technique (SMOTE). Instead of duplicating existing minority observations, SMOTE generates new synthetic examples by interpolating between neighboring fraudulent transactions in the feature space.</p>
 <p>For each minority observation, the algorithm selects one of its nearest minority neighbours and creates a synthetic sample along the line joining the two observations,</p>
-<p><span class="math display">\[
+<p><span id="eq-smote-synthetic-sample"><span class="math display">\[
 x_{\mathrm{new}}=x_i+\lambda(x_j-x_i),
-\]</span></p>
+\tag{4.9}\]</span></span></p>
 <p>where <span class="math inline">\(x_i\)</span> is an existing minority observation, <span class="math inline">\(x_j\)</span> is one of its nearest minority neighbours, and <span class="math inline">\(\lambda\in[0,1]\)</span> is a random interpolation factor.</p>
 <p>By populating the minority region with plausible synthetic observations, SMOTE encourages the classifier to learn broader decision boundaries instead of focusing on a handful of isolated fraud cases. This generally improves the ability to recover fraudulent transactions while avoiding the excessive duplication that can occur with simple random oversampling.</p>
 <p>Several extensions combine synthetic oversampling with subsequent cleaning procedures that remove ambiguous or overlapping observations near the class boundary. Although such hybrid methods can further improve performance in some applications, the benchmark presented in this chapter focuses on the standard resampling strategies needed to evaluate the effect of class imbalance on the candidate classifiers.</p>

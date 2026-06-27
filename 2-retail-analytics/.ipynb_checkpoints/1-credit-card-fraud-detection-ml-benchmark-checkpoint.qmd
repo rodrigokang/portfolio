@@ -155,19 +155,19 @@ Precision measures how many flagged transactions are actually fraudulent:
 
 $$
 \text{Precision} = \frac{TP}{TP + FP}
-$$
+$$ {#eq-precision}
 
 Recall measures how many fraudulent transactions are successfully identified:
 
 $$
 \text{Recall} = \frac{TP}{TP + FN}
-$$
+$$ {#eq-recall}
 
 The F1-score combines both quantities into a single summary:
 
 $$
 F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
-$$
+$$ {#eq-f1-score}
 
 For model selection, Precision-Recall AUC is particularly important because it focuses on the minority class. ROC-AUC remains useful, but under severe imbalance it can sometimes look reassuring even when the model generates too many false positives for practical use. The KS statistic adds a further diagnostic view by measuring the maximum separation between the empirical score distributions of legitimate and fraudulent transactions.
 
@@ -263,7 +263,7 @@ For a binary classification problem, the estimated probability of fraud at a ter
 
 $$
 \hat{p}=\frac{\text{Number of fraudulent observations}}{\text{Total observations in the node}}.
-$$
+$$ {#eq-rf-probability}
 
 Although decision trees are easy to interpret and naturally capture nonlinear relationships and feature interactions, a single tree is usually unstable. Small changes in the training data may produce substantially different tree structures.
 
@@ -273,7 +273,7 @@ Random Forest addresses this instability by combining many trees built from slig
 
 $$
 \hat{y}=\operatorname*{mode}\left(\hat{y}_1,\hat{y}_2,\ldots,\hat{y}_B\right),
-$$
+$$ {#eq-rf-majority-vote}
 
 where $\hat{y}_b$ denotes the prediction of the $b$-th tree.
 
@@ -281,7 +281,7 @@ Class probabilities are estimated by averaging the probabilities produced by the
 
 $$
 \hat{P}(y=1\mid x)=\frac{1}{B}\sum_{b=1}^{B}\hat{P}_b(y=1\mid x).
-$$
+$$ {#eq-rf-probability-ensemble}
 
 Because prediction is based on many independent trees rather than a single model, Random Forest generally achieves lower variance and better generalization. These characteristics explain why it consistently performs well on structured tabular datasets such as credit card transaction records. Its main limitations are reduced interpretability compared with a single decision tree and larger computational requirements as the number of trees increases.
 
@@ -293,7 +293,7 @@ If the prediction after $t-1$ trees is $\hat{y}^{(t-1)}$, the next tree contribu
 
 $$
 \hat{y}^{(t)}=\hat{y}^{(t-1)}+f_t(x),
-$$
+$$ {#eq-xgb-additive-model}
 
 where $f_t$ represents the new decision tree.
 
@@ -301,7 +301,7 @@ Rather than minimizing only the training loss, XGBoost optimizes a regularized o
 
 $$
 \mathcal{L}=\sum_{i=1}^{n}l(y_i,\hat{y}_i)+\sum_{t}\Omega(f_t),
-$$
+$$ {#eq-xgb-objective}
 
 where $l(\cdot)$ measures the prediction error and $\Omega(\cdot)$ penalizes overly complex trees.
 
@@ -317,7 +317,7 @@ For each minority observation, the algorithm selects one of its nearest minority
 
 $$
 x_{\mathrm{new}}=x_i+\lambda(x_j-x_i),
-$$
+$$ {#eq-smote-synthetic-sample}
 
 where $x_i$ is an existing minority observation, $x_j$ is one of its nearest minority neighbours, and $\lambda\in[0,1]$ is a random interpolation factor.
 
