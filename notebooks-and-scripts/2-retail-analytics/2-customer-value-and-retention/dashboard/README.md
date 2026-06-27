@@ -37,7 +37,7 @@ The dashboard is intended to be understandable for both technical and non-techni
 
 ### 1. Customer Segmentation
 
-This tab uses the RFM segmentation output to profile the customer base. The previous 3D RFM chart was replaced because it was harder to explain and less useful for decision-making. The tab now includes:
+This tab uses the RFM segmentation output to profile the customer base. The tab includes:
 
 - **Segment Strategy Matrix**: average recency vs average monetary value, with bubble size showing segment size.
 - **Revenue Concentration by Segment**: identifies which segments drive the largest share of historical revenue.
@@ -81,7 +81,6 @@ This tab uses the CLV output to frame customer value as an investment allocation
 ├── README.md
 │
 ├── assets/
-│   ├── fondo.jpg
 │   └── styles.css
 │
 ├── data/
@@ -112,7 +111,7 @@ data/customer-clv-prediction.csv
 
 These files are precomputed outputs from the notebooks. The dashboard assumes they already contain the customer-level segmentation, churn and CLV results.
 
-For backwards compatibility, the loader also accepts a folder named `datos/` if it exists in an older local copy of the project.
+The loader also accepts a folder named `datos/` as an alternative data directory.
 
 ## How to run locally
 
@@ -130,14 +129,10 @@ streamlit run app.py
 
 The dashboard will open in your browser using Streamlit's local development server.
 
-## Notes for reviewers
+## Notes
 
-This dashboard should be read as the interactive companion to the notebooks, not as a replacement for them. The notebooks contain the full data preparation, modelling and evaluation workflow. The dashboard focuses on the final analytical outputs and presents them in a way that supports retail decision-making:
+This dashboard complements the project notebooks by presenting the final outputs in an interactive format.
 
-- Which customer groups should be protected?
-- Which segments are commercially exposed to churn?
-- Which customers have the highest risk-adjusted future value?
-- Where should retention and growth efforts be prioritised?
-- Which actions should be manual, targeted or automated?
+While the notebooks document the complete data preparation, modelling and evaluation process, the dashboard focuses on how those results can support everyday business decisions, from customer segmentation and churn management to customer lifetime value prioritisation.
 
-The design is intentionally pragmatic and aligned with the portfolio's target audience: reviewers who value clear business reasoning, interpretable analytics, and technically credible machine learning outputs.
+Together, they provide both the technical implementation and the practical application of the project.
