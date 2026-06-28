@@ -177,10 +177,10 @@ In the final R / Quarto implementation, the comparison was narrowed to the two m
 
 The final comparison is summarized in @tbl-final-model-comparison.
 
-| Strategy | Model          | Precision  | Recall  | F1-score  | ROC-AUC  | PR-AUC  | KS statistic  |
-|:---------|:--------------:|:----------:|:-------:|:---------:|:--------:|:-------:|:-------------:|
-| Original | Random Forest  |    0.9625  | 0.8280  |   0.8902  |  0.9656  | 0.8782  |       0.9056  |
-| SMOTE    | XGBoost        |    0.7080  | 0.8602  |   0.7767  |  0.9823  | 0.8594  |       0.9040  |
+| Strategy  | Model          | Precision  | Recall  | F1-score  | ROC-AUC  | PR-AUC  | KS statistic  |
+|:---------:|:--------------:|:----------:|:-------:|:---------:|:--------:|:-------:|:-------------:|
+| Original  | Random Forest  |    0.9625  | 0.8280  |   0.8902  |  0.9656  | 0.8782  |       0.9056  |
+| SMOTE     | XGBoost        |    0.7080  | 0.8602  |   0.7767  |  0.9823  | 0.8594  |       0.9040  |
 
 : Final model comparison on the test set. {#tbl-final-model-comparison}
 
