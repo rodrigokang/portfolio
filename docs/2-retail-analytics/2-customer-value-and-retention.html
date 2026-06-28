@@ -1316,21 +1316,21 @@ Figure&nbsp;5.13: Total predicted Customer Lifetime Value aggregated by customer
 <li><strong>Frequency</strong>, representing the total number of completed purchases during the observation period.</li>
 <li><strong>Monetary value</strong>, describing the customer’s cumulative spending.</li>
 </ul>
-<p>For customer (<span class="math inline">\(i\)</span>), Recency is computed as</p>
+<p>For customer <span class="math inline">\(i\)</span>, Recency is computed as</p>
 <p><span id="eq-rfm-recency"><span class="math display">\[
 R_i=t_{\mathrm{ref}}-t_{\mathrm{last},i},
 \tag{6.1}\]</span></span></p>
-<p>where (<span class="math inline">\(t_{\mathrm{ref}}\)</span>) denotes the reference date used for the analysis and (<span class="math inline">\(t_{\mathrm{last},i}\)</span>) is the date of the customer’s most recent transaction.</p>
+<p>where <span class="math inline">\(t_{\mathrm{ref}}\)</span> denotes the reference date used for the analysis and <span class="math inline">\(t_{\mathrm{last},i}\)</span> is the date of the customer’s most recent transaction.</p>
 <p>Frequency is defined as</p>
 <p><span id="eq-rfm-frequency"><span class="math display">\[
 F_i=n_i,
 \tag{6.2}\]</span></span></p>
-<p>where (<span class="math inline">\(n_i\)</span>) is the number of completed purchases.</p>
+<p>where <span class="math inline">\(n_i\)</span> is the number of completed purchases.</p>
 <p>Monetary value is calculated as</p>
 <p><span id="eq-rfm-monetary"><span class="math display">\[
 M_i=\sum_{j=1}^{n_i}v_{ij},
 \tag{6.3}\]</span></span></p>
-<p>where (<span class="math inline">\(v_{ij}\)</span>) represents the monetary value of transaction (<span class="math inline">\(j\)</span>).</p>
+<p>where <span class="math inline">\(v_{ij}\)</span> represents the monetary value of transaction <span class="math inline">\(j\)</span>.</p>
 <p>Although conceptually simple, these three variables capture complementary aspects of customer behaviour and provide the behavioural representation used throughout the remainder of the workflow. Because Frequency and Monetary value typically exhibit strong positive skewness, additional preprocessing is required before applying distance-based clustering algorithms.</p>
 </section>
 <section id="box-cox-transformation" class="level2" data-number="6.2">
@@ -1344,26 +1344,26 @@ y^{(\lambda)}=
 \log(y), &amp; \lambda=0,
 \end{cases}
 \tag{6.4}\]</span></span></p>
-<p>where the transformation parameter (<span class="math inline">\(\lambda\)</span>) is estimated from the observed data.</p>
+<p>where the transformation parameter <span class="math inline">\(\lambda\)</span> is estimated from the observed data.</p>
 <p>After transformation, each variable is standardised to zero mean and unit variance before clustering. The transformed variables are used exclusively during model fitting; all business interpretation remains based on the original RFM variables.</p>
 </section>
 <section id="k-means-clustering" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">6.3</span> K-Means Clustering</h2>
-<p>Customer segmentation is performed using the K-Means clustering algorithm, which partitions customers into (<span class="math inline">\(K\)</span>) groups by minimising the within-cluster sum of squared Euclidean distances,</p>
+<p>Customer segmentation is performed using the K-Means clustering algorithm, which partitions customers into <span class="math inline">\(K\)</span> groups by minimising the within-cluster sum of squared Euclidean distances,</p>
 <p><span id="eq-kmeans"><span class="math display">\[
 \min_{C_1,\ldots,C_K}
 \sum_{k=1}^{K}
 \sum_{x_i\in C_k}
 \left|x_i-\mu_k\right|^2,
 \tag{6.5}\]</span></span></p>
-<p>where (<span class="math inline">\(\mu_k\)</span>) denotes the centroid of cluster (<span class="math inline">\(k\)</span>).</p>
+<p>where <span class="math inline">\(\mu_k\)</span> denotes the centroid of cluster <span class="math inline">\(k\)</span>.</p>
 <p>The optimisation alternates between assigning observations to their nearest centroid and updating the centroids according to the mean of the assigned observations until convergence.</p>
 <p>Since no ground-truth customer labels exist, the optimal number of clusters is determined using complementary internal validation metrics together with business interpretability. Once the clusters have been identified, they are interpreted using the original RFM variables rather than the transformed feature space, allowing each segment to be associated with a meaningful purchasing profile.</p>
 </section>
 <section id="behavioural-churn-definition" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="behavioural-churn-definition"><span class="header-section-number">6.4</span> Behavioural Churn Definition</h2>
 <p>Unlike subscription-based businesses, transactional retail datasets rarely contain explicit churn events. Customer inactivity must therefore be inferred from observed purchasing behaviour rather than directly measured. The implementation adopted in this project defines churn through a behavioural rule that combines customer engagement during the calibration period with observed activity during a subsequent validation period.</p>
-<p>Let (<span class="math inline">\(S_i\)</span>) denote the behavioural segment assigned to customer (<span class="math inline">\(i\)</span>), (<span class="math inline">\(R_i\)</span>) the customer’s recency, (<span class="math inline">\(\bar{L}_i\)</span>) the average time between consecutive purchases (purchase latency), and (<span class="math inline">\(\mathrm{Score}_i\)</span>) the within-segment RFM score. Furthermore, let (<span class="math inline">\(\overline{\mathrm{Score}}_{S_i}\)</span>) represent the average RFM score of the customer’s segment.</p>
+<p>Let <span class="math inline">\(S_i\)</span> denote the behavioural segment assigned to customer <span class="math inline">\(i\)</span>, <span class="math inline">\(R_i\)</span> the customer’s recency, <span class="math inline">\(\bar{L}_i\)</span> the average time between consecutive purchases (purchase latency), and <span class="math inline">\(\mathrm{Score}_i\)</span> the within-segment RFM score. Furthermore, let <span class="math inline">\(\overline{\mathrm{Score}}_{S_i}\)</span> represent the average RFM score of the customer’s segment.</p>
 <p>A customer is considered a potential churn candidate when all behavioural conditions</p>
 <p><span class="math display">\[
 S_i\in\mathcal{L},
@@ -1376,7 +1376,7 @@ R_i&gt;\bar{L}_i,
 \mathrm{Score}_i&lt;
 \overline{\mathrm{Score}}_{S_i}
 \]</span></p>
-<p>are simultaneously satisfied, where (<span class="math inline">\(\mathcal{L}\)</span>) denotes the set of low-activity customer segments identified during the RFM analysis.</p>
+<p>are simultaneously satisfied, where <span class="math inline">\(\mathcal{L}\)</span> denotes the set of low-activity customer segments identified during the RFM analysis.</p>
 <p>The final churn label is then determined by inspecting future purchasing behaviour during the validation period,</p>
 <p><span id="eq-churn-definition"><span class="math display">\[
 y_i=
@@ -1435,9 +1435,9 @@ F_1
 \frac{\mathbb{E}[P_t]}
 {(1+d)^t},
 \tag{6.10}\]</span></span></p>
-<p>where (<span class="math inline">\(\mathbb{E}[P_t]\)</span>) denotes the expected customer profit during period (<span class="math inline">\(t\)</span>), (<span class="math inline">\(d\)</span>) is the discount rate, and (<span class="math inline">\(T\)</span>) represents the planning horizon.</p>
+<p>where <span class="math inline">\(\mathbb{E}[P_t]\)</span> denotes the expected customer profit during period <span class="math inline">\(t\)</span>, <span class="math inline">\(d\)</span> is the discount rate, and <span class="math inline">\(T\)</span> represents the planning horizon.</p>
 <p>In practice, however, neither future profits nor customer retention are directly observable in non-contractual retail businesses. The implementation presented in this chapter therefore constructs a risk-adjusted valuation framework that combines observed customer profitability with behavioural information derived from the previous stages of the workflow.</p>
-<p>Let (<span class="math inline">\(\hat{P}_i\)</span>) denote the estimated average profit generated by customer (<span class="math inline">\(i\)</span>), (<span class="math inline">\(c_{S_i}\)</span>) the historical churn rate associated with the behavioural segment (S_i), and (d_{S_i}) the corresponding segment-specific discount rate. Assuming that the probability of customer retention remains approximately constant within each behavioural segment, the expected Customer Lifetime Value is estimated as</p>
+<p>Let <span class="math inline">\(\hat{P}_i\)</span> denote the estimated average profit generated by customer <span class="math inline">\(i\)</span>, <span class="math inline">\(c_{S_i}\)</span> the historical churn rate associated with the behavioural segment (S_i), and (d_{S_i}) the corresponding segment-specific discount rate. Assuming that the probability of customer retention remains approximately constant within each behavioural segment, the expected Customer Lifetime Value is estimated as</p>
 <p><span id="eq-risk-adjusted-clv"><span class="math display">\[
 \widehat{\mathrm{CLV}}_i
 =
@@ -1452,7 +1452,7 @@ F_1
 <p><span class="math display">\[
 \left(1-c_{S_i}\right)^{t-1}
 \]</span></p>
-<p>represents the probability that customer (<span class="math inline">\(i\)</span>) remains active up to period (<span class="math inline">\(t\)</span>).</p>
+<p>represents the probability that customer <span class="math inline">\(i\)</span> remains active up to period <span class="math inline">\(t\)</span>.</p>
 <p>Unlike the classical formulation, both the expected retention and the discount rate depend on the customer’s behavioural segment rather than being assumed identical across the entire customer base. This allows customers exhibiting different purchasing patterns to be valued under different behavioural assumptions while preserving a transparent and reproducible valuation framework.</p>
 <p>The resulting quantity should not be interpreted as an objectively measurable future lifetime value. Instead, it represents a model-based valuation constructed from observed profitability together with explicit assumptions regarding customer retention and the time value of money.</p>
 <p>Once the target variable has been constructed, Customer Lifetime Value prediction becomes a supervised regression problem,</p>
@@ -1461,7 +1461,7 @@ F_1
 =
 f(\mathbf{x}_i)+\varepsilon_i,
 \tag{6.12}\]</span></span></p>
-<p>where (<span class="math inline">\(\mathbf{x}_i\)</span>) denotes the customer-level feature vector engineered throughout the project, (<span class="math inline">\(f(\cdot)\)</span>) represents the regression model, and (<span class="math inline">\(\varepsilon_i\)</span>) captures the unexplained prediction error.</p>
+<p>where <span class="math inline">\(\mathbf{x}_i\)</span> denotes the customer-level feature vector engineered throughout the project, <span class="math inline">\(f(\cdot)\)</span> represents the regression model, and <span class="math inline">\(\varepsilon_i\)</span> captures the unexplained prediction error.</p>
 <p>Rather than estimating future profits directly, the regression model learns to approximate the valuation framework defined by <a href="#eq-risk-adjusted-clv" class="quarto-xref">Equation&nbsp;<span>6.11</span></a>. This considerably reduces the computational effort required to evaluate new customers while maintaining consistency with the behavioural and financial assumptions adopted throughout the analytical workflow.</p>
 
 
