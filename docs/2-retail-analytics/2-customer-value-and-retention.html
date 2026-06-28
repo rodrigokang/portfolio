@@ -408,11 +408,8 @@ window.Quarto = {
   <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">5.5</span> Technical Appendix (Optional)</a>
   <ul class="collapse">
   <li><a href="#rfm-analysis" id="toc-rfm-analysis" class="nav-link" data-scroll-target="#rfm-analysis"><span class="header-section-number">5.5.1</span> RFM Analysis</a></li>
-  <li><a href="#box-cox-transformation" id="toc-box-cox-transformation" class="nav-link" data-scroll-target="#box-cox-transformation"><span class="header-section-number">5.5.2</span> Box-Cox Transformation</a></li>
-  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering"><span class="header-section-number">5.5.3</span> K-Means Clustering</a></li>
-  <li><a href="#behavioural-churn-definition" id="toc-behavioural-churn-definition" class="nav-link" data-scroll-target="#behavioural-churn-definition"><span class="header-section-number">5.5.4</span> Behavioural Churn Definition</a></li>
-  <li><a href="#classification-metrics" id="toc-classification-metrics" class="nav-link" data-scroll-target="#classification-metrics"><span class="header-section-number">5.5.5</span> Classification Metrics</a></li>
-  <li><a href="#risk-adjusted-customer-lifetime-value" id="toc-risk-adjusted-customer-lifetime-value" class="nav-link" data-scroll-target="#risk-adjusted-customer-lifetime-value"><span class="header-section-number">5.5.6</span> Risk-Adjusted Customer Lifetime Value</a></li>
+  <li><a href="#behavioural-churn-definition" id="toc-behavioural-churn-definition" class="nav-link" data-scroll-target="#behavioural-churn-definition"><span class="header-section-number">5.5.2</span> Behavioural Churn Definition</a></li>
+  <li><a href="#risk-adjusted-customer-lifetime-value" id="toc-risk-adjusted-customer-lifetime-value" class="nav-link" data-scroll-target="#risk-adjusted-customer-lifetime-value"><span class="header-section-number">5.5.3</span> Risk-Adjusted Customer Lifetime Value</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1332,9 +1329,8 @@ M_i=\sum_{j=1}^{n_i}v_{ij},
 \tag{5.3}\]</span></span></p>
 <p>where <span class="math inline">\(v_{ij}\)</span> represents the monetary value of transaction <span class="math inline">\(j\)</span>.</p>
 <p>Although conceptually simple, these three variables capture complementary aspects of customer behaviour and provide the behavioural representation used throughout the remainder of the workflow. Because Frequency and Monetary value typically exhibit strong positive skewness, additional preprocessing is required before applying distance-based clustering algorithms.</p>
-</section>
-<section id="box-cox-transformation" class="level3" data-number="5.5.2">
-<h3 data-number="5.5.2" class="anchored" data-anchor-id="box-cox-transformation"><span class="header-section-number">5.5.2</span> Box-Cox Transformation</h3>
+<section id="box-cox-transformation" class="level4" data-number="5.5.1.1">
+<h4 data-number="5.5.1.1" class="anchored" data-anchor-id="box-cox-transformation"><span class="header-section-number">5.5.1.1</span> Box-Cox Transformation</h4>
 <p>The RFM variables exhibit markedly different distributions, with Frequency and Monetary value generally dominated by a relatively small number of high-value observations. Since K-Means relies on Euclidean distances, these extreme values can disproportionately influence the clustering process.</p>
 <p>To reduce this effect, each RFM variable is transformed using the Box-Cox transformation,</p>
 <p><span id="eq-boxcox"><span class="math display">\[
@@ -1347,8 +1343,8 @@ y^{(\lambda)}=
 <p>where the transformation parameter <span class="math inline">\(\lambda\)</span> is estimated from the observed data.</p>
 <p>After transformation, each variable is standardised to zero mean and unit variance before clustering. The transformed variables are used exclusively during model fitting; all business interpretation remains based on the original RFM variables.</p>
 </section>
-<section id="k-means-clustering" class="level3" data-number="5.5.3">
-<h3 data-number="5.5.3" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">5.5.3</span> K-Means Clustering</h3>
+<section id="k-means-clustering" class="level4" data-number="5.5.1.2">
+<h4 data-number="5.5.1.2" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">5.5.1.2</span> K-Means Clustering</h4>
 <p>Customer segmentation is performed using the K-Means clustering algorithm, which partitions customers into <span class="math inline">\(K\)</span> groups by minimising the within-cluster sum of squared Euclidean distances,</p>
 <p><span id="eq-kmeans"><span class="math display">\[
 \min_{C_1,\ldots,C_K}
@@ -1360,8 +1356,9 @@ y^{(\lambda)}=
 <p>The optimisation alternates between assigning observations to their nearest centroid and updating the centroids according to the mean of the assigned observations until convergence.</p>
 <p>Since no ground-truth customer labels exist, the optimal number of clusters is determined using complementary internal validation metrics together with business interpretability. Once the clusters have been identified, they are interpreted using the original RFM variables rather than the transformed feature space, allowing each segment to be associated with a meaningful purchasing profile.</p>
 </section>
-<section id="behavioural-churn-definition" class="level3" data-number="5.5.4">
-<h3 data-number="5.5.4" class="anchored" data-anchor-id="behavioural-churn-definition"><span class="header-section-number">5.5.4</span> Behavioural Churn Definition</h3>
+</section>
+<section id="behavioural-churn-definition" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="behavioural-churn-definition"><span class="header-section-number">5.5.2</span> Behavioural Churn Definition</h3>
 <p>Unlike subscription-based businesses, transactional retail datasets rarely contain explicit churn events. Customer inactivity must therefore be inferred from observed purchasing behaviour rather than directly measured. The implementation adopted in this project defines churn through a behavioural rule that combines customer engagement during the calibration period with observed activity during a subsequent validation period.</p>
 <p>Let <span class="math inline">\(S_i\)</span> denote the behavioural segment assigned to customer <span class="math inline">\(i\)</span>, <span class="math inline">\(R_i\)</span> the customer’s recency, <span class="math inline">\(\bar{L}_i\)</span> the average time between consecutive purchases (purchase latency), and <span class="math inline">\(\mathrm{Score}_i\)</span> the within-segment RFM score. Furthermore, let <span class="math inline">\(\overline{\mathrm{Score}}_{S_i}\)</span> represent the average RFM score of the customer’s segment.</p>
 <p>A customer is considered a potential churn candidate when all behavioural conditions</p>
@@ -1387,9 +1384,8 @@ y_i=
 \tag{5.6}\]</span></span></p>
 <p>This formulation differs from the common approach of defining churn solely through future inactivity. Instead, it first identifies customers whose historical purchasing behaviour is already consistent with progressive disengagement and subsequently verifies whether this behaviour persists during the validation period. By separating behavioural identification from future validation, the resulting target remains suitable for supervised learning while reducing the risk of labelling temporarily inactive customers as permanent churners.</p>
 <p>The chronological separation between calibration and validation periods also prevents information leakage, since every explanatory variable is computed exclusively from information that would have been available at the time the prediction is made.</p>
-</section>
-<section id="classification-metrics" class="level3" data-number="5.5.5">
-<h3 data-number="5.5.5" class="anchored" data-anchor-id="classification-metrics"><span class="header-section-number">5.5.5</span> Classification Metrics</h3>
+<section id="classification-metrics" class="level4" data-number="5.5.2.1">
+<h4 data-number="5.5.2.1" class="anchored" data-anchor-id="classification-metrics"><span class="header-section-number">5.5.2.1</span> Classification Metrics</h4>
 <p>Customer churn prediction is formulated as a binary classification problem. Let</p>
 <ul>
 <li><span class="math inline">\(TP\)</span>: true positives,</li>
@@ -1425,8 +1421,9 @@ F_1
 <p>Threshold-independent evaluation is performed using the Receiver Operating Characteristic (ROC) curve and the Precision–Recall curve. While ROC analysis measures the trade-off between the true positive rate and false positive rate across all possible classification thresholds, Precision–Recall curves provide a more informative assessment when the positive class is relatively uncommon, as is typically the case in customer retention problems.</p>
 <p>From a business perspective, ranking quality is often more important than binary classification accuracy. For this reason, the implementation also evaluates cumulative gains, which quantify how effectively the model concentrates future churners within the highest-ranked customers. This ranking perspective is particularly useful for prioritising retention campaigns when marketing resources are limited.</p>
 </section>
-<section id="risk-adjusted-customer-lifetime-value" class="level3" data-number="5.5.6">
-<h3 data-number="5.5.6" class="anchored" data-anchor-id="risk-adjusted-customer-lifetime-value"><span class="header-section-number">5.5.6</span> Risk-Adjusted Customer Lifetime Value</h3>
+</section>
+<section id="risk-adjusted-customer-lifetime-value" class="level3" data-number="5.5.3">
+<h3 data-number="5.5.3" class="anchored" data-anchor-id="risk-adjusted-customer-lifetime-value"><span class="header-section-number">5.5.3</span> Risk-Adjusted Customer Lifetime Value</h3>
 <p>Customer Lifetime Value (CLV) is commonly defined as the present value of the future profits expected from a customer relationship. A general formulation is given by</p>
 <p><span id="eq-classical-clv"><span class="math display">\[
 \mathrm{CLV}

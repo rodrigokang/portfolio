@@ -351,7 +351,7 @@ where $v_{ij}$ represents the monetary value of transaction $j$.
 
 Although conceptually simple, these three variables capture complementary aspects of customer behaviour and provide the behavioural representation used throughout the remainder of the workflow. Because Frequency and Monetary value typically exhibit strong positive skewness, additional preprocessing is required before applying distance-based clustering algorithms.
 
-### Box-Cox Transformation
+#### Box-Cox Transformation
 
 The RFM variables exhibit markedly different distributions, with Frequency and Monetary value generally dominated by a relatively small number of high-value observations. Since K-Means relies on Euclidean distances, these extreme values can disproportionately influence the clustering process.
 
@@ -369,7 +369,7 @@ where the transformation parameter $\lambda$ is estimated from the observed data
 
 After transformation, each variable is standardised to zero mean and unit variance before clustering. The transformed variables are used exclusively during model fitting; all business interpretation remains based on the original RFM variables.
 
-### K-Means Clustering
+#### K-Means Clustering
 
 Customer segmentation is performed using the K-Means clustering algorithm, which partitions customers into $K$ groups by minimising the within-cluster sum of squared Euclidean distances,
 
@@ -425,7 +425,7 @@ This formulation differs from the common approach of defining churn solely throu
 
 The chronological separation between calibration and validation periods also prevents information leakage, since every explanatory variable is computed exclusively from information that would have been available at the time the prediction is made.
 
-### Classification Metrics
+#### Classification Metrics
 
 Customer churn prediction is formulated as a binary classification problem. Let
 
