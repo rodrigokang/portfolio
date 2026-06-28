@@ -313,7 +313,7 @@ These differences are also visible in @fig-clv-by-segment and @fig-total-clv-by-
 
 These results should be interpreted within the assumptions adopted to construct the valuation framework. The response variable used for model training is not directly observed in the AdventureWorks database but is derived from historical profitability, behavioural segmentation, predicted retention, and explicit discount-rate assumptions. Consequently, the regression model should be understood as learning to approximate this internally consistent valuation framework rather than predicting an objectively measurable quantity. Alternative assumptions regarding customer retention or discounting would naturally produce different numerical estimates, although the overall modelling framework would remain unchanged.
 
-# Technical Appendix (Optional)
+## Technical Appendix (Optional)
 
 The main chapter emphasises the practical application of customer analytics using transactional retail data. This appendix complements the discussion by summarising the principal mathematical concepts underlying the implementation. Rather than providing exhaustive theoretical derivations, it introduces the core formulations used throughout the workflow, including behavioural customer segmentation, the operational definition of churn, and the construction of the risk-adjusted Customer Lifetime Value (CLV) framework.
 

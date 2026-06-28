@@ -128,7 +128,7 @@ Additional implementation details, including the companion Quarto and Python not
 
 :::
 
-## Supervised Learning Benchmark
+### Supervised Learning Benchmark
 
 The supervised stage uses the transaction labels to evaluate how well different classification models can identify fraudulent transactions. The purpose is not to find a model that looks good under a single metric, but to compare modelling choices under conditions that resemble the operational reality of fraud detection: the positive class is rare, the cost of missed fraud is not the same as the cost of a false alarm, and a model that performs well on average may still be unhelpful if it fails to rank suspicious transactions near the top.
 
