@@ -138,12 +138,12 @@ The training and test sets were created using stratified sampling so that the ra
 
 The original training distribution is shown in @tbl-class-distribution-training-strategies. The table also shows the SMOTE-resampled version used by the XGBoost model. The resampled dataset is balanced for training purposes only; the test set remains in the original imbalanced distribution.
 
-| Strategy | Class       | Transactions  | Percentage (%)  |
-|:---------|:-----------:| -------------:|:---------------:|
-| Original | Legitimate  |      227,446  |         99.825  |
-| Original | Fraudulent  |          399  |          0.175  |
-| SMOTE    | Legitimate  |      227,446  |         50.000  |
-| SMOTE    | Fraudulent  |      227,446  |         50.000  |
+| Strategy | Class       | Transactions   | Percentage (%)  |
+|:---------|:-----------:| :-------------:|:---------------:|
+| Original | Legitimate  |      227,446   |         99.825  |
+| Original | Fraudulent  |          399   |          0.175  |
+| SMOTE    | Legitimate  |      227,446   |         50.000  |
+| SMOTE    | Fraudulent  |      227,446   |         50.000  |
 
 : Class distribution by training strategy. {#tbl-class-distribution-training-strategies}
 
