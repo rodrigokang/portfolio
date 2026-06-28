@@ -102,11 +102,11 @@ A three-cluster solution was retained because it revealed the strongest concentr
 
 The composition of the resulting clusters was then examined by comparing cluster-level fraud rates against the baseline fraud rate observed in the clustering sample.
 
-| Method                   | Key Finding                                                                                              |
-| ------------------------ | -------------------------------------------------------------------------------------------------------- |
-| K-Means                  | One cluster exhibited a fraud rate approximately 21 times higher than the baseline fraud rate.           |
-| Agglomerative Clustering | A small cluster exhibited a fraud rate approximately 490 times higher than the baseline fraud rate.      |
-| DBSCAN                   | Fraudulent transactions were primarily identified as noise points rather than members of dense clusters. |
+| Method                     | Key Finding                                                                                                |
+| :------------------------: | :--------------------------------------------------------------------------------------------------------: |
+| K-Means                    | One cluster exhibited a fraud rate approximately 21 times higher than the baseline fraud rate.             |
+| Agglomerative Clustering   | A small cluster exhibited a fraud rate approximately 490 times higher than the baseline fraud rate.        |
+| DBSCAN                     | Fraudulent transactions were primarily identified as noise points rather than members of dense clusters.   |
 
 : Summary of the main findings obtained from the clustering algorithms. {#tbl-clustering-summary}
 
@@ -138,12 +138,12 @@ The training and test sets were created using stratified sampling so that the ra
 
 The original training distribution is shown in @tbl-class-distribution-training-strategies. The table also shows the SMOTE-resampled version used by the XGBoost model. The resampled dataset is balanced for training purposes only; the test set remains in the original imbalanced distribution.
 
-| Strategy | Class      | Transactions | Percentage (%) |
-|:---------|:-----------|-------------:|---------------:|
-| Original | Legitimate |      227,446 |         99.825 |
-| Original | Fraudulent |          399 |          0.175 |
-| SMOTE    | Legitimate |      227,446 |         50.000 |
-| SMOTE    | Fraudulent |      227,446 |         50.000 |
+| Strategy | Class       | Transactions  | Percentage (%)  |
+|:---------|:-----------:| -------------:|:---------------:|
+| Original | Legitimate  |      227,446  |         99.825  |
+| Original | Fraudulent  |          399  |          0.175  |
+| SMOTE    | Legitimate  |      227,446  |         50.000  |
+| SMOTE    | Fraudulent  |      227,446  |         50.000  |
 
 : Class distribution by training strategy. {#tbl-class-distribution-training-strategies}
 
@@ -177,10 +177,10 @@ In the final R / Quarto implementation, the comparison was narrowed to the two m
 
 The final comparison is summarized in @tbl-final-model-comparison.
 
-| Strategy | Model         | Precision | Recall | F1-score | ROC-AUC | PR-AUC | KS statistic |
-|:---------|:--------------|----------:|-------:|---------:|--------:|-------:|-------------:|
-| Original | Random Forest |    0.9625 | 0.8280 |   0.8902 |  0.9656 | 0.8782 |       0.9056 |
-| SMOTE    | XGBoost       |    0.7080 | 0.8602 |   0.7767 |  0.9823 | 0.8594 |       0.9040 |
+| Strategy | Model          | Precision  | Recall  | F1-score  | ROC-AUC  | PR-AUC  | KS statistic  |
+|:---------|:--------------:|:----------:|:-------:|:---------:|:--------:|:-------:|:-------------:|
+| Original | Random Forest  |    0.9625  | 0.8280  |   0.8902  |  0.9656  | 0.8782  |       0.9056  |
+| SMOTE    | XGBoost        |    0.7080  | 0.8602  |   0.7767  |  0.9823  | 0.8594  |       0.9040  |
 
 : Final model comparison on the test set. {#tbl-final-model-comparison}
 
@@ -206,10 +206,10 @@ The Precision-Recall curves in @fig-precision-recall-curves provide a more direc
 
 The KS statistic provides another way to assess whether the model scores separate legitimate and fraudulent transactions. The values in @tbl-kolmogorov-smirnov-statistic are almost identical for the two retained models.
 
-| Model strategy          | KS statistic |
-|:------------------------|-------------:|
-| Random Forest - Original |       0.9056 |
-| XGBoost - SMOTE          |       0.9040 |
+| Model strategy           | KS statistic  |
+|:------------------------:|:-------------:|
+| Random Forest - Original |       0.9056  |
+| XGBoost - SMOTE          |       0.9040  |
 
 : Kolmogorov-Smirnov statistic for the retained supervised models. {#tbl-kolmogorov-smirnov-statistic}
 

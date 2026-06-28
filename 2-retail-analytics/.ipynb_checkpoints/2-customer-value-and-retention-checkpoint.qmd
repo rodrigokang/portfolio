@@ -429,10 +429,10 @@ The chronological separation between calibration and validation periods also pre
 
 Customer churn prediction is formulated as a binary classification problem. Let
 
-* (TP): true positives,
-* (FP): false positives,
-* (TN): true negatives,
-* (FN): false negatives.
+* $TP$: true positives,
+* $FP$: false positives,
+* $TN$: true negatives,
+* $FN$: false negatives.
 
 Several complementary metrics are used throughout the chapter to evaluate predictive performance.
 
