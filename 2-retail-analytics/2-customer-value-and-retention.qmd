@@ -317,7 +317,7 @@ These results should be interpreted within the assumptions adopted to construct 
 
 The main chapter emphasises the practical application of customer analytics using transactional retail data. This appendix complements the discussion by summarising the principal mathematical concepts underlying the implementation. Rather than providing exhaustive theoretical derivations, it introduces the core formulations used throughout the workflow, including behavioural customer segmentation, the operational definition of churn, and the construction of the risk-adjusted Customer Lifetime Value (CLV) framework.
 
-## RFM Analysis
+### RFM Analysis
 
 Recency, Frequency, and Monetary (RFM) analysis is one of the most widely used approaches for summarising customer purchasing behaviour in transactional businesses. Instead of modelling the complete purchase history, it represents each customer through three complementary behavioural variables:
 
@@ -351,7 +351,7 @@ where $v_{ij}$ represents the monetary value of transaction $j$.
 
 Although conceptually simple, these three variables capture complementary aspects of customer behaviour and provide the behavioural representation used throughout the remainder of the workflow. Because Frequency and Monetary value typically exhibit strong positive skewness, additional preprocessing is required before applying distance-based clustering algorithms.
 
-## Box-Cox Transformation
+### Box-Cox Transformation
 
 The RFM variables exhibit markedly different distributions, with Frequency and Monetary value generally dominated by a relatively small number of high-value observations. Since K-Means relies on Euclidean distances, these extreme values can disproportionately influence the clustering process.
 
@@ -369,7 +369,7 @@ where the transformation parameter $\lambda$ is estimated from the observed data
 
 After transformation, each variable is standardised to zero mean and unit variance before clustering. The transformed variables are used exclusively during model fitting; all business interpretation remains based on the original RFM variables.
 
-## K-Means Clustering
+### K-Means Clustering
 
 Customer segmentation is performed using the K-Means clustering algorithm, which partitions customers into $K$ groups by minimising the within-cluster sum of squared Euclidean distances,
 
@@ -386,7 +386,7 @@ The optimisation alternates between assigning observations to their nearest cent
 
 Since no ground-truth customer labels exist, the optimal number of clusters is determined using complementary internal validation metrics together with business interpretability. Once the clusters have been identified, they are interpreted using the original RFM variables rather than the transformed feature space, allowing each segment to be associated with a meaningful purchasing profile.
 
-## Behavioural Churn Definition
+### Behavioural Churn Definition
 
 Unlike subscription-based businesses, transactional retail datasets rarely contain explicit churn events. Customer inactivity must therefore be inferred from observed purchasing behaviour rather than directly measured. The implementation adopted in this project defines churn through a behavioural rule that combines customer engagement during the calibration period with observed activity during a subsequent validation period.
 
@@ -425,7 +425,7 @@ This formulation differs from the common approach of defining churn solely throu
 
 The chronological separation between calibration and validation periods also prevents information leakage, since every explanatory variable is computed exclusively from information that would have been available at the time the prediction is made.
 
-## Classification Metrics
+### Classification Metrics
 
 Customer churn prediction is formulated as a binary classification problem. Let
 
@@ -473,7 +473,7 @@ Threshold-independent evaluation is performed using the Receiver Operating Chara
 
 From a business perspective, ranking quality is often more important than binary classification accuracy. For this reason, the implementation also evaluates cumulative gains, which quantify how effectively the model concentrates future churners within the highest-ranked customers. This ranking perspective is particularly useful for prioritising retention campaigns when marketing resources are limited.
 
-## Risk-Adjusted Customer Lifetime Value
+### Risk-Adjusted Customer Lifetime Value
 
 Customer Lifetime Value (CLV) is commonly defined as the present value of the future profits expected from a customer relationship. A general formulation is given by
 
