@@ -764,133 +764,133 @@ Figure&nbsp;5.3: Three-dimensional representation of the customer segments in th
 <div id="tbl-churn-model-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-churn-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.4: Performance comparison of the evaluated churn prediction models.
+Table&nbsp;5.4: Performance comparison of the evaluated churn prediction models. Abbreviations: RF = Random Forest; XGB = XGBoost; LR = Logistic Regression; AP = Average Precision; BA = Balanced Accuracy.
 </figcaption>
 <div aria-describedby="tbl-churn-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
 <colgroup>
-<col style="width: 17%">
-<col style="width: 16%">
-<col style="width: 6%">
-<col style="width: 15%">
-<col style="width: 7%">
-<col style="width: 15%">
-<col style="width: 8%">
-<col style="width: 6%">
-<col style="width: 6%">
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: center;">Model</th>
-<th style="text-align: center;">Sampling Strategy</th>
-<th style="text-align: center;">ROC AUC</th>
-<th style="text-align: center;">Average Precision</th>
-<th style="text-align: center;">Accuracy</th>
-<th style="text-align: center;">Balanced Accuracy</th>
-<th style="text-align: center;">Precision</th>
-<th style="text-align: center;">Recall</th>
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Sampling</th>
+<th style="text-align: center;">AUC</th>
+<th style="text-align: center;">AP</th>
+<th style="text-align: center;">Acc.</th>
+<th style="text-align: center;">BA</th>
+<th style="text-align: center;">Prec.</th>
+<th style="text-align: center;">Rec.</th>
 <th style="text-align: center;">F1</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;">Random Forest</td>
+<td style="text-align: left;">RF</td>
 <td style="text-align: center;">SMOTE</td>
-<td style="text-align: center;">0.9996</td>
-<td style="text-align: center;">0.9707</td>
-<td style="text-align: center;">0.9973</td>
-<td style="text-align: center;">0.9986</td>
-<td style="text-align: center;">0.8000</td>
-<td style="text-align: center;">1.0000</td>
-<td style="text-align: center;">0.8889</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.971</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.800</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.889</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">XGBoost</td>
-<td style="text-align: center;">Undersampling</td>
-<td style="text-align: center;">0.9995</td>
-<td style="text-align: center;">0.9506</td>
-<td style="text-align: center;">0.9871</td>
-<td style="text-align: center;">0.9935</td>
-<td style="text-align: center;">0.4545</td>
-<td style="text-align: center;">1.0000</td>
-<td style="text-align: center;">0.6250</td>
+<td style="text-align: left;">XGB</td>
+<td style="text-align: center;">Under</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.951</td>
+<td style="text-align: center;">0.987</td>
+<td style="text-align: center;">0.994</td>
+<td style="text-align: center;">0.455</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.625</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Random Forest</td>
+<td style="text-align: left;">RF</td>
 <td style="text-align: center;">Original</td>
-<td style="text-align: center;">0.9995</td>
-<td style="text-align: center;">0.9585</td>
-<td style="text-align: center;">0.9973</td>
-<td style="text-align: center;">0.9492</td>
-<td style="text-align: center;">0.8571</td>
-<td style="text-align: center;">0.9000</td>
-<td style="text-align: center;">0.8780</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.959</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.949</td>
+<td style="text-align: center;">0.857</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.878</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">XGBoost</td>
+<td style="text-align: left;">XGB</td>
 <td style="text-align: center;">SMOTE</td>
-<td style="text-align: center;">0.9993</td>
-<td style="text-align: center;">0.9604</td>
-<td style="text-align: center;">0.9973</td>
-<td style="text-align: center;">0.9492</td>
-<td style="text-align: center;">0.8571</td>
-<td style="text-align: center;">0.9000</td>
-<td style="text-align: center;">0.8780</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.960</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.949</td>
+<td style="text-align: center;">0.857</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.878</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">XGBoost</td>
+<td style="text-align: left;">XGB</td>
 <td style="text-align: center;">Original</td>
-<td style="text-align: center;">0.9993</td>
-<td style="text-align: center;">0.9511</td>
-<td style="text-align: center;">0.9979</td>
-<td style="text-align: center;">0.9495</td>
-<td style="text-align: center;">0.9000</td>
-<td style="text-align: center;">0.9000</td>
-<td style="text-align: center;">0.9000</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.951</td>
+<td style="text-align: center;">0.998</td>
+<td style="text-align: center;">0.950</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.900</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Random Forest</td>
-<td style="text-align: center;">Undersampling</td>
-<td style="text-align: center;">0.9993</td>
-<td style="text-align: center;">0.9387</td>
-<td style="text-align: center;">0.9646</td>
-<td style="text-align: center;">0.9821</td>
-<td style="text-align: center;">0.2326</td>
-<td style="text-align: center;">1.0000</td>
-<td style="text-align: center;">0.3774</td>
+<td style="text-align: left;">RF</td>
+<td style="text-align: center;">Under</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.939</td>
+<td style="text-align: center;">0.965</td>
+<td style="text-align: center;">0.982</td>
+<td style="text-align: center;">0.233</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.377</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Logistic Regression</td>
+<td style="text-align: left;">LR</td>
 <td style="text-align: center;">SMOTE</td>
-<td style="text-align: center;">0.9986</td>
-<td style="text-align: center;">0.8923</td>
-<td style="text-align: center;">0.9871</td>
-<td style="text-align: center;">0.9935</td>
-<td style="text-align: center;">0.4545</td>
-<td style="text-align: center;">1.0000</td>
-<td style="text-align: center;">0.6250</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.892</td>
+<td style="text-align: center;">0.987</td>
+<td style="text-align: center;">0.994</td>
+<td style="text-align: center;">0.455</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.625</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;">Logistic Regression</td>
+<td style="text-align: left;">LR</td>
 <td style="text-align: center;">Original</td>
-<td style="text-align: center;">0.9980</td>
-<td style="text-align: center;">0.8706</td>
-<td style="text-align: center;">0.9957</td>
-<td style="text-align: center;">0.8495</td>
-<td style="text-align: center;">0.8750</td>
-<td style="text-align: center;">0.7000</td>
-<td style="text-align: center;">0.7778</td>
+<td style="text-align: center;">0.998</td>
+<td style="text-align: center;">0.871</td>
+<td style="text-align: center;">0.996</td>
+<td style="text-align: center;">0.849</td>
+<td style="text-align: center;">0.875</td>
+<td style="text-align: center;">0.700</td>
+<td style="text-align: center;">0.778</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;">Logistic Regression</td>
-<td style="text-align: center;">Undersampling</td>
-<td style="text-align: center;">0.9969</td>
-<td style="text-align: center;">0.8292</td>
-<td style="text-align: center;">0.9689</td>
-<td style="text-align: center;">0.9843</td>
-<td style="text-align: center;">0.2564</td>
-<td style="text-align: center;">1.0000</td>
-<td style="text-align: center;">0.4082</td>
+<td style="text-align: left;">LR</td>
+<td style="text-align: center;">Under</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.829</td>
+<td style="text-align: center;">0.969</td>
+<td style="text-align: center;">0.984</td>
+<td style="text-align: center;">0.256</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.408</td>
 </tr>
 </tbody>
 </table>

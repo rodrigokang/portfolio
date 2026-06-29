@@ -198,19 +198,19 @@ Customer segmentation provides a descriptive representation of purchasing behavi
 
 Several supervised learning algorithms were evaluated using the engineered customer-level features described in the previous section. Their performance is summarised in @tbl-churn-model-comparison. Rather than relying on a single evaluation metric, the comparison considers both discrimination and ranking performance to identify the model that provides the most reliable estimates of customer retention risk.
 
-: Performance comparison of the evaluated churn prediction models. {#tbl-churn-model-comparison}
+: Performance comparison of the evaluated churn prediction models. Abbreviations: RF = Random Forest; XGB = XGBoost; LR = Logistic Regression; AP = Average Precision; BA = Balanced Accuracy. {#tbl-churn-model-comparison}
 
-|  Model               |  Sampling Strategy  | ROC AUC  |  Average Precision |  Accuracy | Balanced Accuracy  | Precision  | Recall  |     F1  |
-| :------------------: | :-----------------: | :------: | :----------------: | :-------: | :----------------: | :--------: | :-----: | :-----: |
-| Random Forest        | SMOTE               |  0.9996  |            0.9707  |   0.9973  |            0.9986  |    0.8000  | 1.0000  | 0.8889  |
-| XGBoost              | Undersampling       |  0.9995  |            0.9506  |   0.9871  |            0.9935  |    0.4545  | 1.0000  | 0.6250  |
-| Random Forest        | Original            |  0.9995  |            0.9585  |   0.9973  |            0.9492  |    0.8571  | 0.9000  | 0.8780  |
-| XGBoost              | SMOTE               |  0.9993  |            0.9604  |   0.9973  |            0.9492  |    0.8571  | 0.9000  | 0.8780  |
-| XGBoost              | Original            |  0.9993  |            0.9511  |   0.9979  |            0.9495  |    0.9000  | 0.9000  | 0.9000  |
-| Random Forest        | Undersampling       |  0.9993  |            0.9387  |   0.9646  |            0.9821  |    0.2326  | 1.0000  | 0.3774  |
-| Logistic Regression  | SMOTE               |  0.9986  |            0.8923  |   0.9871  |            0.9935  |    0.4545  | 1.0000  | 0.6250  |
-| Logistic Regression  | Original            |  0.9980  |            0.8706  |   0.9957  |            0.8495  |    0.8750  | 0.7000  | 0.7778  |
-| Logistic Regression  | Undersampling       |  0.9969  |            0.8292  |   0.9689  |            0.9843  |    0.2564  | 1.0000  | 0.4082  |
+| Model | Sampling | AUC   | AP    | Acc.   | BA    | Prec. | Rec.  | F1    |
+|:------|:--------:|:-----:|:-----:|:------:|:-----:|:-----:|:-----:|:-----:|
+| RF    | SMOTE    | 1.000 | 0.971 | 0.997  | 0.999 | 0.800 | 1.000 | 0.889 |
+| XGB   | Under    | 1.000 | 0.951 | 0.987  | 0.994 | 0.455 | 1.000 | 0.625 |
+| RF    | Original | 1.000 | 0.959 | 0.997  | 0.949 | 0.857 | 0.900 | 0.878 |
+| XGB   | SMOTE    | 0.999 | 0.960 | 0.997  | 0.949 | 0.857 | 0.900 | 0.878 |
+| XGB   | Original | 0.999 | 0.951 | 0.998  | 0.950 | 0.900 | 0.900 | 0.900 |
+| RF    | Under    | 0.999 | 0.939 | 0.965  | 0.982 | 0.233 | 1.000 | 0.377 |
+| LR    | SMOTE    | 0.999 | 0.892 | 0.987  | 0.994 | 0.455 | 1.000 | 0.625 |
+| LR    | Original | 0.998 | 0.871 | 0.996  | 0.849 | 0.875 | 0.700 | 0.778 |
+| LR    | Under    | 0.997 | 0.829 | 0.969  | 0.984 | 0.256 | 1.000 | 0.408 |
 
 The best-performing specification was the Random Forest model trained with SMOTE. As shown in @tbl-best-churn-model, it achieved excellent discrimination on the independent test set, with a ROC AUC of 0.9996 and an Average Precision of 0.9707. More importantly, the model maintained full recall for the churn class while keeping precision at 0.8000, which is a useful balance for retention-oriented applications where missing high-risk customers is usually more costly than reviewing a small number of false positives.
 
