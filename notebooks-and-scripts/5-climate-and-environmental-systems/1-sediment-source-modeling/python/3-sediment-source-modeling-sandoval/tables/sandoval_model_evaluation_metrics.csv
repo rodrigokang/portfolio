@@ -1,0 +1,2 @@
+model,mae,rmse,mean_error,nse,dominant_source_accuracy,mean_aitchison_distance,mean_ratio_objective
+Sandoval ratio-based constrained deconvolution,0.061971599654983264,0.08639681900329259,1.0540092005935031e-17,0.9166223518731526,0.8481012658227848,14.336320141794362,0.0014274666807104648

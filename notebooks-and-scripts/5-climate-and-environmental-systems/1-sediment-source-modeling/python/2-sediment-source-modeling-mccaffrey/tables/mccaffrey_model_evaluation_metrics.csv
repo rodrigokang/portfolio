@@ -1,0 +1,2 @@
+model,mae,rmse,mean_error,nse,dominant_source_accuracy,mean_aitchison_distance
+McCaffrey constrained least squares,0.07931915175031116,0.10859650203245394,5.1822119029180565e-18,0.8682696613586289,0.8354430379746836,16.679670882123087
