@@ -48,7 +48,7 @@ The implementation follows the evaluation framework proposed by Batista, Laceby,
 
 ::: {.content-visible when-format="html"}
 
-A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista.html).
+A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista.html).
 
 :::
 
@@ -64,7 +64,7 @@ Before fitting the mixing model, the source data were inspected to verify that e
 
 @fig-bmm-source-sample-counts summarizes the number of samples available for each sediment source. The sampling effort is not perfectly balanced, but each class contains enough observations to characterize source variability and support the bootstrap resampling procedure.
 
-![Number of samples available for each sediment source.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/source_sample_counts.png){#fig-bmm-source-sample-counts}
+![Number of samples available for each sediment source.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/source_sample_counts.png){#fig-bmm-source-sample-counts}
 
 Candidate tracers were screened using the non-parametric Kruskal--Wallis test. The retained variables, listed in @tbl-bmm-selected-tracers, show statistically significant differences among the four source classes and were therefore used in the mixing model.
 
@@ -84,7 +84,7 @@ Table: Geochemical tracers retained after Kruskal--Wallis screening. {#tbl-bmm-s
 
 The selected tracer set was also examined through Linear Discriminant Analysis. As shown in @fig-bmm-lda-selected-tracers, most sources occupy distinct regions of the projected feature space, although some overlap remains. This is expected in environmental fingerprinting data and supports the use of a probabilistic model rather than a purely classificatory approach.
 
-![Linear Discriminant Analysis projection using the selected geochemical tracers.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/lda_selected_tracers.png){#fig-bmm-lda-selected-tracers}
+![Linear Discriminant Analysis projection using the selected geochemical tracers.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/lda_selected_tracers.png){#fig-bmm-lda-selected-tracers}
 
 #### Source Apportionment
 
@@ -92,11 +92,11 @@ The selected tracers were then used to estimate source contributions for the lab
 
 The laboratory results are shown in @fig-bmm-laboratory-intervals. In most cases, the observed source proportions fall within the predicted intervals, indicating that the model captures the main structure of the mixing process while still representing the uncertainty caused by overlapping source fingerprints.
 
-![Predicted source contributions for the laboratory-prepared mixtures using the Bootstrapped Mixing Model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/intervals_bmm_laboratory.png){#fig-bmm-laboratory-intervals}
+![Predicted source contributions for the laboratory-prepared mixtures using the Bootstrapped Mixing Model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/intervals_bmm_laboratory.png){#fig-bmm-laboratory-intervals}
 
 The same procedure was then applied to the synthetic mixtures. @fig-bmm-laboratory-vs-virtual shows that performance improves substantially on this benchmark, where the mixtures cover the compositional space more systematically than the smaller laboratory set.
 
-![Comparison of predictive intervals obtained for the laboratory and synthetic benchmark mixtures.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png){#fig-bmm-laboratory-vs-virtual}
+![Comparison of predictive intervals obtained for the laboratory and synthetic benchmark mixtures.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png){#fig-bmm-laboratory-vs-virtual}
 
 The overall metrics in @tbl-bmm-performance confirm this pattern. The laboratory mixtures show wider intervals and larger errors, while the synthetic mixtures are reconstructed almost exactly. This difference should not be interpreted as a weakness of the method, but as a consequence of the different evaluation settings: the laboratory mixtures include the full variability of measured experimental samples, whereas the synthetic mixtures provide a more regular benchmark.
 
@@ -231,13 +231,13 @@ Table: Scaling factors applied to the selected geochemical tracers prior to log-
 
 The reconstructed representative source compositions are compared with the observed fingerprints in @fig-sandoval-representative-signatures. Despite operating in log-ratio space, the model accurately reproduces the characteristic geochemical signatures of the four sediment sources, indicating that the transformation preserves the relevant compositional information.
 
-![Known and reconstructed representative source compositions obtained with the Sandoval ratio-based model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_known_vs_estimated_representative_compositions.png){#fig-sandoval-representative-signatures}
+![Known and reconstructed representative source compositions obtained with the Sandoval ratio-based model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/figures/sandoval_known_vs_estimated_representative_compositions.png){#fig-sandoval-representative-signatures}
 
 #### Source Apportionment
 
 After calibration, the ratio-based model was applied to the laboratory mixtures using exactly the same benchmark employed for the previous methods. The resulting source estimates are compared with the known proportions in @fig-sandoval-estimated-vs-true. Most predictions remain close to the one-to-one reference line, indicating that the log-ratio formulation successfully recovers the dominant source contributions while maintaining numerical stability throughout the optimization.
 
-![Estimated versus true source contributions obtained with the Sandoval ratio-based model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_estimated_vs_true.png){#fig-sandoval-estimated-vs-true}
+![Estimated versus true source contributions obtained with the Sandoval ratio-based model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/figures/sandoval_estimated_vs_true.png){#fig-sandoval-estimated-vs-true}
 
 The overall evaluation metrics are summarized in @tbl-sandoval-performance. Compared with the McCaffrey formulation, the ratio-based model achieves lower prediction errors, a higher Nash–Sutcliffe efficiency, and a modest improvement in dominant source identification. The average Aitchison distance also decreases, suggesting that representing the mixtures in log-ratio space provides a more appropriate description of compositional differences.
 

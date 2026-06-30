@@ -473,7 +473,7 @@ Figure&nbsp;11.1: Conceptual workflow of sediment source apportionment. Represen
 <h3 data-number="11.3.1" class="anchored" data-anchor-id="bootstrapped-mixing-model"><span class="header-section-number">11.3.1</span> Bootstrapped Mixing Model</h3>
 <p>The Bootstrapped Mixing Model (BMM) serves as the probabilistic baseline throughout this study. Unlike deterministic mixing models that produce a single estimate of source contributions, the BMM propagates measurement uncertainty through repeated bootstrap resampling. The result is not only an estimated contribution for each sediment source, but a distribution of plausible solutions for every mixture.</p>
 <p>The implementation follows the evaluation framework proposed by Batista, Laceby, and Evrard <span class="citation" data-cites="batista2022evaluate"><a href="../references.html#ref-batista2022evaluate" role="doc-biblioref">[1]</a></span>. The workflow begins by examining the available source fingerprints, then selects the tracers with the strongest discriminatory power, and finally estimates source contributions for both laboratory-prepared mixtures and synthetically generated benchmark mixtures.</p>
-<p>A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista.html">here</a>.</p>
+<p>A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista.html">here</a>.</p>
 <section id="exploratory-analysis" class="level4" data-number="11.3.1.1">
 <h4 data-number="11.3.1.1" class="anchored" data-anchor-id="exploratory-analysis"><span class="header-section-number">11.3.1.1</span> Exploratory Analysis</h4>
 <p>Before fitting the mixing model, the source data were inspected to verify that each sediment class was adequately represented and that the candidate geochemical tracers carried useful discriminatory information. This step is important because source apportionment depends on separating source signatures, not simply on fitting a numerical mixture.</p>
@@ -481,7 +481,7 @@ Figure&nbsp;11.1: Conceptual workflow of sediment source apportionment. Represen
 <div id="fig-bmm-source-sample-counts" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-source-sample-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/source_sample_counts.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/source_sample_counts.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-source-sample-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.2: Number of samples available for each sediment source.
@@ -558,7 +558,7 @@ Table&nbsp;11.1: Geochemical tracers retained after Kruskal–Wallis screening.
 <div id="fig-bmm-lda-selected-tracers" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-lda-selected-tracers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/lda_selected_tracers.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/lda_selected_tracers.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-lda-selected-tracers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.3: Linear Discriminant Analysis projection using the selected geochemical tracers.
@@ -573,7 +573,7 @@ Figure&nbsp;11.3: Linear Discriminant Analysis projection using the selected geo
 <div id="fig-bmm-laboratory-intervals" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-laboratory-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/intervals_bmm_laboratory.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/intervals_bmm_laboratory.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-laboratory-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.4: Predicted source contributions for the laboratory-prepared mixtures using the Bootstrapped Mixing Model.
@@ -584,7 +584,7 @@ Figure&nbsp;11.4: Predicted source contributions for the laboratory-prepared mix
 <div id="fig-bmm-laboratory-vs-virtual" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-laboratory-vs-virtual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-laboratory-vs-virtual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.5: Comparison of predictive intervals obtained for the laboratory and synthetic benchmark mixtures.
@@ -957,7 +957,7 @@ Table&nbsp;11.7: Scaling factors applied to the selected geochemical tracers pri
 <div id="fig-sandoval-representative-signatures" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sandoval-representative-signatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_known_vs_estimated_representative_compositions.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/figures/sandoval_known_vs_estimated_representative_compositions.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sandoval-representative-signatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.8: Known and reconstructed representative source compositions obtained with the Sandoval ratio-based model.
@@ -971,7 +971,7 @@ Figure&nbsp;11.8: Known and reconstructed representative source compositions obt
 <div id="fig-sandoval-estimated-vs-true" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sandoval-estimated-vs-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_estimated_vs_true.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/figures/sandoval_estimated_vs_true.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sandoval-estimated-vs-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.9: Estimated versus true source contributions obtained with the Sandoval ratio-based model.
