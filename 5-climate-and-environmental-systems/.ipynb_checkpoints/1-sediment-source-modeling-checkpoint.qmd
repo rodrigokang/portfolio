@@ -44,11 +44,11 @@ All methods use the same underlying sediment fingerprinting dataset and the same
 
 The Bootstrapped Mixing Model (BMM) serves as the probabilistic baseline throughout this study. Unlike deterministic mixing models that produce a single estimate of source contributions, the BMM propagates measurement uncertainty through repeated bootstrap resampling. The result is not only an estimated contribution for each sediment source, but a distribution of plausible solutions for every mixture.
 
-The implementation follows the evaluation framework proposed by Batista, Laceby, and Evrard (@batista2022evaluate). The workflow begins by examining the available source fingerprints, then selects the tracers with the strongest discriminatory power, and finally estimates source contributions for both laboratory-prepared mixtures and synthetically generated benchmark mixtures.
+The implementation follows the evaluation framework proposed by Batista, Laceby, and Evrard @batista2022evaluate. The workflow begins by examining the available source fingerprints, then selects the tracers with the strongest discriminatory power, and finally estimates source contributions for both laboratory-prepared mixtures and synthetically generated benchmark mixtures.
 
 ::: {.content-visible when-format="html"}
 
-A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista).
+A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista.html).
 
 :::
 
@@ -64,27 +64,27 @@ Before fitting the mixing model, the source data were inspected to verify that e
 
 @fig-bmm-source-sample-counts summarizes the number of samples available for each sediment source. The sampling effort is not perfectly balanced, but each class contains enough observations to characterize source variability and support the bootstrap resampling procedure.
 
-![Number of samples available for each sediment source.](figures/source_sample_counts.png){#fig-bmm-source-sample-counts}
+![Number of samples available for each sediment source.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/source_sample_counts.png){#fig-bmm-source-sample-counts}
 
 Candidate tracers were screened using the non-parametric Kruskal--Wallis test. The retained variables, listed in @tbl-bmm-selected-tracers, show statistically significant differences among the four source classes and were therefore used in the mixing model.
 
 Table: Geochemical tracers retained after Kruskal--Wallis screening. {#tbl-bmm-selected-tracers}
 
-| **Tracer** | **H Statistic** | **p-value**            |
-|:----------:|:---------------:|:----------------------:|
-| L          | 51.647          | 3.56 $\times 10^{-11}$ |
-| h          | 45.480          | 7.32 $\times 10^{-10}$ |
-| Si         | 43.607          | 1.83 $\times 10^{-9}$  |
-| C*         | 34.421          | 1.61 $\times 10^{-7}$  |
-| K          | 33.015          | 3.20 $\times 10^{-7}$  |
-| Y          | 23.563          | 3.08 $\times 10^{-5}$  |
-| Mn         | 13.278          | 4.07 $\times 10^{-3}$  |
-| Zn         | 12.499          | 5.86 $\times 10^{-3}$  |
-| Ti         | 9.213           | 2.66 $\times 10^{-2}$  |
+| **Tracer** | **H Statistic** | **p-value** |
+|:----------:|:---------------:|:-----------:|
+| L          | 51.647          | 3.56e-11    |
+| h          | 45.480          | 7.32e-10    |
+| Si         | 43.607          | 1.83e-09    |
+| C*         | 34.421          | 1.61e-07    |
+| K          | 33.015          | 3.20e-07    |
+| Y          | 23.563          | 3.08e-05    |
+| Mn         | 13.278          | 4.07e-03    |
+| Zn         | 12.499          | 5.86e-03    |
+| Ti         | 9.213           | 2.66e-02    |
 
 The selected tracer set was also examined through Linear Discriminant Analysis. As shown in @fig-bmm-lda-selected-tracers, most sources occupy distinct regions of the projected feature space, although some overlap remains. This is expected in environmental fingerprinting data and supports the use of a probabilistic model rather than a purely classificatory approach.
 
-![Linear Discriminant Analysis projection using the selected geochemical tracers.](figures/lda_selected_tracers.png){#fig-bmm-lda-selected-tracers}
+![Linear Discriminant Analysis projection using the selected geochemical tracers.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/lda_selected_tracers.png){#fig-bmm-lda-selected-tracers}
 
 #### Source Apportionment
 
@@ -92,11 +92,11 @@ The selected tracers were then used to estimate source contributions for the lab
 
 The laboratory results are shown in @fig-bmm-laboratory-intervals. In most cases, the observed source proportions fall within the predicted intervals, indicating that the model captures the main structure of the mixing process while still representing the uncertainty caused by overlapping source fingerprints.
 
-![Predicted source contributions for the laboratory-prepared mixtures using the Bootstrapped Mixing Model.](figures/intervals_bmm_laboratory.png){#fig-bmm-laboratory-intervals}
+![Predicted source contributions for the laboratory-prepared mixtures using the Bootstrapped Mixing Model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/intervals_bmm_laboratory.png){#fig-bmm-laboratory-intervals}
 
 The same procedure was then applied to the synthetic mixtures. @fig-bmm-laboratory-vs-virtual shows that performance improves substantially on this benchmark, where the mixtures cover the compositional space more systematically than the smaller laboratory set.
 
-![Comparison of predictive intervals obtained for the laboratory and synthetic benchmark mixtures.](figures/laboratory_vs_virtual_quantiles.png){#fig-bmm-laboratory-vs-virtual}
+![Comparison of predictive intervals obtained for the laboratory and synthetic benchmark mixtures.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png){#fig-bmm-laboratory-vs-virtual}
 
 The overall metrics in @tbl-bmm-performance confirm this pattern. The laboratory mixtures show wider intervals and larger errors, while the synthetic mixtures are reconstructed almost exactly. This difference should not be interpreted as a weakness of the method, but as a consequence of the different evaluation settings: the laboratory mixtures include the full variability of measured experimental samples, whereas the synthetic mixtures provide a more regular benchmark.
 
@@ -120,13 +120,13 @@ Table: Source-level performance metrics of the Bootstrapped Mixing Model. {#tbl-
 
 ### McCaffrey Constrained Least-Squares Model
 
-The second approach adapts the constrained least-squares formulation proposed by McCaffrey et al. (@mccaffrey2011geochemical) for production allocation in commingled oil and gas reservoirs. Rather than estimating a distribution of possible source contributions, this method seeks a single solution that best reproduces the observed geochemical composition while satisfying the physical constraints of the mixing process. Source contributions are therefore constrained to remain non-negative and to sum to one, ensuring that every solution is physically interpretable.
+The second approach adapts the constrained least-squares formulation proposed by McCaffrey et al. @mccaffrey2011geochemical for production allocation in commingled oil and gas reservoirs. Rather than estimating a distribution of possible source contributions, this method seeks a single solution that best reproduces the observed geochemical composition while satisfying the physical constraints of the mixing process. Source contributions are therefore constrained to remain non-negative and to sum to one, ensuring that every solution is physically interpretable.
 
 Although originally developed for petroleum production allocation, the mathematical formulation is directly applicable to sediment fingerprinting. In both cases, the observed sample represents a mixture of multiple sources with unknown proportions, and the objective is to recover those proportions from a set of conservative geochemical tracers. This shared structure makes the McCaffrey formulation an interesting deterministic alternative to the probabilistic Bootstrapped Mixing Model.
 
 ::: {.content-visible when-format="html"}
 
-A complete Python implementation of the McCaffrey constrained least-squares model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey).
+A complete Python implementation of the McCaffrey constrained least-squares model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey.html).
 
 :::
 
@@ -158,13 +158,13 @@ Table: Scaling factors applied to the selected geochemical tracers prior to opti
 
 After estimating the source proportions, the representative source compositions can be reconstructed and compared with their known values. As shown in @fig-mccaffrey-representative-signatures, the reconstructed compositions closely follow the observed geochemical fingerprints, indicating that the optimization successfully reproduces the dominant characteristics of each sediment source.
 
-![Known and reconstructed representative source compositions obtained with the McCaffrey constrained least-squares model.](figures/mccaffrey_known_vs_estimated_representative_compositions.png){#fig-mccaffrey-representative-signatures}
+![Known and reconstructed representative source compositions obtained with the McCaffrey constrained least-squares model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey-figures/figures/mccaffrey_known_vs_estimated_representative_compositions.png){#fig-mccaffrey-representative-signatures}
 
 #### Source Apportionment
 
 The constrained least-squares model was subsequently applied to every laboratory mixture included in the benchmark dataset. The estimated source proportions are compared with the known compositions in @fig-mccaffrey-estimated-vs-true. Most predictions lie close to the one-to-one reference line, suggesting that the deterministic optimization captures the overall mixing behaviour despite the absence of an explicit uncertainty model.
 
-![Estimated versus true source contributions obtained with the McCaffrey constrained least-squares model.](figures/mccaffrey_estimated_vs_true.png){#fig-mccaffrey-estimated-vs-true}
+![Estimated versus true source contributions obtained with the McCaffrey constrained least-squares model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey-figures/figures/mccaffrey_estimated_vs_true.png){#fig-mccaffrey-estimated-vs-true}
 
 Overall performance is summarized in @tbl-mccaffrey-performance. The model achieves a mean absolute error of approximately 0.08, an RMSE of 0.11, and a Nash–Sutcliffe efficiency close to 0.87. In addition, the dominant sediment source is correctly identified for more than 83% of the evaluated mixtures, demonstrating that the deterministic formulation preserves most of the practical information required for source attribution.
 
@@ -193,13 +193,13 @@ Compared with the probabilistic BMM, the McCaffrey model sacrifices uncertainty 
 
 ### Sandoval Ratio-Based Mixing Model
 
-The final approach implements the ratio-based constrained deconvolution model proposed by Sandoval et al. (@sandoval2022original). Although it solves the same source apportionment problem as the McCaffrey model, it adopts a different representation of the geochemical data. Instead of comparing elemental concentrations directly, the optimization is performed using log-ratios between tracers, reducing the influence of the constant-sum constraint that characterizes compositional datasets.
+The final approach implements the ratio-based constrained deconvolution model proposed by Sandoval et al. @sandoval2022original. Although it solves the same source apportionment problem as the McCaffrey model, it adopts a different representation of the geochemical data. Instead of comparing elemental concentrations directly, the optimization is performed using log-ratios between tracers, reducing the influence of the constant-sum constraint that characterizes compositional datasets.
 
 This formulation is particularly attractive for geochemical applications because many analytical measurements are inherently relative rather than absolute. By expressing the observations as ratios, the optimization focuses on the proportional relationships between tracers instead of their individual magnitudes, making the solution less sensitive to scaling effects and compositional closure.
 
 ::: {.content-visible when-format="html"}
 
-A complete Python implementation of the Sandoval ratio-based mixing model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval).
+A complete Python implementation of the Sandoval ratio-based mixing model presented in this section is available in the companion notebook [here](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval.html).
 
 :::
 
@@ -231,13 +231,13 @@ Table: Scaling factors applied to the selected geochemical tracers prior to log-
 
 The reconstructed representative source compositions are compared with the observed fingerprints in @fig-sandoval-representative-signatures. Despite operating in log-ratio space, the model accurately reproduces the characteristic geochemical signatures of the four sediment sources, indicating that the transformation preserves the relevant compositional information.
 
-![Known and reconstructed representative source compositions obtained with the Sandoval ratio-based model.](figures/sandoval_known_vs_estimated_representative_compositions.png){#fig-sandoval-representative-signatures}
+![Known and reconstructed representative source compositions obtained with the Sandoval ratio-based model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_known_vs_estimated_representative_compositions.png){#fig-sandoval-representative-signatures}
 
 #### Source Apportionment
 
 After calibration, the ratio-based model was applied to the laboratory mixtures using exactly the same benchmark employed for the previous methods. The resulting source estimates are compared with the known proportions in @fig-sandoval-estimated-vs-true. Most predictions remain close to the one-to-one reference line, indicating that the log-ratio formulation successfully recovers the dominant source contributions while maintaining numerical stability throughout the optimization.
 
-![Estimated versus true source contributions obtained with the Sandoval ratio-based model.](figures/sandoval_estimated_vs_true.png){#fig-sandoval-estimated-vs-true}
+![Estimated versus true source contributions obtained with the Sandoval ratio-based model.](../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_estimated_vs_true.png){#fig-sandoval-estimated-vs-true}
 
 The overall evaluation metrics are summarized in @tbl-sandoval-performance. Compared with the McCaffrey formulation, the ratio-based model achieves lower prediction errors, a higher Nash–Sutcliffe efficiency, and a modest improvement in dominant source identification. The average Aitchison distance also decreases, suggesting that representing the mixtures in log-ratio space provides a more appropriate description of compositional differences.
 
@@ -454,7 +454,7 @@ Unlike the deterministic methods discussed later in this appendix, the objective
 
 The Bootstrapped Mixing Model characterizes uncertainty by repeatedly perturbing the source fingerprints and solving the inverse problem many times. The deterministic approaches follow a different philosophy. Rather than estimating a distribution of plausible solutions, they seek a single set of source proportions that best reproduces the observed sediment composition.
 
-The first deterministic formulation considered in this chapter is based on the constrained least-squares approach proposed by McCaffrey et al. (@mccaffrey2011geochemical). Originally developed for geochemical allocation of commingled oil and gas production, the method assumes that the measured composition of a mixture can be reconstructed by combining the representative fingerprints of the contributing sources.
+The first deterministic formulation considered in this chapter is based on the constrained least-squares approach proposed by McCaffrey et al. @mccaffrey2011geochemical. Originally developed for geochemical allocation of commingled oil and gas production, the method assumes that the measured composition of a mixture can be reconstructed by combining the representative fingerprints of the contributing sources.
 
 Within the optimization framework introduced in @eq-constrained-optimization, the McCaffrey formulation defines the objective function as the squared Euclidean distance between the observed sediment composition and the composition reconstructed from the estimated source proportions,
 
@@ -504,11 +504,11 @@ which expresses the relative abundance of one tracer with respect to another. Si
 
 The central idea is therefore not that the absolute concentration of a tracer carries the relevant information, but that its abundance relative to the remaining tracers is often more informative. This perspective forms the foundation of **Compositional Data Analysis (CoDA)** and motivates the ratio-based source apportionment model proposed by Sandoval et al.
 
-Although several log-ratio transformations have been developed—including additive, centered, and isometric log-ratios—the implementation presented in this chapter follows the ratio-based formulation introduced by Sandoval et al. (@sandoval2022original), which was specifically designed for geochemical source allocation problems.
+Although several log-ratio transformations have been developed—including additive, centered, and isometric log-ratios—the implementation presented in this chapter follows the ratio-based formulation introduced by Sandoval et al. @sandoval2022original, which was specifically designed for geochemical source allocation problems.
 
 ### Log-Ratio-Based Deconvolution
 
-The ratio-based deconvolution model proposed by Sandoval et al. (@sandoval2022original) builds directly upon the concepts introduced in the previous sections. Like the McCaffrey formulation, it seeks the source proportions that best reproduce an observed geochemical mixture while satisfying the physical constraints of the mixing process. The fundamental difference lies not in the optimization itself, but in how the geochemical information is represented.
+The ratio-based deconvolution model proposed by Sandoval et al. @sandoval2022original builds directly upon the concepts introduced in the previous sections. Like the McCaffrey formulation, it seeks the source proportions that best reproduce an observed geochemical mixture while satisfying the physical constraints of the mixing process. The fundamental difference lies not in the optimization itself, but in how the geochemical information is represented.
 
 Instead of comparing elemental concentrations directly, the model first transforms the source fingerprints and the observed mixture into a set of log-ratios. The optimization is then performed in this transformed space, where the relative relationships between tracers are preserved and the effects of compositional closure are substantially reduced.
 

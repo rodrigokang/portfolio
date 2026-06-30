@@ -472,8 +472,8 @@ Figure&nbsp;11.1: Conceptual workflow of sediment source apportionment. Represen
 <section id="bootstrapped-mixing-model" class="level3" data-number="11.3.1">
 <h3 data-number="11.3.1" class="anchored" data-anchor-id="bootstrapped-mixing-model"><span class="header-section-number">11.3.1</span> Bootstrapped Mixing Model</h3>
 <p>The Bootstrapped Mixing Model (BMM) serves as the probabilistic baseline throughout this study. Unlike deterministic mixing models that produce a single estimate of source contributions, the BMM propagates measurement uncertainty through repeated bootstrap resampling. The result is not only an estimated contribution for each sediment source, but a distribution of plausible solutions for every mixture.</p>
-<p>The implementation follows the evaluation framework proposed by Batista, Laceby, and Evrard (<span class="citation" data-cites="batista2022evaluate"><a href="../references.html#ref-batista2022evaluate" role="doc-biblioref">[1]</a></span>). The workflow begins by examining the available source fingerprints, then selects the tracers with the strongest discriminatory power, and finally estimates source contributions for both laboratory-prepared mixtures and synthetically generated benchmark mixtures.</p>
-<p>A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista">here</a>.</p>
+<p>The implementation follows the evaluation framework proposed by Batista, Laceby, and Evrard <span class="citation" data-cites="batista2022evaluate"><a href="../references.html#ref-batista2022evaluate" role="doc-biblioref">[1]</a></span>. The workflow begins by examining the available source fingerprints, then selects the tracers with the strongest discriminatory power, and finally estimates source contributions for both laboratory-prepared mixtures and synthetically generated benchmark mixtures.</p>
+<p>A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista.html">here</a>.</p>
 <section id="exploratory-analysis" class="level4" data-number="11.3.1.1">
 <h4 data-number="11.3.1.1" class="anchored" data-anchor-id="exploratory-analysis"><span class="header-section-number">11.3.1.1</span> Exploratory Analysis</h4>
 <p>Before fitting the mixing model, the source data were inspected to verify that each sediment class was adequately represented and that the candidate geochemical tracers carried useful discriminatory information. This step is important because source apportionment depends on separating source signatures, not simply on fitting a numerical mixture.</p>
@@ -481,7 +481,7 @@ Figure&nbsp;11.1: Conceptual workflow of sediment source apportionment. Represen
 <div id="fig-bmm-source-sample-counts" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-source-sample-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/source_sample_counts.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/source_sample_counts.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-source-sample-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.2: Number of samples available for each sediment source.
@@ -507,47 +507,47 @@ Table&nbsp;11.1: Geochemical tracers retained after Kruskal–Wallis screening.
 <tr class="odd">
 <td style="text-align: center;">L</td>
 <td style="text-align: center;">51.647</td>
-<td style="text-align: center;">3.56 <span class="math inline">\(\times 10^{-11}\)</span></td>
+<td style="text-align: center;">3.56e-11</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">h</td>
 <td style="text-align: center;">45.480</td>
-<td style="text-align: center;">7.32 <span class="math inline">\(\times 10^{-10}\)</span></td>
+<td style="text-align: center;">7.32e-10</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Si</td>
 <td style="text-align: center;">43.607</td>
-<td style="text-align: center;">1.83 <span class="math inline">\(\times 10^{-9}\)</span></td>
+<td style="text-align: center;">1.83e-09</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">C*</td>
 <td style="text-align: center;">34.421</td>
-<td style="text-align: center;">1.61 <span class="math inline">\(\times 10^{-7}\)</span></td>
+<td style="text-align: center;">1.61e-07</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">K</td>
 <td style="text-align: center;">33.015</td>
-<td style="text-align: center;">3.20 <span class="math inline">\(\times 10^{-7}\)</span></td>
+<td style="text-align: center;">3.20e-07</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Y</td>
 <td style="text-align: center;">23.563</td>
-<td style="text-align: center;">3.08 <span class="math inline">\(\times 10^{-5}\)</span></td>
+<td style="text-align: center;">3.08e-05</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Mn</td>
 <td style="text-align: center;">13.278</td>
-<td style="text-align: center;">4.07 <span class="math inline">\(\times 10^{-3}\)</span></td>
+<td style="text-align: center;">4.07e-03</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Zn</td>
 <td style="text-align: center;">12.499</td>
-<td style="text-align: center;">5.86 <span class="math inline">\(\times 10^{-3}\)</span></td>
+<td style="text-align: center;">5.86e-03</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Ti</td>
 <td style="text-align: center;">9.213</td>
-<td style="text-align: center;">2.66 <span class="math inline">\(\times 10^{-2}\)</span></td>
+<td style="text-align: center;">2.66e-02</td>
 </tr>
 </tbody>
 </table>
@@ -558,7 +558,7 @@ Table&nbsp;11.1: Geochemical tracers retained after Kruskal–Wallis screening.
 <div id="fig-bmm-lda-selected-tracers" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-lda-selected-tracers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/lda_selected_tracers.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/lda_selected_tracers.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-lda-selected-tracers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.3: Linear Discriminant Analysis projection using the selected geochemical tracers.
@@ -573,7 +573,7 @@ Figure&nbsp;11.3: Linear Discriminant Analysis projection using the selected geo
 <div id="fig-bmm-laboratory-intervals" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-laboratory-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/intervals_bmm_laboratory.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/intervals_bmm_laboratory.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-laboratory-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.4: Predicted source contributions for the laboratory-prepared mixtures using the Bootstrapped Mixing Model.
@@ -584,7 +584,7 @@ Figure&nbsp;11.4: Predicted source contributions for the laboratory-prepared mix
 <div id="fig-bmm-laboratory-vs-virtual" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bmm-laboratory-vs-virtual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/laboratory_vs_virtual_quantiles.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment_source_modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bmm-laboratory-vs-virtual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.5: Comparison of predictive intervals obtained for the laboratory and synthetic benchmark mixtures.
@@ -713,9 +713,9 @@ Table&nbsp;11.3: Source-level performance metrics of the Bootstrapped Mixing Mod
 </section>
 <section id="mccaffrey-constrained-least-squares-model" class="level3" data-number="11.3.2">
 <h3 data-number="11.3.2" class="anchored" data-anchor-id="mccaffrey-constrained-least-squares-model"><span class="header-section-number">11.3.2</span> McCaffrey Constrained Least-Squares Model</h3>
-<p>The second approach adapts the constrained least-squares formulation proposed by McCaffrey et al.&nbsp;(<span class="citation" data-cites="mccaffrey2011geochemical"><a href="../references.html#ref-mccaffrey2011geochemical" role="doc-biblioref">[2]</a></span>) for production allocation in commingled oil and gas reservoirs. Rather than estimating a distribution of possible source contributions, this method seeks a single solution that best reproduces the observed geochemical composition while satisfying the physical constraints of the mixing process. Source contributions are therefore constrained to remain non-negative and to sum to one, ensuring that every solution is physically interpretable.</p>
+<p>The second approach adapts the constrained least-squares formulation proposed by McCaffrey et al. <span class="citation" data-cites="mccaffrey2011geochemical"><a href="../references.html#ref-mccaffrey2011geochemical" role="doc-biblioref">[2]</a></span> for production allocation in commingled oil and gas reservoirs. Rather than estimating a distribution of possible source contributions, this method seeks a single solution that best reproduces the observed geochemical composition while satisfying the physical constraints of the mixing process. Source contributions are therefore constrained to remain non-negative and to sum to one, ensuring that every solution is physically interpretable.</p>
 <p>Although originally developed for petroleum production allocation, the mathematical formulation is directly applicable to sediment fingerprinting. In both cases, the observed sample represents a mixture of multiple sources with unknown proportions, and the objective is to recover those proportions from a set of conservative geochemical tracers. This shared structure makes the McCaffrey formulation an interesting deterministic alternative to the probabilistic Bootstrapped Mixing Model.</p>
-<p>A complete Python implementation of the McCaffrey constrained least-squares model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey">here</a>.</p>
+<p>A complete Python implementation of the McCaffrey constrained least-squares model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey.html">here</a>.</p>
 <section id="representative-source-signatures" class="level4" data-number="11.3.2.1">
 <h4 data-number="11.3.2.1" class="anchored" data-anchor-id="representative-source-signatures"><span class="header-section-number">11.3.2.1</span> Representative Source Signatures</h4>
 <p>Unlike the Bootstrapped Mixing Model, which explicitly propagates measurement uncertainty through repeated resampling, the McCaffrey formulation requires a single representative geochemical signature for each sediment source. These signatures were obtained by aggregating the available observations from each source and subsequently scaling the retained tracers to comparable numerical ranges before solving the constrained optimization problem.</p>
@@ -779,7 +779,7 @@ Table&nbsp;11.4: Scaling factors applied to the selected geochemical tracers pri
 <div id="fig-mccaffrey-representative-signatures" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mccaffrey-representative-signatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/mccaffrey_known_vs_estimated_representative_compositions.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey-figures/figures/mccaffrey_known_vs_estimated_representative_compositions.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mccaffrey-representative-signatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.6: Known and reconstructed representative source compositions obtained with the McCaffrey constrained least-squares model.
@@ -793,7 +793,7 @@ Figure&nbsp;11.6: Known and reconstructed representative source compositions obt
 <div id="fig-mccaffrey-estimated-vs-true" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mccaffrey-estimated-vs-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/mccaffrey_estimated_vs_true.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey-figures/figures/mccaffrey_estimated_vs_true.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mccaffrey-estimated-vs-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.7: Estimated versus true source contributions obtained with the McCaffrey constrained least-squares model.
@@ -891,9 +891,9 @@ Table&nbsp;11.6: Source-level performance metrics for the McCaffrey constrained 
 </section>
 <section id="sandoval-ratio-based-mixing-model" class="level3" data-number="11.3.3">
 <h3 data-number="11.3.3" class="anchored" data-anchor-id="sandoval-ratio-based-mixing-model"><span class="header-section-number">11.3.3</span> Sandoval Ratio-Based Mixing Model</h3>
-<p>The final approach implements the ratio-based constrained deconvolution model proposed by Sandoval et al.&nbsp;(<span class="citation" data-cites="sandoval2022original"><a href="../references.html#ref-sandoval2022original" role="doc-biblioref">[3]</a></span>). Although it solves the same source apportionment problem as the McCaffrey model, it adopts a different representation of the geochemical data. Instead of comparing elemental concentrations directly, the optimization is performed using log-ratios between tracers, reducing the influence of the constant-sum constraint that characterizes compositional datasets.</p>
+<p>The final approach implements the ratio-based constrained deconvolution model proposed by Sandoval et al. <span class="citation" data-cites="sandoval2022original"><a href="../references.html#ref-sandoval2022original" role="doc-biblioref">[3]</a></span>. Although it solves the same source apportionment problem as the McCaffrey model, it adopts a different representation of the geochemical data. Instead of comparing elemental concentrations directly, the optimization is performed using log-ratios between tracers, reducing the influence of the constant-sum constraint that characterizes compositional datasets.</p>
 <p>This formulation is particularly attractive for geochemical applications because many analytical measurements are inherently relative rather than absolute. By expressing the observations as ratios, the optimization focuses on the proportional relationships between tracers instead of their individual magnitudes, making the solution less sensitive to scaling effects and compositional closure.</p>
-<p>A complete Python implementation of the Sandoval ratio-based mixing model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval">here</a>.</p>
+<p>A complete Python implementation of the Sandoval ratio-based mixing model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval.html">here</a>.</p>
 <section id="representative-source-signatures-1" class="level4" data-number="11.3.3.1">
 <h4 data-number="11.3.3.1" class="anchored" data-anchor-id="representative-source-signatures-1"><span class="header-section-number">11.3.3.1</span> Representative Source Signatures</h4>
 <p>As in the McCaffrey formulation, a representative fingerprint was first constructed for each sediment source. These reference signatures were subsequently transformed into a log-ratio representation before solving the constrained optimization problem.</p>
@@ -957,7 +957,7 @@ Table&nbsp;11.7: Scaling factors applied to the selected geochemical tracers pri
 <div id="fig-sandoval-representative-signatures" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sandoval-representative-signatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/sandoval_known_vs_estimated_representative_compositions.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_known_vs_estimated_representative_compositions.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sandoval-representative-signatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.8: Known and reconstructed representative source compositions obtained with the Sandoval ratio-based model.
@@ -971,7 +971,7 @@ Figure&nbsp;11.8: Known and reconstructed representative source compositions obt
 <div id="fig-sandoval-estimated-vs-true" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sandoval-estimated-vs-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="figures/sandoval_estimated_vs_true.png" class="img-fluid figure-img">
+<img src="../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/3-sediment-source-modeling-sandoval-figures/sandoval_estimated_vs_true.png" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sandoval-estimated-vs-true-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.9: Estimated versus true source contributions obtained with the Sandoval ratio-based model.
@@ -1217,7 +1217,7 @@ b=1,\ldots,B,
 <section id="concentration-based-deconvolution" class="level3" data-number="11.5.5">
 <h3 data-number="11.5.5" class="anchored" data-anchor-id="concentration-based-deconvolution"><span class="header-section-number">11.5.5</span> Concentration-Based Deconvolution</h3>
 <p>The Bootstrapped Mixing Model characterizes uncertainty by repeatedly perturbing the source fingerprints and solving the inverse problem many times. The deterministic approaches follow a different philosophy. Rather than estimating a distribution of plausible solutions, they seek a single set of source proportions that best reproduces the observed sediment composition.</p>
-<p>The first deterministic formulation considered in this chapter is based on the constrained least-squares approach proposed by McCaffrey et al.&nbsp;(<span class="citation" data-cites="mccaffrey2011geochemical"><a href="../references.html#ref-mccaffrey2011geochemical" role="doc-biblioref">[2]</a></span>). Originally developed for geochemical allocation of commingled oil and gas production, the method assumes that the measured composition of a mixture can be reconstructed by combining the representative fingerprints of the contributing sources.</p>
+<p>The first deterministic formulation considered in this chapter is based on the constrained least-squares approach proposed by McCaffrey et al. <span class="citation" data-cites="mccaffrey2011geochemical"><a href="../references.html#ref-mccaffrey2011geochemical" role="doc-biblioref">[2]</a></span>. Originally developed for geochemical allocation of commingled oil and gas production, the method assumes that the measured composition of a mixture can be reconstructed by combining the representative fingerprints of the contributing sources.</p>
 <p>Within the optimization framework introduced in <a href="#eq-constrained-optimization" class="quarto-xref">Equation&nbsp;<span>11.7</span></a>, the McCaffrey formulation defines the objective function as the squared Euclidean distance between the observed sediment composition and the composition reconstructed from the estimated source proportions,</p>
 <p><span id="eq-mccaffrey-objective"><span class="math display">\[
 f(\mathbf{x})
@@ -1251,11 +1251,11 @@ z_{ij}
 \tag{11.11}\]</span></span></p>
 <p>which expresses the relative abundance of one tracer with respect to another. Since the logarithm converts multiplicative differences into additive ones, many statistical techniques developed for unconstrained Euclidean spaces become applicable once the data have been transformed.</p>
 <p>The central idea is therefore not that the absolute concentration of a tracer carries the relevant information, but that its abundance relative to the remaining tracers is often more informative. This perspective forms the foundation of <strong>Compositional Data Analysis (CoDA)</strong> and motivates the ratio-based source apportionment model proposed by Sandoval et al.</p>
-<p>Although several log-ratio transformations have been developed—including additive, centered, and isometric log-ratios—the implementation presented in this chapter follows the ratio-based formulation introduced by Sandoval et al.&nbsp;(<span class="citation" data-cites="sandoval2022original"><a href="../references.html#ref-sandoval2022original" role="doc-biblioref">[3]</a></span>), which was specifically designed for geochemical source allocation problems.</p>
+<p>Although several log-ratio transformations have been developed—including additive, centered, and isometric log-ratios—the implementation presented in this chapter follows the ratio-based formulation introduced by Sandoval et al. <span class="citation" data-cites="sandoval2022original"><a href="../references.html#ref-sandoval2022original" role="doc-biblioref">[3]</a></span>, which was specifically designed for geochemical source allocation problems.</p>
 </section>
 <section id="log-ratio-based-deconvolution" class="level3" data-number="11.5.7">
 <h3 data-number="11.5.7" class="anchored" data-anchor-id="log-ratio-based-deconvolution"><span class="header-section-number">11.5.7</span> Log-Ratio-Based Deconvolution</h3>
-<p>The ratio-based deconvolution model proposed by Sandoval et al.&nbsp;(<span class="citation" data-cites="sandoval2022original"><a href="../references.html#ref-sandoval2022original" role="doc-biblioref">[3]</a></span>) builds directly upon the concepts introduced in the previous sections. Like the McCaffrey formulation, it seeks the source proportions that best reproduce an observed geochemical mixture while satisfying the physical constraints of the mixing process. The fundamental difference lies not in the optimization itself, but in how the geochemical information is represented.</p>
+<p>The ratio-based deconvolution model proposed by Sandoval et al. <span class="citation" data-cites="sandoval2022original"><a href="../references.html#ref-sandoval2022original" role="doc-biblioref">[3]</a></span> builds directly upon the concepts introduced in the previous sections. Like the McCaffrey formulation, it seeks the source proportions that best reproduce an observed geochemical mixture while satisfying the physical constraints of the mixing process. The fundamental difference lies not in the optimization itself, but in how the geochemical information is represented.</p>
 <p>Instead of comparing elemental concentrations directly, the model first transforms the source fingerprints and the observed mixture into a set of log-ratios. The optimization is then performed in this transformed space, where the relative relationships between tracers are preserved and the effects of compositional closure are substantially reduced.</p>
 <p>Within the constrained optimization framework introduced in <a href="#eq-constrained-optimization" class="quarto-xref">Equation&nbsp;<span>11.7</span></a>, the objective function can be expressed as</p>
 <p><span id="eq-sandoval-objective"><span class="math display">\[
