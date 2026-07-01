@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.1.28)  1 JUL 2026 09:29
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2026.1.28)  1 JUL 2026 10:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -3365,9 +3365,6 @@ LaTeX Warning: Reference `fig-bmm-laboratory-intervals' on page 191 undefined on
 File: 5-climate-and-environmental-systems/../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/intervals_bmm_laboratory.png Graphic file (type bmp)
 <5-climate-and-environmental-systems/../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/intervals_bmm_laboratory.png>
 
-LaTeX Warning: Reference `fig-bmm-laboratory-vs-virtual' on page 191 undefined on input line 6853.
-
-
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
 (fancyhdr)                \setlength{\headheight}{14.49998pt}.
@@ -3384,23 +3381,105 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [192]
 
-LaTeX Warning: File `5-climate-and-environmental-systems/../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png' not found on input line 6862.
+LaTeX Warning: Reference `tbl-bmm-performance' on page 193 undefined on input line 6859.
 
-! Unable to load picture or PDF file '5-climate-and-environmental-systems/../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/1-sediment-source-modeling-batista-figures/figures/laboratory_vs_virtual_quantiles.png'.
+
+Overfull \hbox (1.58476pt too wide) in paragraph at lines 6892--6893
+ []\TU/LinuxLibertineO(0)/b/n/12 MAE50 
+ []
+
+
+Overfull \hbox (1.58476pt too wide) in paragraph at lines 6894--6895
+ []\TU/LinuxLibertineO(0)/b/n/12 MAE95 
+ []
+
+
+Overfull \hbox (1.58476pt too wide) in paragraph at lines 6914--6915
+ []\TU/LinuxLibertineO(0)/b/n/12 MAE50 
+ []
+
+
+Overfull \hbox (1.58476pt too wide) in paragraph at lines 6916--6917
+ []\TU/LinuxLibertineO(0)/b/n/12 MAE95 
+ []
+
+
+Overfull \hbox (12.50383pt too wide) in paragraph at lines 6926--6926
+ []|\TU/LinuxLibertineO(0)/m/n/12 Laboratory| 
+ []
+
+
+Overfull \hbox (4.28383pt too wide) in paragraph at lines 6928--6928
+ []|\TU/LinuxLibertineO(0)/m/n/12 Synthetic| 
+ []
+
+
+Overfull \hbox (1.46121pt too wide) in paragraph at lines 6928--6928
+ []|\TU/LinuxLibertineO(0)/m/n/12 0.0001| 
+ []
+
+
+Overfull \hbox (1.46121pt too wide) in paragraph at lines 6928--6928
+ []|\TU/LinuxLibertineO(0)/m/n/12 0.0013| 
+ []
+
+
+Overfull \hbox (3.81122pt too wide) in paragraph at lines 6928--6929
+ []|\TU/LinuxLibertineO(0)/m/n/12 0.00003| 
+ []
+
+
+LaTeX Warning: Reference `tbl-bmm-source-metrics' on page 193 undefined on input line 6932.
+
+
+Overfull \hbox (20.7336pt too wide) in paragraph at lines 6980--6980
+ []|\TU/LinuxLibertineO(0)/m/n/12 Decontaminated| 
+ []
+
+
+LaTeX Warning: Citation `ref-mccaffrey2011geochemical' on page 193 undefined on input line 6990.
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[193]
+
+LaTeX Warning: Reference `tbl-mccaffrey-scaling-factors' on page 194 undefined on input line 7025.
+
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[194]
+
+LaTeX Warning: Reference `fig-mccaffrey-representative-signatures' on page 195 undefined on input line 7054.
+
+
+LaTeX Warning: File `5-climate-and-environmental-systems/../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey-figures/figures/mccaffrey_known_vs_estimated_representative_compositions.png' not found on input line 7063.
+
+! Unable to load picture or PDF file '5-climate-and-environmental-systems/../notebooks-and-scripts/5-climate-and-environmental-systems/1-sediment-source-modeling/python/2-sediment-source-modeling-mccaffrey-figures/figures/mccaffrey_known_vs_estimated_representative_compositions.png'.
 <to be read again> 
                    }
-l.6862 ...es/laboratory_vs_virtual_quantiles.png}}
+l.7063 ...imated_representative_compositions.png}}
                                                   
 The requested image couldn't be read because
 it was not a recognized image format.
 
  
 Here is how much of TeX's memory you used:
- 22831 strings out of 470128
- 508059 string characters out of 5474314
+ 22840 strings out of 470128
+ 509689 string characters out of 5474314
  990185 words of memory out of 5000000
- 51075 multiletter control sequences out of 15000+600000
+ 51083 multiletter control sequences out of 15000+600000
  636584 words of font info for 122 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  90i,12n,116p,1002b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
-Output written on index.pdf (196 pages).
+Output written on index.pdf (198 pages).

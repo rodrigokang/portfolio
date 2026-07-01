@@ -7312,7 +7312,6 @@ a.anchor-link {
                     processEnvironments: true
                 },
                 displayAlign: 'center',
-                messageStyle: 'none',
                 CommonHTML: {
                     linebreaks: {
                     automatic: true
@@ -7565,7 +7564,7 @@ Rodrigo Kang</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>Paths and settings are centralised here. With the expected project layout, the notebook runs from the <code>python</code> directory, reads the project data from the sibling <code>data</code> directory, and stores all generated tables, figures, and evaluation results in the project-specific output directory:</p>
-<p><code>python/3-sediment-source-modeling-sandoval-figures</code></p>
+<p><code>python/3-sandoval</code></p>
 </div>
 </div>
 </div>
@@ -7577,15 +7576,15 @@ Rodrigo Kang</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
 
 
 <span class="c1"># Paths</span>
@@ -7596,7 +7595,7 @@ Rodrigo Kang</p>
 <span class="n">data_dir</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="s2">"data"</span>
 <span class="n">input_processed_dir</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="s2">"processed"</span>
 
-<span class="n">output_dir</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="s2">"python"</span> <span class="o">/</span> <span class="s2">"3-sediment-source-modeling-sandoval-figures"</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="s2">"python"</span> <span class="o">/</span> <span class="s2">"3-sandoval"</span>
 <span class="n">figures_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"figures"</span>
 <span class="n">tables_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"tables"</span>
 
@@ -7659,7 +7658,7 @@ Rodrigo Kang</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_sediment_data</span><span class="p">(</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">load_sediment_data</span><span class="p">(</span>
     <span class="n">data_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">input_processed_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">source_order</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -7733,8 +7732,8 @@ Rodrigo Kang</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"source_log_data.csv"</span><span class="p">,</span>
-            <span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"laboratory_mixture_log_data.csv"</span><span class="p">,</span>
-            <span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"known_source_proportions.csv"</span><span class="p">,</span>
+            <span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"lab-mixtures-log.csv"</span><span class="p">,</span>
+            <span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"known-proportions.csv"</span><span class="p">,</span>
         <span class="p">]</span>
 
         <span class="n">missing_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">required_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()]</span>
@@ -7745,8 +7744,8 @@ Rodrigo Kang</p>
             <span class="p">)</span>
 
         <span class="n">source_log_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"source_log_data.csv"</span><span class="p">)</span>
-        <span class="n">target_log_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"laboratory_mixture_log_data.csv"</span><span class="p">)</span>
-        <span class="n">truth</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"known_source_proportions.csv"</span><span class="p">)</span>
+        <span class="n">target_log_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"lab-mixtures-log.csv"</span><span class="p">)</span>
+        <span class="n">truth</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_processed_dir</span> <span class="o">/</span> <span class="s2">"known-proportions.csv"</span><span class="p">)</span>
 
         <span class="n">selected_tracers</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">column</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">target_log_df</span><span class="o">.</span><span class="n">columns</span>
@@ -7848,9 +7847,9 @@ Selected tracers: 9
     <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">source_signature</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_source_representative_signatures.csv"</span><span class="p">)</span>
+<span class="n">source_signature</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"source-signatures.csv"</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"tracer"</span><span class="p">:</span> <span class="n">tracer_scale</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s2">"scale"</span><span class="p">:</span> <span class="n">tracer_scale</span><span class="o">.</span><span class="n">values</span><span class="p">})</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_tracer_scaling_factors.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"tracer-scales.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -7984,19 +7983,16 @@ Selected tracers: 9
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>For each artificial mixture, the source fractions are estimated by minimizing the mismatch between observed and predicted pairwise tracer ratios.</p>
 <p>If $A$ contains the representative source signatures, $b$ is the observed mixture signature, and $x$ is the vector of source fractions, the predicted mixture signature is:</p>
-<p>$$
+$$
 \hat{b} = Ax
-$$</p>
-<p>The objective is defined in log-ratio space:</p>
-<p>$$
+$$<p>The objective is defined in log-ratio space:</p>
+$$
 \min_x \sum_{i&lt;j}\left[\log\left(\frac{\hat{b}_i}{\hat{b}_j}\right) - \log\left(\frac{b_i}{b_j} \right)
 \right]^2
-$$</p>
-<p>subject to:</p>
-<p>$$
+$$<p>subject to:</p>
+$$
 x_k \geq 0, \qquad \sum_k x_k = 1
-$$</p>
-<p>This formulation is deterministic, constrained to the simplex, and less dependent on absolute tracer magnitudes than direct least-squares deconvolution.</p>
+$$<p>This formulation is deterministic, constrained to the simplex, and less dependent on absolute tracer magnitudes than direct least-squares deconvolution.</p>
 </div>
 </div>
 </div>
@@ -8008,7 +8004,7 @@ $$</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pairwise_log_ratios</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pairwise_log_ratios</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Build pairwise log ratios for a positive tracer vector.</span>
 
@@ -8037,7 +8033,7 @@ $$</p>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">idx_i</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">idx_j</span><span class="p">])</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">estimate_sandoval_fractions</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">estimate_sandoval_fractions</span><span class="p">(</span>
     <span class="n">source_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">target_vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">n_random_starts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
@@ -8077,7 +8073,7 @@ $$</p>
     <span class="n">n_sources</span> <span class="o">=</span> <span class="n">source_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">observed_ratios</span> <span class="o">=</span> <span class="n">pairwise_log_ratios</span><span class="p">(</span><span class="n">target_vector</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">objective</span><span class="p">(</span><span class="n">fractions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">fractions</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="n">predicted</span> <span class="o">=</span> <span class="n">source_matrix</span> <span class="o">@</span> <span class="n">fractions</span>
         <span class="n">predicted_ratios</span> <span class="o">=</span> <span class="n">pairwise_log_ratios</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
         <span class="n">residual</span> <span class="o">=</span> <span class="n">predicted_ratios</span> <span class="o">-</span> <span class="n">observed_ratios</span>
@@ -8177,17 +8173,17 @@ $$</p>
 <span class="n">ratio_residuals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ratio_residual_records</span><span class="p">)</span>
 
 <span class="n">sandoval_results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_source_apportionment.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"apportionment-summary.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">residuals</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_residuals_by_tracer.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"residuals-by-tracer.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">ratio_residuals</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_log_ratio_residuals.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"ratio-residuals.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -8308,7 +8304,7 @@ $$</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">nash_sutcliffe_efficiency</span><span class="p">(</span><span class="n">observed</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">predicted</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">nash_sutcliffe_efficiency</span><span class="p">(</span><span class="n">observed</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">predicted</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute Nash-Sutcliffe Efficiency.</span>
 
@@ -8336,7 +8332,7 @@ $$</p>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">aitchison_distance</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">aitchison_distance</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">y</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Compute Aitchison distance between two compositions.</span>
 
@@ -8440,10 +8436,10 @@ $$</p>
     <span class="n">colnames</span><span class="o">=</span><span class="p">[</span><span class="s2">"Estimated dominant source"</span><span class="p">],</span>
 <span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">source_order</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">source_order</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="n">metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_model_evaluation_metrics.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">source_metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_source_level_metrics.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">sample_metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_sample_level_metrics.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">dominant_confusion</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_dominant_source_confusion_matrix.csv"</span><span class="p">)</span>
+<span class="n">metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"model-metrics.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">source_metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"source-metrics.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">sample_metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sample-metrics.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">dominant_confusion</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"dominant-confusion.csv"</span><span class="p">)</span>
 
 <span class="n">metrics</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
@@ -8667,11 +8663,16 @@ $$</p>
     <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">value</span> <span class="o">+</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">"center"</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_overall_performance_summary.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"performance-summary.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="n">performance_summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"sandoval_overall_performance_summary.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"performance-summary.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -8743,7 +8744,12 @@ $$</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_estimated_vs_true.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"estimated-vs-true.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -8803,7 +8809,12 @@ $$</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_error_by_source.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"error-by-source.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -8842,7 +8853,12 @@ $$</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_bias_by_source.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"bias-by-source.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -8944,7 +8960,12 @@ $$</p>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"upper center"</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">))</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_known_vs_estimated_representative_compositions.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"known-vs-estimated-compositions.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -9018,7 +9039,12 @@ $$</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_dominant_source_confusion_matrix.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"dominant-confusion.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -9086,7 +9112,12 @@ $$</p>
 <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_residuals_by_tracer.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"residuals-by-tracer.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -9136,7 +9167,12 @@ $$</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Most difficult tracer ratios"</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_difficult_tracer_ratios.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"sandoval_difficult_tracer_ratios.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="n">ratio_pair_summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
