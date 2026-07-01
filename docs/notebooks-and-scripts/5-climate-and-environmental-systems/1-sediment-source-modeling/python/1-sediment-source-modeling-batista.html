@@ -7562,7 +7562,7 @@ Rodrigo Kang</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Paths and stochastic settings are centralised here. With the expected project layout, the notebook runs from the <code>python</code> directory, reads the project data from the sibling <code>data</code> directory, and writes processed datasets to <code>data/processed</code>.</p>
+<p>Paths, output directories, and stochastic settings are centralised here. With the expected project layout, the notebook runs from the <code>python</code> directory, reads the project data from the sibling <code>data</code> directory, and stores all generated figures and summary tables in <code>python/1-batista</code>.</p>
 </div>
 </div>
 </div>
@@ -7581,7 +7581,6 @@ Rodrigo Kang</p>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -7614,15 +7613,16 @@ Rodrigo Kang</p>
 
 <span class="n">data_dir</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="s2">"data"</span>
 
-<span class="n">output_dir</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="s2">"python"</span> <span class="o">/</span> <span class="s2">"1-sediment-source-modeling-batista-figures"</span>
+<span class="c1"># Output directories</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="s2">"python"</span> <span class="o">/</span> <span class="s2">"1-batista"</span>
 <span class="n">figures_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"figures"</span>
 <span class="n">tables_dir</span> <span class="o">=</span> <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"tables"</span>
 
-<span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="p">[</span>
+<span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="p">(</span>
     <span class="n">output_dir</span><span class="p">,</span>
     <span class="n">figures_dir</span><span class="p">,</span>
     <span class="n">tables_dir</span><span class="p">,</span>
-<span class="p">]:</span>
+<span class="p">):</span>
     <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Modeling parameters</span>
@@ -7707,6 +7707,16 @@ Rodrigo Kang</p>
     <span class="p">})</span>
 <span class="p">)</span>
 
+<span class="n">missing_proportion_columns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"sample"</span><span class="p">,</span> <span class="o">*</span><span class="n">source_order</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">proportions</span><span class="o">.</span><span class="n">columns</span>
+<span class="p">]</span>
+
+<span class="k">if</span> <span class="n">missing_proportion_columns</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"Missing columns in mixture proportions table: </span><span class="si">{</span><span class="n">missing_proportion_columns</span><span class="si">}</span><span class="s2">"</span>
+    <span class="p">)</span>
+
 <span class="n">proportions</span><span class="p">[</span><span class="n">source_order</span><span class="p">]</span> <span class="o">=</span> <span class="n">proportions</span><span class="p">[</span><span class="n">source_order</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
 <span class="n">sources</span> <span class="o">=</span> <span class="n">fingerprints</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">"type == 'source'"</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -7717,6 +7727,15 @@ Rodrigo Kang</p>
     <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">source_name_map</span><span class="p">)</span>
 <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">sources</span><span class="p">[</span><span class="s2">"source_label"</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+    <span class="n">unmapped_sources</span> <span class="o">=</span> <span class="n">sources</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="n">sources</span><span class="p">[</span><span class="s2">"source_label"</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">(),</span> <span class="s2">"source"</span>
+    <span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"Unmapped source labels found in fingerprint data: </span><span class="si">{</span><span class="n">unmapped_sources</span><span class="si">}</span><span class="s2">"</span>
+    <span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Source samples: </span><span class="si">{</span><span class="n">sources</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Laboratory mixtures: </span><span class="si">{</span><span class="n">targets_lab</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
@@ -7779,8 +7798,19 @@ Name: count, dtype: int64
 <div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">fingerprints</span><span class="p">[</span><span class="n">selected_tracers</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"All selected tracers must be positive before log transformation."</span><span class="p">)</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">sources</span><span class="p">[</span><span class="n">selected_tracers</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"All selected source tracers must be positive before log transformation."</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">targets_lab</span><span class="p">[</span><span class="n">selected_tracers</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"All selected laboratory mixture tracers must be positive before log transformation."</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">proportions</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets_lab</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The number of proportion rows and target mixtures does not match."</span><span class="p">)</span>
+
+<span class="n">missing_sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">source</span> <span class="k">for</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">source_order</span> <span class="k">if</span> <span class="n">source</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">proportions</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="n">missing_sources</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing source columns in proportions table: </span><span class="si">{</span><span class="n">missing_sources</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">source_log_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span>
     <span class="n">sources</span><span class="p">[[</span><span class="s2">"sample"</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">,</span> <span class="s2">"source_label"</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
@@ -7795,9 +7825,6 @@ Name: count, dtype: int64
 <span class="c1"># The proportion table uses artificial-mixture IDs, while the fingerprint table</span>
 <span class="c1"># stores laboratory mixture sample IDs. The rows follow the same experimental</span>
 <span class="c1"># order, so the known proportions are aligned by row position.</span>
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">proportions</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets_lab</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The number of proportion rows and target mixtures does not match."</span><span class="p">)</span>
-
 <span class="n">truth</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span>
     <span class="n">targets_lab</span><span class="p">[[</span><span class="s2">"sample"</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
     <span class="n">proportions</span><span class="p">[</span><span class="n">source_order</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
@@ -7810,12 +7837,7 @@ Name: count, dtype: int64
     <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">source_order</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="n">source_log_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"source_log_data.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">target_log_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"laboratory_mixture_log_data.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">truth</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"known_source_proportions.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">source_summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"source_tracer_summary.csv"</span><span class="p">)</span>
-<span class="n">source_summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"source_tracer_summary.csv"</span><span class="p">)</span>
+<span class="n">source_summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"source-summary.csv"</span><span class="p">)</span>
 
 <span class="n">source_summary</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -8041,7 +8063,12 @@ Name: count, dtype: int64
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Number of Samples"</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"source_sample_counts.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"source-counts.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -8065,7 +8092,12 @@ Name: count, dtype: int64
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"upper right"</span><span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"known_mixture_proportions.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"known-mixture-proportions.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -8099,7 +8131,12 @@ Name: count, dtype: int64
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"lda_selected_tracers.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"lda-selected-tracers.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -8921,29 +8958,24 @@ Name: count, dtype: int64
 <span class="p">)</span>
 
 <span class="n">all_draws</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">bmm_lab</span><span class="p">,</span> <span class="n">bmm_virtual</span><span class="p">,</span> <span class="n">bayes_lab</span><span class="p">,</span> <span class="n">bayes_virtual</span><span class="p">],</span>
+    <span class="p">[</span>
+        <span class="n">bmm_lab</span><span class="p">,</span>
+        <span class="n">bmm_virtual</span><span class="p">,</span>
+        <span class="n">bayes_lab</span><span class="p">,</span>
+        <span class="n">bayes_virtual</span><span class="p">,</span>
+    <span class="p">],</span>
     <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">summary</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="n">evaluate_draws</span><span class="p">(</span><span class="n">all_draws</span><span class="p">)</span>
 
 <span class="n">summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"source_apportionment_summary.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"apportionment-summary.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"model_evaluation_metrics.csv"</span><span class="p">,</span>
-    <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">summary</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"source_apportionment_summary.csv"</span><span class="p">,</span>
-    <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"model_evaluation_metrics.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"model-metrics.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -9122,18 +9154,19 @@ Name: count, dtype: int64
     <span class="n">mixture_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Plot source apportionment intervals for a model and mixture type.</span>
+<span class="sd">    Plot predictive intervals for a source apportionment model.</span>
 
 <span class="sd">    Brief explanation:</span>
-<span class="sd">    Visualise median estimates, 50% and 95% intervals, together with the known source proportions.</span>
+<span class="sd">    Display the median estimated source contributions together with the 50% and</span>
+<span class="sd">    95% predictive intervals and the known source proportions for each mixture.</span>
 
 <span class="sd">    Inputs:</span>
 <span class="sd">    summary_df : pd.DataFrame</span>
-<span class="sd">        Quantile summary produced by evaluate_draws.</span>
+<span class="sd">        Quantile summary returned by evaluate_draws().</span>
 <span class="sd">    model : str</span>
-<span class="sd">        Model name to plot.</span>
+<span class="sd">        Source apportionment model to display.</span>
 <span class="sd">    mixture_type : str</span>
-<span class="sd">        Mixture type to plot.</span>
+<span class="sd">        Mixture dataset to display ("Laboratory" or "Virtual").</span>
 
 <span class="sd">    Outputs:</span>
 <span class="sd">    None</span>
@@ -9169,28 +9202,9 @@ Name: count, dtype: int64
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">subset</span><span class="p">[</span><span class="s2">"mixture_number"</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">,</span>
-            <span class="n">subset</span><span class="p">[</span><span class="s2">"q025"</span><span class="p">],</span>
-            <span class="n">subset</span><span class="p">[</span><span class="s2">"q975"</span><span class="p">],</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">"95</span><span class="si">% i</span><span class="s2">nterval"</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">,</span>
-            <span class="n">subset</span><span class="p">[</span><span class="s2">"q25"</span><span class="p">],</span>
-            <span class="n">subset</span><span class="p">[</span><span class="s2">"q75"</span><span class="p">],</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">"50</span><span class="si">% i</span><span class="s2">nterval"</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">,</span>
-            <span class="n">subset</span><span class="p">[</span><span class="s2">"median"</span><span class="p">],</span>
-            <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">"Median"</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">subset</span><span class="p">[</span><span class="s2">"q025"</span><span class="p">],</span> <span class="n">subset</span><span class="p">[</span><span class="s2">"q975"</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"95</span><span class="si">% i</span><span class="s2">nterval"</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">subset</span><span class="p">[</span><span class="s2">"q25"</span><span class="p">],</span> <span class="n">subset</span><span class="p">[</span><span class="s2">"q75"</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"50</span><span class="si">% i</span><span class="s2">nterval"</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">subset</span><span class="p">[</span><span class="s2">"median"</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Median"</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">x</span><span class="p">,</span>
@@ -9218,9 +9232,14 @@ Name: count, dtype: int64
 
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
+    <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">)</span>
+    <span class="n">mixture_name</span> <span class="o">=</span> <span class="n">mixture_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">)</span>
+
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-        <span class="n">figures_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"intervals_</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">mixture_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">.png"</span><span class="p">,</span>
+        <span class="n">figures_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">mixture_name</span><span class="si">}</span><span class="s2">-intervals.png"</span><span class="p">,</span>
         <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+        <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+        <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -9299,12 +9318,7 @@ Name: count, dtype: int64
 <span class="n">correlation_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">correlation_records</span><span class="p">)</span>
 
 <span class="n">correlation_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">output_dir</span> <span class="o">/</span> <span class="s2">"laboratory_virtual_correlations.csv"</span><span class="p">,</span>
-    <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">correlation_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"laboratory_virtual_correlations.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"lab-vs-virtual-correlations.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -9421,21 +9435,23 @@ Name: count, dtype: int64
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
-    <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">quantile_columns</span><span class="p">),</span>
+    <span class="mi">1</span><span class="p">,</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">quantile_columns</span><span class="p">),</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">quantile_columns</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">summary</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
         <span class="n">sub</span> <span class="o">=</span> <span class="n">comparison</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">model</span><span class="p">]</span>
+
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">sub</span><span class="p">[(</span><span class="n">q</span><span class="p">,</span> <span class="s2">"Laboratory"</span><span class="p">)],</span>
             <span class="n">sub</span><span class="p">[(</span><span class="n">q</span><span class="p">,</span> <span class="s2">"Virtual"</span><span class="p">)],</span>
             <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="n">model</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -9447,19 +9463,22 @@ Name: count, dtype: int64
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Virtual mixtures"</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower right"</span><span class="p">)</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">"Laboratory versus virtual mixture apportionments"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.05</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+    <span class="s2">"Laboratory versus virtual mixture apportionments"</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="mf">1.05</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
-<span class="n">output_path</span> <span class="o">=</span> <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"laboratory_vs_virtual_quantiles.png"</span>
-
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-    <span class="n">output_path</span><span class="p">,</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"lab-vs-virtual-quantiles.png"</span><span class="p">,</span>
     <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
     <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
-    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 
@@ -9471,7 +9490,7 @@ Name: count, dtype: int64
         <span class="n">group</span><span class="p">[</span><span class="n">crps_col</span><span class="p">],</span>
         <span class="n">s</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="n">model</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
     <span class="p">)</span>
 
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"CRPS as a function of known source proportion"</span><span class="p">)</span>
@@ -9480,7 +9499,14 @@ Name: count, dtype: int64
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"crps_by_source_proportion.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"crps-by-source-proportion.png"</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -9539,7 +9565,10 @@ Name: count, dtype: int64
 
 <span class="k">for</span> <span class="n">tracer</span> <span class="ow">in</span> <span class="n">selected_tracers</span><span class="p">:</span>
     <span class="n">samples_by_source</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">source_log_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">source_log_df</span><span class="p">[</span><span class="s2">"source_label"</span><span class="p">]</span> <span class="o">==</span> <span class="n">label</span><span class="p">,</span> <span class="n">tracer</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">source_log_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="n">source_log_df</span><span class="p">[</span><span class="s2">"source_label"</span><span class="p">]</span> <span class="o">==</span> <span class="n">label</span><span class="p">,</span>
+            <span class="n">tracer</span><span class="p">,</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">source_order</span>
     <span class="p">]</span>
 
@@ -9559,7 +9588,7 @@ Name: count, dtype: int64
 <span class="p">)</span>
 
 <span class="n">kruskal_table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"kruskal_selected_tracers.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"kruskal-tracers.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -9678,7 +9707,9 @@ Name: count, dtype: int64
     <span class="n">columns</span><span class="o">=</span><span class="n">source_order</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">cm</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"lda_confusion_matrix.csv"</span><span class="p">)</span>
+<span class="n">cm</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"lda-confusion-matrix.csv"</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 
@@ -9690,12 +9721,16 @@ Name: count, dtype: int64
     <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
     <span class="n">ha</span><span class="o">=</span><span class="s2">"right"</span><span class="p">,</span>
 <span class="p">)</span>
+
 <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span>
     <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">source_order</span><span class="p">)),</span>
     <span class="n">labels</span><span class="o">=</span><span class="n">source_order</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span>
+    <span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+    <span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+<span class="p">):</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
         <span class="n">j</span><span class="p">,</span>
         <span class="n">i</span><span class="p">,</span>
@@ -9708,12 +9743,20 @@ Name: count, dtype: int64
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Predicted source"</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Observed source"</span><span class="p">)</span>
 
-<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+    <span class="n">im</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span>
+    <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"lda_confusion_matrix.png"</span><span class="p">,</span>
+    <span class="n">figures_dir</span> <span class="o">/</span> <span class="s2">"lda-confusion-matrix.png"</span><span class="p">,</span>
     <span class="n">dpi</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+    <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -9739,7 +9782,7 @@ Name: count, dtype: int64
 <span class="p">)</span>
 
 <span class="n">source_level_metrics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"source_level_metrics.csv"</span><span class="p">,</span>
+    <span class="n">tables_dir</span> <span class="o">/</span> <span class="s2">"source-metrics.csv"</span><span class="p">,</span>
     <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 

@@ -447,8 +447,8 @@ window.Quarto = {
 PV = \left( \frac{1}{1 + r_t} \right)^t \mathbb{E}[X_t]
 \tag{1.1}\]</span></span></p>
 <p>Here, <span class="math inline">\(PV\)</span> represents the expected present value of a future cash flow <span class="math inline">\(X_t\)</span> received at time <span class="math inline">\(t\)</span>, while <span class="math inline">\(r_t\)</span> denotes the discount rate associated with risk and the opportunity cost of capital. The fundamental challenge for the investor is that this discount rate is not known in advance. In other words, the key question is how much return should be required to compensate for the level of risk being taken. This problem provides the conceptual motivation for the Capital Asset Pricing Model (CAPM) and its multifactor extensions.</p>
-<p>Since future returns are uncertain, this project models them as random variables. A practical way to characterize them is through their expected value, representing the anticipated average return, and their volatility, which measures the dispersion of outcomes around that average. This mean-variance framework, originally developed by Harry Markowitz in modern portfolio theory, shows that total portfolio risk can be reduced by combining assets whose returns do not move exactly in the same way <span class="citation" data-cites="markowitz1952portfolio"><a href="#ref-markowitz1952portfolio" role="doc-biblioref">[1]</a></span>. The intuition is straightforward: through diversification, part of the individual fluctuations of each asset tends to offset one another.</p>
-<p>However, diversification has an observable practical limit. As portfolios are constructed with an increasing number of assets, total volatility initially falls rapidly but eventually stabilizes around a lower bound. As illustrated in <a href="#fig-diversification" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-diversification</span></a>, this behavior reveals the existence of two distinct components of risk. On the one hand, idiosyncratic or diversifiable risk, which is associated with firm-specific events and can largely be eliminated through diversification. On the other hand, systematic risk, which is linked to broader macroeconomic and market-wide movements and therefore persists even in highly diversified portfolios.</p>
+<p>Since future returns are uncertain, this project models them as random variables. A practical way to characterize them is through their expected value, representing the anticipated average return, and their volatility, which measures the dispersion of outcomes around that average. This mean-variance framework, originally developed by Harry Markowitz in modern portfolio theory, shows that total portfolio risk can be reduced by combining assets whose returns do not move exactly in the same way <span class="citation" data-cites="markowitz1952portfolio"><a href="../references.html#ref-markowitz1952portfolio" role="doc-biblioref">[1]</a></span>. The intuition is straightforward: through diversification, part of the individual fluctuations of each asset tends to offset one another.</p>
+<p>However, diversification has an observable practical limit. As portfolios are constructed with an increasing number of assets, total volatility initially falls rapidly but eventually stabilizes around a lower bound. As illustrated in <a href="#fig-diversification" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>, this behavior reveals the existence of two distinct components of risk. On the one hand, idiosyncratic or diversifiable risk, which is associated with firm-specific events and can largely be eliminated through diversification. On the other hand, systematic risk, which is linked to broader macroeconomic and market-wide movements and therefore persists even in highly diversified portfolios.</p>
 <div id="fig-diversification" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-diversification-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -459,18 +459,18 @@ Figure&nbsp;1.1: Decomposition of total risk into systematic and diversifiable r
 </figcaption>
 </figure>
 </div>
-<p>This distinction has a fundamental implication for asset pricing. In a competitive market, rational investors should not expect compensation for taking risks that can be eliminated at virtually no cost through diversification. As a result, the market only rewards exposure to systematic risk. This idea forms the conceptual foundation of the CAPM, which states that the expected risk premium of an asset should be proportional to the expected risk premium of the market <span class="citation" data-cites="sharpe1964capital"><a href="#ref-sharpe1964capital" role="doc-biblioref">[2]</a></span> <span class="citation" data-cites="lintner1975valuation"><a href="#ref-lintner1975valuation" role="doc-biblioref">[3]</a></span>:</p>
+<p>This distinction has a fundamental implication for asset pricing. In a competitive market, rational investors should not expect compensation for taking risks that can be eliminated at virtually no cost through diversification. As a result, the market only rewards exposure to systematic risk. This idea forms the conceptual foundation of the CAPM, which states that the expected risk premium of an asset should be proportional to the expected risk premium of the market <span class="citation" data-cites="sharpe1964capital"><a href="../references.html#ref-sharpe1964capital" role="doc-biblioref">[2]</a></span> <span class="citation" data-cites="lintner1975valuation"><a href="../references.html#ref-lintner1975valuation" role="doc-biblioref">[3]</a></span>:</p>
 <p><span id="eq-capm"><span class="math display">\[
 \mathbb{E}[r_i] - r_f = \beta_i \left( \mathbb{E}[r_m] - r_f \right)
 \tag{1.2}\]</span></span></p>
 <p>In this expression, <span class="math inline">\(\mathbb{E}[r_i]\)</span> represents the expected return of asset <span class="math inline">\(i\)</span>, <span class="math inline">\(r_f\)</span> is the risk-free rate, and <span class="math inline">\(\mathbb{E}[r_m]\)</span> corresponds to the expected return of the market portfolio. The parameter <span class="math inline">\(\beta_i\)</span> measures the sensitivity of the asset to market fluctuations and summarizes its exposure to systematic risk.</p>
-<p>From a modeling perspective, the estimation of beta can be interpreted as a simple linear regression between asset returns and market returns <span class="citation" data-cites="bossaerts2006lectures"><a href="#ref-bossaerts2006lectures" role="doc-biblioref">[4]</a></span>. In this project, the CAPM is implemented precisely under this framework, using simple linear regression to estimate the market exposure of different assets and analyze the relationship between systematic risk and expected return.</p>
-<p>Despite its conceptual simplicity and historical importance, the CAPM assumes that the entire structure of systematic risk can be summarized by a single factor: the market itself. Empirical evidence, however, suggests that certain firm characteristics — such as company size or the relationship between book value and market value — capture persistent return patterns that the CAPM does not fully explain. These observations motivated the development of the multifactor models proposed by Fama and French <span class="citation" data-cites="fama1993common"><a href="#ref-fama1993common" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="fama1997industry"><a href="#ref-fama1997industry" role="doc-biblioref">[6]</a></span>.</p>
+<p>From a modeling perspective, the estimation of beta can be interpreted as a simple linear regression between asset returns and market returns <span class="citation" data-cites="bossaerts2006lectures"><a href="../references.html#ref-bossaerts2006lectures" role="doc-biblioref">[4]</a></span>. In this project, the CAPM is implemented precisely under this framework, using simple linear regression to estimate the market exposure of different assets and analyze the relationship between systematic risk and expected return.</p>
+<p>Despite its conceptual simplicity and historical importance, the CAPM assumes that the entire structure of systematic risk can be summarized by a single factor: the market itself. Empirical evidence, however, suggests that certain firm characteristics — such as company size or the relationship between book value and market value — capture persistent return patterns that the CAPM does not fully explain. These observations motivated the development of the multifactor models proposed by Fama and French <span class="citation" data-cites="fama1993common"><a href="../references.html#ref-fama1993common" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="fama1997industry"><a href="../references.html#ref-fama1997industry" role="doc-biblioref">[6]</a></span>.</p>
 <p>In this project, these extensions are implemented using multiple linear regression. The three-factor model can be expressed as:</p>
 <p><span id="eq-fama-french-3factor"><span class="math display">\[
 \mathbb{E}[r_i] - r_f = \alpha + \beta_{mkt} (\mathbb{E}[r_m] - r_f) + \beta_{smb} \cdot \text{SMB} + \beta_{hml} \cdot \text{HML} + \varepsilon
 \tag{1.3}\]</span></span></p>
-<p>where <span class="math inline">\(\text{SMB}\)</span> (<em>Small Minus Big</em>) measures the excess return of small-cap stocks relative to large-cap stocks, while <span class="math inline">\(\text{HML}\)</span> (<em>High Minus Low</em>) captures the return differential between value and growth stocks <span class="citation" data-cites="brealey2011principles"><a href="#ref-brealey2011principles" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="lewinson2022python"><a href="#ref-lewinson2022python" role="doc-biblioref">[8]</a></span>.</p>
+<p>where <span class="math inline">\(\text{SMB}\)</span> (<em>Small Minus Big</em>) measures the excess return of small-cap stocks relative to large-cap stocks, while <span class="math inline">\(\text{HML}\)</span> (<em>High Minus Low</em>) captures the return differential between value and growth stocks <span class="citation" data-cites="brealey2011principles"><a href="../references.html#ref-brealey2011principles" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="lewinson2022python"><a href="../references.html#ref-lewinson2022python" role="doc-biblioref">[8]</a></span>.</p>
 <p>From a modeling perspective, the transition from the CAPM to the Fama–French three-factor model can be interpreted as moving from a simple linear regression to a multiple linear regression framework, incorporating additional explanatory variables to capture dimensions of systematic risk that a single-factor model cannot fully represent.</p>
 <p>The main objective of the project is not simply to compare statistical goodness-of-fit metrics, but to understand how different economic factors contribute to the generation of returns in financial markets and to evaluate how effectively models of different complexity levels represent that underlying process.</p>
 </section>
@@ -493,7 +493,7 @@ Figure&nbsp;1.2: Adjusted closing prices for Apple Inc.&nbsp;and the S&amp;P 500
 </figure>
 </div>
 <p>Daily simple returns are then computed from the adjusted closing prices. These returns constitute the main variables used throughout the regression analysis.</p>
-<p>Before estimating the model, the relationship between asset and market returns is visually explored through a scatter plot. As shown in <a href="#fig-capm-daily-returns-scatter" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-capm-daily-returns-scatter</span></a>, the data already suggest a positive linear relationship between Apple returns and market returns, supporting the use of a linear regression framework for the CAPM estimation.</p>
+<p>Before estimating the model, the relationship between asset and market returns is visually explored through a scatter plot. As shown in <a href="#fig-capm-daily-returns-scatter" class="quarto-xref">Figure&nbsp;<span>1.3</span></a>, the data already suggest a positive linear relationship between Apple returns and market returns, supporting the use of a linear regression framework for the CAPM estimation.</p>
 <div id="fig-capm-daily-returns-scatter" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-capm-daily-returns-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -507,7 +507,7 @@ Figure&nbsp;1.3: Scatter plot of daily Apple returns against S&amp;P 500 daily r
 </section>
 <section id="capm-implementation" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="capm-implementation"><span class="header-section-number">1.3.2</span> CAPM Implementation</h3>
-<p>Following the theoretical formulation introduced in <a href="#eq-capm" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-capm</span></a>, the CAPM is implemented through a simple linear regression in which the daily returns of Apple Inc.&nbsp;are modeled as a function of the daily returns of the market portfolio.</p>
+<p>Following the theoretical formulation introduced in <a href="#eq-capm" class="quarto-xref">Equation&nbsp;<span>1.2</span></a>, the CAPM is implemented through a simple linear regression in which the daily returns of Apple Inc.&nbsp;are modeled as a function of the daily returns of the market portfolio.</p>
 <p>For simplicity, the implementation presented here uses raw daily returns without explicitly incorporating a risk-free rate. Under this approximation, the model estimates the linear sensitivity of the selected asset relative to market movements.</p>
 <p>The estimated regression coefficients are summarized below.</p>
 <div id="tbl-capm-coefficients" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -585,7 +585,7 @@ Table&nbsp;1.2: Diagnostic statistics associated with the CAPM linear regression
 </div>
 <p>The estimated beta coefficient is also statistically significant, with a large associated <span class="math inline">\(t\)</span>-statistic and a near-zero <span class="math inline">\(p\)</span>-value. Similarly, the overall regression presents a large <span class="math inline">\(F\)</span>-statistic, supporting the existence of a statistically meaningful linear relationship between Apple returns and market returns during the analyzed period.</p>
 <p>The estimated coefficient of determination of approximately <span class="math inline">\(R^2 = 0.625\)</span> indicates that the market factor alone explains a substantial fraction of the observed variability in Apple daily returns during the selected period. Nevertheless, a significant portion of the variability remains unexplained, motivating the consideration of multifactor extensions beyond the single-factor CAPM specification.</p>
-<p>The fitted linear relationship between asset and market returns is illustrated in <a href="#fig-capm-regression" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-capm-regression</span></a>.</p>
+<p>The fitted linear relationship between asset and market returns is illustrated in <a href="#fig-capm-regression" class="quarto-xref">Figure&nbsp;<span>1.4</span></a>.</p>
 <div id="fig-capm-regression" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-capm-regression-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -600,10 +600,10 @@ Figure&nbsp;1.4: CAPM linear regression between Apple daily returns and S&amp;P 
 </section>
 <section id="famafrench-three-factor-model-implementation" class="level3" data-number="1.3.3">
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="famafrench-three-factor-model-implementation"><span class="header-section-number">1.3.3</span> Fama–French Three-Factor Model Implementation</h3>
-<p>To extend the single-factor CAPM specification, the Fama–French three-factor model introduced in <a href="#eq-fama-french-3factor" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-fama-french-3factor</span></a> was estimated using ordinary least squares (OLS) regression. In addition to the market excess return factor, the model incorporates two additional systematic risk factors associated with firm size (<code>SMB</code>) and relative valuation (<code>HML</code>).</p>
+<p>To extend the single-factor CAPM specification, the Fama–French three-factor model introduced in <a href="#eq-fama-french-3factor" class="quarto-xref">Equation&nbsp;<span>1.3</span></a> was estimated using ordinary least squares (OLS) regression. In addition to the market excess return factor, the model incorporates two additional systematic risk factors associated with firm size (<code>SMB</code>) and relative valuation (<code>HML</code>).</p>
 <p>The implementation combines daily adjusted closing prices for Apple Inc.&nbsp;(<code>AAPL</code>) obtained from Yahoo Finance with the daily Fama–French factor dataset developed by Kenneth French. The final modeling dataset contains 1,256 daily observations covering the period from January 2020 to December 2024. The average daily excess return of Apple over the sample period was approximately <span class="math inline">\(0.11\%\)</span>, with a daily standard deviation close to <span class="math inline">\(2.0\%\)</span>.</p>
 <p>Additional implementation details are available in the companion Quarto notebook <a href="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/r/2-fama-french-three-factor-model.html">here</a>. A companion Python implementation is also available <a href="../notebooks-and-scripts/1-quantitative-finance/1-capm-and-fama-french-factor-model/python/2-fama-french-three-factor-model.html">here</a>.</p>
-<p><a href="#fig-fama-french-factor-series" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-fama-french-factor-series</span></a> displays the behavior of the three explanatory factors over time. The series exhibit substantial short-term variability, particularly during periods of market stress such as the early stages of the COVID-19 pandemic in 2020. The <code>SMB</code> factor shows the highest volatility among the three factors during this period, reflecting the stronger sensitivity of small-cap firms to abrupt changes in market conditions.</p>
+<p><a href="#fig-fama-french-factor-series" class="quarto-xref">Figure&nbsp;<span>1.5</span></a> displays the behavior of the three explanatory factors over time. The series exhibit substantial short-term variability, particularly during periods of market stress such as the early stages of the COVID-19 pandemic in 2020. The <code>SMB</code> factor shows the highest volatility among the three factors during this period, reflecting the stronger sensitivity of small-cap firms to abrupt changes in market conditions.</p>
 <div id="fig-fama-french-factor-series" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-fama-french-factor-series-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -718,7 +718,7 @@ Table&nbsp;1.4: Diagnostic statistics associated with the Fama-French three-fact
 </div>
 </figure>
 </div>
-<p><a href="#fig-fama-french-observed-fitted" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-fama-french-observed-fitted</span></a> compares the observed excess returns against the fitted values generated by the regression model. The fitted series captures a substantial fraction of the short-term dynamics of Apple returns, although large residual fluctuations remain during periods of elevated volatility.</p>
+<p><a href="#fig-fama-french-observed-fitted" class="quarto-xref">Figure&nbsp;<span>1.6</span></a> compares the observed excess returns against the fitted values generated by the regression model. The fitted series captures a substantial fraction of the short-term dynamics of Apple returns, although large residual fluctuations remain during periods of elevated volatility.</p>
 <div id="fig-fama-french-observed-fitted" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-fama-french-observed-fitted-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -729,7 +729,7 @@ Figure&nbsp;1.6: Observed and fitted excess returns under the Fama–French thre
 </figcaption>
 </figure>
 </div>
-<p>The residual series displayed in <a href="#fig-fama-french-residuals" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-fama-french-residuals</span></a> remains approximately centered around zero throughout the analyzed period, without obvious long-term structural drift. However, clusters of higher residual volatility are still visible during stressed market conditions, indicating that a portion of the variability remains unexplained even after incorporating the additional systematic factors.</p>
+<p>The residual series displayed in <a href="#fig-fama-french-residuals" class="quarto-xref">Figure&nbsp;<span>1.7</span></a> remains approximately centered around zero throughout the analyzed period, without obvious long-term structural drift. However, clusters of higher residual volatility are still visible during stressed market conditions, indicating that a portion of the variability remains unexplained even after incorporating the additional systematic factors.</p>
 <div id="fig-fama-french-residuals" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-fama-french-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -740,7 +740,7 @@ Figure&nbsp;1.7: Residual series of the Fama–French three-factor model.
 </figcaption>
 </figure>
 </div>
-<p>Finally, the residual distribution shown in <a href="#fig-fama-french-residual-distribution" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-fama-french-residual-distribution</span></a> exhibits a roughly symmetric shape centered near zero, although moderate tail behavior remains visible. This behavior is consistent with the presence of occasional large market movements that are not fully captured by the linear factor structure.</p>
+<p>Finally, the residual distribution shown in <a href="#fig-fama-french-residual-distribution" class="quarto-xref">Figure&nbsp;<span>1.8</span></a> exhibits a roughly symmetric shape centered near zero, although moderate tail behavior remains visible. This behavior is consistent with the presence of occasional large market movements that are not fully captured by the linear factor structure.</p>
 <div id="fig-fama-french-residual-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-fama-french-residual-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -780,10 +780,10 @@ Figure&nbsp;1.8: Distribution of residuals from the Fama–French three-factor m
 <h2 data-number="1.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">1.5</span> Technical Appendix (Optional)</h2>
 <p>This appendix provides a compact technical background for the regression models used in this project. The main body of the chapter focuses on the financial interpretation of the CAPM and Fama-French models, while this appendix summarizes the statistical structure underlying their empirical estimation.</p>
 <p>The CAPM specification can be interpreted as a simple linear regression model, where the excess return of an asset is explained by the excess return of the market portfolio. In contrast, the Fama-French three-factor model extends this idea to a multiple linear regression setting, where asset excess returns are explained by a set of risk factors rather than by the market factor alone.</p>
-<p>The purpose of this appendix is not to provide a complete treatment of linear regression or statistical learning. Instead, it collects the main concepts needed to understand how the models were estimated, how the coefficients should be interpreted, and how goodness-of-fit and statistical significance measures relate to the empirical results discussed in the project. The presentation follows standard treatments of linear regression and statistical learning <span class="citation" data-cites="james2023statistical"><a href="#ref-james2023statistical" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="ugarte2016probability"><a href="#ref-ugarte2016probability" role="doc-biblioref">[10]</a></span>.</p>
+<p>The purpose of this appendix is not to provide a complete treatment of linear regression or statistical learning. Instead, it collects the main concepts needed to understand how the models were estimated, how the coefficients should be interpreted, and how goodness-of-fit and statistical significance measures relate to the empirical results discussed in the project. The presentation follows standard treatments of linear regression and statistical learning <span class="citation" data-cites="james2023statistical"><a href="../references.html#ref-james2023statistical" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="ugarte2016probability"><a href="../references.html#ref-ugarte2016probability" role="doc-biblioref">[10]</a></span>.</p>
 <section id="simple-linear-regression-and-the-capm-model" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="simple-linear-regression-and-the-capm-model"><span class="header-section-number">1.5.1</span> Simple Linear Regression and the CAPM Model</h3>
-<p>As discussed previously in <a href="#eq-capm" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-capm</span></a>, the CAPM establishes a linear relationship between the expected excess return of an asset and the expected excess return of the market portfolio. From a statistical perspective, this relationship can be interpreted as a simple linear regression model of the form</p>
+<p>As discussed previously in <a href="#eq-capm" class="quarto-xref">Equation&nbsp;<span>1.2</span></a>, the CAPM establishes a linear relationship between the expected excess return of an asset and the expected excess return of the market portfolio. From a statistical perspective, this relationship can be interpreted as a simple linear regression model of the form</p>
 <p><span id="eq-slr-model"><span class="math display">\[
 y_i = \theta_0 + \theta_1 x_i + \varepsilon_i
 \tag{1.4}\]</span></span></p>
@@ -811,7 +811,7 @@ r_i - r_f =
 (y_i - \theta_0 - \theta_1 x_i)^2
 \tag{1.6}\]</span></span></p>
 <p>where each residual represents the difference between an observed value and the value predicted by the model.</p>
-<p><a href="#fig-rss" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-rss</span></a> illustrates the geometric interpretation of the residuals in simple linear regression. The ordinary least squares estimator selects the parameters that minimize the squared residual distances between the observations and the fitted regression line.</p>
+<p><a href="#fig-rss" class="quarto-xref">Figure&nbsp;<span>1.9</span></a> illustrates the geometric interpretation of the residuals in simple linear regression. The ordinary least squares estimator selects the parameters that minimize the squared residual distances between the observations and the fitted regression line.</p>
 <div id="fig-rss" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -822,7 +822,7 @@ Figure&nbsp;1.9: Residual Sum of Squares (RSS)
 </figcaption>
 </figure>
 </div>
-<p>The ordinary least squares estimators are obtained by minimizing <a href="#eq-rss" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-rss</span></a> with respect to the model parameters. Since the RSS is a convex quadratic function of <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_1\)</span>, the solution can be obtained by setting the gradient equal to zero. The convexity of the RSS follows from the positive definiteness of the associated Hessian matrix, ensuring that the stationary point corresponds to a unique global minimum.</p>
+<p>The ordinary least squares estimators are obtained by minimizing <a href="#eq-rss" class="quarto-xref">Equation&nbsp;<span>1.6</span></a> with respect to the model parameters. Since the RSS is a convex quadratic function of <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_1\)</span>, the solution can be obtained by setting the gradient equal to zero. The convexity of the RSS follows from the positive definiteness of the associated Hessian matrix, ensuring that the stationary point corresponds to a unique global minimum.</p>
 <p>The resulting estimators are given by</p>
 <p><span id="eq-ols-slope"><span class="math display">\[
 \hat{\theta}_1 =
@@ -848,7 +848,7 @@ Figure&nbsp;1.9: Residual Sum of Squares (RSS)
 -
 \hat{\theta}_1 \bar{x}
 \tag{1.8}\]</span></span></p>
-<p><a href="#eq-ols-slope" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-ols-slope</span></a> shows that the slope estimator can be interpreted as the ratio between the covariance of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> and the variance of <span class="math inline">\(x\)</span>. Consequently, the estimated slope increases when both variables tend to move together and decreases when their linear relationship weakens. In the context of empirical asset pricing, this interpretation leads naturally to the CAPM market beta, which can be viewed as the ordinary least squares estimator obtained by regressing the excess return of an asset against the excess return of the market portfolio. Under this interpretation, the CAPM beta measures the linear sensitivity of the asset return to market movements in the least-squares sense.</p>
+<p><a href="#eq-ols-slope" class="quarto-xref">Equation&nbsp;<span>1.7</span></a> shows that the slope estimator can be interpreted as the ratio between the covariance of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> and the variance of <span class="math inline">\(x\)</span>. Consequently, the estimated slope increases when both variables tend to move together and decreases when their linear relationship weakens. In the context of empirical asset pricing, this interpretation leads naturally to the CAPM market beta, which can be viewed as the ordinary least squares estimator obtained by regressing the excess return of an asset against the excess return of the market portfolio. Under this interpretation, the CAPM beta measures the linear sensitivity of the asset return to market movements in the least-squares sense.</p>
 </section>
 <section id="residual-analysis-and-model-assumptions" class="level4" data-number="1.5.1.2">
 <h4 data-number="1.5.1.2" class="anchored" data-anchor-id="residual-analysis-and-model-assumptions"><span class="header-section-number">1.5.1.2</span> Residual Analysis and Model Assumptions</h4>
@@ -859,7 +859,7 @@ e_i
 y_i - \hat{y}_i
 \tag{1.9}\]</span></span></p>
 <p>where <span class="math inline">\(\hat{y}_i\)</span> denotes the predicted value obtained from the fitted regression model.</p>
-<p>A distinction should be made between residuals and random errors. Residuals correspond to observable deviations between the fitted model and the data, whereas the random errors <span class="math inline">\(\varepsilon_i\)</span> introduced in <a href="#eq-slr-model" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-slr-model</span></a> represent the unobservable stochastic component assumed by the statistical model.</p>
+<p>A distinction should be made between residuals and random errors. Residuals correspond to observable deviations between the fitted model and the data, whereas the random errors <span class="math inline">\(\varepsilon_i\)</span> introduced in <a href="#eq-slr-model" class="quarto-xref">Equation&nbsp;<span>1.4</span></a> represent the unobservable stochastic component assumed by the statistical model.</p>
 <p>Classical linear regression assumes that the random errors are independent, centered around zero, and have constant variance. Under these assumptions,</p>
 <p><span id="eq-gaussian-errors"><span class="math display">\[
 \varepsilon_i
@@ -923,7 +923,7 @@ N - 2
 \right]
 }
 \tag{1.14}\]</span></span></p>
-<p>where <span class="math inline">\(\sigma^2\)</span> is typically replaced in practice by the estimator introduced in <a href="#eq-rse" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-rse</span></a>.</p>
+<p>where <span class="math inline">\(\sigma^2\)</span> is typically replaced in practice by the estimator introduced in <a href="#eq-rse" class="quarto-xref">Equation&nbsp;<span>1.12</span></a>.</p>
 <p>These expressions show that the uncertainty associated with the estimated coefficients depends on both the residual variability and the dispersion of the predictor variable. In particular, the standard error of the slope coefficient decreases as the variability of <span class="math inline">\(x\)</span> increases, leading to more stable estimates of the linear relationship.</p>
 <p>Confidence intervals provide a range of plausible values for the regression coefficients. Under approximate normality assumptions, a <span class="math inline">\(95\%\)</span> confidence interval for a parameter <span class="math inline">\(\theta\)</span> can be written as</p>
 <p><span id="eq-confidence-interval"><span class="math display">\[
@@ -969,7 +969,7 @@ y_i - \bar{y}
 (y_i - \hat{y}_i)
 \tag{1.18}\]</span></span></p>
 <p>which separates the total deviation of each observation into an explained component and a residual component.</p>
-<p><a href="#fig-anova" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-anova</span></a> illustrates the geometric interpretation of this decomposition in the context of simple linear regression.</p>
+<p><a href="#fig-anova" class="quarto-xref">Figure&nbsp;<span>1.10</span></a> illustrates the geometric interpretation of this decomposition in the context of simple linear regression.</p>
 <div id="fig-anova" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-anova-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1042,7 +1042,7 @@ F
 <section id="coefficient-of-determination-r2" class="level4" data-number="1.5.1.6">
 <h4 data-number="1.5.1.6" class="anchored" data-anchor-id="coefficient-of-determination-r2"><span class="header-section-number">1.5.1.6</span> Coefficient of Determination (<span class="math inline">\(R^2\)</span>)</h4>
 <p>Another commonly used measure in linear regression is the coefficient of determination, denoted by <span class="math inline">\(R^2\)</span>. This statistic quantifies the proportion of the total variability in the response variable that is explained by the regression model.</p>
-<p>Using the ANOVA decomposition introduced in <a href="#eq-anova-decomposition" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-anova-decomposition</span></a>,</p>
+<p>Using the ANOVA decomposition introduced in <a href="#eq-anova-decomposition" class="quarto-xref">Equation&nbsp;<span>1.19</span></a>,</p>
 <p><span class="math display">\[
 \mathrm{TSS}
 =
@@ -1150,7 +1150,7 @@ y_N
 <p>Under this interpretation, the Fama–French three-factor model can be viewed as a particular case of multiple linear regression in which the excess return of an asset is explained simultaneously by the market factor, the SMB factor, and the HML factor.</p>
 <section id="ordinary-least-squares-estimation-1" class="level4" data-number="1.5.2.1">
 <h4 data-number="1.5.2.1" class="anchored" data-anchor-id="ordinary-least-squares-estimation-1"><span class="header-section-number">1.5.2.1</span> Ordinary Least Squares Estimation</h4>
-<p>As in the simple linear regression setting, the parameters of the multiple linear regression model are estimated by minimizing the residual sum of squares. Using the matrix formulation introduced in <a href="#eq-mlr-matrix" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mlr-matrix</span></a>, the residual vector can be written as</p>
+<p>As in the simple linear regression setting, the parameters of the multiple linear regression model are estimated by minimizing the residual sum of squares. Using the matrix formulation introduced in <a href="#eq-mlr-matrix" class="quarto-xref">Equation&nbsp;<span>1.29</span></a>, the residual vector can be written as</p>
 <p><span id="eq-mlr-residuals"><span class="math display">\[
 \mathbf{e}
 =
@@ -1167,7 +1167,7 @@ y_N
 (\mathbf{y} - \mathbf{X}\boldsymbol{\theta})^T
 (\mathbf{y} - \mathbf{X}\boldsymbol{\theta})
 \tag{1.31}\]</span></span></p>
-<p>The ordinary least squares estimator is obtained by minimizing <a href="#eq-mlr-rss" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mlr-rss</span></a> with respect to the parameter vector <span class="math inline">\(\boldsymbol{\theta}\)</span>. As in the simple linear regression case, the optimization problem is convex and admits a unique global minimum provided that the columns of the design matrix <span class="math inline">\(\mathbf{X}\)</span> are linearly independent.</p>
+<p>The ordinary least squares estimator is obtained by minimizing <a href="#eq-mlr-rss" class="quarto-xref">Equation&nbsp;<span>1.31</span></a> with respect to the parameter vector <span class="math inline">\(\boldsymbol{\theta}\)</span>. As in the simple linear regression case, the optimization problem is convex and admits a unique global minimum provided that the columns of the design matrix <span class="math inline">\(\mathbf{X}\)</span> are linearly independent.</p>
 <p>The resulting estimator is given by</p>
 <p><span id="eq-mlr-ols"><span class="math display">\[
 \hat{\boldsymbol{\theta}}
@@ -1203,7 +1203,7 @@ N - M - 1
 }
 \tag{1.34}\]</span></span></p>
 <p>where <span class="math inline">\(N\)</span> represents the number of observations and <span class="math inline">\(M\)</span> the number of explanatory variables included in the model.</p>
-<p>The diagonal elements of <a href="#eq-mlr-covariance" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mlr-covariance</span></a> determine the standard errors associated with each regression coefficient and provide a measure of the uncertainty of the parameter estimates. Larger standard errors indicate greater uncertainty in the estimated contribution of the corresponding predictor.</p>
+<p>The diagonal elements of <a href="#eq-mlr-covariance" class="quarto-xref">Equation&nbsp;<span>1.33</span></a> determine the standard errors associated with each regression coefficient and provide a measure of the uncertainty of the parameter estimates. Larger standard errors indicate greater uncertainty in the estimated contribution of the corresponding predictor.</p>
 <p>In the context of the Fama–French three-factor model, the estimated coefficients associated with the market, SMB, and HML factors measure the sensitivity of the asset return to each systematic risk factor after controlling for the remaining factors included in the regression. Consequently, the interpretation of each coefficient should always be understood conditionally on the presence of the other explanatory variables.</p>
 <p>The inclusion of multiple predictors may also introduce statistical challenges such as multicollinearity, which occurs when explanatory variables exhibit strong linear dependence. In such cases, coefficient estimates may become unstable and difficult to interpret, even when the overall predictive performance of the model remains satisfactory.</p>
 </section>
@@ -1242,7 +1242,7 @@ F
 <p>Despite these limitations, linear regression models remain fundamental tools in empirical finance due to their interpretability, computational efficiency, and strong connection with statistical inference and risk factor modeling.</p>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-markowitz1952portfolio" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">H. Markowitz, <span>“Portfolio selection,”</span> <em>The Journal of Finance</em>, vol. 7, no. 1, pp. 77–91, 1952.</div>
 </div>
