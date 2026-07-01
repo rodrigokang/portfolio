@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,15 +54,14 @@ div.csl-indent {
 <link href="../2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -105,7 +104,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -145,9 +144,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -437,7 +434,7 @@ window.Quarto = {
 
 
 <p>Customer relationships are among the most valuable assets of a business, yet they are also among the most difficult to quantify. While transactional databases record what customers have purchased, they rarely explain how purchasing behaviour evolves over time or which customers deserve the greatest commercial attention. As a result, organisations often rely on simple indicators such as historical revenue or purchase counts, even though these metrics provide only a partial view of customer behaviour.</p>
-<p>Database marketing has long recognised that effective customer management requires combining behavioural analysis with predictive and financial perspectives rather than relying on a single performance indicator <span class="citation" data-cites="robert2008database"><a href="../references.html#ref-robert2008database" role="doc-biblioref">[1]</a></span>. Understanding who customers are, who is likely to leave, and which relationships are expected to generate the greatest long-term value are closely related questions that should be addressed within a unified analytical framework.</p>
+<p>Database marketing has long recognised that effective customer management requires combining behavioural analysis with predictive and financial perspectives rather than relying on a single performance indicator <span class="citation" data-cites="robert2008database"><a href="#ref-robert2008database" role="doc-biblioref">[1]</a></span>. Understanding who customers are, who is likely to leave, and which relationships are expected to generate the greatest long-term value are closely related questions that should be addressed within a unified analytical framework.</p>
 <p>This chapter develops a complete customer analytics workflow for a non-contractual retail business using transactional data from the AdventureWorks database. Unlike subscription businesses, where customer churn is explicitly observed through contract cancellations, retail businesses rarely record when a customer relationship has ended. Instead, customer behaviour must be inferred from historical purchasing activity.</p>
 <p>The analysis is organised around three complementary tasks. First, customers are segmented using Recency, Frequency, and Monetary (RFM) variables to identify groups with similar purchasing behaviour. Second, churn is formulated as a supervised learning problem by defining customer inactivity over a future observation window. Finally, customer lifetime value (CLV) is estimated by combining customer profitability with retention risk and explicit discount-rate assumptions.</p>
 <p>Rather than presenting these models as independent analyses, the chapter demonstrates how descriptive analytics, predictive modelling, and economic valuation can be integrated into a single decision-support workflow. The emphasis is not on producing a universal customer score, but on developing a transparent framework in which every modelling assumption remains explicit and interpretable.</p>
@@ -492,7 +489,7 @@ window.Quarto = {
 <section id="risk-adjusted-customer-lifetime-value-prediction" class="level3" data-number="5.3.3">
 <h3 data-number="5.3.3" class="anchored" data-anchor-id="risk-adjusted-customer-lifetime-value-prediction"><span class="header-section-number">5.3.3</span> Risk-Adjusted Customer Lifetime Value Prediction</h3>
 <p>The final stage of the workflow extends the analysis from customer retention to customer value. While the churn model estimates the likelihood that a customer will become inactive, it does not indicate the potential economic impact associated with that outcome. In practice, customers with similar churn probabilities may contribute very differently to the business, making it necessary to consider both retention risk and expected profitability when prioritising commercial actions.</p>
-<p>Customer Lifetime Value (CLV) provides a natural framework for integrating these dimensions. Following the general principles described by <span class="citation" data-cites="robert2008database"><a href="../references.html#ref-robert2008database" role="doc-biblioref">[1]</a></span>, customer value is interpreted as the present value of future customer profits rather than a simple summary of historical revenue. The implementation adopts this perspective while adapting it to a non-contractual retail environment in which future purchasing behaviour cannot be observed directly.</p>
+<p>Customer Lifetime Value (CLV) provides a natural framework for integrating these dimensions. Following the general principles described by <span class="citation" data-cites="robert2008database"><a href="#ref-robert2008database" role="doc-biblioref">[1]</a></span>, customer value is interpreted as the present value of future customer profits rather than a simple summary of historical revenue. The implementation adopts this perspective while adapting it to a non-contractual retail environment in which future purchasing behaviour cannot be observed directly.</p>
 <p>The modelling process begins by estimating customer-level profitability from historical sales and product costs extracted from the AdventureWorks database. These observed profits are then combined with the behavioural information obtained during the previous stages of the workflow. Instead of assuming identical future behaviour for every customer, the implementation incorporates segment-specific retention characteristics derived from the RFM analysis together with the predicted probability of churn estimated by the classification model. Segment-specific discount-rate assumptions are subsequently introduced to account for differences in the uncertainty associated with future customer relationships.</p>
 <p>These components are combined to construct a risk-adjusted customer lifetime value that serves as the target variable for the predictive model. Since this valuation cannot be observed directly in the transactional database, it should be interpreted as a transparent economic framework based on explicit behavioural and financial assumptions rather than as a measured quantity.</p>
 <p>Once the target has been constructed, the problem is formulated as a supervised regression task. The customer-level features engineered throughout the project—including behavioural variables, profitability measures, customer characteristics, and the outputs of the segmentation and churn models—are used to train several regression algorithms under a common cross-validation framework. Their predictive performance is assessed using complementary regression metrics together with residual analysis and predicted-versus-observed comparisons to evaluate both numerical accuracy and ranking capability.</p>
@@ -506,7 +503,7 @@ window.Quarto = {
 <p>The three stages of the analytical workflow provide complementary perspectives on customer behaviour. Customer segmentation offers an interpretable description of purchasing patterns, churn modelling estimates future customer inactivity, and customer lifetime value integrates these behavioural insights with expected economic contribution. Rather than evaluating each component independently, the results are interpreted as successive layers of information that progressively enrich the understanding of customer relationships.</p>
 <section id="customer-segmentation" class="level3" data-number="5.4.1">
 <h3 data-number="5.4.1" class="anchored" data-anchor-id="customer-segmentation"><span class="header-section-number">5.4.1</span> Customer Segmentation</h3>
-<p>The exploratory analysis confirms the strong asymmetry typically observed in transactional retail data. As shown in <a href="#tbl-rfm-summary" class="quarto-xref">Table&nbsp;<span>5.1</span></a>, Frequency and Monetary value exhibit substantial positive skewness, indicating that most customers purchase infrequently while a relatively small number account for a disproportionate share of total revenue. Such distributions are common in customer analytics and motivate the use of transformations before applying distance-based clustering algorithms.</p>
+<p>The exploratory analysis confirms the strong asymmetry typically observed in transactional retail data. As shown in <a href="#tbl-rfm-summary" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-rfm-summary</span></a>, Frequency and Monetary value exhibit substantial positive skewness, indicating that most customers purchase infrequently while a relatively small number account for a disproportionate share of total revenue. Such distributions are common in customer analytics and motivate the use of transformations before applying distance-based clustering algorithms.</p>
 <div id="tbl-rfm-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-rfm-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -546,7 +543,7 @@ Table&nbsp;5.1: Summary statistics of the RFM variables before transformation.
 </div>
 </figure>
 </div>
-<p>The distributions of the original RFM variables are illustrated in <a href="#fig-rfm-distributions" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>. After applying the Box-Cox transformation and standardisation, the feature space becomes considerably more suitable for clustering while preserving the original variables for business interpretation.</p>
+<p>The distributions of the original RFM variables are illustrated in <a href="#fig-rfm-distributions" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-rfm-distributions</span></a>. After applying the Box-Cox transformation and standardisation, the feature space becomes considerably more suitable for clustering while preserving the original variables for business interpretation.</p>
 <div id="fig-rfm-distributions" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rfm-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -557,7 +554,7 @@ Figure&nbsp;5.1: Distribution of the original RFM variables before transformatio
 </figcaption>
 </figure>
 </div>
-<p>Several candidate values of (k) were evaluated using complementary clustering diagnostics. Rather than relying on a single criterion, the final solution balances cluster separation, compactness, and interpretability. As summarised in <a href="#tbl-cluster-selection" class="quarto-xref">Table&nbsp;<span>5.2</span></a>, the nine-cluster solution provides the best overall compromise across the internal validation metrics without producing unnecessarily fragmented customer groups.</p>
+<p>Several candidate values of (k) were evaluated using complementary clustering diagnostics. Rather than relying on a single criterion, the final solution balances cluster separation, compactness, and interpretability. As summarised in <a href="#tbl-cluster-selection" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-cluster-selection</span></a>, the nine-cluster solution provides the best overall compromise across the internal validation metrics without producing unnecessarily fragmented customer groups.</p>
 <div id="tbl-cluster-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cluster-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -633,7 +630,7 @@ Table&nbsp;5.2: Clustering quality metrics used to determine the optimal number 
 </div>
 </figure>
 </div>
-<p>The corresponding diagnostic curves are presented in <a href="#fig-cluster-selection" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>.</p>
+<p>The corresponding diagnostic curves are presented in <a href="#fig-cluster-selection" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-cluster-selection</span></a>.</p>
 <div id="fig-cluster-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cluster-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -644,7 +641,7 @@ Figure&nbsp;5.2: Cluster selection diagnostics for different values of (k).
 </figcaption>
 </figure>
 </div>
-<p>The selected segmentation identifies nine customer profiles that capture meaningful differences in purchasing behaviour. Rather than representing fixed customer categories, these segments describe behavioural tendencies ranging from highly engaged customers to inactive, low-value buyers. A summary of the resulting segments is presented in <a href="#tbl-segment-summary" class="quarto-xref">Table&nbsp;<span>5.3</span></a>.</p>
+<p>The selected segmentation identifies nine customer profiles that capture meaningful differences in purchasing behaviour. Rather than representing fixed customer categories, these segments describe behavioural tendencies ranging from highly engaged customers to inactive, low-value buyers. A summary of the resulting segments is presented in <a href="#tbl-segment-summary" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-segment-summary</span></a>.</p>
 <div id="tbl-segment-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-segment-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -748,7 +745,7 @@ Table&nbsp;5.3: Summary of the final customer segments obtained from the RFM ana
 </div>
 </figure>
 </div>
-<p>The three-dimensional representation shown in <a href="#fig-rfm-space" class="quarto-xref">Figure&nbsp;<span>5.3</span></a> highlights the gradual transition between behavioural groups rather than sharply separated customer categories. This reinforces an important practical point: customer segmentation should be interpreted as a descriptive representation of purchasing behaviour rather than a definitive classification of customer types.</p>
+<p>The three-dimensional representation shown in <a href="#fig-rfm-space" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-rfm-space</span></a> highlights the gradual transition between behavioural groups rather than sharply separated customer categories. This reinforces an important practical point: customer segmentation should be interpreted as a descriptive representation of purchasing behaviour rather than a definitive classification of customer types.</p>
 <div id="fig-rfm-space" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rfm-space-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -763,7 +760,7 @@ Figure&nbsp;5.3: Three-dimensional representation of the customer segments in th
 <section id="churn-prediction" class="level3" data-number="5.4.2">
 <h3 data-number="5.4.2" class="anchored" data-anchor-id="churn-prediction"><span class="header-section-number">5.4.2</span> Churn Prediction</h3>
 <p>Customer segmentation provides a descriptive representation of purchasing behaviour, but it does not indicate whether customers are likely to remain active. The second stage of the workflow therefore introduces a predictive component by estimating the probability that each customer will become inactive during the observation period.</p>
-<p>Several supervised learning algorithms were evaluated using the engineered customer-level features described in the previous section. Their performance is summarised in <a href="#tbl-churn-model-comparison" class="quarto-xref">Table&nbsp;<span>5.4</span></a>. Rather than relying on a single evaluation metric, the comparison considers both discrimination and ranking performance to identify the model that provides the most reliable estimates of customer retention risk.</p>
+<p>Several supervised learning algorithms were evaluated using the engineered customer-level features described in the previous section. Their performance is summarised in <a href="#tbl-churn-model-comparison" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-churn-model-comparison</span></a>. Rather than relying on a single evaluation metric, the comparison considers both discrimination and ranking performance to identify the model that provides the most reliable estimates of customer retention risk.</p>
 <div id="tbl-churn-model-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-churn-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -900,7 +897,7 @@ Table&nbsp;5.4: Performance comparison of the evaluated churn prediction models.
 </div>
 </figure>
 </div>
-<p>The best-performing specification was the Random Forest model trained with SMOTE. As shown in <a href="#tbl-best-churn-model" class="quarto-xref">Table&nbsp;<span>5.5</span></a>, it achieved excellent discrimination on the independent test set, with a ROC AUC of 0.9996 and an Average Precision of 0.9707. More importantly, the model maintained full recall for the churn class while keeping precision at 0.8000, which is a useful balance for retention-oriented applications where missing high-risk customers is usually more costly than reviewing a small number of false positives.</p>
+<p>The best-performing specification was the Random Forest model trained with SMOTE. As shown in <a href="#tbl-best-churn-model" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-best-churn-model</span></a>, it achieved excellent discrimination on the independent test set, with a ROC AUC of 0.9996 and an Average Precision of 0.9707. More importantly, the model maintained full recall for the churn class while keeping precision at 0.8000, which is a useful balance for retention-oriented applications where missing high-risk customers is usually more costly than reviewing a small number of false positives.</p>
 <div id="tbl-best-churn-model" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-best-churn-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -943,7 +940,7 @@ Table&nbsp;5.5: Performance of the selected churn prediction model on the indepe
 </div>
 </figure>
 </div>
-<p>The class-level results in <a href="#tbl-classification-report" class="quarto-xref">Table&nbsp;<span>5.6</span></a> provide a more detailed view of the same behaviour. The model correctly identifies all churn cases in the test set, while most retention cases are also classified correctly. This is particularly relevant because the churn class is very small relative to the retained customer population.</p>
+<p>The class-level results in <a href="#tbl-classification-report" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-classification-report</span></a> provide a more detailed view of the same behaviour. The model correctly identifies all churn cases in the test set, while most retention cases are also classified correctly. This is particularly relevant because the churn class is very small relative to the retained customer population.</p>
 <div id="tbl-classification-report" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-classification-report-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1001,7 +998,7 @@ Table&nbsp;5.6: Precision, Recall, F1-score, and support for the selected churn 
 </div>
 </figure>
 </div>
-<p>The Receiver Operating Characteristic curve presented in <a href="#fig-roc" class="quarto-xref">Figure&nbsp;<span>5.4</span></a> demonstrates that the model separates active and inactive customers across a broad range of decision thresholds. Since customer retention datasets are inherently imbalanced, the Precision–Recall curve shown in <a href="#fig-pr-curve" class="quarto-xref">Figure&nbsp;<span>5.5</span></a> provides an equally important perspective by evaluating the model’s ability to identify genuinely high-risk customers without generating an excessive number of false positives.</p>
+<p>The Receiver Operating Characteristic curve presented in <a href="#fig-roc" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-roc</span></a> demonstrates that the model separates active and inactive customers across a broad range of decision thresholds. Since customer retention datasets are inherently imbalanced, the Precision–Recall curve shown in <a href="#fig-pr-curve" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-pr-curve</span></a> provides an equally important perspective by evaluating the model’s ability to identify genuinely high-risk customers without generating an excessive number of false positives.</p>
 <div id="fig-roc" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1022,7 +1019,7 @@ Figure&nbsp;5.5: Precision–Recall curve for the selected churn prediction mode
 </figcaption>
 </figure>
 </div>
-<p>The confusion matrix shown in <a href="#fig-confusion-matrix" class="quarto-xref">Figure&nbsp;<span>5.6</span></a> reinforces this interpretation. Most customers are correctly classified, while the remaining errors reflect the intrinsic uncertainty associated with non-contractual customer behaviour. In this setting, some customers naturally purchase at irregular intervals, making it difficult to distinguish perfectly between temporary inactivity and progressive disengagement.</p>
+<p>The confusion matrix shown in <a href="#fig-confusion-matrix" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-confusion-matrix</span></a> reinforces this interpretation. Most customers are correctly classified, while the remaining errors reflect the intrinsic uncertainty associated with non-contractual customer behaviour. In this setting, some customers naturally purchase at irregular intervals, making it difficult to distinguish perfectly between temporary inactivity and progressive disengagement.</p>
 <div id="fig-confusion-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1033,7 +1030,7 @@ Figure&nbsp;5.6: Confusion matrix for the selected churn prediction model.
 </figcaption>
 </figure>
 </div>
-<p>From a business perspective, ranking customers by estimated churn probability is often more useful than producing binary predictions. Marketing teams typically have limited resources and cannot intervene with every customer simultaneously. The cumulative gains curve shown in <a href="#fig-cumulative-gains" class="quarto-xref">Figure&nbsp;<span>5.7</span></a> demonstrates that the model concentrates a substantial proportion of future churners within the highest-risk customers, enabling retention campaigns to be prioritised more effectively.</p>
+<p>From a business perspective, ranking customers by estimated churn probability is often more useful than producing binary predictions. Marketing teams typically have limited resources and cannot intervene with every customer simultaneously. The cumulative gains curve shown in <a href="#fig-cumulative-gains" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-cumulative-gains</span></a> demonstrates that the model concentrates a substantial proportion of future churners within the highest-risk customers, enabling retention campaigns to be prioritised more effectively.</p>
 <div id="fig-cumulative-gains" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cumulative-gains-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1044,7 +1041,7 @@ Figure&nbsp;5.7: Cumulative gains curve for the selected churn prediction model.
 </figcaption>
 </figure>
 </div>
-<p>Inspection of the feature importance rankings further supports the behavioural interpretation of the model. As shown in <a href="#fig-feature-importance" class="quarto-xref">Figure&nbsp;<span>5.8</span></a>, variables related to purchasing recency, customer tenure, purchasing cadence, and behavioural segmentation contribute substantially to the predicted probabilities. This consistency suggests that the model is learning meaningful patterns associated with customer engagement rather than relying on spurious statistical relationships.</p>
+<p>Inspection of the feature importance rankings further supports the behavioural interpretation of the model. As shown in <a href="#fig-feature-importance" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-feature-importance</span></a>, variables related to purchasing recency, customer tenure, purchasing cadence, and behavioural segmentation contribute substantially to the predicted probabilities. This consistency suggests that the model is learning meaningful patterns associated with customer engagement rather than relying on spurious statistical relationships.</p>
 <div id="fig-feature-importance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-feature-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1060,7 +1057,7 @@ Figure&nbsp;5.8: Feature importance for the selected churn prediction model.
 <section id="risk-adjusted-customer-lifetime-value-prediction-1" class="level3" data-number="5.4.3">
 <h3 data-number="5.4.3" class="anchored" data-anchor-id="risk-adjusted-customer-lifetime-value-prediction-1"><span class="header-section-number">5.4.3</span> Risk-Adjusted Customer Lifetime Value Prediction</h3>
 <p>The final stage of the workflow integrates customer profitability with the behavioural information obtained during the segmentation and churn analyses. Rather than estimating customer value exclusively from historical purchases, the objective is to approximate a risk-adjusted valuation that combines observed profitability with expected customer retention. This produces a more realistic prioritisation framework by recognising that customers with similar historical revenue may contribute very differently to future business performance.</p>
-<p>Several regression algorithms were evaluated using the customer-level features engineered throughout the project. Their predictive performance is summarised in <a href="#tbl-clv-model-comparison" class="quarto-xref">Table&nbsp;<span>5.7</span></a>. The Random Forest regressor achieved the best overall performance, with the lowest RMSE and MAE and the highest (R^2), indicating that it reproduced the constructed valuation framework more accurately than the other candidate models.</p>
+<p>Several regression algorithms were evaluated using the customer-level features engineered throughout the project. Their predictive performance is summarised in <a href="#tbl-clv-model-comparison" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-clv-model-comparison</span></a>. The Random Forest regressor achieved the best overall performance, with the lowest RMSE and MAE and the highest (R^2), indicating that it reproduced the constructed valuation framework more accurately than the other candidate models.</p>
 <div id="tbl-clv-model-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-clv-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1136,7 +1133,7 @@ Table&nbsp;5.7: Performance comparison of the evaluated Customer Lifetime Value 
 </div>
 </figure>
 </div>
-<p>The selected model was then evaluated on the independent test set. As reported in <a href="#tbl-final-clv-model" class="quarto-xref">Table&nbsp;<span>5.8</span></a>, the final Random Forest model retained very strong predictive performance, explaining most of the variation in the constructed CLV target while keeping the average absolute error relatively small.</p>
+<p>The selected model was then evaluated on the independent test set. As reported in <a href="#tbl-final-clv-model" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-final-clv-model</span></a>, the final Random Forest model retained very strong predictive performance, explaining most of the variation in the constructed CLV target while keeping the average absolute error relatively small.</p>
 <div id="tbl-final-clv-model" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-final-clv-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1164,7 +1161,7 @@ Table&nbsp;5.8: Predictive performance of the selected Customer Lifetime Value m
 </div>
 </figure>
 </div>
-<p>The relationship between predicted and observed customer lifetime values is illustrated in <a href="#fig-predicted-vs-actual" class="quarto-xref">Figure&nbsp;<span>5.9</span></a>. Most observations are concentrated around the identity line, indicating that the regression model successfully reproduces the underlying valuation framework across a broad range of customer values. The residual analysis shown in <a href="#fig-residuals" class="quarto-xref">Figure&nbsp;<span>5.10</span></a> further suggests that no major systematic prediction bias is present, although variability naturally increases for the highest-value customers, which represent only a small fraction of the customer base.</p>
+<p>The relationship between predicted and observed customer lifetime values is illustrated in <a href="#fig-predicted-vs-actual" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-predicted-vs-actual</span></a>. Most observations are concentrated around the identity line, indicating that the regression model successfully reproduces the underlying valuation framework across a broad range of customer values. The residual analysis shown in <a href="#fig-residuals" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-residuals</span></a> further suggests that no major systematic prediction bias is present, although variability naturally increases for the highest-value customers, which represent only a small fraction of the customer base.</p>
 <div id="fig-predicted-vs-actual" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-predicted-vs-actual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1185,7 +1182,7 @@ Figure&nbsp;5.10: Residual analysis for the selected Customer Lifetime Value mod
 </figcaption>
 </figure>
 </div>
-<p>Feature importance analysis provides additional insight into the behaviour of the regression model. As shown in <a href="#fig-clv-feature-importance" class="quarto-xref">Figure&nbsp;<span>5.11</span></a>, the estimated customer value is influenced not only by historical profitability but also by behavioural characteristics derived during the previous stages of the workflow, including purchasing recency, transaction frequency, customer tenure, and the outputs of the churn prediction model. This demonstrates that the estimated lifetime value reflects a combination of historical performance and expected future behaviour rather than historical spending alone.</p>
+<p>Feature importance analysis provides additional insight into the behaviour of the regression model. As shown in <a href="#fig-clv-feature-importance" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-clv-feature-importance</span></a>, the estimated customer value is influenced not only by historical profitability but also by behavioural characteristics derived during the previous stages of the workflow, including purchasing recency, transaction frequency, customer tenure, and the outputs of the churn prediction model. This demonstrates that the estimated lifetime value reflects a combination of historical performance and expected future behaviour rather than historical spending alone.</p>
 <div id="fig-clv-feature-importance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-clv-feature-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1196,7 +1193,7 @@ Figure&nbsp;5.11: Feature importance for the selected Customer Lifetime Value mo
 </figcaption>
 </figure>
 </div>
-<p>The segment-level results in <a href="#tbl-clv-segment-summary" class="quarto-xref">Table&nbsp;<span>5.9</span></a> show why customer value should not be interpreted only at the individual level. Some segments contribute strongly because they contain many customers, while others contribute through high average expected value. The largest aggregate predicted value is concentrated in Declining Frequent Buyers, mainly because this segment combines a large customer base with a very high average predicted CLV. By contrast, Lost Customers and Inactive Low-Value Customers produce negative expected value under the adopted framework, reflecting weak profitability and unfavourable behavioural assumptions.</p>
+<p>The segment-level results in <a href="#tbl-clv-segment-summary" class="quarto-xref">Table&nbsp;<span class="quarto-unresolved-ref">tbl-clv-segment-summary</span></a> show why customer value should not be interpreted only at the individual level. Some segments contribute strongly because they contain many customers, while others contribute through high average expected value. The largest aggregate predicted value is concentrated in Declining Frequent Buyers, mainly because this segment combines a large customer base with a very high average predicted CLV. By contrast, Lost Customers and Inactive Low-Value Customers produce negative expected value under the adopted framework, reflecting weak profitability and unfavourable behavioural assumptions.</p>
 <div id="tbl-clv-segment-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-clv-segment-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1278,7 +1275,7 @@ Table&nbsp;5.9: Customer Lifetime Value summarised by behavioural segment.
 </div>
 </figure>
 </div>
-<p>These differences are also visible in <a href="#fig-clv-by-segment" class="quarto-xref">Figure&nbsp;<span>5.12</span></a> and <a href="#fig-total-clv-by-segment" class="quarto-xref">Figure&nbsp;<span>5.13</span></a>. The first figure shows the distribution of predicted CLV within each behavioural segment, while the second aggregates predicted value across the customer portfolio. Together, they show that customer prioritisation should consider both individual-level value and the broader segment structure in which that value is concentrated.</p>
+<p>These differences are also visible in <a href="#fig-clv-by-segment" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-clv-by-segment</span></a> and <a href="#fig-total-clv-by-segment" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-total-clv-by-segment</span></a>. The first figure shows the distribution of predicted CLV within each behavioural segment, while the second aggregates predicted value across the customer portfolio. Together, they show that customer prioritisation should consider both individual-level value and the broader segment structure in which that value is concentrated.</p>
 <div id="fig-clv-by-segment" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-clv-by-segment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1459,10 +1456,10 @@ F_1
 f(\mathbf{x}_i)+\varepsilon_i,
 \tag{5.12}\]</span></span></p>
 <p>where <span class="math inline">\(\mathbf{x}_i\)</span> denotes the customer-level feature vector engineered throughout the project, <span class="math inline">\(f(\cdot)\)</span> represents the regression model, and <span class="math inline">\(\varepsilon_i\)</span> captures the unexplained prediction error.</p>
-<p>Rather than estimating future profits directly, the regression model learns to approximate the valuation framework defined by <a href="#eq-risk-adjusted-clv" class="quarto-xref">Equation&nbsp;<span>5.11</span></a>. This considerably reduces the computational effort required to evaluate new customers while maintaining consistency with the behavioural and financial assumptions adopted throughout the analytical workflow.</p>
+<p>Rather than estimating future profits directly, the regression model learns to approximate the valuation framework defined by <a href="#eq-risk-adjusted-clv" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-risk-adjusted-clv</span></a>. This considerably reduces the computational effort required to evaluate new customers while maintaining consistency with the behavioural and financial assumptions adopted throughout the analytical workflow.</p>
 
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-robert2008database" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">C. B. Robert, D. K. Byung, and A. N. Scott, <em>Database marketing: Analyzing and managing customers</em>. Spinger, 2008.</div>
 </div>
@@ -1522,14 +1519,13 @@ f(\mathbf{x}_i)+\varepsilon_i,
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
