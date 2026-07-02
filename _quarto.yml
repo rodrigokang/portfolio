@@ -40,7 +40,7 @@ book:
         - 2-retail-analytics/0-overview.qmd
         - 2-retail-analytics/1-credit-card-fraud-detection-ml-benchmark.qmd
         - 2-retail-analytics/2-customer-value-and-retention.qmd
-        - 2-retail-analytics/3-customer-sentiment-and-topic-analysis.qmd
+        - 2-retail-analytics/3-customer-feedback-nlp.qmd
 
     - part: "Biological Systems"
       chapters:
