@@ -52,7 +52,7 @@ book:
       chapters:
         - 4-energy-and-industrial-systems/0-overview.qmd
         - 4-energy-and-industrial-systems/1-permeability-prediction-in-porous-media.qmd
-        - 4-energy-and-industrial-systems/2-pipeline-corrosion-asset-integrity.qmd
+        - 4-energy-and-industrial-systems/2-predictive-maintenance.qmd
 
     - part: "Climate and Environmental Systems"
       chapters:
