@@ -8,7 +8,7 @@ The dataset was published by the **McAuley Lab** at the University of California
 
 **Dataset**
 
-Official project: [Amazon Reviews 2023](https://amazon-reviews-2023.github.io/)
+Official project site: [Amazon Reviews 2023](https://amazon-reviews-2023.github.io/)
 
 **Reference**
 
