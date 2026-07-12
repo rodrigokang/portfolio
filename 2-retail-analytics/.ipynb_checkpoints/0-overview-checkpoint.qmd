@@ -2,4 +2,4 @@
 
 This part covers problems related to retail analytics, including the analysis of customer behavior, transaction data, and marketing performance.
 
-The scope of this domain includes methods for segmentation, prediction, and decision support, with applications in areas such as fraud detection, customer lifetime value estimation, and campaign optimization.
+The scope of this domain includes methods for segmentation, prediction, and decision support, with applications in areas such as fraud detection, customer lifetime value estimation, and customer feedback analysis.

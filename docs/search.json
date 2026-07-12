@@ -220,7 +220,7 @@
     "href": "2-retail-analytics/0-overview.html",
     "title": "Overview",
     "section": "",
-    "text": "This part covers problems related to retail analytics, including the analysis of customer behavior, transaction data, and marketing performance.\nThe scope of this domain includes methods for segmentation, prediction, and decision support, with applications in areas such as fraud detection, customer lifetime value estimation, and campaign optimization.",
+    "text": "This part covers problems related to retail analytics, including the analysis of customer behavior, transaction data, and marketing performance.\nThe scope of this domain includes methods for segmentation, prediction, and decision support, with applications in areas such as fraud detection, customer lifetime value estimation, and customer feedback analysis.",
     "crumbs": [
       "Retail Analytics",
       "Overview"
