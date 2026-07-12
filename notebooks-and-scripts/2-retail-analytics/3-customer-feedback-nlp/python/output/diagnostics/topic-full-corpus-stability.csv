@@ -1,0 +1,2 @@
+n_topics,full_corpus_runs,mean_pairwise_stability,minimum_pairwise_stability,selected_reconstruction_error
+5,4,0.999999995579663,0.9999999917681913,111.5904123985982

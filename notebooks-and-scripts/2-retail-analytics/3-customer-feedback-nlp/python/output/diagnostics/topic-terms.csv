@@ -1,0 +1,61 @@
+topic,rank,term,weight,topic_label
+0,1,did,2.2996952537532076,Product did not work as expected
+0,2,did not,2.181814002403559,Product did not work as expected
+0,3,not,1.0392717820980528,Product did not work as expected
+0,4,work,0.9049326820127951,Product did not work as expected
+0,5,not work,0.8769167891262503,Product did not work as expected
+0,6,not like,0.3495581715674629,Product did not work as expected
+0,7,product did,0.2504686009274123,Product did not work as expected
+0,8,like,0.1662291996624582,Product did not work as expected
+0,9,not come,0.14048853459903476,Product did not work as expected
+0,10,come,0.12375123555963999,Product did not work as expected
+0,11,not fit,0.10889110036441683,Product did not work as expected
+0,12,fit,0.10091620058030021,Product did not work as expected
+1,1,not,1.4980480903812239,General dissatisfaction (residual)
+1,2,product,0.9588219238821761,General dissatisfaction (residual)
+1,3,like,0.84647250553106,General dissatisfaction (residual)
+1,4,use,0.6785357626191812,General dissatisfaction (residual)
+1,5,good,0.6249979066476344,General dissatisfaction (residual)
+1,6,just,0.5411725199301041,General dissatisfaction (residual)
+1,7,no,0.4201562415786724,General dissatisfaction (residual)
+1,8,buy,0.4060043804695512,General dissatisfaction (residual)
+1,9,used,0.4008361386835822,General dissatisfaction (residual)
+1,10,really,0.37887035061595215,General dissatisfaction (residual)
+1,11,color,0.37096233692459374,General dissatisfaction (residual)
+1,12,great,0.3399972050687614,General dissatisfaction (residual)
+2,1,money,1.6135428845419393,Poor value for money
+2,2,waste,1.5452159649706365,Poor value for money
+2,3,waste money,1.4527812862303464,Poor value for money
+2,4,not waste,0.8514690120363517,Poor value for money
+2,5,not,0.35356663382347536,Poor value for money
+2,6,worth,0.18151551130951307,Poor value for money
+2,7,not worth,0.1758093857396376,Poor value for money
+2,8,time,0.16975516798136533,Poor value for money
+2,9,worth money,0.16834414098369516,Poor value for money
+2,10,money not,0.15297558816243417,Poor value for money
+2,11,waste time,0.14675531501587857,Poor value for money
+2,12,total waste,0.1255329691202607,Poor value for money
+3,1,does,2.2558277131401443,Limited durability or staying power
+3,2,does not,2.159527729034293,Limited durability or staying power
+3,3,not,1.1554757227543861,Limited durability or staying power
+3,4,work,0.7594411061846764,Limited durability or staying power
+3,5,not work,0.7420946071337607,Limited durability or staying power
+3,6,not stay,0.3043957067084142,Limited durability or staying power
+3,7,stay,0.3042643974365855,Limited durability or staying power
+3,8,product does,0.22856863506104255,Limited durability or staying power
+3,9,hold,0.15590776263111406,Limited durability or staying power
+3,10,not hold,0.1553639125726478,Limited durability or staying power
+3,11,not look,0.12576431510422126,Limited durability or staying power
+3,12,not fit,0.11854594170974518,Limited durability or staying power
+4,1,hair,2.7111135625314975,Hair-product quality concerns
+4,2,hair not,0.3277422922187509,Hair-product quality concerns
+4,3,human,0.2014377956322725,Hair-product quality concerns
+4,4,human hair,0.1830350139135444,Hair-product quality concerns
+4,5,not,0.17305480238035145,Hair-product quality concerns
+4,6,soft,0.15591447634880354,Hair-product quality concerns
+4,7,brush,0.15262269599295053,Hair-product quality concerns
+4,8,wig,0.15242211784124413,Hair-product quality concerns
+4,9,tangled,0.14066347676023136,Hair-product quality concerns
+4,10,curl,0.13335683502336682,Hair-product quality concerns
+4,11,hold,0.12569486151119846,Hair-product quality concerns
+4,12,sheds,0.1203211475482176,Hair-product quality concerns

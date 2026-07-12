@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "artifact": {
+    "name": "sentiment_pipeline.joblib",
+    "type": "scikit-learn Pipeline",
+    "format": "joblib",
+    "model_version": "1.0.0",
+    "exported_at_utc": "2026-07-12T04:24:26.796539+00:00"
+  },
+  "project": {
+    "name": "Understanding Customer Feedback through NLP",
+    "dataset": "Amazon Reviews 2023",
+    "review_category": "All_Beauty"
+  },
+  "runtime": {
+    "python_version": "3.13.5",
+    "scikit_learn_version": "1.6.1"
+  },
+  "training": {
+    "random_seed": 42,
+    "reviews": 43030,
+    "products": 22746,
+    "language": "English"
+  },
+  "input_schema": {
+    "text": {
+      "type": "string",
+      "required": true,
+      "description": "Raw customer-review text supplied as a non-empty string."
+    }
+  },
+  "preprocessing": {
+    "function": "normalise_review_text",
+    "minimum_words_used_during_training": 3,
+    "included_in_pipeline": true
+  },
+  "target": {
+    "name": "sentiment",
+    "definition": {
+      "negative": "ratings 1-2",
+      "neutral": "rating 3",
+      "positive": "ratings 4-5"
+    },
+    "classes": [
+      "negative",
+      "neutral",
+      "positive"
+    ]
+  },
+  "model": {
+    "estimator": "LogisticRegression",
+    "vectorizer": "TfidfVectorizer",
+    "supports_probabilities": true
+  },
+  "primary_evaluation": {
+    "design": "product-grouped holdout",
+    "metric": "macro_f1",
+    "value": 0.673557
+  }
+}

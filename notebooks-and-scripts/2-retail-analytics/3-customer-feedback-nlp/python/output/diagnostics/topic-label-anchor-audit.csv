@@ -1,0 +1,6 @@
+topic,topic_label,assigned_anchor_weight,next_best_topic_weight,assignment_margin,topic_anchor_share,leading_terms
+0,Product did not work as expected,3.3091993924572214,0.7420946071337607,2.5671047853234605,0.9440235910905105,"did, did not, not, work, not work, not like, product did, like"
+1,General dissatisfaction (residual),,,,,"not, product, like, use, good, just, no, buy"
+2,Poor value for money,4.955693662466254,0.22056764635925136,4.735126016107003,0.9897122323328863,"money, waste, waste money, not waste, not, worth, not worth, time"
+3,Limited durability or staying power,2.923551745751941,0.19283417185406293,2.730717573897878,0.7838444329435594,"does, does not, not, work, not work, not stay, stay, product does"
+4,Hair-product quality concerns,3.339856867039468,0.36774518488604907,2.972111682153419,0.9583280697039207,"hair, hair not, human, human hair, not, soft, brush, wig"

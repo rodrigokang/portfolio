@@ -1,0 +1,4 @@
+azure-functions==1.23.0
+joblib==1.5.3
+numpy==2.2.6
+scikit-learn==1.6.1

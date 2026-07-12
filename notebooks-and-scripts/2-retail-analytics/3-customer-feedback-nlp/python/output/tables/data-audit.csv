@@ -1,0 +1,9 @@
+metric,value
+input rows,50000.0
+whole-row duplicates in raw sample,45.0
+invalid ratings,0.0
+empty review text,47.0
+missing product identifiers,0.0
+analytical duplicates removed,46.0
+prepared rows,49907.0
+retention rate,0.99814

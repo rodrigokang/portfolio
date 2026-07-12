@@ -1,0 +1,45 @@
+# Version control
+.git
+.gitignore
+.github
+
+# Python environments and caches
+**/.venv
+**/__pycache__
+**/*.py[cod]
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+
+# Notebook and IDE metadata
+**/.ipynb_checkpoints
+**/.vscode
+**/.idea
+
+# Local Azure and storage state
+azure/local.settings.json
+azure/.azurite
+
+# Local logs and temporary files
+**/*.log
+**/*.tmp
+**/*.temp
+**/.DS_Store
+**/Thumbs.db
+
+# Raw and processed datasets are not required by inference
+data
+
+# Training notebooks are not required inside the image
+python
+
+# Documentation is not required inside the image
+README.md
+ARCHITECTURE.md
+azure/README.md
+azure/DOCKER.md
+
+# Development-only files
+azure/tests
+azure/scripts
+azure/requirements-dev.txt

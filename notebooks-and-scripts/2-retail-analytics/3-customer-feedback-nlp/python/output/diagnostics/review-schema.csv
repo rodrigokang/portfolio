@@ -1,0 +1,11 @@
+column,data_type,missing_values,missing_share,unique_values
+rating,int64,0,0.0,5
+title,object,0,0.0,33030
+text,object,0,0.0,47695
+images,object,0,0.0,4254
+asin,object,0,0.0,26171
+parent_asin,object,0,0.0,25491
+user_id,object,0,0.0,49334
+timestamp,datetime64[ns],0,0.0,49952
+helpful_vote,int64,0,0.0,90
+verified_purchase,bool,0,0.0,2

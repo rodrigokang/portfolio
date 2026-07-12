@@ -1,0 +1,7 @@
+rating,actual_sentiment,predicted_sentiment,maximum_model_score,clean_word_count,analysis_text
+4,positive,neutral,0.9711212309350769,7,It’s ok very cute but not sturdy
+2,negative,neutral,0.9550811128876578,38,Was not as comfortable as I thought it would be. Probably needs to be in some type of pocket in the mask but I don’t have a mask like that. Will have to make one to fit.
+2,negative,neutral,0.945979278508368,20,Very tiny and petite steamer. It works okay but is a little wobbly. Constantly have to re tighten the screws.
+4,positive,neutral,0.9412645924890142,12,"Not as long lasting as I would have liked, but it’s okay."
+5,positive,negative,0.8816404545777135,6,"I found these, was not disappointed."
+5,positive,negative,0.8438610818600737,13,My 1st product I've bought that only lasted 2 weeks . Motor burned out

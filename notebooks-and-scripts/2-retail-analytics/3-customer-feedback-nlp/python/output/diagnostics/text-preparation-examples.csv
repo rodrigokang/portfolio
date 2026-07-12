@@ -1,0 +1,21 @@
+rating,title,rating_derived_title,language,language_probability,clean_word_count,usable_for_nlp
+4,Colors are nice.....,False,en,0.9999964551411655,120,True
+4,When you come it out the hair shedds,False,uncertain,0.0,3,False
+5,Love this!,False,en,0.9999967443274822,4,True
+4,Good for braiding practice.,False,en,0.9999964733134109,7,True
+5,Had to get used to at first but loved it after I found the right position,False,en,0.9999978310408418,5,True
+5,Five Stars,True,uncertain,0.0,1,False
+5,Rub-a-dub,False,en,0.9999982912446714,20,True
+1,Worst,False,da,0.8571409695470065,6,False
+4,"dont need to use every day will leave purple tint,,,,,every couple days works great",False,en,0.9999979355899572,21,True
+5,I'm sure like most guys,False,en,0.9999974319995445,153,True
+1,Slow and iritates neck,False,en,0.9999958718333194,63,True
+5,Really great hair! Will buy again!,False,en,0.9992842250743812,4,True
+2,Didn’t meet the description,False,en,0.999998517713911,18,True
+5,Great !!!,False,en,0.9999979534684573,22,True
+5,Great for lips,False,en,0.9999973309741969,7,True
+5,Will get you dark quickly,False,en,0.9999936403253942,10,True
+5,Fantastic Sprayer,False,en,0.9999979284002353,38,True
+1,Product was not factory sealed,False,en,0.9999959351726107,29,True
+5,Appreciate the different shades.,False,en,0.9999970787950699,14,True
+5,You Get What You Pay For,False,en,0.9999955875271007,88,True
