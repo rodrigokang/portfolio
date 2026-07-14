@@ -23,6 +23,6 @@ Most projects follow a common structure:
 
 Theoretical concepts and mathematical details are introduced only when they help clarify modeling decisions, support methodological choices, or explain the behavior of the proposed approaches. The emphasis throughout the portfolio remains on applied problem solving, structured reasoning, and practical implementation rather than on purely theoretical discussion.
 
-Each chapter is accompanied by computational artifacts implemented in `Python` and `R`, allowing readers to explore the implementation details, reproduce experiments, and examine complementary analyses when appropriate.
+The computational artifacts accompanying the projects vary according to the nature of the problem and the methodology employed. Where appropriate, projects include implementations in `Python`, `R`, or both, allowing readers to explore the underlying workflows, reproduce experiments, and examine complementary analyses. The emphasis is on selecting the most suitable computational tools for each project rather than adhering to a fixed implementation framework.
 
 The material presented here combines quantitative reasoning, statistical modeling, machine learning methods, and computational experimentation, with a consistent focus on developing solutions that are both technically sound and practically meaningful.
