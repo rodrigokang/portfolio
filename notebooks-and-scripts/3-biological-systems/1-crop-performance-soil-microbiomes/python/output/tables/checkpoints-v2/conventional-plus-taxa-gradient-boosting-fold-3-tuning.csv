@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,inner-mae,best-parameters
+conventional-plus-taxa,gradient-boosting,3,1085.6358927029644,"{'feature-screen__k': 500, 'regressor__learning_rate': 0.03, 'regressor__max_depth': 2, 'regressor__min_samples_leaf': 5, 'regressor__n_estimators': 150}"

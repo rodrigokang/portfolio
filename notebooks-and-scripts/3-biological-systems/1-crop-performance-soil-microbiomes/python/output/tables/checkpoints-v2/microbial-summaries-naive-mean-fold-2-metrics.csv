@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
+microbial-summaries,naive-mean,2,85,16,992.3417274624435,1280.881048823395,-0.0006290736829595023

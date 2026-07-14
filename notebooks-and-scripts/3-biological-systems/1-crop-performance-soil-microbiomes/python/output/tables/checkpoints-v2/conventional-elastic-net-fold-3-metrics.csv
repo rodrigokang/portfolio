@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
+conventional,elastic-net,3,84,15,1079.836760261984,1517.8694086888222,0.14662558120666758

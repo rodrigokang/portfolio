@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,inner-mae,best-parameters
+conventional,gradient-boosting,5,1049.2315344991955,"{'regressor__learning_rate': 0.03, 'regressor__max_depth': 2, 'regressor__min_samples_leaf': 5, 'regressor__n_estimators': 150}"

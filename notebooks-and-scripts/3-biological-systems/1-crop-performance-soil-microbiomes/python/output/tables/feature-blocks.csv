@@ -1,0 +1,8 @@
+block,features,numeric-features,categorical-features,features-with-missing,mean-missing-rate,mean-zero-rate,constant-features
+management,10,2,8,2,0.03404255319148936,0.0,0
+soil-chemistry,10,10,0,0,0.0,0.0009456264775413711,0
+qpcr-abundance,4,4,0,0,0.0,0.0,0
+shannon-diversity,6,6,0,0,0.0,0.0,0
+pcoa-axes,4,4,0,4,0.15602836879432624,0.0,0
+bacterial-taxa,885,885,0,0,0.0,0.7088138264481576,0
+fungal-taxa,706,706,0,0,0.0,0.8016662313570275,0

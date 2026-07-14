@@ -1,0 +1,7 @@
+feature-set,source-features,uses-fold-safe-screening,models,outer-folds,inner-folds
+conventional,20,False,"naive-mean, elastic-net, random-forest, gradient-boosting",5,3
+microbial-summaries,14,False,"naive-mean, elastic-net, random-forest, gradient-boosting",5,3
+conventional-plus-summaries,34,False,"naive-mean, elastic-net, random-forest, gradient-boosting",5,3
+taxonomic-composition,1591,True,"naive-mean, elastic-net, random-forest, gradient-boosting",5,3
+conventional-plus-taxa,1611,True,"naive-mean, elastic-net, random-forest, gradient-boosting",5,3
+integrated,1621,True,"naive-mean, elastic-net, random-forest, gradient-boosting",5,3

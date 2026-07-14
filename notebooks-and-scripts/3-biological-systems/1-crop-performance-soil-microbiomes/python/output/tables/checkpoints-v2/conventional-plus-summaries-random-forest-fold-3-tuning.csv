@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,inner-mae,best-parameters
+conventional-plus-summaries,random-forest,3,1036.3216720553712,"{'regressor__max_depth': None, 'regressor__max_features': 'sqrt', 'regressor__min_samples_leaf': 2}"

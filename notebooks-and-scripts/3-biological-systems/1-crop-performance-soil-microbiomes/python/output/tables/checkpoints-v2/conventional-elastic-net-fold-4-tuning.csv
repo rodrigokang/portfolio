@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,inner-mae,best-parameters
+conventional,elastic-net,4,1056.4703947705846,"{'regressor__alpha': 1.0, 'regressor__l1_ratio': 0.9}"

@@ -1,0 +1,11 @@
+check,value
+observations,423
+source-columns,1631
+analysis-columns,1632
+duplicate-rows,0
+duplicate-sample-ids,0
+duplicate-link-ids,0
+missing-target-values,0
+non-positive-target-values,0
+physical-field-groups,77
+field-season-groups,137

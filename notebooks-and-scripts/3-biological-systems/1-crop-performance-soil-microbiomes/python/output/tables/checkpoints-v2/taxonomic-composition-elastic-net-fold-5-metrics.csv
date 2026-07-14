@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
+taxonomic-composition,elastic-net,5,84,15,1239.6245178547886,1549.9597846601966,0.09942195030333023

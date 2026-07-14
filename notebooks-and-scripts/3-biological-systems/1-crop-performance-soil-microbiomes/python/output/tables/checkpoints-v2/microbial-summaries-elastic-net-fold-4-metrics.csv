@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
+microbial-summaries,elastic-net,4,85,16,1273.2851068500258,1611.6080076429787,0.0634794678023084

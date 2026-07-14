@@ -1,0 +1,2 @@
+feature-set,model,outer-fold,inner-mae,best-parameters
+microbial-summaries,gradient-boosting,3,1234.1328599390183,"{'regressor__learning_rate': 0.03, 'regressor__max_depth': 1, 'regressor__min_samples_leaf': 5, 'regressor__n_estimators': 150}"
