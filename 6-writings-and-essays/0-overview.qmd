@@ -1,5 +1,0 @@
-# Overview {.unnumbered}
-
-This part covers technical writings and essays spanning scientific modeling, data analysis, and related areas of mathematics, physics, and philosophy.
-
-The scope includes discussions of modeling principles, reasoning under uncertainty, and computational approaches, providing context and deeper insight into the ideas underlying the projects.

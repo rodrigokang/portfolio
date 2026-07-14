@@ -1,0 +1,9 @@
+# Overview {.unnumbered}
+
+The final section of this portfolio brings together a collection of essays that complement the technical case studies presented throughout the book. While the previous chapters focus on the practical application of quantitative methods and computational models, these writings explore the broader ideas that shape data science as a scientific and engineering discipline.
+
+Rather than presenting new implementations or experimental results, these essays examine the principles that motivate sound modeling, critical thinking, and mathematical reasoning. They discuss topics that extend beyond individual projects, providing a broader perspective on the assumptions, methodologies, and conceptual foundations that underpin applied data science.
+
+The objective is not to offer definitive answers, but to encourage careful reflection on the role of scientific reasoning in modern data science. As machine learning continues to evolve rapidly, maintaining a rigorous approach to modeling, validation, and interpretation remains essential for developing reliable and meaningful solutions.
+
+Together, these essays complement the practical projects presented in the earlier sections, offering a perspective on the ideas and principles that continue to guide my approach to quantitative modeling, computational science, and data-driven problem solving.

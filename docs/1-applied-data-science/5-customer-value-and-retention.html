@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Customer Value and Retention – Data Science Across Domains</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../1-applied-data-science/6-customer-feedback-nlp.html" rel="next">
+<link href="../1-applied-data-science/4-credit-card-fraud-detection-ml-benchmark.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Quantitative Finance</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/5-customer-value-and-retention.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Customer Value and Retention</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Data Science Across Domains</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/rodrigokang/portfolio" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/rodrigojuankang/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="mailto:rodrigokang88@gmail.com" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-envelope"></i></a>
+    <a href="https://raw.githubusercontent.com/rodrigokang/portfolio/main/data-science-across-domains.pdf" title="PDF" class="quarto-navigation-tool px-1" aria-label="PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../preface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reading-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to Read This Portfolio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Quantitative Finance</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/0-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/1-capm-and-fama-french-factor-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">CAPM and Fama–French Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/2-unsupervised-learning-for-asset-allocation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unsupervised Learning for Asset Allocation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/3-option-pricing-with-path-integrals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Option Pricing with Path Integrals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/4-credit-card-fraud-detection-ml-benchmark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Credit Card Fraud Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/5-customer-value-and-retention.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Customer Value and Retention</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/6-customer-feedback-nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Understanding Customer Feedback through NLP</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/7-sediment-source-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Sediment Source Modeling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/8-skin-lesion-triage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Medical Image Analysis for Skin Lesion Triage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/9-drought-risk-climate-time-series.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Forecasting Drought Risk from Climate Time Series</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Data Science Beyond the Classical Scope</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../2-data-science-beyond-the-classical-scope/0-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../2-data-science-beyond-the-classical-scope/1-quantum-control-theory.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Quantum Control Theory</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Writings &amp; Essays</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../3-writings-and-essays/0-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../3-writings-and-essays/1-data-science-age-of-hype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Science in the Age of Hype: Why the scientific method still matters</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../3-writings-and-essays/2-conformal-geometry-in-3-d.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Conformal Geometry and Electrostatics in Three Dimensions</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">5.1</span> Problem Definition</a></li>
+  <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">5.2</span> Modeling Approach</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">5.3</span> Methodology and Implementation</a>
+  <ul class="collapse">
+  <li><a href="#customer-segmentation-with-rfm-analysis" id="toc-customer-segmentation-with-rfm-analysis" class="nav-link" data-scroll-target="#customer-segmentation-with-rfm-analysis"><span class="header-section-number">5.3.1</span> Customer Segmentation with RFM Analysis</a></li>
+  <li><a href="#churn-prediction-in-non-contractual-relationships-based-on-rfm-analysis" id="toc-churn-prediction-in-non-contractual-relationships-based-on-rfm-analysis" class="nav-link" data-scroll-target="#churn-prediction-in-non-contractual-relationships-based-on-rfm-analysis"><span class="header-section-number">5.3.2</span> Churn Prediction in Non-Contractual Relationships Based on RFM Analysis</a></li>
+  <li><a href="#risk-adjusted-customer-lifetime-value-prediction" id="toc-risk-adjusted-customer-lifetime-value-prediction" class="nav-link" data-scroll-target="#risk-adjusted-customer-lifetime-value-prediction"><span class="header-section-number">5.3.3</span> Risk-Adjusted Customer Lifetime Value Prediction</a></li>
+  </ul></li>
+  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">5.4</span> Results, Discussion, and Limitations</a>
+  <ul class="collapse">
+  <li><a href="#customer-segmentation" id="toc-customer-segmentation" class="nav-link" data-scroll-target="#customer-segmentation"><span class="header-section-number">5.4.1</span> Customer Segmentation</a></li>
+  <li><a href="#churn-prediction" id="toc-churn-prediction" class="nav-link" data-scroll-target="#churn-prediction"><span class="header-section-number">5.4.2</span> Churn Prediction</a></li>
+  <li><a href="#risk-adjusted-customer-lifetime-value-prediction-1" id="toc-risk-adjusted-customer-lifetime-value-prediction-1" class="nav-link" data-scroll-target="#risk-adjusted-customer-lifetime-value-prediction-1"><span class="header-section-number">5.4.3</span> Risk-Adjusted Customer Lifetime Value Prediction</a></li>
+  </ul></li>
+  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">5.5</span> Technical Appendix (Optional)</a>
+  <ul class="collapse">
+  <li><a href="#rfm-analysis" id="toc-rfm-analysis" class="nav-link" data-scroll-target="#rfm-analysis"><span class="header-section-number">5.5.1</span> RFM Analysis</a></li>
+  <li><a href="#behavioural-churn-definition" id="toc-behavioural-churn-definition" class="nav-link" data-scroll-target="#behavioural-churn-definition"><span class="header-section-number">5.5.2</span> Behavioural Churn Definition</a></li>
+  <li><a href="#risk-adjusted-customer-lifetime-value" id="toc-risk-adjusted-customer-lifetime-value" class="nav-link" data-scroll-target="#risk-adjusted-customer-lifetime-value"><span class="header-section-number">5.5.3</span> Risk-Adjusted Customer Lifetime Value</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Quantitative Finance</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/5-customer-value-and-retention.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Customer Value and Retention</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Customer Value and Retention</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Customer relationships are among the most valuable assets of a business, yet they are also among the most difficult to quantify. While transactional databases record what customers have purchased, they rarely explain how purchasing behaviour evolves over time or which customers deserve the greatest commercial attention. As a result, organisations often rely on simple indicators such as historical revenue or purchase counts, even though these metrics provide only a partial view of customer behaviour.</p>
+<p>Database marketing has long recognised that effective customer management requires combining behavioural analysis with predictive and financial perspectives rather than relying on a single performance indicator <span class="citation" data-cites="robert2008database"><a href="../references.html#ref-robert2008database" role="doc-biblioref">[1]</a></span>. Understanding who customers are, who is likely to leave, and which relationships are expected to generate the greatest long-term value are closely related questions that should be addressed within a unified analytical framework.</p>
+<p>This chapter develops a complete customer analytics workflow for a non-contractual retail business using transactional data from the AdventureWorks database. Unlike subscription businesses, where customer churn is explicitly observed through contract cancellations, retail businesses rarely record when a customer relationship has ended. Instead, customer behaviour must be inferred from historical purchasing activity.</p>
+<p>The analysis is organised around three complementary tasks. First, customers are segmented using Recency, Frequency, and Monetary (RFM) variables to identify groups with similar purchasing behaviour. Second, churn is formulated as a supervised learning problem by defining customer inactivity over a future observation window. Finally, customer lifetime value (CLV) is estimated by combining customer profitability with retention risk and explicit discount-rate assumptions.</p>
+<p>Rather than presenting these models as independent analyses, the chapter demonstrates how descriptive analytics, predictive modelling, and economic valuation can be integrated into a single decision-support workflow. The emphasis is not on producing a universal customer score, but on developing a transparent framework in which every modelling assumption remains explicit and interpretable.</p>
+<section id="problem-definition" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="problem-definition"><span class="header-section-number">5.1</span> Problem Definition</h2>
+<p>Customer value is inherently difficult to assess in a non-contractual business. Unlike subscription services, where customers can be classified as active or cancelled, retail customers may purchase irregularly, return after long periods of inactivity, or buy only seasonally. Consequently, the absence of recent transactions does not necessarily indicate that a customer has churned.</p>
+<p>This uncertainty complicates several common business decisions. Which customers should receive retention efforts? Which customers appear valuable but are gradually becoming inactive? Which recently acquired customers show early signs of future growth? Which inactive customers are unlikely to return?</p>
+<p>Historical revenue alone cannot answer these questions because it ignores how recently customers have purchased, how frequently they buy, and how likely they are to continue purchasing in the future. Likewise, prioritising customers solely according to churn probability overlooks the fact that not every customer contributes equally to the business.</p>
+<p>The AdventureWorks database provides a realistic environment for studying these problems because it stores detailed transactional information across customers, orders, products, costs, and sales territories. Rather than relying on pre-computed customer summaries, this project reconstructs customer behaviour directly from transactional records and derives the features required for segmentation, churn prediction, and customer value estimation.</p>
+<p>The analysis therefore addresses three related questions.</p>
+<ul>
+<li>How can customers be grouped according to their purchasing behaviour?</li>
+<li>Which customers appear most likely to become inactive?</li>
+<li>How does expected customer value change once profitability, retention risk, and discounting are considered simultaneously?</li>
+</ul>
+<p>Although each question can be investigated independently, combining them provides a substantially richer understanding of customer relationships than any single model alone.</p>
+</section>
+<section id="modeling-approach" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">5.2</span> Modeling Approach</h2>
+<p>The analytical workflow follows a layered structure in which each stage provides information for the next.</p>
+<p>The first stage focuses on behavioural segmentation. Customer-level RFM variables are computed from the complete transaction history available for each individual. Because these variables exhibit strong positive skewness, they are transformed and standardised before applying K-Means clustering. The resulting clusters are then interpreted using the original RFM variables to preserve their business meaning.</p>
+<p>The second stage introduces prediction through churn modelling. Since customer churn is not explicitly recorded in the AdventureWorks database, an operational target is constructed by separating the available transaction history into calibration and observation periods. Customers who make no purchases during the observation window are labelled as churned, allowing the problem to be formulated as a supervised classification task while avoiding information leakage.</p>
+<p>The final stage estimates customer lifetime value. Customer profitability is derived from historical revenue and product costs, while segment-specific retention behaviour and discount-rate assumptions are used to construct a risk-adjusted valuation framework. A regression model is then trained to approximate this valuation using the customer-level features engineered throughout the previous stages.</p>
+<p>Viewed as a whole, the workflow progresses naturally from behavioural description to future risk estimation and finally to economic value. Rather than producing isolated analytical models, each stage complements the previous one, resulting in a coherent framework for customer prioritisation and retention planning.</p>
+</section>
+<section id="methodology-and-implementation" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">5.3</span> Methodology and Implementation</h2>
+<p>The methodology is organised into three complementary stages that progressively transform transactional sales records into actionable customer insights. Although each stage addresses a different analytical problem, they are connected through a common customer-level feature engineering pipeline built from the AdventureWorks transactional database.</p>
+<p>The workflow begins by describing customer purchasing behaviour through RFM segmentation. These behavioural profiles then provide additional context for a supervised churn prediction model, where customer inactivity is defined using future purchasing behaviour observed within a separate validation period. Finally, the outputs of the previous stages are combined with profitability information to construct a risk-adjusted Customer Lifetime Value (CLV) framework that supports customer prioritisation from both behavioural and financial perspectives.</p>
+<p>Rather than treating segmentation, churn prediction, and lifetime value estimation as independent modelling exercises, the implementation integrates them into a single analytical workflow in which each stage provides information that strengthens the interpretation of the next.</p>
+<section id="customer-segmentation-with-rfm-analysis" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="customer-segmentation-with-rfm-analysis"><span class="header-section-number">5.3.1</span> Customer Segmentation with RFM Analysis</h3>
+<p>Customer segmentation provides the behavioural foundation for the remainder of the chapter. Instead of analysing thousands of customers individually, the objective is to identify groups with similar purchasing patterns that can later support both churn prediction and customer value estimation.</p>
+<p>The implementation begins by extracting transaction-level data directly from the AdventureWorks database rather than relying on pre-aggregated customer tables. Sales orders, order details, products, product categories, customers, and sales territories are combined to create a reusable transactional dataset from which customer-level features can be derived consistently throughout the project.</p>
+<p>Customer behaviour is summarised using the classical Recency, Frequency, and Monetary (RFM) framework. Recency measures the time elapsed since the customer’s most recent purchase, Frequency counts completed purchase events, and Monetary represents cumulative customer spending over the observation period. Because these variables exhibit strong positive skewness, particularly Frequency and Monetary value, they are transformed using the Box-Cox transformation and standardised before clustering to reduce the influence of extreme observations.</p>
+<p>Customer segments are then identified using the K-Means algorithm. Rather than selecting the number of clusters arbitrarily, several candidate solutions are evaluated using complementary internal validation metrics, including the silhouette coefficient, the Calinski–Harabasz Index, and the Davies–Bouldin Index. The final segmentation balances statistical quality with business interpretability, allowing each cluster to be characterised according to the original RFM variables rather than the transformed feature space.</p>
+<p>To complement the discrete segmentation, the implementation also introduces a continuous within-segment RFM score that ranks customers according to their relative purchasing behaviour inside each cluster. This additional layer helps distinguish customers who belong to the same behavioural segment but differ in their overall commercial importance, providing a practical prioritisation mechanism for subsequent retention activities.</p>
+<p>The resulting customer segments constitute the descriptive layer of the analytical workflow and are subsequently incorporated as explanatory variables in both the churn prediction and customer lifetime value models.</p>
+<p>The complete Python implementation of this workflow, including data extraction, feature engineering, clustering diagnostics, segment interpretation, and customer scoring, is available in the companion notebook linked above.</p>
+<p>A complete Python implementation of the RFM analysis presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/1-rfm-analysis.html">here</a>.</p>
+</section>
+<section id="churn-prediction-in-non-contractual-relationships-based-on-rfm-analysis" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="churn-prediction-in-non-contractual-relationships-based-on-rfm-analysis"><span class="header-section-number">5.3.2</span> Churn Prediction in Non-Contractual Relationships Based on RFM Analysis</h3>
+<p>Once the customer segments have been established, the analysis shifts from behavioural description to predictive modelling. The objective is no longer to characterise purchasing behaviour, but to identify customers who appear at risk of becoming inactive in the near future. In a non-contractual retail environment, however, this is not straightforward because the absence of recent purchases does not necessarily imply that a customer has permanently left. Instead, churn must be defined operationally from observed purchasing behaviour.</p>
+<p>To reproduce a realistic prediction scenario, the available transaction history is divided into calibration and observation periods. All explanatory variables are computed exclusively from the calibration window, while customer activity during the subsequent observation period is used only to validate the churn outcome. This chronological separation ensures that every predictor reflects information that would have been available at the time the prediction was made, thereby preventing information leakage.</p>
+<p>Rather than defining churn solely as the absence of future purchases, the implementation combines several behavioural indicators derived during the calibration period. Customers are first identified as potential churners if they belong to a low-activity behavioural segment, their recency exceeds their historical average purchase latency, and their within-segment RFM score falls below the average score of their corresponding segment. These behavioural conditions identify customers whose purchasing patterns are consistent with progressive disengagement rather than temporary inactivity. A customer is ultimately labelled as churned only if no additional purchases are observed during the subsequent validation period. This two-stage definition combines historical behaviour with future purchasing activity, producing a target that remains consistent with the non-contractual nature of retail customer relationships while avoiding information leakage.</p>
+<p>The predictive feature set extends the variables developed during the segmentation stage. In addition to the original RFM variables and customer segment assignments, the implementation derives customer-level descriptors that capture purchasing cadence, average order value, customer tenure, product diversity, profitability, purchase intervals, geographic information, and several aggregated transaction statistics. Together, these variables provide a more comprehensive representation of customer behaviour than RFM alone while preserving a clear business interpretation.</p>
+<p>Several supervised learning algorithms are evaluated under a common modelling framework using cross-validation and hyperparameter optimisation. Because churned customers represent only a minority of the customer base, particular attention is given to model evaluation under class imbalance. Performance is therefore assessed using complementary metrics, including ROC AUC, Average Precision, Precision, Recall, and F1-score. In addition, cumulative gains analysis is used to evaluate how effectively customers can be ranked according to their estimated churn risk, which is often more valuable for retention planning than binary classification alone.</p>
+<p>Rather than producing deterministic decisions, the selected classifier estimates the probability that each customer will become inactive during the observation period. These probabilities provide a practical ranking of retention risk that can support targeted marketing campaigns, customer prioritisation, and proactive retention strategies. They also constitute one of the principal inputs for the risk-adjusted customer lifetime value framework developed in the following section.</p>
+<p>A complete Python implementation of the churn prediction model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/2-churn-prediction.html">here</a>.</p>
+</section>
+<section id="risk-adjusted-customer-lifetime-value-prediction" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="risk-adjusted-customer-lifetime-value-prediction"><span class="header-section-number">5.3.3</span> Risk-Adjusted Customer Lifetime Value Prediction</h3>
+<p>The final stage of the workflow extends the analysis from customer retention to customer value. While the churn model estimates the likelihood that a customer will become inactive, it does not indicate the potential economic impact associated with that outcome. In practice, customers with similar churn probabilities may contribute very differently to the business, making it necessary to consider both retention risk and expected profitability when prioritising commercial actions.</p>
+<p>Customer Lifetime Value (CLV) provides a natural framework for integrating these dimensions. Following the general principles described by <span class="citation" data-cites="robert2008database"><a href="../references.html#ref-robert2008database" role="doc-biblioref">[1]</a></span>, customer value is interpreted as the present value of future customer profits rather than a simple summary of historical revenue. The implementation adopts this perspective while adapting it to a non-contractual retail environment in which future purchasing behaviour cannot be observed directly.</p>
+<p>The modelling process begins by estimating customer-level profitability from historical sales and product costs extracted from the AdventureWorks database. These observed profits are then combined with the behavioural information obtained during the previous stages of the workflow. Instead of assuming identical future behaviour for every customer, the implementation incorporates segment-specific retention characteristics derived from the RFM analysis together with the predicted probability of churn estimated by the classification model. Segment-specific discount-rate assumptions are subsequently introduced to account for differences in the uncertainty associated with future customer relationships.</p>
+<p>These components are combined to construct a risk-adjusted customer lifetime value that serves as the target variable for the predictive model. Since this valuation cannot be observed directly in the transactional database, it should be interpreted as a transparent economic framework based on explicit behavioural and financial assumptions rather than as a measured quantity.</p>
+<p>Once the target has been constructed, the problem is formulated as a supervised regression task. The customer-level features engineered throughout the project—including behavioural variables, profitability measures, customer characteristics, and the outputs of the segmentation and churn models—are used to train several regression algorithms under a common cross-validation framework. Their predictive performance is assessed using complementary regression metrics together with residual analysis and predicted-versus-observed comparisons to evaluate both numerical accuracy and ranking capability.</p>
+<p>The resulting model provides a scalable approximation of the underlying valuation framework. Rather than recomputing the complete economic model for every new customer, organisations can estimate expected customer value directly from observable behavioural characteristics while maintaining consistency with the assumptions adopted throughout the analytical workflow.</p>
+<p>A complete Python implementation of the customer lifetime value model presented in this section is available in the companion notebook <a href="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/3-clv-prediction.html">here</a>.</p>
+<p>An interactive Streamlit application implementing the methods presented in this chapter is available <a href="https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/dashboard">here</a>.</p>
+</section>
+</section>
+<section id="results-discussion-and-limitations" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">5.4</span> Results, Discussion, and Limitations</h2>
+<p>The three stages of the analytical workflow provide complementary perspectives on customer behaviour. Customer segmentation offers an interpretable description of purchasing patterns, churn modelling estimates future customer inactivity, and customer lifetime value integrates these behavioural insights with expected economic contribution. Rather than evaluating each component independently, the results are interpreted as successive layers of information that progressively enrich the understanding of customer relationships.</p>
+<section id="customer-segmentation" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="customer-segmentation"><span class="header-section-number">5.4.1</span> Customer Segmentation</h3>
+<p>The exploratory analysis confirms the strong asymmetry typically observed in transactional retail data. As shown in <a href="#tbl-rfm-summary" class="quarto-xref">Table&nbsp;<span>5.1</span></a>, Frequency and Monetary value exhibit substantial positive skewness, indicating that most customers purchase infrequently while a relatively small number account for a disproportionate share of total revenue. Such distributions are common in customer analytics and motivate the use of transformations before applying distance-based clustering algorithms.</p>
+<div id="tbl-rfm-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-rfm-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.1: Summary statistics of the RFM variables before transformation.
+</figcaption>
+<div aria-describedby="tbl-rfm-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Variable</th>
+<th style="text-align: center;">Mean</th>
+<th style="text-align: center;">Standard Deviation</th>
+<th style="text-align: center;">Skewness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Recency</td>
+<td style="text-align: center;">191.2675</td>
+<td style="text-align: center;">150.4236</td>
+<td style="text-align: center;">2.4352</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Frequency</td>
+<td style="text-align: center;">1.6457</td>
+<td style="text-align: center;">1.4571</td>
+<td style="text-align: center;">7.3882</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Monetary</td>
+<td style="text-align: center;">5745.4041</td>
+<td style="text-align: center;">38800.3833</td>
+<td style="text-align: center;">12.7974</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The distributions of the original RFM variables are illustrated in <a href="#fig-rfm-distributions" class="quarto-xref">Figure&nbsp;<span>5.1</span></a>. After applying the Box-Cox transformation and standardisation, the feature space becomes considerably more suitable for clustering while preserving the original variables for business interpretation.</p>
+<div id="fig-rfm-distributions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rfm-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/1-customer-value-and-retention-rfm-figures/rfm-feature-distributions.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rfm-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: Distribution of the original RFM variables before transformation.
+</figcaption>
+</figure>
+</div>
+<p>Several candidate values of (k) were evaluated using complementary clustering diagnostics. Rather than relying on a single criterion, the final solution balances cluster separation, compactness, and interpretability. As summarised in <a href="#tbl-cluster-selection" class="quarto-xref">Table&nbsp;<span>5.2</span></a>, the nine-cluster solution provides the best overall compromise across the internal validation metrics without producing unnecessarily fragmented customer groups.</p>
+<div id="tbl-cluster-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cluster-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.2: Clustering quality metrics used to determine the optimal number of customer segments.
+</figcaption>
+<div aria-describedby="tbl-cluster-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">k</th>
+<th style="text-align: center;">Silhouette</th>
+<th style="text-align: center;">Calinski–Harabasz</th>
+<th style="text-align: center;">Davies–Bouldin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0.4435</td>
+<td style="text-align: center;">15024.18</td>
+<td style="text-align: center;">0.9683</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0.3890</td>
+<td style="text-align: center;">13311.31</td>
+<td style="text-align: center;">1.0315</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.4035</td>
+<td style="text-align: center;">12695.18</td>
+<td style="text-align: center;">0.8897</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0.4237</td>
+<td style="text-align: center;">13171.97</td>
+<td style="text-align: center;">0.9205</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.4267</td>
+<td style="text-align: center;">13676.56</td>
+<td style="text-align: center;">0.8533</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">0.4348</td>
+<td style="text-align: center;">14390.70</td>
+<td style="text-align: center;">0.7965</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">0.4556</td>
+<td style="text-align: center;">15406.58</td>
+<td style="text-align: center;">0.7315</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>9</strong></td>
+<td style="text-align: center;"><strong>0.4655</strong></td>
+<td style="text-align: center;"><strong>16264.65</strong></td>
+<td style="text-align: center;"><strong>0.7046</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">0.4622</td>
+<td style="text-align: center;">16513.19</td>
+<td style="text-align: center;">0.7133</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The corresponding diagnostic curves are presented in <a href="#fig-cluster-selection" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>.</p>
+<div id="fig-cluster-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cluster-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/1-customer-value-and-retention-rfm-figures/cluster-selection-metrics.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cluster-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Cluster selection diagnostics for different values of (k).
+</figcaption>
+</figure>
+</div>
+<p>The selected segmentation identifies nine customer profiles that capture meaningful differences in purchasing behaviour. Rather than representing fixed customer categories, these segments describe behavioural tendencies ranging from highly engaged customers to inactive, low-value buyers. A summary of the resulting segments is presented in <a href="#tbl-segment-summary" class="quarto-xref">Table&nbsp;<span>5.3</span></a>.</p>
+<div id="tbl-segment-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-segment-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.3: Summary of the final customer segments obtained from the RFM analysis.
+</figcaption>
+<div aria-describedby="tbl-segment-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Segment</th>
+<th style="text-align: center;">Customers</th>
+<th style="text-align: center;">Recency</th>
+<th style="text-align: center;">Frequency</th>
+<th style="text-align: center;">Monetary</th>
+<th style="text-align: center;">Avg. Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Champions</td>
+<td style="text-align: center;">2767</td>
+<td style="text-align: center;">87.1</td>
+<td style="text-align: center;">3.05</td>
+<td style="text-align: center;">28042.2</td>
+<td style="text-align: center;">0.74</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">High Value but Cooling</td>
+<td style="text-align: center;">2832</td>
+<td style="text-align: center;">264.0</td>
+<td style="text-align: center;">2.27</td>
+<td style="text-align: center;">8903.2</td>
+<td style="text-align: center;">0.51</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Frequent Low-Spend Customers</td>
+<td style="text-align: center;">791</td>
+<td style="text-align: center;">67.5</td>
+<td style="text-align: center;">2.77</td>
+<td style="text-align: center;">776.8</td>
+<td style="text-align: center;">0.76</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Recent Low-Value Customers</td>
+<td style="text-align: center;">1724</td>
+<td style="text-align: center;">87.3</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">1397.6</td>
+<td style="text-align: center;">0.66</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Active Minimal Buyers</td>
+<td style="text-align: center;">2463</td>
+<td style="text-align: center;">147.6</td>
+<td style="text-align: center;">1.20</td>
+<td style="text-align: center;">2145.7</td>
+<td style="text-align: center;">0.63</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Declining Frequent Buyers</td>
+<td style="text-align: center;">1075</td>
+<td style="text-align: center;">107.1</td>
+<td style="text-align: center;">2.35</td>
+<td style="text-align: center;">122.3</td>
+<td style="text-align: center;">0.57</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Inactive Minimal Buyers</td>
+<td style="text-align: center;">4987</td>
+<td style="text-align: center;">328.4</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">1054.6</td>
+<td style="text-align: center;">0.35</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Inactive Low-Value Customers</td>
+<td style="text-align: center;">2046</td>
+<td style="text-align: center;">274.7</td>
+<td style="text-align: center;">1.00</td>
+<td style="text-align: center;">1352.8</td>
+<td style="text-align: center;">0.40</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Lost Customers</td>
+<td style="text-align: center;">434</td>
+<td style="text-align: center;">845.6</td>
+<td style="text-align: center;">1.01</td>
+<td style="text-align: center;">2852.1</td>
+<td style="text-align: center;">0.18</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The three-dimensional representation shown in <a href="#fig-rfm-space" class="quarto-xref">Figure&nbsp;<span>5.3</span></a> highlights the gradual transition between behavioural groups rather than sharply separated customer categories. This reinforces an important practical point: customer segmentation should be interpreted as a descriptive representation of purchasing behaviour rather than a definitive classification of customer types.</p>
+<div id="fig-rfm-space" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rfm-space-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/1-customer-value-and-retention-rfm-figures/customer-segments-rfm-space.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rfm-space-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.3: Three-dimensional representation of the customer segments in the original RFM space.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="churn-prediction" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="churn-prediction"><span class="header-section-number">5.4.2</span> Churn Prediction</h3>
+<p>Customer segmentation provides a descriptive representation of purchasing behaviour, but it does not indicate whether customers are likely to remain active. The second stage of the workflow therefore introduces a predictive component by estimating the probability that each customer will become inactive during the observation period.</p>
+<p>Several supervised learning algorithms were evaluated using the engineered customer-level features described in the previous section. Their performance is summarised in <a href="#tbl-churn-model-comparison" class="quarto-xref">Table&nbsp;<span>5.4</span></a>. Rather than relying on a single evaluation metric, the comparison considers both discrimination and ranking performance to identify the model that provides the most reliable estimates of customer retention risk.</p>
+<div id="tbl-churn-model-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-churn-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.4: Performance comparison of the evaluated churn prediction models. Abbreviations: RF = Random Forest; XGB = XGBoost; LR = Logistic Regression; AP = Average Precision; BA = Balanced Accuracy.
+</figcaption>
+<div aria-describedby="tbl-churn-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Sampling</th>
+<th style="text-align: center;">AUC</th>
+<th style="text-align: center;">AP</th>
+<th style="text-align: center;">Acc.</th>
+<th style="text-align: center;">BA</th>
+<th style="text-align: center;">Prec.</th>
+<th style="text-align: center;">Rec.</th>
+<th style="text-align: center;">F1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">RF</td>
+<td style="text-align: center;">SMOTE</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.971</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.800</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.889</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">XGB</td>
+<td style="text-align: center;">Under</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.951</td>
+<td style="text-align: center;">0.987</td>
+<td style="text-align: center;">0.994</td>
+<td style="text-align: center;">0.455</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">RF</td>
+<td style="text-align: center;">Original</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.959</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.949</td>
+<td style="text-align: center;">0.857</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.878</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">XGB</td>
+<td style="text-align: center;">SMOTE</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.960</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.949</td>
+<td style="text-align: center;">0.857</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.878</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">XGB</td>
+<td style="text-align: center;">Original</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.951</td>
+<td style="text-align: center;">0.998</td>
+<td style="text-align: center;">0.950</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.900</td>
+<td style="text-align: center;">0.900</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">RF</td>
+<td style="text-align: center;">Under</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.939</td>
+<td style="text-align: center;">0.965</td>
+<td style="text-align: center;">0.982</td>
+<td style="text-align: center;">0.233</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.377</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LR</td>
+<td style="text-align: center;">SMOTE</td>
+<td style="text-align: center;">0.999</td>
+<td style="text-align: center;">0.892</td>
+<td style="text-align: center;">0.987</td>
+<td style="text-align: center;">0.994</td>
+<td style="text-align: center;">0.455</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.625</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LR</td>
+<td style="text-align: center;">Original</td>
+<td style="text-align: center;">0.998</td>
+<td style="text-align: center;">0.871</td>
+<td style="text-align: center;">0.996</td>
+<td style="text-align: center;">0.849</td>
+<td style="text-align: center;">0.875</td>
+<td style="text-align: center;">0.700</td>
+<td style="text-align: center;">0.778</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LR</td>
+<td style="text-align: center;">Under</td>
+<td style="text-align: center;">0.997</td>
+<td style="text-align: center;">0.829</td>
+<td style="text-align: center;">0.969</td>
+<td style="text-align: center;">0.984</td>
+<td style="text-align: center;">0.256</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">0.408</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The best-performing specification was the Random Forest model trained with SMOTE. As shown in <a href="#tbl-best-churn-model" class="quarto-xref">Table&nbsp;<span>5.5</span></a>, it achieved excellent discrimination on the independent test set, with a ROC AUC of 0.9996 and an Average Precision of 0.9707. More importantly, the model maintained full recall for the churn class while keeping precision at 0.8000, which is a useful balance for retention-oriented applications where missing high-risk customers is usually more costly than reviewing a small number of false positives.</p>
+<div id="tbl-best-churn-model" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-best-churn-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.5: Performance of the selected churn prediction model on the independent test set.
+</figcaption>
+<div aria-describedby="tbl-best-churn-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 23%">
+<col style="width: 11%">
+<col style="width: 23%">
+<col style="width: 12%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">ROC AUC</th>
+<th style="text-align: center;">Average Precision</th>
+<th style="text-align: center;">Accuracy</th>
+<th style="text-align: center;">Balanced Accuracy</th>
+<th style="text-align: center;">Precision</th>
+<th style="text-align: center;">Recall</th>
+<th style="text-align: center;">F1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0.9996</td>
+<td style="text-align: center;">0.9707</td>
+<td style="text-align: center;">0.9973</td>
+<td style="text-align: center;">0.9986</td>
+<td style="text-align: center;">0.8000</td>
+<td style="text-align: center;">1.0000</td>
+<td style="text-align: center;">0.8889</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The class-level results in <a href="#tbl-classification-report" class="quarto-xref">Table&nbsp;<span>5.6</span></a> provide a more detailed view of the same behaviour. The model correctly identifies all churn cases in the test set, while most retention cases are also classified correctly. This is particularly relevant because the churn class is very small relative to the retained customer population.</p>
+<div id="tbl-classification-report" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-classification-report-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.6: Precision, Recall, F1-score, and support for the selected churn prediction model.
+</figcaption>
+<div aria-describedby="tbl-classification-report-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Class</th>
+<th style="text-align: center;">Precision</th>
+<th style="text-align: center;">Recall</th>
+<th style="text-align: center;">F1-score</th>
+<th style="text-align: center;">Support</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Retention</td>
+<td style="text-align: center;">1.0000</td>
+<td style="text-align: center;">0.9973</td>
+<td style="text-align: center;">0.9986</td>
+<td style="text-align: center;">1842</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Churn</td>
+<td style="text-align: center;">0.8000</td>
+<td style="text-align: center;">1.0000</td>
+<td style="text-align: center;">0.8889</td>
+<td style="text-align: center;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Accuracy</td>
+<td style="text-align: center;">0.9973</td>
+<td style="text-align: center;">0.9973</td>
+<td style="text-align: center;">0.9973</td>
+<td style="text-align: center;">0.9973</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Macro avg</td>
+<td style="text-align: center;">0.9000</td>
+<td style="text-align: center;">0.9986</td>
+<td style="text-align: center;">0.9438</td>
+<td style="text-align: center;">1862</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Weighted avg</td>
+<td style="text-align: center;">0.9979</td>
+<td style="text-align: center;">0.9973</td>
+<td style="text-align: center;">0.9975</td>
+<td style="text-align: center;">1862</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The Receiver Operating Characteristic curve presented in <a href="#fig-roc" class="quarto-xref">Figure&nbsp;<span>5.4</span></a> demonstrates that the model separates active and inactive customers across a broad range of decision thresholds. Since customer retention datasets are inherently imbalanced, the Precision–Recall curve shown in <a href="#fig-pr-curve" class="quarto-xref">Figure&nbsp;<span>5.5</span></a> provides an equally important perspective by evaluating the model’s ability to identify genuinely high-risk customers without generating an excessive number of false positives.</p>
+<div id="fig-roc" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/2-customer-value-and-retention-churn-figures/roc-curve.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.4: Receiver Operating Characteristic curve for the selected churn prediction model.
+</figcaption>
+</figure>
+</div>
+<div id="fig-pr-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pr-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/2-customer-value-and-retention-churn-figures/precision-recall-curve.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pr-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.5: Precision–Recall curve for the selected churn prediction model.
+</figcaption>
+</figure>
+</div>
+<p>The confusion matrix shown in <a href="#fig-confusion-matrix" class="quarto-xref">Figure&nbsp;<span>5.6</span></a> reinforces this interpretation. Most customers are correctly classified, while the remaining errors reflect the intrinsic uncertainty associated with non-contractual customer behaviour. In this setting, some customers naturally purchase at irregular intervals, making it difficult to distinguish perfectly between temporary inactivity and progressive disengagement.</p>
+<div id="fig-confusion-matrix" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/2-customer-value-and-retention-churn-figures/confusion-matrix.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.6: Confusion matrix for the selected churn prediction model.
+</figcaption>
+</figure>
+</div>
+<p>From a business perspective, ranking customers by estimated churn probability is often more useful than producing binary predictions. Marketing teams typically have limited resources and cannot intervene with every customer simultaneously. The cumulative gains curve shown in <a href="#fig-cumulative-gains" class="quarto-xref">Figure&nbsp;<span>5.7</span></a> demonstrates that the model concentrates a substantial proportion of future churners within the highest-risk customers, enabling retention campaigns to be prioritised more effectively.</p>
+<div id="fig-cumulative-gains" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cumulative-gains-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/2-customer-value-and-retention-churn-figures/cumulative-gains-curve.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cumulative-gains-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.7: Cumulative gains curve for the selected churn prediction model.
+</figcaption>
+</figure>
+</div>
+<p>Inspection of the feature importance rankings further supports the behavioural interpretation of the model. As shown in <a href="#fig-feature-importance" class="quarto-xref">Figure&nbsp;<span>5.8</span></a>, variables related to purchasing recency, customer tenure, purchasing cadence, and behavioural segmentation contribute substantially to the predicted probabilities. This consistency suggests that the model is learning meaningful patterns associated with customer engagement rather than relying on spurious statistical relationships.</p>
+<div id="fig-feature-importance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-feature-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/2-customer-value-and-retention-churn-figures/top-feature-importances.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-feature-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.8: Feature importance for the selected churn prediction model.
+</figcaption>
+</figure>
+</div>
+<p>Although the predictive performance is strong, several limitations should be acknowledged. The model depends on the operational definition of churn adopted in this project, meaning that alternative calibration or observation windows would naturally produce different labels. The churn class is also small in absolute terms, so the excellent performance metrics should be interpreted with caution. The predicted probabilities quantify behavioural risk rather than certainty, and customers identified as high risk should be understood as candidates for proactive retention strategies rather than customers who have definitively left the business.</p>
+</section>
+<section id="risk-adjusted-customer-lifetime-value-prediction-1" class="level3" data-number="5.4.3">
+<h3 data-number="5.4.3" class="anchored" data-anchor-id="risk-adjusted-customer-lifetime-value-prediction-1"><span class="header-section-number">5.4.3</span> Risk-Adjusted Customer Lifetime Value Prediction</h3>
+<p>The final stage of the workflow integrates customer profitability with the behavioural information obtained during the segmentation and churn analyses. Rather than estimating customer value exclusively from historical purchases, the objective is to approximate a risk-adjusted valuation that combines observed profitability with expected customer retention. This produces a more realistic prioritisation framework by recognising that customers with similar historical revenue may contribute very differently to future business performance.</p>
+<p>Several regression algorithms were evaluated using the customer-level features engineered throughout the project. Their predictive performance is summarised in <a href="#tbl-clv-model-comparison" class="quarto-xref">Table&nbsp;<span>5.7</span></a>. The Random Forest regressor achieved the best overall performance, with the lowest RMSE and MAE and the highest (R^2), indicating that it reproduced the constructed valuation framework more accurately than the other candidate models.</p>
+<div id="tbl-clv-model-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-clv-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.7: Performance comparison of the evaluated Customer Lifetime Value prediction models.
+</figcaption>
+<div aria-describedby="tbl-clv-model-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Model</th>
+<th style="text-align: center;">RMSE</th>
+<th style="text-align: center;">MAE</th>
+<th style="text-align: center;"><span class="math inline">\(R^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Random Forest</td>
+<td style="text-align: center;">1936.5286</td>
+<td style="text-align: center;">345.9793</td>
+<td style="text-align: center;">0.9966</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">XGBoost</td>
+<td style="text-align: center;">2178.4778</td>
+<td style="text-align: center;">473.2691</td>
+<td style="text-align: center;">0.9957</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Regression Tree</td>
+<td style="text-align: center;">2607.8713</td>
+<td style="text-align: center;">456.9903</td>
+<td style="text-align: center;">0.9938</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">K-Nearest Neighbors Regression</td>
+<td style="text-align: center;">4066.1658</td>
+<td style="text-align: center;">880.0326</td>
+<td style="text-align: center;">0.9850</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Ridge Regression</td>
+<td style="text-align: center;">8251.9469</td>
+<td style="text-align: center;">4268.8566</td>
+<td style="text-align: center;">0.9384</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">LASSO Regression</td>
+<td style="text-align: center;">8300.8116</td>
+<td style="text-align: center;">4313.9835</td>
+<td style="text-align: center;">0.9377</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Linear Regression</td>
+<td style="text-align: center;">8316.9955</td>
+<td style="text-align: center;">4332.1693</td>
+<td style="text-align: center;">0.9374</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Support Vector Regression</td>
+<td style="text-align: center;">35181.7991</td>
+<td style="text-align: center;">19710.3313</td>
+<td style="text-align: center;">-0.1193</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The selected model was then evaluated on the independent test set. As reported in <a href="#tbl-final-clv-model" class="quarto-xref">Table&nbsp;<span>5.8</span></a>, the final Random Forest model retained very strong predictive performance, explaining most of the variation in the constructed CLV target while keeping the average absolute error relatively small.</p>
+<div id="tbl-final-clv-model" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-final-clv-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.8: Predictive performance of the selected Customer Lifetime Value model on the independent test set.
+</figcaption>
+<div aria-describedby="tbl-final-clv-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Model</th>
+<th style="text-align: center;">RMSE</th>
+<th style="text-align: center;">MAE</th>
+<th style="text-align: center;"><span class="math inline">\(R^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Random Forest</td>
+<td style="text-align: center;">2028.6151</td>
+<td style="text-align: center;">363.8659</td>
+<td style="text-align: center;">0.9963</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The relationship between predicted and observed customer lifetime values is illustrated in <a href="#fig-predicted-vs-actual" class="quarto-xref">Figure&nbsp;<span>5.9</span></a>. Most observations are concentrated around the identity line, indicating that the regression model successfully reproduces the underlying valuation framework across a broad range of customer values. The residual analysis shown in <a href="#fig-residuals" class="quarto-xref">Figure&nbsp;<span>5.10</span></a> further suggests that no major systematic prediction bias is present, although variability naturally increases for the highest-value customers, which represent only a small fraction of the customer base.</p>
+<div id="fig-predicted-vs-actual" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-predicted-vs-actual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/3-customer-value-and-retention-clv-figures/predicted-vs-actual-clv.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-predicted-vs-actual-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.9: Predicted versus observed Customer Lifetime Value on the independent test set.
+</figcaption>
+</figure>
+</div>
+<div id="fig-residuals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/3-customer-value-and-retention-clv-figures/residual-plot.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-residuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.10: Residual analysis for the selected Customer Lifetime Value model.
+</figcaption>
+</figure>
+</div>
+<p>Feature importance analysis provides additional insight into the behaviour of the regression model. As shown in <a href="#fig-clv-feature-importance" class="quarto-xref">Figure&nbsp;<span>5.11</span></a>, the estimated customer value is influenced not only by historical profitability but also by behavioural characteristics derived during the previous stages of the workflow, including purchasing recency, transaction frequency, customer tenure, and the outputs of the churn prediction model. This demonstrates that the estimated lifetime value reflects a combination of historical performance and expected future behaviour rather than historical spending alone.</p>
+<div id="fig-clv-feature-importance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-clv-feature-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/3-customer-value-and-retention-clv-figures/feature-importance.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clv-feature-importance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.11: Feature importance for the selected Customer Lifetime Value model.
+</figcaption>
+</figure>
+</div>
+<p>The segment-level results in <a href="#tbl-clv-segment-summary" class="quarto-xref">Table&nbsp;<span>5.9</span></a> show why customer value should not be interpreted only at the individual level. Some segments contribute strongly because they contain many customers, while others contribute through high average expected value. The largest aggregate predicted value is concentrated in Declining Frequent Buyers, mainly because this segment combines a large customer base with a very high average predicted CLV. By contrast, Lost Customers and Inactive Low-Value Customers produce negative expected value under the adopted framework, reflecting weak profitability and unfavourable behavioural assumptions.</p>
+<div id="tbl-clv-segment-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-clv-segment-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.9: Customer Lifetime Value summarised by behavioural segment.
+</figcaption>
+<div aria-describedby="tbl-clv-segment-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 36%">
+<col style="width: 13%">
+<col style="width: 24%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Segment</th>
+<th style="text-align: right;">Customers</th>
+<th style="text-align: center;">Avg. Predicted CLV</th>
+<th style="text-align: center;">Total Predicted CLV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Declining Frequent Buyers</td>
+<td style="text-align: right;">1395</td>
+<td style="text-align: center;">76859.60</td>
+<td style="text-align: center;">107219140.34</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">High Value but Cooling</td>
+<td style="text-align: right;">454</td>
+<td style="text-align: center;">11367.20</td>
+<td style="text-align: center;">5160706.87</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Frequent Low-Spend Customers</td>
+<td style="text-align: right;">928</td>
+<td style="text-align: center;">10412.29</td>
+<td style="text-align: center;">9662602.51</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Active Minimal Buyers</td>
+<td style="text-align: right;">1767</td>
+<td style="text-align: center;">10098.15</td>
+<td style="text-align: center;">17843434.86</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Inactive Minimal Buyers</td>
+<td style="text-align: right;">686</td>
+<td style="text-align: center;">2776.18</td>
+<td style="text-align: center;">1904456.08</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Recent Low-Value Customers</td>
+<td style="text-align: right;">609</td>
+<td style="text-align: center;">2748.03</td>
+<td style="text-align: center;">1673548.64</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Champions</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: center;">242.58</td>
+<td style="text-align: center;">9945.82</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Lost Customers</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: center;">-71046.79</td>
+<td style="text-align: center;">-3765480.03</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Inactive Low-Value Customers</td>
+<td style="text-align: right;">273</td>
+<td style="text-align: center;">-18539.27</td>
+<td style="text-align: center;">-5061219.47</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>These differences are also visible in <a href="#fig-clv-by-segment" class="quarto-xref">Figure&nbsp;<span>5.12</span></a> and <a href="#fig-total-clv-by-segment" class="quarto-xref">Figure&nbsp;<span>5.13</span></a>. The first figure shows the distribution of predicted CLV within each behavioural segment, while the second aggregates predicted value across the customer portfolio. Together, they show that customer prioritisation should consider both individual-level value and the broader segment structure in which that value is concentrated.</p>
+<div id="fig-clv-by-segment" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-clv-by-segment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/3-customer-value-and-retention-clv-figures/predicted-clv-by-segment.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clv-by-segment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.12: Distribution of predicted Customer Lifetime Value across customer segments.
+</figcaption>
+</figure>
+</div>
+<div id="fig-total-clv-by-segment" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-total-clv-by-segment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/python/3-customer-value-and-retention-clv-figures/total-predicted-clv-by-segment.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-total-clv-by-segment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.13: Total predicted Customer Lifetime Value aggregated by customer segment.
+</figcaption>
+</figure>
+</div>
+<p>These results should be interpreted within the assumptions adopted to construct the valuation framework. The response variable used for model training is not directly observed in the AdventureWorks database but is derived from historical profitability, behavioural segmentation, predicted retention, and explicit discount-rate assumptions. Consequently, the regression model should be understood as learning to approximate this internally consistent valuation framework rather than predicting an objectively measurable quantity. Alternative assumptions regarding customer retention or discounting would naturally produce different numerical estimates, although the overall modelling framework would remain unchanged.</p>
+</section>
+</section>
+<section id="technical-appendix-optional" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">5.5</span> Technical Appendix (Optional)</h2>
+<p>The main chapter emphasises the practical application of customer analytics using transactional retail data. This appendix complements the discussion by summarising the principal mathematical concepts underlying the implementation. Rather than providing exhaustive theoretical derivations, it introduces the core formulations used throughout the workflow, including behavioural customer segmentation, the operational definition of churn, and the construction of the risk-adjusted Customer Lifetime Value (CLV) framework.</p>
+<section id="rfm-analysis" class="level3" data-number="5.5.1">
+<h3 data-number="5.5.1" class="anchored" data-anchor-id="rfm-analysis"><span class="header-section-number">5.5.1</span> RFM Analysis</h3>
+<p>Recency, Frequency, and Monetary (RFM) analysis is one of the most widely used approaches for summarising customer purchasing behaviour in transactional businesses. Instead of modelling the complete purchase history, it represents each customer through three complementary behavioural variables:</p>
+<ul>
+<li><strong>Recency</strong>, measuring the time elapsed since the customer’s most recent purchase.</li>
+<li><strong>Frequency</strong>, representing the total number of completed purchases during the observation period.</li>
+<li><strong>Monetary value</strong>, describing the customer’s cumulative spending.</li>
+</ul>
+<p>For customer <span class="math inline">\(i\)</span>, Recency is computed as</p>
+<p><span id="eq-rfm-recency"><span class="math display">\[
+R_i=t_{\mathrm{ref}}-t_{\mathrm{last},i},
+\tag{5.1}\]</span></span></p>
+<p>where <span class="math inline">\(t_{\mathrm{ref}}\)</span> denotes the reference date used for the analysis and <span class="math inline">\(t_{\mathrm{last},i}\)</span> is the date of the customer’s most recent transaction.</p>
+<p>Frequency is defined as</p>
+<p><span id="eq-rfm-frequency"><span class="math display">\[
+F_i=n_i,
+\tag{5.2}\]</span></span></p>
+<p>where <span class="math inline">\(n_i\)</span> is the number of completed purchases.</p>
+<p>Monetary value is calculated as</p>
+<p><span id="eq-rfm-monetary"><span class="math display">\[
+M_i=\sum_{j=1}^{n_i}v_{ij},
+\tag{5.3}\]</span></span></p>
+<p>where <span class="math inline">\(v_{ij}\)</span> represents the monetary value of transaction <span class="math inline">\(j\)</span>.</p>
+<p>Although conceptually simple, these three variables capture complementary aspects of customer behaviour and provide the behavioural representation used throughout the remainder of the workflow. Because Frequency and Monetary value typically exhibit strong positive skewness, additional preprocessing is required before applying distance-based clustering algorithms.</p>
+<section id="box-cox-transformation" class="level4" data-number="5.5.1.1">
+<h4 data-number="5.5.1.1" class="anchored" data-anchor-id="box-cox-transformation"><span class="header-section-number">5.5.1.1</span> Box-Cox Transformation</h4>
+<p>The RFM variables exhibit markedly different distributions, with Frequency and Monetary value generally dominated by a relatively small number of high-value observations. Since K-Means relies on Euclidean distances, these extreme values can disproportionately influence the clustering process.</p>
+<p>To reduce this effect, each RFM variable is transformed using the Box-Cox transformation,</p>
+<p><span id="eq-boxcox"><span class="math display">\[
+y^{(\lambda)}=
+\begin{cases}
+\dfrac{y^\lambda-1}{\lambda}, &amp; \lambda \neq 0,\\
+\log(y), &amp; \lambda=0,
+\end{cases}
+\tag{5.4}\]</span></span></p>
+<p>where the transformation parameter <span class="math inline">\(\lambda\)</span> is estimated from the observed data.</p>
+<p>After transformation, each variable is standardised to zero mean and unit variance before clustering. The transformed variables are used exclusively during model fitting; all business interpretation remains based on the original RFM variables.</p>
+</section>
+<section id="k-means-clustering" class="level4" data-number="5.5.1.2">
+<h4 data-number="5.5.1.2" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">5.5.1.2</span> K-Means Clustering</h4>
+<p>Customer segmentation is performed using the K-Means clustering algorithm, which partitions customers into <span class="math inline">\(K\)</span> groups by minimising the within-cluster sum of squared Euclidean distances,</p>
+<p><span id="eq-kmeans"><span class="math display">\[
+\min_{C_1,\ldots,C_K}
+\sum_{k=1}^{K}
+\sum_{x_i\in C_k}
+\left|x_i-\mu_k\right|^2,
+\tag{5.5}\]</span></span></p>
+<p>where <span class="math inline">\(\mu_k\)</span> denotes the centroid of cluster <span class="math inline">\(k\)</span>.</p>
+<p>The optimisation alternates between assigning observations to their nearest centroid and updating the centroids according to the mean of the assigned observations until convergence.</p>
+<p>Since no ground-truth customer labels exist, the optimal number of clusters is determined using complementary internal validation metrics together with business interpretability. Once the clusters have been identified, they are interpreted using the original RFM variables rather than the transformed feature space, allowing each segment to be associated with a meaningful purchasing profile.</p>
+</section>
+</section>
+<section id="behavioural-churn-definition" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="behavioural-churn-definition"><span class="header-section-number">5.5.2</span> Behavioural Churn Definition</h3>
+<p>Unlike subscription-based businesses, transactional retail datasets rarely contain explicit churn events. Customer inactivity must therefore be inferred from observed purchasing behaviour rather than directly measured. The implementation adopted in this project defines churn through a behavioural rule that combines customer engagement during the calibration period with observed activity during a subsequent validation period.</p>
+<p>Let <span class="math inline">\(S_i\)</span> denote the behavioural segment assigned to customer <span class="math inline">\(i\)</span>, <span class="math inline">\(R_i\)</span> the customer’s recency, <span class="math inline">\(\bar{L}_i\)</span> the average time between consecutive purchases (purchase latency), and <span class="math inline">\(\mathrm{Score}_i\)</span> the within-segment RFM score. Furthermore, let <span class="math inline">\(\overline{\mathrm{Score}}_{S_i}\)</span> represent the average RFM score of the customer’s segment.</p>
+<p>A customer is considered a potential churn candidate when all behavioural conditions</p>
+<p><span class="math display">\[
+S_i\in\mathcal{L},
+\]</span></p>
+<p><span class="math display">\[
+R_i&gt;\bar{L}_i,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\mathrm{Score}_i&lt;
+\overline{\mathrm{Score}}_{S_i}
+\]</span></p>
+<p>are simultaneously satisfied, where <span class="math inline">\(\mathcal{L}\)</span> denotes the set of low-activity customer segments identified during the RFM analysis.</p>
+<p>The final churn label is then determined by inspecting future purchasing behaviour during the validation period,</p>
+<p><span id="eq-churn-definition"><span class="math display">\[
+y_i=
+\begin{cases}
+1, &amp; \text{if the customer makes no purchases during the validation window},\\
+0, &amp; \text{otherwise}.
+\end{cases}
+\tag{5.6}\]</span></span></p>
+<p>This formulation differs from the common approach of defining churn solely through future inactivity. Instead, it first identifies customers whose historical purchasing behaviour is already consistent with progressive disengagement and subsequently verifies whether this behaviour persists during the validation period. By separating behavioural identification from future validation, the resulting target remains suitable for supervised learning while reducing the risk of labelling temporarily inactive customers as permanent churners.</p>
+<p>The chronological separation between calibration and validation periods also prevents information leakage, since every explanatory variable is computed exclusively from information that would have been available at the time the prediction is made.</p>
+<section id="classification-metrics" class="level4" data-number="5.5.2.1">
+<h4 data-number="5.5.2.1" class="anchored" data-anchor-id="classification-metrics"><span class="header-section-number">5.5.2.1</span> Classification Metrics</h4>
+<p>Customer churn prediction is formulated as a binary classification problem. Let</p>
+<ul>
+<li><span class="math inline">\(TP\)</span>: true positives,</li>
+<li><span class="math inline">\(FP\)</span>: false positives,</li>
+<li><span class="math inline">\(TN\)</span>: true negatives,</li>
+<li><span class="math inline">\(FN\)</span>: false negatives.</li>
+</ul>
+<p>Several complementary metrics are used throughout the chapter to evaluate predictive performance.</p>
+<p>Precision measures the proportion of customers predicted to churn who actually become inactive,</p>
+<p><span id="eq-precision"><span class="math display">\[
+\mathrm{Precision}
+=
+\frac{TP}{TP+FP},
+\tag{5.7}\]</span></span></p>
+<p>where higher values indicate fewer false positive predictions.</p>
+<p>Recall, also referred to as sensitivity, measures the proportion of actual churners correctly identified by the classifier,</p>
+<p><span id="eq-recall"><span class="math display">\[
+\mathrm{Recall}
+=
+\frac{TP}{TP+FN},
+\tag{5.8}\]</span></span></p>
+<p>making it particularly relevant when missing high-risk customers carries a significant commercial cost.</p>
+<p>The harmonic mean of Precision and Recall is given by the F1-score,</p>
+<p><span id="eq-f1"><span class="math display">\[
+F_1
+=
+2
+\cdot
+\frac{\mathrm{Precision}\times\mathrm{Recall}}
+{\mathrm{Precision}+\mathrm{Recall}},
+\tag{5.9}\]</span></span></p>
+<p>which provides a balanced summary of classifier performance under class imbalance.</p>
+<p>Threshold-independent evaluation is performed using the Receiver Operating Characteristic (ROC) curve and the Precision–Recall curve. While ROC analysis measures the trade-off between the true positive rate and false positive rate across all possible classification thresholds, Precision–Recall curves provide a more informative assessment when the positive class is relatively uncommon, as is typically the case in customer retention problems.</p>
+<p>From a business perspective, ranking quality is often more important than binary classification accuracy. For this reason, the implementation also evaluates cumulative gains, which quantify how effectively the model concentrates future churners within the highest-ranked customers. This ranking perspective is particularly useful for prioritising retention campaigns when marketing resources are limited.</p>
+</section>
+</section>
+<section id="risk-adjusted-customer-lifetime-value" class="level3" data-number="5.5.3">
+<h3 data-number="5.5.3" class="anchored" data-anchor-id="risk-adjusted-customer-lifetime-value"><span class="header-section-number">5.5.3</span> Risk-Adjusted Customer Lifetime Value</h3>
+<p>Customer Lifetime Value (CLV) is commonly defined as the present value of the future profits expected from a customer relationship. A general formulation is given by</p>
+<p><span id="eq-classical-clv"><span class="math display">\[
+\mathrm{CLV}
+=
+\sum_{t=1}^{T}
+\frac{\mathbb{E}[P_t]}
+{(1+d)^t},
+\tag{5.10}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbb{E}[P_t]\)</span> denotes the expected customer profit during period <span class="math inline">\(t\)</span>, <span class="math inline">\(d\)</span> is the discount rate, and <span class="math inline">\(T\)</span> represents the planning horizon.</p>
+<p>In practice, however, neither future profits nor customer retention are directly observable in non-contractual retail businesses. The implementation presented in this chapter therefore constructs a risk-adjusted valuation framework that combines observed customer profitability with behavioural information derived from the previous stages of the workflow.</p>
+<p>Let <span class="math inline">\(\hat{P}_i\)</span> denote the estimated average profit generated by customer <span class="math inline">\(i\)</span>, <span class="math inline">\(c_{S_i}\)</span> the historical churn rate associated with the behavioural segment (S_i), and (d_{S_i}) the corresponding segment-specific discount rate. Assuming that the probability of customer retention remains approximately constant within each behavioural segment, the expected Customer Lifetime Value is estimated as</p>
+<p><span id="eq-risk-adjusted-clv"><span class="math display">\[
+\widehat{\mathrm{CLV}}_i
+=
+\sum_{t=1}^{T}
+\frac{
+\hat{P}_i
+\left(1-c_{S_i}\right)^{t-1}
+}
+{\left(1+d_{S_i}\right)^t},
+\tag{5.11}\]</span></span></p>
+<p>where the term</p>
+<p><span class="math display">\[
+\left(1-c_{S_i}\right)^{t-1}
+\]</span></p>
+<p>represents the probability that customer <span class="math inline">\(i\)</span> remains active up to period <span class="math inline">\(t\)</span>.</p>
+<p>Unlike the classical formulation, both the expected retention and the discount rate depend on the customer’s behavioural segment rather than being assumed identical across the entire customer base. This allows customers exhibiting different purchasing patterns to be valued under different behavioural assumptions while preserving a transparent and reproducible valuation framework.</p>
+<p>The resulting quantity should not be interpreted as an objectively measurable future lifetime value. Instead, it represents a model-based valuation constructed from observed profitability together with explicit assumptions regarding customer retention and the time value of money.</p>
+<p>Once the target variable has been constructed, Customer Lifetime Value prediction becomes a supervised regression problem,</p>
+<p><span id="eq-clv-regression"><span class="math display">\[
+\widehat{\mathrm{CLV}}_i
+=
+f(\mathbf{x}_i)+\varepsilon_i,
+\tag{5.12}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{x}_i\)</span> denotes the customer-level feature vector engineered throughout the project, <span class="math inline">\(f(\cdot)\)</span> represents the regression model, and <span class="math inline">\(\varepsilon_i\)</span> captures the unexplained prediction error.</p>
+<p>Rather than estimating future profits directly, the regression model learns to approximate the valuation framework defined by <a href="#eq-risk-adjusted-clv" class="quarto-xref">Equation&nbsp;<span>5.11</span></a>. This considerably reduces the computational effort required to evaluate new customers while maintaining consistency with the behavioural and financial assumptions adopted throughout the analytical workflow.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-robert2008database" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">C. B. Robert, D. K. Byung, and A. N. Scott, <em>Database marketing: Analyzing and managing customers</em>. Spinger, 2008.</div>
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../1-applied-data-science/4-credit-card-fraud-detection-ml-benchmark.html" class="pagination-link" aria-label="Credit Card Fraud Detection">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Credit Card Fraud Detection</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../1-applied-data-science/6-customer-feedback-nlp.html" class="pagination-link" aria-label="Understanding Customer Feedback through NLP">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Understanding Customer Feedback through NLP</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

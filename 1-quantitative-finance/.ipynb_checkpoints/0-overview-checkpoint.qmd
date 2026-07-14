@@ -1,5 +1,0 @@
-# Overview {.unnumbered}
-
-This part covers problems related to quantitative finance, including the modeling of financial assets, portfolio construction, and risk analysis under uncertainty.
-
-The scope of this domain includes methods for analyzing market data, evaluating financial instruments, and supporting decision-making where risk and return must be jointly considered.

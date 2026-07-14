@@ -1,0 +1,9 @@
+# Overview {.unnumbered}
+
+The projects presented in this section explore applications of data science beyond its more conventional domains. While they continue to rely on the same principles of quantitative modeling, computational experimentation, and systematic problem solving, they are situated at the intersection of data science with disciplines where mathematical modeling, optimization, and algorithmic design play a central role.
+
+These projects are intended to demonstrate that the methods and reasoning developed in data science extend naturally to a broader range of scientific and engineering problems. Rather than focusing solely on predictive modeling or business analytics, they explore how computational techniques can be applied to complex systems where analytical reasoning and algorithmic thinking are equally important.
+
+Although the application areas differ from those presented in the previous section, the underlying philosophy remains unchanged. Each project begins with a clearly formulated problem, develops an appropriate computational methodology, and critically evaluates the resulting solution, emphasizing transparency, reproducibility, and the limitations of the proposed approach.
+
+Together, these case studies illustrate that data science is not confined to a single industry or class of problems. Instead, it provides a versatile quantitative framework that can be adapted to a wide variety of scientific and technological challenges, reinforcing the broader perspective that underpins this portfolio.

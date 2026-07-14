@@ -1,0 +1,11 @@
+# Overview {.unnumbered}
+
+The projects presented in this section illustrate a practical approach to applied data science across a range of real-world problems. Rather than emphasizing a particular industry or family of algorithms, they focus on the process of translating domain-specific questions into quantitative models that can be implemented, evaluated, and interpreted systematically.
+
+Although the application areas vary—from quantitative finance and fraud detection to natural language processing, computer vision, and climate forecasting—the underlying methodology remains consistent. Each project begins with a clearly defined problem, develops an appropriate modeling strategy, and evaluates the resulting solution using transparent assumptions and reproducible computational workflows.
+
+The intention is not to demonstrate familiarity with every machine learning technique, but to show how statistical reasoning, mathematical modeling, and modern data science methods can be combined to solve practical problems. In some cases, relatively simple models provide robust and interpretable solutions; in others, more sophisticated approaches are justified by the complexity of the problem itself. The emphasis throughout is on selecting methods that are appropriate for the task rather than applying complexity for its own sake.
+
+Each chapter has been written as an independent case study. Readers interested in a particular topic can begin with any project without requiring knowledge of the others, while those reading the portfolio sequentially will find a consistent approach to problem formulation, model development, evaluation, and discussion of limitations.
+
+Together, these projects provide a representative view of applied data science as a disciplined process of quantitative problem solving, where statistical thinking, computational methods, and domain knowledge are integrated to produce reliable and practical solutions.

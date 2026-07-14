@@ -1,5 +1,0 @@
-# Overview {.unnumbered}
-
-This part covers problems related to climate and environmental systems, including the analysis and modeling of temporal and spatial data describing atmospheric and large-scale natural processes.
-
-The scope of this domain includes approaches for time series analysis, forecasting, and the study of variability and uncertainty in systems influenced by natural dynamics, external drivers, and interactions across multiple scales.

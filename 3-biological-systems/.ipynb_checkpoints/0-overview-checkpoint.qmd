@@ -1,5 +1,0 @@
-# Overview {.unnumbered}
-
-This part covers problems related to biological systems, including the analysis and modeling of data arising in biological, health, and life science contexts.
-
-The scope of this domain includes approaches for studying complex processes, identifying patterns in biological data, and supporting analysis in settings where systems are often heterogeneous, nonlinear, and influenced by multiple interacting factors.
