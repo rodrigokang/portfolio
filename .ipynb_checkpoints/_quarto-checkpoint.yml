@@ -10,7 +10,7 @@ book:
   cover-image: cover.png
 
   sidebar:
-    collapse-level: 1
+    collapse-level: 2
     tools:
       - icon: github
         href: https://github.com/rodrigokang/portfolio
