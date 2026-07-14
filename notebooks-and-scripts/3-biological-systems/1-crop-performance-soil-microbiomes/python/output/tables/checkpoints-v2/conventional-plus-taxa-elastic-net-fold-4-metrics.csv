@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-conventional-plus-taxa,elastic-net,4,85,16,1191.7659074942635,1543.245040219316,0.14124703454505316

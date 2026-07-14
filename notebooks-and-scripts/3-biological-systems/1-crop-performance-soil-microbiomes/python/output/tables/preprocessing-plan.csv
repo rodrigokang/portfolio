@@ -1,7 +1,0 @@
-feature-set,source-features,categorical-features,numeric-summary-features,bacterial-taxa,fungal-taxa,uses-pcoa,uses-clr
-conventional,20,8,12,0,0,False,False
-microbial-summaries,14,0,14,0,0,True,False
-conventional-plus-summaries,34,8,26,0,0,True,False
-taxonomic-composition,1591,0,0,885,706,False,True
-conventional-plus-taxa,1611,8,12,885,706,False,True
-integrated,1621,8,22,885,706,False,True

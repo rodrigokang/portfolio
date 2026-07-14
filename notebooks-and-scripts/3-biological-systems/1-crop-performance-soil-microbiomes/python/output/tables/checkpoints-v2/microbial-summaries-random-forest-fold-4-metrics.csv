@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-microbial-summaries,random-forest,4,85,16,1232.4649321351496,1592.5752847831277,0.08546903822854823

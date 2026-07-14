@@ -1,6 +1,0 @@
-candidate,interpretation,n_groups,selected_for_validation
-link-id,sample-level identifier,423,False
-project-state-field2,project-specific field-season,143,False
-state-field2,field-season across projects,137,False
-project-state-field1,project-specific physical field,89,False
-state-field1,physical field across projects and years,77,True

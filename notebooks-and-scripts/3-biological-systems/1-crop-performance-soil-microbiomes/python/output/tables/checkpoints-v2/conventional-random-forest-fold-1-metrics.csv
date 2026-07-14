@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-conventional,random-forest,1,85,15,1062.61335891961,1395.1206260902634,0.24117421881941392

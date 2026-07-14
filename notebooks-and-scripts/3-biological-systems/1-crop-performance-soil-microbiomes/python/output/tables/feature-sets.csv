@@ -1,7 +1,0 @@
-feature-set,features,includes-management,includes-chemistry,includes-qpcr,includes-shannon,includes-pcoa,includes-taxa
-conventional,20,True,True,False,False,False,False
-microbial-summaries,14,False,False,True,True,True,False
-conventional-plus-summaries,34,True,True,True,True,True,False
-taxonomic-composition,1591,False,False,False,False,False,True
-conventional-plus-taxa,1611,True,True,False,False,False,True
-integrated,1621,True,True,True,True,False,True

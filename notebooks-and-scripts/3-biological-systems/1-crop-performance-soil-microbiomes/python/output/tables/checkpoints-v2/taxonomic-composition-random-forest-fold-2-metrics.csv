@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-taxonomic-composition,random-forest,2,85,16,953.8208858116208,1262.0835227937819,0.028524817041830297

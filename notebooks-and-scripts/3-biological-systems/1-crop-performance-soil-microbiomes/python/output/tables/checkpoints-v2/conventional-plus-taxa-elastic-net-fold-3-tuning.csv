@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,inner-mae,best-parameters
-conventional-plus-taxa,elastic-net,3,1141.5626847509986,"{'feature-screen__k': 250, 'regressor__alpha': 10.0, 'regressor__l1_ratio': 0.9}"

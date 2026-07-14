@@ -1,5 +1,0 @@
-model,estimator,scaled-inputs,tuned,base-candidate-settings,taxa-screen-candidates,selection-metric,rationale
-naive-mean,DummyRegressor,False,False,1,1,not applicable,Reference performance from the training-fold mean yield.
-elastic-net,ElasticNet,True,True,12,3,inner grouped MAE,Regularised additive effects with a wider but still compact penalty grid.
-random-forest,RandomForestRegressor,False,True,8,3,inner grouped MAE,"Non-linear interactions with stronger averaging and explicit control of tree depth, feature subsampling, and terminal-node size."
-gradient-boosting,GradientBoostingRegressor,False,True,8,3,inner grouped MAE,Robust shallow boosting with a modest learning-rate and iteration search.

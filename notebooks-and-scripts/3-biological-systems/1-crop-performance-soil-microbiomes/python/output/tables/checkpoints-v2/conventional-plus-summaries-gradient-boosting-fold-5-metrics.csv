@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-conventional-plus-summaries,gradient-boosting,5,84,15,1155.1883971462648,1441.0952219571973,0.22148702735774561

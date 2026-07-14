@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-microbial-summaries,gradient-boosting,4,85,16,1343.8953213491918,1678.0490779596416,-0.015331329185449327

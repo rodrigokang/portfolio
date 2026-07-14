@@ -1,3 +1,0 @@
-comparison,feature-set,model,mae,rmse,r2,mae-improvement-vs-conventional,improved-folds
-best-overall,conventional,random-forest,1011.6048279465191,1359.0535375806999,0.24846813973251783,,
-strongest-microbial-extension,conventional-plus-summaries,random-forest,,,,-8.110532956861515,1.0

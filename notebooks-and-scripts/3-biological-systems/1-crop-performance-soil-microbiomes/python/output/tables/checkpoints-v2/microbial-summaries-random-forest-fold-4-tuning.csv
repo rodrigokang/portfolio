@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,inner-mae,best-parameters
-microbial-summaries,random-forest,4,1135.7199750154523,"{'regressor__max_depth': 10, 'regressor__max_features': 'sqrt', 'regressor__min_samples_leaf': 5}"

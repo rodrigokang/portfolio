@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-conventional-plus-taxa,random-forest,4,85,16,1146.3095723869062,1509.6955600208169,0.17817901697742466

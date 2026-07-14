@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-integrated,naive-mean,5,84,15,1293.4302611190476,1633.5677674210856,-0.0003565231682332026

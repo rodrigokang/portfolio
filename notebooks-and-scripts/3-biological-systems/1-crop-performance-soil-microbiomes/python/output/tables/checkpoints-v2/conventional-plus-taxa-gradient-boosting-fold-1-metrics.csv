@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,validation-observations,validation-groups,mae,rmse,r2
-conventional-plus-taxa,gradient-boosting,1,85,15,1107.7166519484476,1456.2567870443609,0.17321139311611045

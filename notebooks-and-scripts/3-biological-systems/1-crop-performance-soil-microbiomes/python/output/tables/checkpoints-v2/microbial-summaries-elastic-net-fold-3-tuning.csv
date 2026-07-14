@@ -1,2 +1,0 @@
-feature-set,model,outer-fold,inner-mae,best-parameters
-microbial-summaries,elastic-net,3,1180.4468673471697,"{'regressor__alpha': 1.0, 'regressor__l1_ratio': 0.5}"
