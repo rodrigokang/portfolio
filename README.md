@@ -58,5 +58,5 @@ Across different application domains, the same underlying philosophy remains con
 
 ## Author
 
-**Rodrigo Kang**
+**Rodrigo Kang**  
 *Physicist* | *Data Scientist*
