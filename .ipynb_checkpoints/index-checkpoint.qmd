@@ -2,19 +2,13 @@
 
 Welcome to my portfolio:
 
-**Data Science Across Domains**  
+**Data Science Across Domains**
 *From Methods and Models to Business Applications*
 
-This portfolio presents a curated collection of applied projects developed across different domains. Rather than a traditional theoretical text, it is organized as a series of case studies illustrating how quantitative methods, machine learning, and computational modeling can be used to address real-world problems.
+This portfolio brings together a collection of applied data science projects developed across a range of domains. Organized as a series of self-contained case studies, it illustrates how quantitative methods, machine learning, and computational modeling can be applied to real-world problems.
 
-Each chapter focuses on a specific project. Problems are clearly defined, modeling assumptions are made explicit, and solutions are developed through a combination of statistical reasoning, computational experimentation, and quantitative modeling. Results are analyzed and interpreted within the context of the problem being addressed.
+Although the application areas vary, the underlying philosophy remains consistent. Each project addresses a clearly defined problem, develops an appropriate modeling strategy, and evaluates the resulting solution through structured reasoning, careful experimentation, and thoughtful interpretation of the results.
 
-The emphasis throughout the portfolio is on applied problem solving. Mathematical concepts and technical details are introduced only when they help clarify modeling decisions, support methodological choices, or explain the behavior of the proposed approaches.
+The emphasis throughout is on selecting methods that are appropriate to the problem rather than applying complexity for its own sake. Where appropriate, projects are accompanied by computational artifacts implemented in `Python`, `R`, or both, allowing readers to explore the underlying workflows, reproduce experiments, and examine the implementation supporting each solution.
 
-Every project presented here corresponds to a fully implemented workflow. The associated computational artifacts—written in Python and R—are available alongside the text, allowing readers to explore the code, reproduce experiments, and examine the implementation details supporting each solution.
-
-This portfolio reflects an approach to applied data science and quantitative modeling that combines structured reasoning, careful experimentation, and practical implementation.
-
-Many of the projects presented here also draw on my background in physics and computational modeling, where mathematical reasoning and computational experimentation naturally complement data-driven approaches to problem solving.
-
-Each chapter can be read independently as a standalone project, while together they illustrate a consistent approach to developing technically sound and practically meaningful solutions across different domains.
+Each chapter can be read independently as a standalone case study, while together they present a coherent view of applied data science as a disciplined process of quantitative problem solving across different domains.

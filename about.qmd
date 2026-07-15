@@ -1,15 +1,13 @@
 # About {.unnumbered}
 
-I am a physicist and data scientist with a background in applied mathematics, machine learning, and computational modeling. My work focuses on applying quantitative methods to real-world problems, combining mathematical reasoning with practical implementation.
+I am a physicist and data scientist with a background in applied mathematics, machine learning, and computational modeling. Throughout my professional experience, I have worked on problems where quantitative reasoning, statistical modeling, and scientific computing come together to support practical decision-making.
 
-My academic training in physics has strongly shaped the way I approach quantitative modeling and data-driven problem solving. My research included work on **quantum optimal control theory**, with particular emphasis on algorithmic design based on *shortcuts to adiabaticity* and the study of computational complexity in physical systems. This background continues to influence my modeling philosophy through an emphasis on clear problem formulation, explicit assumptions, and careful evaluation of model behavior.
+My academic training in physics has strongly influenced the way I approach data science. My research focused on **quantum optimal control theory**, particularly on algorithmic methods based on *shortcuts to adiabaticity* and the study of computational complexity in physical systems. Although my work has since expanded into a wide range of applied domains, that experience continues to shape my approach through an emphasis on clear problem formulation, explicit assumptions, and careful evaluation of model behavior.
 
-Professionally, I have applied machine learning, statistical modeling, and optimization techniques across data-intensive industries. Much of my work has been developed within the **energy sector**, where I have contributed to quantitative modeling, decision-support systems, and optimization frameworks for gas trading and operational planning.
+Professionally, I have applied quantitative methods, statistical modeling, and machine learning across a variety of application areas, including quantitative finance, retail analytics, energy, and industrial research. My work has involved optimization, simulation, predictive modeling, and decision-support systems, always with the objective of translating complex problems into reliable computational solutions.
 
-In the retail sector, I have worked on projects involving customer segmentation, churn prediction, and recommendation systems, balancing quantitative modeling with practical constraints such as data quality, interpretability, and deployment considerations.
+What connects these experiences is not the industry itself, but a consistent way of approaching quantitative problems. Regardless of the domain, I believe that successful solutions begin with understanding the problem, selecting methods that are appropriate to the task, and validating results carefully before drawing conclusions.
 
-More recently, within Oil & Gas research and development environments, my work has focused on integrating physical modeling, statistical inference, and machine learning to address complex industrial problems. These projects include predictive modeling for pipeline corrosion, production optimization, and simulation-based approaches for decision-making under uncertainty.
-
-Across both academic and industrial settings, my perspective remains consistent: computational and statistical methods are most effective when supported by disciplined modeling, transparent assumptions, and careful validation.
+This portfolio reflects that philosophy. The projects presented here combine ideas from mathematics, statistics, computer science, and physics, but their primary purpose is always the same: to develop practical solutions that are technically rigorous, transparent, and reproducible.
 
 Outside my professional work, I enjoy playing the bass guitar and maintain a longstanding interest in theology.
