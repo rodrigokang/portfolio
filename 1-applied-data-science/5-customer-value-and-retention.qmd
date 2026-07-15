@@ -72,7 +72,7 @@ A complete Python implementation of the RFM analysis presented in this section i
 
 ::: {.content-visible when-format="pdf"}
 
-A complete Python implementation of the RFM analysis presented in this section is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention).
+A complete Python implementation of the RFM analysis presented in this section is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention}{\faGithub}.
 
 :::
 
@@ -98,7 +98,7 @@ A complete Python implementation of the churn prediction model presented in this
 
 ::: {.content-visible when-format="pdf"}
 
-A complete Python implementation of the churn prediction model presented in this section is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention).
+A complete Python implementation of the churn prediction model presented in this section is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention}{\faGithub}.
 
 :::
 
@@ -126,9 +126,9 @@ An interactive Streamlit application implementing the methods presented in this 
 
 ::: {.content-visible when-format="pdf"}
 
-A complete Python implementation of the customer lifetime value model presented in this section is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention).
+A complete Python implementation of the customer lifetime value model presented in this section is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention}{\faGithub}.
 
-An interactive Streamlit application implementing the methods presented in this chapter is available [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/dashboard).
+An interactive Streamlit application implementing the methods presented in this chapter is available \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/5-customer-value-and-retention/dashboard}{\faGithub}.
 
 :::
 

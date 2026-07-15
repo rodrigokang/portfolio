@@ -174,7 +174,7 @@ A complete Python implementation of the workflow presented in this chapter is av
 
 ::: {.content-visible when-format="pdf"}
 
-A complete Python implementation of the workflow presented in this chapter is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/6-customer-feedback-nlp).
+A complete Python implementation of the workflow presented in this chapter is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/6-customer-feedback-nlp}{\faGithub}.
 
 :::
 
@@ -186,7 +186,7 @@ An Azure-compatible deployment implementing the inference service presented in t
 
 ::: {.content-visible when-format="pdf"}
 
-An Azure-compatible deployment implementing the inference service presented in this chapter is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/6-customer-feedback-nlp).
+An Azure-compatible deployment implementing the inference service presented in this chapter is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/6-customer-feedback-nlp}{\faGithub}.
 
 :::
 

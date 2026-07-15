@@ -2,7 +2,7 @@
 
 Welcome to my portfolio:
 
-**Data Science Across Domains**
+**Data Science Across Domains**  
 *From Methods and Models to Business Applications*
 
 This portfolio brings together a collection of applied data science projects developed across a range of domains. Organized as a series of self-contained case studies, it illustrates how quantitative methods, machine learning, and computational modeling can be applied to real-world problems.

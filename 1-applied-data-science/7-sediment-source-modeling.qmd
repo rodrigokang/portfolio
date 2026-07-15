@@ -54,7 +54,7 @@ A complete Python implementation of the Bootstrapped Mixing Model presented in t
 
 ::: {.content-visible when-format="pdf"}
 
-A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/7-sediment-source-modeling).
+A complete Python implementation of the Bootstrapped Mixing Model presented in this section is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/7-sediment-source-modeling}{\faGithub}.
 
 :::
 
@@ -132,7 +132,7 @@ A complete Python implementation of the McCaffrey constrained least-squares mode
 
 ::: {.content-visible when-format="pdf"}
 
-A complete Python implementation of the McCaffrey constrained least-squares model presented in this section is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/7-sediment-source-modeling).
+A complete Python implementation of the McCaffrey constrained least-squares model presented in this section is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/7-sediment-source-modeling}{\faGithub}.
 
 :::
 
@@ -205,7 +205,7 @@ A complete Python implementation of the Sandoval ratio-based mixing model presen
 
 ::: {.content-visible when-format="pdf"}
 
-A complete Python implementation of the Sandoval ratio-based mixing model presented in this section is available in the project repository [here](https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/7-sediment-source-modeling).
+A complete Python implementation of the Sandoval ratio-based mixing model presented in this section is available in the project repository \href{https://github.com/rodrigokang/portfolio/tree/main/notebooks-and-scripts/1-applied-data-science/7-sediment-source-modeling}{\faGithub}.
 
 :::
 
