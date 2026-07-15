@@ -2,7 +2,7 @@
 
 ### From Methods and Models to Business Applications
 
-**Read the portfolio online:**
+**Read the portfolio online:**  
 [Data Science Across Domains – Portfolio Website](https://rodrigokang.github.io/portfolio)
 
 ---
