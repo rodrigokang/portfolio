@@ -1,9 +1,0 @@
-# Overview {.unnumbered}
-
-The final section of this portfolio brings together a collection of essays that complement the applied projects presented throughout the book. Rather than documenting complete implementations, these writings explore the ideas, principles, and mathematical foundations that continue to shape my approach to quantitative modeling and computational problem solving.
-
-Some essays examine broader questions about the practice of data science, while others revisit concepts from mathematics, physics, and scientific computing that remain relevant well beyond their original disciplines. Although their topics vary, they share a common objective: to understand not only how particular methods work, but also why they work, when they are appropriate, and what assumptions underlie their use.
-
-These essays are not intended as comprehensive reviews or textbook chapters. Instead, they reflect a personal interest in the theoretical ideas that support practical work, connecting mathematical reasoning with real-world modeling and encouraging a more critical and scientifically grounded perspective on computational methods.
-
-Together, they complement the technical case studies presented elsewhere in this portfolio, illustrating that effective applied data science depends not only on implementation, but also on a solid understanding of the principles that guide quantitative reasoning and scientific inquiry.

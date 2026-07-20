@@ -5,10 +5,10 @@ Welcome to my portfolio:
 **Data Science Across Domains**  
 *From Methods and Models to Business Applications*
 
-This portfolio brings together a collection of applied data science projects developed across a range of domains. Organized as a series of self-contained case studies, it illustrates how quantitative methods, machine learning, and computational modeling can be applied to real-world problems.
+This portfolio brings together a collection of technical work developed across a range of domains. Organized as a series of self-contained case studies and technical writings, it reflects an approach to quantitative problem solving grounded in statistical reasoning, computational modeling, and the scientific method.
 
-Although the application areas vary, the underlying philosophy remains consistent. Each project addresses a clearly defined problem, develops an appropriate modeling strategy, and evaluates the resulting solution through structured reasoning, careful experimentation, and thoughtful interpretation of the results.
+Although the topics vary, the underlying philosophy remains consistent. Each piece begins with a clearly defined question, develops an appropriate quantitative approach, and evaluates the resulting solution through structured reasoning, careful experimentation, and thoughtful interpretation of the results.
 
-The emphasis throughout is on selecting methods that are appropriate to the problem rather than applying complexity for its own sake. Where appropriate, projects are accompanied by computational artifacts implemented in `Python`, `R`, or both, allowing readers to explore the underlying workflows, reproduce experiments, and examine the implementation supporting each solution.
+The emphasis throughout is on selecting methods that are appropriate to the problem rather than applying complexity for its own sake. Depending on the objectives of each project, computational artifacts implemented in `Python`, `R`, or both are provided to support reproducibility, illustrate the analytical workflow, and document the implementation behind the results.
 
-Each chapter can be read independently as a standalone case study, while together they present a coherent view of applied data science as a disciplined process of quantitative problem solving across different domains.
+Each chapter is intended to stand on its own, while together they present a coherent view of quantitative problem solving across different domains. Whether addressing an applied problem, exploring a computational method, or discussing broader scientific ideas, the common objective remains the same: to develop transparent, reproducible, and well-founded solutions through quantitative reasoning.

@@ -39,18 +39,12 @@ book:
         - 1-applied-data-science/6-customer-feedback-nlp.qmd
         - 1-applied-data-science/7-sediment-source-modeling.qmd
         - 1-applied-data-science/8-skin-lesion-triage.qmd
-        - 1-applied-data-science/9-drought-risk-climate-time-series.qmd
-
-    - part: "Data Science Beyond the Classical Scope"
-      chapters:
-        - 2-data-science-beyond-the-classical-scope/0-overview.qmd
-        - 2-data-science-beyond-the-classical-scope/1-quantum-control-theory.qmd
 
     - part: "Writings & Essays"
       chapters:
-        - 3-writings-and-essays/0-overview.qmd
-        - 3-writings-and-essays/1-data-science-age-of-hype.qmd
-        - 3-writings-and-essays/2-conformal-geometry-in-3-d.qmd
+        - 2-writings-and-essays/0-overview.qmd
+        - 2-writings-and-essays/1-data-science-age-of-hype.qmd
+        - 2-writings-and-essays/2-conformal-geometry-in-3-d.qmd
 
     - references.qmd
 

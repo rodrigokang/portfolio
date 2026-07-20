@@ -1,0 +1,9 @@
+# Overview {.unnumbered}
+
+The chapters presented in this section complement the applied projects found elsewhere in this portfolio by exploring the ideas, methods, and scientific principles that underpin quantitative modeling and computational problem solving. Some take the form of technical essays, while others investigate computational methods or methodological questions through independent studies and practical implementations.
+
+Rather than focusing on the immediate demands of a particular application domain, these chapters examine the broader concepts that continue to shape modern quantitative practice. Their topics range from scientific methodology and mathematical reasoning to computational techniques with applications that extend across multiple disciplines.
+
+Although the subject matter varies, they share a common objective: to develop a deeper understanding of the assumptions, limitations, and reasoning that lie behind quantitative methods. The emphasis is not only on how particular techniques work, but also on why they work, when they are appropriate, and how they contribute to solving complex problems.
+
+Together, these chapters complement the applied case studies presented throughout the portfolio by highlighting the broader scientific and computational ideas that continue to inform my approach to quantitative problem solving.
