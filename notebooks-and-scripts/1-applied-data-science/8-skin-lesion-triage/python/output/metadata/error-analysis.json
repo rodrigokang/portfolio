@@ -1,0 +1,14 @@
+{
+  "selected_model": "resnet18_staged",
+  "test_image_count": 1431,
+  "test_error_count": 276,
+  "test_error_rate": 0.1928721174004193,
+  "most_common_error_pair": {
+    "target": "mel",
+    "prediction": "nv",
+    "error_count": 53,
+    "error_share": 0.19202898550724637
+  },
+  "high_confidence_error_threshold": 0.8,
+  "high_confidence_error_count": 20
+}

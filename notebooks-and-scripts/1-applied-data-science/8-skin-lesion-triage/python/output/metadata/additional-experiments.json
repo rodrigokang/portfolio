@@ -1,0 +1,7 @@
+{
+  "selected_model": "resnet18_staged",
+  "temperature": 0.8090427693201321,
+  "calibration_fitted_on": "validation",
+  "calibration_evaluated_on": "test",
+  "selective_prediction_probabilities": "temperature_scaled"
+}

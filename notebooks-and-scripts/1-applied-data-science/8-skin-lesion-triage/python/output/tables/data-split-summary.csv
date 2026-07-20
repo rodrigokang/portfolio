@@ -1,0 +1,4 @@
+split,image_count,image_percent,lesion_count,akiec_count,bcc_count,bkl_count,df_count,mel_count,nv_count,vasc_count
+train,7154,71.43285072391413,5337,233,367,785,83,795,4790,101
+validation,1430,14.278582126809786,1066,47,73,157,16,159,958,20
+test,1431,14.288567149276085,1067,47,74,157,16,159,957,21

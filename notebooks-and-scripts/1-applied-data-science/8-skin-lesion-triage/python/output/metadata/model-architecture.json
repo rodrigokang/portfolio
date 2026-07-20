@@ -1,0 +1,21 @@
+{
+  "image_size": 224,
+  "number_of_classes": 7,
+  "class_order": [
+    "akiec",
+    "bcc",
+    "bkl",
+    "df",
+    "mel",
+    "nv",
+    "vasc"
+  ],
+  "baseline_model": "CompactConvolutionalNetwork",
+  "transfer_model": "ResNet-18 with gradual unfreezing",
+  "transfer_learning_weights": "ImageNet-1K V1",
+  "fine_tuning_stages": [
+    "head",
+    "layer4",
+    "layer3_layer4"
+  ]
+}
