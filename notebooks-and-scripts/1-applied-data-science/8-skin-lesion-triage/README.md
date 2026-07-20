@@ -22,9 +22,7 @@ During execution, the notebook automatically generates figures, tables, metadata
 
 The analyses are based on the **ISIC 2019 Challenge Dataset**, released by the International Skin Imaging Collaboration (ISIC).
 
-The official dataset can be obtained from the ISIC Archive collection:
-
-https://api.isic-archive.com/collections/66/
+The official dataset can be obtained from the ISIC Archive collection [here](https://api.isic-archive.com/collections/66/).
 
 The implementation expects the image files together with the corresponding metadata and ground-truth labels to be placed inside the local `data/` directory before executing the notebook.
 
