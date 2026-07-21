@@ -1,3 +1,0 @@
-probability_version,temperature,negative_log_likelihood,multiclass_brier_score,expected_calibration_error
-uncalibrated,1.0,0.5338087967728175,0.28109434355796376,0.05501933480168706
-temperature_scaled,0.8090427693201321,0.5208454723633504,0.27699156679850795,0.02734934279593245

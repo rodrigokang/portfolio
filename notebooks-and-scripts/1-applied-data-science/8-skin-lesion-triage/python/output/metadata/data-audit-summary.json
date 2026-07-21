@@ -1,0 +1,42 @@
+{
+  "metadata": {
+    "metadata_rows": 10015,
+    "metadata_columns": 19,
+    "unique_image_ids": 10015,
+    "duplicate_rows": 0,
+    "duplicate_image_ids": 0,
+    "unique_lesions": 7470,
+    "missing_lesion_ids": 0,
+    "lesions_with_multiple_images": 1956,
+    "images_from_repeated_lesions": 4501,
+    "maximum_images_per_lesion": 6
+  },
+  "archive": {
+    "archive_image_members": 10015,
+    "unique_archive_image_ids": 10015,
+    "unreadable_images": 0,
+    "metadata_rows_without_images": 0,
+    "archive_images_without_metadata": 0,
+    "non_image_archive_members": 3
+  },
+  "source_diagnosis_counts": {
+    "nv": 6705,
+    "mel": 1113,
+    "bkl": 1099,
+    "bcc": 514,
+    "akiec": 327,
+    "vasc": 142,
+    "df": 115
+  },
+  "binary_target_counts": {
+    "0": 8061,
+    "1": 1954
+  },
+  "metadata_rows_without_images": [],
+  "archive_images_without_metadata": [],
+  "non_image_archive_members": [
+    "attribution.txt",
+    "licenses/CC-BY-NC.txt",
+    "metadata.csv"
+  ]
+}

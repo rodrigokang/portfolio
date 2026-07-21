@@ -1,3 +1,0 @@
-model,best_epoch,best_stage,best_validation_selection_score,best_validation_macro_f1,best_validation_melanoma_recall,epochs_completed,training_duration_minutes,checkpoint_path
-resnet18_staged,17,layer3_layer4,0.6352113070427082,0.6756387944275887,0.5408805031446541,19,61.56725891333384,output\models\resnet18_staged-best.pt
-compact_cnn,6,all,0.46010654305844845,0.4254891315929318,0.5408805031446541,10,40.41906225666559,output\models\compact_cnn-best.pt

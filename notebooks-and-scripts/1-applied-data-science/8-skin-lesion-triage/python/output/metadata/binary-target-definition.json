@@ -1,0 +1,21 @@
+{
+  "project_name": "deep-learning-skin-lesion-triage",
+  "target_name": "binary_target",
+  "positive_class_index": 1,
+  "positive_class_name": "priority dermatological review",
+  "positive_source_labels": [
+    "akiec",
+    "bcc",
+    "mel"
+  ],
+  "negative_class_index": 0,
+  "negative_class_name": "lower-priority lesion",
+  "negative_source_labels": [
+    "bkl",
+    "df",
+    "nv",
+    "vasc"
+  ],
+  "source_label_column": "source_diagnosis",
+  "statement": "Project-specific analytical grouping for experimental prioritisation; not an original dataset ground truth or clinically validated referral rule."
+}

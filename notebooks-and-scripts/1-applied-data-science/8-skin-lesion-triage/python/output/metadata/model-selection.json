@@ -1,7 +1,0 @@
-{
-  "selection_metric": "0.70 * validation macro F1 + 0.30 * validation melanoma recall",
-  "selected_model": "resnet18_staged",
-  "selected_validation_selection_score": 0.6352113070427082,
-  "selected_validation_macro_f1": 0.6756387944275887,
-  "selected_validation_melanoma_recall": 0.5408805031446541
-}
