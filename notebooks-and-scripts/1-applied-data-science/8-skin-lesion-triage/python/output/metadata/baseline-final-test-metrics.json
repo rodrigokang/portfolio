@@ -1,0 +1,58 @@
+{
+  "model": "BaselineConvNet",
+  "checkpoint_epoch": 8,
+  "threshold_selection": {
+    "selection_partition": "validation",
+    "selection_rule": "maximum-f2",
+    "beta": 2.0,
+    "threshold": 0.2987675070762634,
+    "true_negative": 639.0,
+    "false_positive": 568.0,
+    "false_negative": 4.0,
+    "true_positive": 295.0,
+    "precision": 0.34183082271147164,
+    "sensitivity": 0.9866220735785953,
+    "specificity": 0.5294117647058824,
+    "negative_predictive_value": 0.9937791601866252,
+    "f_beta": 0.7163671685284118
+  },
+  "image_level_test_metrics": {
+    "threshold": 0.2987675070762634,
+    "true_negative": 647,
+    "false_positive": 565,
+    "false_negative": 14,
+    "true_positive": 269,
+    "precision": 0.3225419664268585,
+    "sensitivity": 0.950530035335689,
+    "specificity": 0.5338283828382838,
+    "negative_predictive_value": 0.9788199697428139,
+    "f_beta": 0.6841302136317394,
+    "roc_auc": 0.848505521930285,
+    "average_precision": 0.5583247475602797,
+    "brier_score": 0.14963511143316913,
+    "image_count": 1495
+  },
+  "lesion_level_test_metrics": {
+    "threshold": 0.2987675070762634,
+    "true_negative": 604,
+    "false_positive": 341,
+    "false_negative": 6,
+    "true_positive": 170,
+    "precision": 0.33268101761252444,
+    "sensitivity": 0.9659090909090909,
+    "specificity": 0.6391534391534391,
+    "negative_predictive_value": 0.9901639344262295,
+    "f_beta": 0.6995884773662552,
+    "roc_auc": 0.8987073112073112,
+    "average_precision": 0.5999319045421065,
+    "brier_score": 0.12333402397737188,
+    "lesion_count": 1121,
+    "aggregation": "maximum-image-probability"
+  },
+  "limitations": [
+    "The binary target is project-derived rather than an original clinical referral label.",
+    "The threshold is selected internally on validation data and is not clinically validated.",
+    "HAM10000 acquisition, ground-truth and class composition may not represent deployment settings.",
+    "External and prospective validation would be required before any clinical use."
+  ]
+}

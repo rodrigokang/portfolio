@@ -1,0 +1,10 @@
+{
+  "completed_epochs": 12,
+  "best_epoch": 8,
+  "best_validation_average_precision": 0.5492251509359081,
+  "early_stopping_patience": 4,
+  "total_training_seconds": 4656.057724299841,
+  "checkpoint_path": "output\\models\\baseline-convnet-best.pt",
+  "selection_metric": "validation_average_precision",
+  "test_set_used": false
+}

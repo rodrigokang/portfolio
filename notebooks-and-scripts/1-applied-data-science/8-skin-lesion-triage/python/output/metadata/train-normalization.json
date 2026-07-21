@@ -1,0 +1,21 @@
+{
+  "image_split": "train",
+  "image_count": 7014,
+  "resize_height": 224,
+  "resize_width": 224,
+  "channel_order": [
+    "red",
+    "green",
+    "blue"
+  ],
+  "mean": [
+    0.7632521912949143,
+    0.545720365022916,
+    0.5704369804027538
+  ],
+  "standard_deviation": [
+    0.1407283480893129,
+    0.1521064461978903,
+    0.16930720206766883
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "project_name": "deep-learning-skin-lesion-triage",
+  "project_name": "skin-lesion-triage",
   "target_name": "binary_target",
   "positive_class_index": 1,
   "positive_class_name": "priority dermatological review",

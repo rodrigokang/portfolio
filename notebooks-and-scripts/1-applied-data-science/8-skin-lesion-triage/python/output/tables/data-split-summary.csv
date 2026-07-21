@@ -1,0 +1,4 @@
+split,image_count,lesion_count,positive_image_count,positive_image_proportion
+train,7014,5229,1372,0.19560878243512975
+validation,1506,1120,299,0.19853917662682602
+test,1495,1121,283,0.18929765886287625

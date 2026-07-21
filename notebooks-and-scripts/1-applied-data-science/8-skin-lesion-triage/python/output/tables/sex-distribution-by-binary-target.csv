@@ -1,0 +1,6 @@
+binary_target,sex,lesion_count,class_name
+0,Missing,46,lower-priority lesion
+0,female,2977,lower-priority lesion
+0,male,3278,lower-priority lesion
+1,female,445,priority dermatological review
+1,male,724,priority dermatological review

@@ -1,0 +1,15 @@
+{
+  "selection_partition": "validation",
+  "selection_rule": "maximum-f2",
+  "beta": 2.0,
+  "threshold": 0.2987675070762634,
+  "true_negative": 639.0,
+  "false_positive": 568.0,
+  "false_negative": 4.0,
+  "true_positive": 295.0,
+  "precision": 0.34183082271147164,
+  "sensitivity": 0.9866220735785953,
+  "specificity": 0.5294117647058824,
+  "negative_predictive_value": 0.9937791601866252,
+  "f_beta": 0.7163671685284118
+}

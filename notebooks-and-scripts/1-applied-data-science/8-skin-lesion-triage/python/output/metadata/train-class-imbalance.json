@@ -1,0 +1,6 @@
+{
+  "training_negative_images": 5642,
+  "training_positive_images": 1372,
+  "negative_to_positive_ratio": 4.112244897959184,
+  "planned_loss_usage": "BCEWithLogitsLoss positive-class weight in Part 5"
+}

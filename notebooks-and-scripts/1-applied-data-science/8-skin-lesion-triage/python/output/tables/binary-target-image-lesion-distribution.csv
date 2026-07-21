@@ -1,0 +1,3 @@
+binary_target,image_count,lesion_count,class_name,image_proportion,lesion_proportion
+0,8061,6301,lower-priority lesion,0.8048926610084872,0.8435073627844712
+1,1954,1169,priority dermatological review,0.19510733899151272,0.15649263721552878

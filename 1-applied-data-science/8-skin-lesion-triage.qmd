@@ -1,4 +1,4 @@
-# Medical Image Analysis for Skin Lesion Triage
+# Skin Lesion Triage
 
 _Header._
 

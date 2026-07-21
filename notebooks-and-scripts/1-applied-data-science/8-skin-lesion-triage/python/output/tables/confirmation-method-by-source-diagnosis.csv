@@ -1,0 +1,14 @@
+source_diagnosis,diagnosis_confirm_type,image_count,within_diagnosis_proportion
+akiec,histopathology,327,1.0
+bcc,histopathology,514,1.0
+bkl,confocal microscopy with consensus dermoscopy,69,0.06278434940855324
+bkl,histopathology,766,0.6969972702456779
+bkl,single image expert consensus,264,0.24021838034576887
+df,histopathology,55,0.4782608695652174
+df,single image expert consensus,60,0.5217391304347826
+mel,histopathology,1113,1.0
+nv,histopathology,2498,0.3725577926920209
+nv,serial imaging showing no change,3704,0.5524235645041015
+nv,single image expert consensus,503,0.0750186428038777
+vasc,histopathology,67,0.47183098591549294
+vasc,single image expert consensus,75,0.528169014084507

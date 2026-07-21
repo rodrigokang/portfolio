@@ -1,0 +1,7 @@
+split,binary_target,image_count,class_name
+test,0,1212,lower-priority lesion
+test,1,283,priority dermatological review
+train,0,5642,lower-priority lesion
+train,1,1372,priority dermatological review
+validation,0,1207,lower-priority lesion
+validation,1,299,priority dermatological review

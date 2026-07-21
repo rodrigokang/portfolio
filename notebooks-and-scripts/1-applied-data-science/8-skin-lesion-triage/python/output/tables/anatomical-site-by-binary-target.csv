@@ -1,0 +1,12 @@
+binary_target,anatom_site_1,lesion_count,within_class_proportion,class_name
+0,Anogenital region,45,0.007141723535946675,lower-priority lesion
+0,Head and neck,415,0.06586256149817489,lower-priority lesion
+0,Lower extremity,1614,0.2561498174892874,lower-priority lesion
+0,Missing,197,0.03126487859069989,lower-priority lesion
+0,Trunk,3385,0.5372163148706555,lower-priority lesion
+0,Upper extremity,645,0.10236470401523567,lower-priority lesion
+1,Head and neck,287,0.24550898203592814,priority dermatological review
+1,Lower extremity,198,0.16937553464499572,priority dermatological review
+1,Missing,9,0.007698887938408896,priority dermatological review
+1,Trunk,480,0.41060735671514115,priority dermatological review
+1,Upper extremity,195,0.16680923866552608,priority dermatological review
