@@ -1,59 +1,146 @@
-# Medical Image Analysis for Skin Lesion Triage
+# Skin Lesion Triage
 
-This repository contains the implementation files accompanying the portfolio project **Medical Image Analysis for Skin Lesion Triage**, part of the book *Data Science Across Domains: From Methods and Models to Business Applications*.
+This repository contains the implementation accompanying the portfolio project **Skin Lesion Triage**, part of the book *Data Science Across Domains: From Methods and Models to Business Applications*.
 
-The project investigates multiclass skin lesion image classification using deep learning models for computer-assisted triage. Rather than focusing solely on predictive performance, the implementation follows a complete and reproducible machine learning workflow encompassing data preparation, leakage-aware dataset partitioning, model development, model comparison, evaluation, calibration, and error analysis.
+The project investigates deep learning methods for computer-assisted skin lesion triage using dermoscopic images. Rather than attempting automated diagnosis, the objective is to identify lesions requiring **priority clinical review** within a transparent and reproducible machine learning workflow.
+
+The implementation emphasises sound experimental design alongside predictive performance. The workflow covers data preparation, leakage-aware dataset partitioning, model development, validation-based model selection, independent testing, robustness assessment, subgroup analysis, and post-hoc interpretability.
 
 Two complementary modelling strategies are implemented and compared:
 
-* **Compact Convolutional Neural Network (CNN)** developed from scratch as a lightweight baseline architecture.
-* **Transfer Learning with ResNet-18**, adapted from a model pretrained on ImageNet and fine-tuned for multiclass skin lesion classification.
+- **BaselineConvNet** — a compact convolutional neural network developed from scratch as a lightweight baseline.
+- **ResNet-18 Transfer Learning** — a pretrained ResNet-18 progressively fine-tuned for the binary triage task.
 
-Model selection is performed using validation macro F1 score, followed by independent evaluation on a held-out test set. The workflow also includes probability calibration through temperature scaling, selective prediction based on confidence thresholds, confusion analysis, and inspection of high-confidence prediction errors.
+Model selection is performed **exclusively on the validation partition** using **Average Precision (AP)**. After selecting the best-performing model, the operating threshold is determined on the validation set by maximising the **F₂ score**, followed by a single frozen evaluation on the held-out test set.
 
-## Repository Structure
+---
 
-* `notebook.ipynb` — Complete end-to-end implementation of the modelling workflow.
-* `data/` — Input datasets required to reproduce the analyses.
+# Repository Structure
 
-During execution, the notebook automatically generates figures, tables, metadata files, trained model checkpoints, and other reproducibility artefacts.
+```text
+.
+├── README.md
+├── requirements.txt
+│
+├── data/
+│   ├── ISIC-images/
+│   └── metadata.csv
+│
+└── python/
+    ├── 1-skin-lesion-triage.ipynb
+    └── output/
+        ├── figures/
+        ├── models/
+        ├── predictions/
+        ├── reports/
+        └── tables/
+```
 
-## Dataset
+- **README.md** — project overview and execution instructions.
+- **requirements.txt** — Python package dependencies.
+- **data/** — dermoscopic images and metadata required to reproduce the analyses.
+- **python/** — notebook implementation.
+- **python/output/** — automatically generated artefacts created during notebook execution.
 
-The analyses are based on the **ISIC 2019 Challenge Dataset**, released by the International Skin Imaging Collaboration (ISIC).
+---
 
-The official dataset can be obtained from the ISIC Archive collection [here](https://api.isic-archive.com/collections/66/).
+# Dataset
 
-The implementation expects the image files together with the corresponding metadata and ground-truth labels to be placed inside the local `data/` directory before executing the notebook.
+The implementation uses the **HAM10000** dermoscopic image dataset distributed through the **ISIC 2018 Task 3** training collection.
 
-The dataset is distributed by the ISIC Archive under its own licensing terms and is **not** included in this repository.
+The dataset is **not** included in this repository.
 
-## Implementation
+Before running the notebook, place:
 
-The notebook implements a fully reproducible deep learning pipeline including:
+- all dermoscopic images inside:
 
-* lesion-level train/validation/test partitioning to prevent data leakage;
-* exploratory analysis of class distributions;
-* image preprocessing and data augmentation;
-* training of both a custom CNN and a transfer-learning ResNet-18 model;
-* weighted loss functions to mitigate class imbalance;
-* learning-rate scheduling, gradient clipping, and early stopping;
-* validation-based model selection;
-* evaluation using accuracy, balanced accuracy, macro F1, and weighted F1;
-* class-level performance analysis and confusion matrices;
-* confidence analysis and inspection of high-confidence errors;
-* probability calibration using temperature scaling;
-* reliability diagrams and expected calibration error;
-* selective prediction analysis based on confidence thresholds;
-* automatic export of figures, tables, metadata, and trained model checkpoints.
+```text
+data/ISIC-images/
+```
 
-## Companion Chapter
+- the metadata file as:
 
-The theoretical background, methodology, implementation details, experimental results, and discussion are presented in the corresponding chapter of *Data Science Across Domains: From Methods and Models to Business Applications*.
+```text
+data/metadata.csv
+```
 
-The notebook contained in this repository provides a fully reproducible computational workflow supporting the analyses presented in the chapter.
+The notebook located in `python/` reads the dataset directly from the repository-level `data/` directory.
 
-## Copyright
+The binary triage target used throughout this project is derived exclusively for analytical purposes and should not be interpreted as an original dataset label or as a clinically validated referral protocol.
+
+---
+
+# Implementation
+
+The notebook implements a fully reproducible deep learning workflow including:
+
+- lesion-aware train, validation, and test partitioning to prevent information leakage;
+- exploratory analysis of lesion and class distributions;
+- train-only image normalisation;
+- data augmentation applied exclusively to the training partition;
+- implementation of a compact CNN baseline;
+- implementation of a transfer-learning ResNet-18 model;
+- weighted binary cross-entropy to mitigate class imbalance;
+- learning-rate scheduling, gradient clipping, and early stopping;
+- validation-based checkpoint selection;
+- validation-based operating-threshold selection;
+- independent frozen test evaluation;
+- lesion-aware bootstrap confidence intervals;
+- subgroup performance analysis;
+- Grad-CAM visualisations for qualitative model interpretation;
+- automatic export of figures, tables, trained models, prediction files, and reproducibility artefacts.
+
+---
+
+# Reproducibility
+
+Running `python/1-skin-lesion-triage.ipynb` automatically generates the artefacts required to reproduce the complete experimental workflow inside `python/output/`.
+
+The exported artefacts include:
+
+### Baseline experiment
+
+- training summary;
+- final test metrics;
+- reproducibility manifest;
+- project summary.
+
+### Final selected model
+
+- trained ResNet-18 checkpoint;
+- prediction files;
+- evaluation summary;
+- final test metrics;
+- reproducibility manifest;
+- project summary;
+- bootstrap confidence intervals;
+- subgroup analyses;
+- comparison tables;
+- figures generated throughout the evaluation pipeline.
+
+By preserving both the baseline experiment and the final selected model, the repository maintains a complete and traceable record of model development, selection, and evaluation.
+
+---
+
+# Companion Chapter
+
+The theoretical background, modelling decisions, implementation details, experimental results, and discussion are presented in the corresponding chapter of *Data Science Across Domains: From Methods and Models to Business Applications*.
+
+This repository provides the complete computational workflow supporting the analyses presented in the chapter.
+
+---
+
+# Requirements
+
+Install the required Python packages before running the notebook:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Copyright
 
 Copyright © Rodrigo Kang.
 

@@ -1,0 +1,9 @@
+========================
+Dataset filename mapping
+========================
+
+Original supplementary files from the publication:
+
+11368_2022_3157_MOESM4_ESM.csv → mixture_proportions.csv
+11368_2022_3157_MOESM5_ESM.csv → fingerprint_data.csv
+11368_2022_3157_MOESM6_ESM.csv → selected_tracers.csv

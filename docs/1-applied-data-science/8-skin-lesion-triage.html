@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; Medical Image Analysis for Skin Lesion Triage – Data Science Across Domains</title>
+<title>8&nbsp; Skin Lesion Triage – Data Science Across Domains</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -82,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Applied Data Science</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/8-skin-lesion-triage.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Medical Image Analysis for Skin Lesion Triage</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Applied Data Science</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/8-skin-lesion-triage.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Skin Lesion Triage</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -197,7 +217,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../1-applied-data-science/8-skin-lesion-triage.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Medical Image Analysis for Skin Lesion Triage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Skin Lesion Triage</span></span></a>
   </div>
 </li>
       </ul>
@@ -249,7 +269,17 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">8.1</span> Problem Definition</a></li>
   <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">8.2</span> Modeling Approach</a></li>
-  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">8.3</span> Methodology and Implementation</a></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">8.3</span> Methodology and Implementation</a>
+  <ul class="collapse">
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset"><span class="header-section-number">8.3.1</span> Dataset</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis"><span class="header-section-number">8.3.2</span> Exploratory Data Analysis</a></li>
+  <li><a href="#lesion-level-data-partitioning" id="toc-lesion-level-data-partitioning" class="nav-link" data-scroll-target="#lesion-level-data-partitioning"><span class="header-section-number">8.3.3</span> Lesion-Level Data Partitioning</a></li>
+  <li><a href="#image-preprocessing" id="toc-image-preprocessing" class="nav-link" data-scroll-target="#image-preprocessing"><span class="header-section-number">8.3.4</span> Image Preprocessing</a></li>
+  <li><a href="#data-augmentation" id="toc-data-augmentation" class="nav-link" data-scroll-target="#data-augmentation"><span class="header-section-number">8.3.5</span> Data Augmentation</a></li>
+  <li><a href="#baseline-convolutional-neural-network" id="toc-baseline-convolutional-neural-network" class="nav-link" data-scroll-target="#baseline-convolutional-neural-network"><span class="header-section-number">8.3.6</span> Baseline Convolutional Neural Network</a></li>
+  <li><a href="#transfer-learning-with-resnet18" id="toc-transfer-learning-with-resnet18" class="nav-link" data-scroll-target="#transfer-learning-with-resnet18"><span class="header-section-number">8.3.7</span> Transfer Learning with ResNet18</a></li>
+  <li><a href="#evaluation-protocol" id="toc-evaluation-protocol" class="nav-link" data-scroll-target="#evaluation-protocol"><span class="header-section-number">8.3.8</span> Evaluation Protocol</a></li>
+  </ul></li>
   <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">8.4</span> Results, Discussion, and Limitations</a></li>
   <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">8.5</span> Technical Appendix (Optional)</a></li>
   </ul>
@@ -258,9 +288,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Applied Data Science</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/8-skin-lesion-triage.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Medical Image Analysis for Skin Lesion Triage</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Applied Data Science</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/8-skin-lesion-triage.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Skin Lesion Triage</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Medical Image Analysis for Skin Lesion Triage</span></h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Skin Lesion Triage</span></h1>
 </div>
 
 
@@ -277,18 +307,278 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><em>Header.</em></p>
+<p>The ability to prioritise patients who may require earlier clinical attention is an important aspect of many healthcare workflows. In dermatology, dermoscopic imaging has become a valuable tool for assessing pigmented skin lesions, but interpreting these images remains a specialised task that depends on clinical expertise and available resources.</p>
+<p>This project explores whether deep learning can support that prioritisation process by distinguishing lesions that warrant earlier dermatological review from those that can be assigned a lower priority. Rather than attempting to automate diagnosis, the objective is to investigate how image classification models can contribute to a cautious triage workflow while preserving clear boundaries between decision support and clinical judgement.</p>
+<p>The chapter follows the complete modelling process, from data preparation and model development to performance evaluation and interpretation, with particular attention to the methodological decisions required to obtain a reliable assessment of model performance.</p>
 <section id="problem-definition" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="problem-definition"><span class="header-section-number">8.1</span> Problem Definition</h2>
-<p><em>Section.</em></p>
+<p>Dermoscopic image classification is commonly framed as a diagnostic task in which each image is assigned to a specific disease category. While this formulation is appropriate for benchmarking machine learning models, it does not necessarily reflect how such models are most likely to be used in clinical practice. In many situations, the immediate objective is not to establish a definitive diagnosis but to identify which lesions should be prioritised for specialist assessment.</p>
+<p>This project therefore approaches skin lesion analysis as a binary triage problem. Rather than predicting one of the seven diagnostic categories provided by the original dataset, the objective is to distinguish lesions that warrant <strong>priority dermatological review</strong> from those assigned a lower review priority. This reformulation shifts the focus from diagnostic classification towards clinical prioritisation, where the cost of overlooking a potentially serious lesion is considerably higher than recommending an unnecessary specialist examination.</p>
+<p>The binary target is created by grouping melanoma (<code>mel</code>), basal cell carcinoma (<code>bcc</code>), and actinic keratosis or intraepithelial carcinoma (<code>akiec</code>) into the priority-review class. Melanocytic naevi (<code>nv</code>), benign keratoses (<code>bkl</code>), dermatofibroma (<code>df</code>), and vascular lesions (<code>vasc</code>) constitute the non-priority class. This grouping is introduced solely for the purposes of this study and should not be interpreted as a validated clinical referral protocol. Instead, it provides a practical framework for evaluating whether deep learning models can effectively rank lesions according to their potential clinical urgency.</p>
+<p>This formulation introduces several modelling challenges. The priority-review class represents a relatively small proportion of the available observations, creating a naturally imbalanced classification problem. In addition, multiple dermoscopic images may correspond to the same underlying lesion, making careful data partitioning essential to avoid information leakage between training and evaluation. These characteristics influence both the modelling strategy and the interpretation of the resulting performance.</p>
+<p>The objective is therefore not simply to maximise predictive accuracy, but to develop a reproducible workflow capable of supporting image-based lesion prioritisation while providing a realistic assessment of its strengths, limitations, and potential role within a clinical decision-support setting.</p>
 </section>
 <section id="modeling-approach" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">8.2</span> Modeling Approach</h2>
-<p><em>Section.</em></p>
+<p>The objective of this project is not to identify the most sophisticated image classification architecture, but to evaluate whether deep learning can provide effective support for prioritising dermoscopic lesions that may require earlier clinical attention. Rather than comparing a large number of competing models, the analysis focuses on two complementary modelling strategies that represent different levels of complexity while sharing the same evaluation framework.</p>
+<p>The first approach consists of a compact convolutional neural network (CNN) developed specifically for this study. Training a model from scratch establishes a transparent baseline and provides a useful reference for assessing the extent to which predictive performance can be achieved without relying on external image representations. Although relatively simple, this architecture allows the complete learning process to be observed directly and serves as a benchmark against which more advanced approaches can be evaluated.</p>
+<p>The second approach adopts transfer learning using ResNet-18, a convolutional neural network pretrained on the ImageNet dataset. Instead of learning visual features entirely from the available dermoscopic images, the model starts from representations acquired from a large-scale natural image dataset and is subsequently fine-tuned for the binary lesion triage task. Transfer learning has become a common strategy in medical image analysis because it often improves performance when labelled clinical datasets are relatively limited.</p>
+<p>Both models address the same binary classification problem, are trained using the same lesion-level data partitions, and are evaluated under an identical validation and testing protocol. This common framework allows differences in predictive performance to be attributed primarily to the modelling strategy rather than to variations in data preparation or evaluation methodology.</p>
+<p>The overall objective is therefore not only to determine which model achieves superior predictive performance, but also to assess the practical trade-offs between a lightweight architecture trained from scratch and a widely adopted transfer learning approach when applied to automated skin lesion triage.</p>
 </section>
 <section id="methodology-and-implementation" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">8.3</span> Methodology and Implementation</h2>
-<p><em>Section.</em></p>
+<p>The modelling approach described in the previous section was implemented through a structured workflow covering data preparation, model development, evaluation, and interpretation. Particular attention was given to preserving the independence of the evaluation data, mitigating class imbalance, and ensuring that model selection was based exclusively on validation performance. The implementation follows established practices in deep learning for medical image analysis while adapting them to the specific objective of binary skin lesion triage. Throughout the workflow, methodological decisions prioritise reproducibility and a realistic assessment of predictive performance rather than maximising results on a single dataset.</p>
+<section id="dataset" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="dataset"><span class="header-section-number">8.3.1</span> Dataset</h3>
+<p>The implementation is based on the <strong>HAM10000</strong> (<em>Human Against Machine with 10,000 Training Images</em>) dataset, introduced by Tschandl et al. <span class="citation" data-cites="tschandl2018ham10000"><a href="../references.html#ref-tschandl2018ham10000" role="doc-biblioref">[1]</a></span> and released as the principal dataset for the ISIC 2018 Skin Lesion Analysis Challenge <span class="citation" data-cites="codella2019skin"><a href="../references.html#ref-codella2019skin" role="doc-biblioref">[2]</a></span>. With 10,015 dermoscopic images spanning seven diagnostic categories, HAM10000 has become one of the most widely used public benchmarks for developing and evaluating machine learning methods for skin lesion analysis.</p>
+<p>The dataset combines images collected from different clinical sources and represents a broad spectrum of pigmented skin lesions encountered in dermatological practice. Diagnostic labels were established through histopathology where available, together with follow-up examinations, expert consensus, or confocal microscopy, resulting in a carefully curated dataset suitable for supervised learning.</p>
+<p>Although HAM10000 was originally developed as a seven-class diagnostic dataset, this project reformulates the task as a binary lesion triage problem. The original diagnostic categories were grouped according to whether they require priority dermatological assessment, as introduced in the Problem Definition section. The mapping between the original labels and the binary target used throughout the analysis is summarised in <a href="#tbl-class-mapping" class="quarto-xref">Table&nbsp;<span>8.1</span></a>.</p>
+<div id="tbl-class-mapping" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-class-mapping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8.1: Mapping from the original HAM10000 diagnostic categories to the binary triage target used in this study.
+</figcaption>
+<div aria-describedby="tbl-class-mapping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Original diagnosis</th>
+<th style="text-align: center;">Label</th>
+<th style="text-align: left;">Project class</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Melanoma</td>
+<td style="text-align: center;"><code>mel</code></td>
+<td style="text-align: left;">Priority review</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Basal cell carcinoma</td>
+<td style="text-align: center;"><code>bcc</code></td>
+<td style="text-align: left;">Priority review</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Actinic keratosis / Bowen’s disease</td>
+<td style="text-align: center;"><code>akiec</code></td>
+<td style="text-align: left;">Priority review</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Melanocytic naevus</td>
+<td style="text-align: center;"><code>nv</code></td>
+<td style="text-align: left;">Non-priority</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Benign keratosis</td>
+<td style="text-align: center;"><code>bkl</code></td>
+<td style="text-align: left;">Non-priority</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dermatofibroma</td>
+<td style="text-align: center;"><code>df</code></td>
+<td style="text-align: left;">Non-priority</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Vascular lesion</td>
+<td style="text-align: center;"><code>vasc</code></td>
+<td style="text-align: left;">Non-priority</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>After this transformation, the dataset contains <strong>1,954 priority-review images</strong> and <strong>8,061 non-priority images</strong>, reflecting the natural imbalance between potentially malignant and predominantly benign lesions. This imbalance constitutes an important consideration throughout model development and is explicitly addressed during training.</p>
+<p>A further characteristic of HAM10000 is that multiple images may correspond to the same underlying lesion. Since these images are not statistically independent, preserving lesion-level separation between the training, validation, and test partitions becomes essential to avoid information leakage. The partitioning strategy adopted in this study is described in the following section.</p>
+</section>
+<section id="exploratory-data-analysis" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="exploratory-data-analysis"><span class="header-section-number">8.3.2</span> Exploratory Data Analysis</h3>
+<p>Before developing the classification models, an exploratory analysis was conducted to characterise the dataset and identify properties that could influence model development and evaluation. Rather than searching for predictive relationships, the objective of this stage was to verify the quality of the available data, understand the distribution of the target classes, and identify potential sources of bias that should be considered throughout the modelling process.</p>
+<p>The first step was to examine the distribution of the binary triage target. Figure <a href="#fig-binary-target-distribution" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> summarises the number of images and unique lesions assigned to each class. As expected, non-priority lesions represent the majority of observations, whereas lesions requiring priority review constitute a substantially smaller proportion of the dataset. This imbalance reflects routine dermatological practice, where benign lesions are considerably more common than lesions requiring immediate clinical attention, and motivates the use of evaluation metrics that extend beyond overall classification accuracy.</p>
+<div id="fig-binary-target-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-binary-target-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/binary-target-image-lesion-counts.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-binary-target-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.1: Distribution of images and unique lesions across the binary triage classes.
+</figcaption>
+</figure>
+</div>
+<p>A second characteristic of HAM10000 is that multiple dermoscopic images may correspond to the same underlying lesion. Figure <a href="#fig-images-per-lesion" class="quarto-xref">Figure&nbsp;<span>8.2</span></a> illustrates the distribution of the number of images available for each lesion. While many lesions are represented by a single image, a substantial proportion includes multiple photographs captured from different viewpoints or magnifications. This characteristic reinforces the importance of performing lesion-level rather than image-level partitioning, ensuring that the evaluation reflects the model’s ability to generalise to previously unseen lesions rather than recognising repeated visual appearances of the same case.</p>
+<div id="fig-images-per-lesion" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-images-per-lesion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/images-per-lesion-distribution.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-images-per-lesion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.2: Distribution of the number of images available for each unique lesion.
+</figcaption>
+</figure>
+</div>
+<p>Patient demographics provide additional context regarding the composition of the study population. Figure <a href="#fig-age-by-target" class="quarto-xref">Figure&nbsp;<span>8.3</span></a> presents the age distribution for the two binary target classes. Most observations correspond to middle-aged and older adults, consistent with the epidemiology of pigmented skin lesions. Although the age distributions overlap considerably, this analysis provides useful context for interpreting the characteristics of the study population.</p>
+<div id="fig-age-by-target" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-age-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/age-distribution-by-binary-target.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-age-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.3: Patient age distribution stratified by binary triage class.
+</figcaption>
+</figure>
+</div>
+<p>The distribution of patients by biological sex is shown in Figure <a href="#fig-sex-by-target" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>. Male and female patients are both well represented across the two triage categories, reducing the likelihood that the classification models are driven primarily by differences in sex representation within the dataset.</p>
+<div id="fig-sex-by-target" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sex-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/sex-distribution-by-binary-target.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sex-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.4: Distribution of patient sex stratified by binary triage class.
+</figcaption>
+</figure>
+</div>
+<p>Figure <a href="#fig-anatomical-site-by-target" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> summarises the anatomical location of lesions across the binary target classes. Lesions originate from multiple body regions, with the trunk and lower extremities accounting for a substantial proportion of the observations. This diversity contributes to the visual variability of the dataset and reflects the heterogeneous clinical presentation of pigmented skin lesions encountered in routine practice.</p>
+<div id="fig-anatomical-site-by-target" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anatomical-site-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/anatomical-site-by-binary-target.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anatomical-site-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.5: Distribution of anatomical sites stratified by binary triage class.
+</figcaption>
+</figure>
+</div>
+<p>To better understand the composition of the binary target, the original diagnostic categories were also examined. Figure <a href="#fig-source-diagnoses" class="quarto-xref">Figure&nbsp;<span>8.6</span></a> shows the number of images and lesions contributed by each diagnostic class before collapsing them into the binary triage formulation. This analysis confirms that the priority-review group combines several clinically important but comparatively infrequent diagnoses, whereas benign melanocytic nevi dominate the dataset.</p>
+<div id="fig-source-diagnoses" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-source-diagnoses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/source-diagnosis-image-lesion-counts.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-source-diagnoses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.6: Distribution of images and lesions across the original diagnostic categories.
+</figcaption>
+</figure>
+</div>
+<p>Finally, Figure <a href="#fig-confirmation-method" class="quarto-xref">Figure&nbsp;<span>8.7</span></a> summarises the methods used to establish the reference diagnosis for each lesion. Histopathology represents the predominant confirmation method for malignant lesions, whereas benign lesions include a mixture of histopathological confirmation, expert consensus, and follow-up examinations. Understanding these differences provides additional context regarding the reliability of the ground-truth labels used throughout model development and evaluation.</p>
+<div id="fig-confirmation-method" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confirmation-method-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/confirmation-method-by-source-diagnosis.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confirmation-method-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.7: Reference diagnosis confirmation methods across the original diagnostic categories.
+</figcaption>
+</figure>
+</div>
+<p>Overall, the exploratory analysis confirms several characteristics that must be considered throughout model development, including class imbalance, heterogeneous patient demographics, variation in anatomical location, and the presence of multiple images corresponding to the same lesion. Among these, the repeated representation of individual lesions has the greatest methodological implications, directly motivating the lesion-level data partitioning strategy adopted throughout the remainder of this study.</p>
+</section>
+<section id="lesion-level-data-partitioning" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="lesion-level-data-partitioning"><span class="header-section-number">8.3.3</span> Lesion-Level Data Partitioning</h3>
+<p>A critical characteristic of the HAM10000 dataset is that multiple dermoscopic images may correspond to the same underlying lesion. Although these images differ in magnification, lighting conditions, orientation, or acquisition time, they remain highly correlated because they depict the same clinical case. Consequently, randomly splitting individual images between training and testing sets would allow visually similar representations of the same lesion to appear in both partitions, leading to overly optimistic estimates of model performance.</p>
+<p>To prevent this form of information leakage, the dataset was partitioned at the lesion level rather than at the image level. Each unique lesion identifier was assigned exclusively to either the training, validation, or test set, ensuring that no lesion was represented in more than one partition. This strategy provides a more realistic assessment of the model’s ability to generalise to previously unseen lesions, which is ultimately the objective in a clinical decision-support setting.</p>
+<p>The resulting partition is summarised in <a href="#tbl-data-split-summary" class="quarto-xref">Table&nbsp;<span>8.2</span></a>. Approximately 70% of the images were allocated to the training set, while the remaining observations were divided almost equally between the validation and independent test sets. Importantly, the proportion of priority-review lesions remains remarkably consistent across all three partitions, indicating that the lesion-level split preserves the overall class distribution while maintaining complete separation between lesions.</p>
+<div id="tbl-data-split-summary" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-data-split-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8.2: Summary of the lesion-level data partition used throughout model development and evaluation.
+</figcaption>
+<div aria-describedby="tbl-data-split-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 8%">
+<col style="width: 18%">
+<col style="width: 27%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Partition</th>
+<th style="text-align: center;">Images</th>
+<th style="text-align: center;">Unique lesions</th>
+<th style="text-align: center;">Priority-review images</th>
+<th style="text-align: center;">Priority-review proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Training</td>
+<td style="text-align: center;">7,014</td>
+<td style="text-align: center;">5,229</td>
+<td style="text-align: center;">1,372</td>
+<td style="text-align: center;">19.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Validation</td>
+<td style="text-align: center;">1,506</td>
+<td style="text-align: center;">1,120</td>
+<td style="text-align: center;">299</td>
+<td style="text-align: center;">19.9%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Test</td>
+<td style="text-align: center;">1,495</td>
+<td style="text-align: center;">1,121</td>
+<td style="text-align: center;">283</td>
+<td style="text-align: center;">18.9%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Once established, these partitions remained fixed throughout the entire analysis. All preprocessing operations, image normalisation, data augmentation, model optimisation, threshold selection, and performance assessment were performed using this predefined split. The validation set was used exclusively for model selection and threshold calibration, whereas the test set remained untouched until the final evaluation.</p>
+<p>By separating lesions rather than individual images, the evaluation protocol better reflects the intended clinical application. During deployment, a model is expected to analyse lesions that have never been observed previously, rather than additional photographs of lesions encountered during training. Adopting a lesion-level partition therefore provides a substantially more reliable estimate of the model’s ability to generalise to new patients.</p>
+<p>With the data partitions established, the next stage of the workflow consists of standardising the input images before they are presented to the neural networks.</p>
+</section>
+<section id="image-preprocessing" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="image-preprocessing"><span class="header-section-number">8.3.4</span> Image Preprocessing</h3>
+<p>Before being presented to the neural networks, all dermoscopic images underwent a standardised preprocessing pipeline to ensure consistent input dimensions and pixel distributions across the dataset. Standardising the input is an essential step in deep learning workflows, as convolutional neural networks require images of fixed size while also benefiting from comparable intensity statistics during optimisation.</p>
+<p>All images were resized to 224 × 224 pixels using bilinear interpolation. This resolution represents a practical compromise between preserving diagnostically relevant visual structures and maintaining computational efficiency during training. Moreover, it matches the input size expected by the pre-trained ResNet18 architecture, allowing both models to be evaluated under identical conditions.</p>
+<p>Pixel values were subsequently converted to floating-point tensors and normalised using channel-wise statistics computed exclusively from the training partition. Applying the same transformation to the validation and test sets ensures that no information from unseen data contributes to the preprocessing stage, thereby preventing a subtle but important source of information leakage.</p>
+<p>No handcrafted image enhancement techniques were applied. In particular, procedures such as colour correction, contrast enhancement, hair removal, lesion segmentation, or artefact suppression were intentionally omitted. This decision allows the models to learn directly from the original dermoscopic images and avoids introducing additional preprocessing assumptions that may not generalise across acquisition devices or clinical settings.</p>
+<p>Consequently, the preprocessing pipeline remains deliberately simple, focusing on producing consistent inputs while preserving the visual characteristics of the original images. This design also facilitates reproducibility and makes the comparison between the baseline convolutional network and the transfer learning approach more transparent, as both models receive exactly the same preprocessed data.</p>
+<p>Although image preprocessing standardises the inputs, it does not address the limited variability of the training data. To improve the robustness of the learned representations and reduce the risk of overfitting, a series of data augmentation techniques were applied exclusively to the training partition, as described in the following section.</p>
+</section>
+<section id="data-augmentation" class="level3" data-number="8.3.5">
+<h3 data-number="8.3.5" class="anchored" data-anchor-id="data-augmentation"><span class="header-section-number">8.3.5</span> Data Augmentation</h3>
+<p>Although the lesion-level partition prevents information leakage, the number of available training images remains relatively limited for training deep convolutional neural networks. Furthermore, dermoscopic images exhibit natural variability arising from differences in patient positioning, camera orientation, magnification, and illumination. Data augmentation was therefore applied to increase the diversity of the training data while preserving the underlying diagnostic characteristics of each lesion.</p>
+<p>All augmentation operations were performed online during training, meaning that transformed images were generated dynamically at each training epoch rather than being stored as additional samples. This approach exposes the model to a broader range of image variations while avoiding unnecessary duplication of the dataset.</p>
+<p>The augmentation pipeline included random horizontal and vertical flips, small rotations, affine transformations, resized crops, and mild colour perturbations. Together, these operations encourage the networks to learn features that are robust to changes in orientation, scale, and illumination without altering the clinical label associated with each lesion.</p>
+<p>Importantly, data augmentation was applied exclusively to the training partition. Validation and test images were subjected only to the standard preprocessing pipeline described in the previous section. Restricting augmentation to the training data ensures that model selection and final performance evaluation are conducted using images that faithfully represent unseen clinical observations.</p>
+<p>This strategy serves two complementary purposes. First, it increases the effective diversity of the training data, helping to reduce overfitting in a dataset of moderate size. Second, it encourages the learned feature representations to become less sensitive to superficial image characteristics, allowing the models to focus on diagnostically meaningful visual patterns.</p>
+<p>With the input pipeline fully defined, the following sections describe the two modelling approaches evaluated in this study: a baseline convolutional neural network trained from scratch and a transfer learning model based on a pre-trained ResNet18 architecture.</p>
+</section>
+<section id="baseline-convolutional-neural-network" class="level3" data-number="8.3.6">
+<h3 data-number="8.3.6" class="anchored" data-anchor-id="baseline-convolutional-neural-network"><span class="header-section-number">8.3.6</span> Baseline Convolutional Neural Network</h3>
+<p>As a benchmark for comparison, a convolutional neural network was trained from scratch using only the dermoscopic images available in the training partition. The purpose of this baseline model was not to maximise predictive performance but to establish a reference against which the benefits of transfer learning could be evaluated under an identical experimental protocol.</p>
+<p>The network follows a conventional convolutional architecture composed of successive feature extraction blocks followed by fully connected classification layers. The convolutional layers progressively learn increasingly abstract image representations, beginning with low-level visual features such as edges, colour transitions, and simple textures before combining them into more complex lesion characteristics relevant to the classification task.</p>
+<p>To improve optimisation stability and reduce overfitting, the architecture incorporates batch normalisation, non-linear activation functions, and dropout regularisation. Max-pooling operations progressively reduce the spatial resolution of the feature maps while increasing the receptive field of subsequent convolutional layers, allowing the network to capture both local morphological patterns and broader structural characteristics of each lesion.</p>
+<p>The network was trained using the Adam optimiser and binary cross-entropy loss, with the objective of distinguishing lesions requiring priority clinical review from those considered lower priority. During optimisation, model parameters were updated exclusively using the training partition, while the validation set was used to monitor learning progress and identify the best-performing model.</p>
+<p>Rather than selecting the final model according to classification accuracy alone, the validation Average Precision (AP) score was adopted as the primary selection criterion. Because the dataset exhibits moderate class imbalance and the principal objective is to identify clinically important lesions, Average Precision provides a more informative assessment of model quality than overall accuracy by evaluating performance across all possible decision thresholds.</p>
+<p>The weights corresponding to the highest validation Average Precision were retained and subsequently used for the final evaluation on the independent test set. This model therefore represents the strongest version of the baseline architecture obtained without exposure to the test data, providing a fair point of comparison for the transfer learning approach described in the following section.</p>
+</section>
+<section id="transfer-learning-with-resnet18" class="level3" data-number="8.3.7">
+<h3 data-number="8.3.7" class="anchored" data-anchor-id="transfer-learning-with-resnet18"><span class="header-section-number">8.3.7</span> Transfer Learning with ResNet18</h3>
+<p>In addition to the baseline convolutional network, a transfer learning approach based on the ResNet18 architecture was evaluated. Transfer learning has become a standard strategy in medical image analysis because it enables models to leverage visual representations learned from large-scale image datasets, reducing the amount of task-specific data required to achieve strong predictive performance.</p>
+<p>ResNet18 was originally trained on the ImageNet dataset, which contains millions of natural images spanning a wide range of object categories. Although dermoscopic images differ substantially from natural photographs, the lower layers of deep convolutional networks learn general-purpose visual features such as edges, textures, colour gradients, and geometric patterns that remain useful across many image classification tasks. Initialising the network with pre-trained weights therefore provides a more informative starting point than random parameter initialisation.</p>
+<p>To adapt the model to the binary lesion triage task, the original classification layer was replaced with a new fully connected output layer producing a single probability corresponding to the priority-review class. During training, the entire network was fine-tuned using the dermoscopic images rather than restricting optimisation to the final classification layer. This allows the higher-level feature representations to progressively adapt to the visual characteristics of skin lesions while retaining the robust low-level features learned during pre-training.</p>
+<p>The transfer learning model was trained using the same lesion-level partitions, preprocessing pipeline, data augmentation strategy, optimiser, loss function, and validation protocol adopted for the baseline convolutional network. Maintaining identical experimental conditions ensures that any observed differences in predictive performance can be attributed primarily to the modelling strategy rather than to differences in data preparation or optimisation.</p>
+<p>As with the baseline model, validation Average Precision was used as the primary model selection criterion. The network parameters corresponding to the highest validation AP score were retained and subsequently evaluated on the independent test set. This consistent evaluation protocol enables a direct comparison between a model trained entirely from scratch and one that benefits from prior visual knowledge acquired through large-scale pre-training.</p>
+</section>
+<section id="evaluation-protocol" class="level3" data-number="8.3.8">
+<h3 data-number="8.3.8" class="anchored" data-anchor-id="evaluation-protocol"><span class="header-section-number">8.3.8</span> Evaluation Protocol</h3>
+<p>Both models were evaluated using exactly the same experimental protocol to ensure that any performance differences reflected the modelling approach rather than inconsistencies in data preparation or model selection. Throughout the study, the lesion-level data partition remained fixed, with the training set used for parameter optimisation, the validation set reserved for model selection and threshold calibration, and the independent test set withheld until the final evaluation.</p>
+<p>Given the clinical objective of prioritising lesions requiring further assessment, model selection was based on validation Average Precision (AP) rather than classification accuracy. Average Precision summarises the precision–recall relationship across all possible decision thresholds and is particularly informative when class distributions are imbalanced or when correctly identifying the minority class is of greater clinical importance than maximising overall accuracy.</p>
+<p>After selecting the best-performing model according to validation AP, an operating threshold was determined using the validation data. This threshold was then fixed and applied without modification to the independent test set, ensuring that the reported performance represents a genuine out-of-sample evaluation rather than an optimistically tuned estimate.</p>
+<p>The final assessment included threshold-independent metrics, such as the Area Under the Receiver Operating Characteristic Curve (ROC AUC) and Average Precision, together with threshold-dependent measures including sensitivity, specificity, precision, F1-score, balanced accuracy, and overall classification accuracy. Reporting both groups of metrics provides a more comprehensive characterisation of model behaviour than relying on a single performance measure.</p>
+<p>To quantify the uncertainty associated with the reported results, confidence intervals were estimated using bootstrap resampling of the independent test set. This procedure generates repeated samples with replacement and estimates the variability of each performance metric without relying on strong distributional assumptions.</p>
+<p>Because the dataset contains multiple images of some lesions, predictions were also aggregated at the lesion level in addition to the image level. Aggregating predictions better reflects the intended clinical application, where the objective is to support the assessment of individual lesions rather than isolated photographs. This complementary analysis allows the robustness of the models to be evaluated under a more clinically meaningful perspective.</p>
+<p>Finally, model performance was examined across relevant demographic subgroups, including biological sex and age category. Although these analyses are exploratory, they provide useful insight into the consistency of predictive performance across different patient populations and help identify potential sources of performance variability that may warrant further investigation.</p>
+<p>The methodology described in this chapter is implemented in the accompanying Python notebook, available <a href="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/8-skin-lesion-triage.html">here</a>.</p>
+</section>
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">8.4</span> Results, Discussion, and Limitations</h2>
@@ -299,6 +589,14 @@ ul.task-list li input[type="checkbox"] {
 <p><em>Section.</em></p>
 
 
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-tschandl2018ham10000" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">P. Tschandl, C. Rosendahl, and H. Kittler, <span>“The HAM10000 dataset, a large collection of multi-source dermatoscopic images of common pigmented skin lesions,”</span> <em>Scientific data</em>, vol. 5, no. 1, p. 180161, 2018.</div>
+</div>
+<div id="ref-codella2019skin" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">N. Codella <em>et al.</em>, <span>“Skin lesion analysis toward melanoma detection 2018: A challenge hosted by the international skin imaging collaboration (isic),”</span> <em>arXiv preprint arXiv:1902.03368</em>, 2019.</div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

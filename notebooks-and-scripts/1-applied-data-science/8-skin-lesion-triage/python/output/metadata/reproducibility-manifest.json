@@ -13,7 +13,7 @@
   },
   "source_paths": {
     "image_archive": "..\\data\\ISIC-images.zip",
-    "metadata": "..\\data\\challenge-2018-task-3-training_metadata_2026-07-21.csv"
+    "metadata": "..\\data\\metadata.csv"
   },
   "binary_target": {
     "positive": [
@@ -54,26 +54,50 @@
       0.16930720206766883
     ]
   },
-  "model": {
-    "architecture": "BaselineConvNet",
-    "checkpoint": "output\\models\\baseline-convnet-best.pt",
-    "selection_metric": "validation-average-precision"
+  "model_selection": {
+    "candidate_models": [
+      "baseline-convnet",
+      "resnet18-transfer"
+    ],
+    "selection_partition": "validation",
+    "selection_metric": "average-precision",
+    "selected_model": "resnet18-transfer",
+    "validation_comparison": "output\\tables\\baseline-resnet18-validation-comparison.csv"
+  },
+  "selected_model": {
+    "name": "resnet18-transfer",
+    "architecture": "ResNet18Transfer",
+    "checkpoint": "output\\models\\resnet18-transfer-best.pt",
+    "selected_epoch": 12,
+    "selected_stage": "layer4-and-head",
+    "checkpoint_selection": "maximum validation average precision"
   },
   "operating_point": {
-    "threshold": 0.33811554312705994,
+    "threshold": 0.27775877714157104,
     "selection_partition": "validation",
     "selection_rule": "maximum-f2",
-    "beta": 2.0
+    "beta": 2.0,
+    "threshold_summary": "output\\metadata\\resnet18-transfer-selected-validation-threshold.json"
   },
   "test_evaluation": {
-    "prediction_table": "output\\tables\\test-predictions.csv",
+    "image_predictions": "output\\tables\\resnet18-transfer-test-predictions.csv",
+    "lesion_predictions": "output\\tables\\resnet18-transfer-test-lesion-predictions.csv",
+    "final_metrics": "output\\metadata\\resnet18-transfer-final-test-metrics.json",
+    "bootstrap_intervals": "output\\tables\\resnet18-transfer-test-bootstrap-confidence-intervals.csv",
+    "subgroup_review": "output\\tables\\resnet18-transfer-test-subgroup-performance.csv",
+    "model_comparison": "output\\tables\\final-model-test-comparison.csv"
+  },
+  "baseline_reference": {
+    "summary": "output\\metadata\\baseline-project-summary.json",
+    "reproducibility_manifest": "output\\metadata\\baseline-reproducibility-manifest.json",
     "final_metrics": "output\\metadata\\baseline-final-test-metrics.json",
-    "bootstrap_intervals": "output\\tables\\test-bootstrap-confidence-intervals.csv",
-    "subgroup_review": "output\\tables\\test-subgroup-performance.csv"
+    "selected_threshold": 0.2987675070762634
   },
   "interpretability": {
+    "model": "baseline-convnet",
     "selected_cases": "output\\tables\\qualitative-test-case-selection.csv",
-    "grad_cam_summary": "output\\metadata\\grad-cam-review-summary.json"
+    "grad_cam_summary": "output\\metadata\\grad-cam-review-summary.json",
+    "qualification": "The existing Grad-CAM review applies to the compact baseline and is retained as a qualitative baseline diagnostic rather than an explanation of ResNet-18."
   },
   "reproducibility_note": "Fixed seeds and deterministic PyTorch settings are used where practical, but exact bitwise equivalence may vary across hardware and software versions."
 }

@@ -1,0 +1,95 @@
+{
+  "project": "Skin Lesion Triage",
+  "experiment": "baseline-convnet",
+  "objective": "Experimental decision support for identifying dermoscopic images that may warrant prioritised specialist dermatological review.",
+  "target_definition": {
+    "priority_review": [
+      "akiec",
+      "bcc",
+      "mel"
+    ],
+    "lower_priority": [
+      "bkl",
+      "df",
+      "nv",
+      "vasc"
+    ],
+    "qualification": "Project-specific analytical grouping; not an original dataset ground truth, clinically validated referral rule or diagnostic label."
+  },
+  "dataset_scope": {
+    "collection": "HAM10000 / ISIC 2018 Task 3 training data",
+    "image_count": 10015,
+    "lesion_count": 7470,
+    "known_constraints": [
+      "class imbalance",
+      "repeated images for some lesions",
+      "heterogeneous acquisition sources",
+      "multiple ground-truth confirmation methods",
+      "limited evidence for external generalisation"
+    ]
+  },
+  "methodological_safeguards": [
+    "lesion-aware train, validation and test partitioning",
+    "train-only image normalisation",
+    "validation-only checkpoint and threshold selection",
+    "single frozen test evaluation",
+    "lesion-aware bootstrap confidence intervals",
+    "post-hoc interpretability excluded from model revision"
+  ],
+  "model": {
+    "name": "BaselineConvNet",
+    "training": "trained from scratch with weighted binary loss",
+    "checkpoint_selection": "maximum validation average precision",
+    "threshold_selection": "maximum validation F2",
+    "threshold": 0.2987675070762634
+  },
+  "test_results": {
+    "image_level": {
+      "threshold": 0.2987675070762634,
+      "true_negative": 647,
+      "false_positive": 565,
+      "false_negative": 14,
+      "true_positive": 269,
+      "precision": 0.3225419664268585,
+      "sensitivity": 0.950530035335689,
+      "specificity": 0.5338283828382838,
+      "negative_predictive_value": 0.9788199697428139,
+      "f_beta": 0.6841302136317394,
+      "roc_auc": 0.848505521930285,
+      "average_precision": 0.5583247475602797,
+      "brier_score": 0.14963511143316913,
+      "image_count": 1495
+    },
+    "lesion_level_sensitivity_analysis": {
+      "threshold": 0.2987675070762634,
+      "true_negative": 604,
+      "false_positive": 341,
+      "false_negative": 6,
+      "true_positive": 170,
+      "precision": 0.33268101761252444,
+      "sensitivity": 0.9659090909090909,
+      "specificity": 0.6391534391534391,
+      "negative_predictive_value": 0.9901639344262295,
+      "f_beta": 0.6995884773662552,
+      "roc_auc": 0.8987073112073112,
+      "average_precision": 0.5999319045421065,
+      "brier_score": 0.12333402397737188,
+      "lesion_count": 1121,
+      "aggregation": "maximum-image-probability"
+    },
+    "bootstrap_interval_table": "output\\tables\\test-bootstrap-confidence-intervals.csv"
+  },
+  "claim_boundaries": [
+    "The model does not provide autonomous diagnosis.",
+    "The model is not a substitute for dermatologist assessment.",
+    "The derived target and operating threshold are not clinically validated.",
+    "Subgroup results are descriptive and do not establish fairness or safety.",
+    "External, prospective and workflow-specific validation would be required before clinical use."
+  ],
+  "artifacts": {
+    "final_metrics": "output\\metadata\\baseline-final-test-metrics.json",
+    "reproducibility_manifest": "output\\metadata\\baseline-reproducibility-manifest.json",
+    "subgroup_review": "output\\tables\\test-subgroup-performance.csv",
+    "interpretability_summary": "output\\metadata\\grad-cam-review-summary.json"
+  }
+}

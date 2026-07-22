@@ -1,6 +1,6 @@
 {
   "model_checkpoint": "output\\models\\baseline-convnet-best.pt",
-  "test_threshold": 0.33811554312705994,
+  "test_threshold": 0.2987675070762634,
   "target_layer": "features.12",
   "examples_per_error_group": 3,
   "selected_case_count": 12,

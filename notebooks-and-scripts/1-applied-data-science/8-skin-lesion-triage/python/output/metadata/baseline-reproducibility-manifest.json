@@ -1,0 +1,82 @@
+{
+  "project_name": "skin-lesion-triage",
+  "experiment": "baseline-convnet",
+  "author": "Rodrigo Kang",
+  "random_seed": 42,
+  "environment": {
+    "python": "3.12.13",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "numpy": "2.5.1",
+    "torch": "2.13.0+cpu",
+    "torchvision": "0.28.0+cpu",
+    "cuda_available": false,
+    "selected_device": "cpu"
+  },
+  "source_paths": {
+    "image_archive": "..\\data\\ISIC-images.zip",
+    "metadata": "..\\data\\metadata.csv"
+  },
+  "binary_target": {
+    "positive": [
+      "akiec",
+      "bcc",
+      "mel"
+    ],
+    "negative": [
+      "bkl",
+      "df",
+      "nv",
+      "vasc"
+    ],
+    "class_names": {
+      "0": "lower-priority lesion",
+      "1": "priority dermatological review"
+    },
+    "status": "project-derived analytical target"
+  },
+  "split": {
+    "unit": "lesion-id",
+    "train_fraction": 0.7,
+    "validation_fraction": 0.15,
+    "test_fraction": 0.15
+  },
+  "image_pipeline": {
+    "image_size": 224,
+    "batch_size": 32,
+    "num_workers": 0,
+    "normalisation_mean": [
+      0.7632521912949143,
+      0.545720365022916,
+      0.5704369804027538
+    ],
+    "normalisation_std": [
+      0.1407283480893129,
+      0.1521064461978903,
+      0.16930720206766883
+    ]
+  },
+  "model": {
+    "name": "baseline-convnet",
+    "architecture": "BaselineConvNet",
+    "checkpoint": "output\\models\\baseline-convnet-best.pt",
+    "selection_partition": "validation",
+    "selection_metric": "average-precision"
+  },
+  "operating_point": {
+    "threshold": 0.2987675070762634,
+    "selection_partition": "validation",
+    "selection_rule": "maximum-f2",
+    "beta": 2.0
+  },
+  "test_evaluation": {
+    "prediction_table": "output\\tables\\test-predictions.csv",
+    "final_metrics": "output\\metadata\\baseline-final-test-metrics.json",
+    "bootstrap_intervals": "output\\tables\\test-bootstrap-confidence-intervals.csv",
+    "subgroup_review": "output\\tables\\test-subgroup-performance.csv"
+  },
+  "interpretability": {
+    "selected_cases": "output\\tables\\qualitative-test-case-selection.csv",
+    "grad_cam_summary": "output\\metadata\\grad-cam-review-summary.json"
+  },
+  "reproducibility_note": "Fixed seeds and deterministic PyTorch settings are used where practical, but exact bitwise equivalence may vary across hardware and software versions."
+}

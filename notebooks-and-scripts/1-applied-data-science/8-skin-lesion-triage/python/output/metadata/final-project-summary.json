@@ -1,5 +1,5 @@
 {
-  "project": "Deep Learning for Skin Lesion Triage",
+  "project": "Skin Lesion Triage",
   "objective": "Experimental decision support for identifying dermoscopic images that may warrant prioritised specialist dermatological review.",
   "target_definition": {
     "priority_review": [
@@ -31,63 +31,125 @@
     "lesion-aware train, validation and test partitioning",
     "train-only image normalisation",
     "validation-only checkpoint and threshold selection",
-    "single frozen test evaluation",
+    "validation-only comparison between candidate models",
+    "one frozen test evaluation per candidate model",
     "lesion-aware bootstrap confidence intervals",
     "post-hoc interpretability excluded from model revision"
   ],
-  "model": {
-    "name": "BaselineConvNet",
-    "training": "trained from scratch with weighted binary loss",
+  "model_selection": {
+    "candidate_models": [
+      "baseline-convnet",
+      "resnet18-transfer"
+    ],
+    "selected_model": "resnet18-transfer",
+    "selection_partition": "validation",
+    "selection_metric": "average-precision",
+    "validation_comparison": "output\\tables\\baseline-resnet18-validation-comparison.csv"
+  },
+  "selected_model": {
+    "name": "resnet18-transfer",
+    "architecture": "ResNet18Transfer",
+    "training": "pretrained ResNet-18 with staged classification-head training and partial layer4 fine-tuning",
+    "checkpoint": "output\\models\\resnet18-transfer-best.pt",
+    "selected_epoch": 12,
+    "selected_stage": "layer4-and-head",
     "checkpoint_selection": "maximum validation average precision",
+    "threshold": 0.27775877714157104,
     "threshold_selection": "maximum validation F2"
   },
-  "test_results": {
+  "final_test_results": {
     "image_level": {
-      "threshold": 0.33811554312705994,
-      "true_negative": 645,
-      "false_positive": 567,
-      "false_negative": 9,
-      "true_positive": 274,
-      "precision": 0.3258026159334126,
-      "sensitivity": 0.9681978798586572,
-      "specificity": 0.5321782178217822,
-      "negative_predictive_value": 0.9862385321100917,
-      "f_beta": 0.6943740496705525,
-      "roc_auc": 0.8536921713372749,
-      "average_precision": 0.5664260696820052,
-      "brier_score": 0.15415224035912464,
+      "threshold": 0.27775877714157104,
+      "true_negative": 810,
+      "false_positive": 402,
+      "false_negative": 15,
+      "true_positive": 268,
+      "precision": 0.4,
+      "sensitivity": 0.9469964664310954,
+      "specificity": 0.6683168316831684,
+      "negative_predictive_value": 0.9818181818181818,
+      "f_beta": 0.7436182019977802,
+      "roc_auc": 0.9099581336225495,
+      "average_precision": 0.7049655151982273,
+      "brier_score": 0.12772637210142154,
       "image_count": 1495
     },
     "lesion_level_sensitivity_analysis": {
-      "threshold": 0.33811554312705994,
-      "true_negative": 598,
-      "false_positive": 347,
-      "false_negative": 3,
-      "true_positive": 173,
-      "precision": 0.3326923076923077,
-      "sensitivity": 0.9829545454545454,
-      "specificity": 0.6328042328042328,
-      "negative_predictive_value": 0.9950083194675541,
-      "f_beta": 0.7066993464052286,
-      "roc_auc": 0.9007936507936507,
-      "average_precision": 0.6055474591548652,
-      "brier_score": 0.12744856902242105,
+      "threshold": 0.27775877714157104,
+      "true_negative": 678,
+      "false_positive": 267,
+      "false_negative": 5,
+      "true_positive": 171,
+      "precision": 0.3904109589041096,
+      "sensitivity": 0.9715909090909091,
+      "specificity": 0.7174603174603175,
+      "negative_predictive_value": 0.9926793557833089,
+      "f_beta": 0.7486865148861647,
+      "roc_auc": 0.9378487253487252,
+      "average_precision": 0.7356111637943528,
+      "brier_score": 0.11012159284355486,
       "lesion_count": 1121,
       "aggregation": "maximum-image-probability"
     },
-    "bootstrap_interval_table": "output\\tables\\test-bootstrap-confidence-intervals.csv"
+    "bootstrap_interval_table": "output\\tables\\resnet18-transfer-test-bootstrap-confidence-intervals.csv",
+    "subgroup_review": "output\\tables\\resnet18-transfer-test-subgroup-performance.csv"
+  },
+  "baseline_reference": {
+    "model": "baseline-convnet",
+    "architecture": "BaselineConvNet",
+    "threshold": 0.2987675070762634,
+    "image_level_test_metrics": {
+      "threshold": 0.2987675070762634,
+      "true_negative": 647,
+      "false_positive": 565,
+      "false_negative": 14,
+      "true_positive": 269,
+      "precision": 0.3225419664268585,
+      "sensitivity": 0.950530035335689,
+      "specificity": 0.5338283828382838,
+      "negative_predictive_value": 0.9788199697428139,
+      "f_beta": 0.6841302136317394,
+      "roc_auc": 0.848505521930285,
+      "average_precision": 0.5583247475602797,
+      "brier_score": 0.14963511143316913,
+      "image_count": 1495
+    },
+    "lesion_level_test_metrics": {
+      "threshold": 0.2987675070762634,
+      "true_negative": 604,
+      "false_positive": 341,
+      "false_negative": 6,
+      "true_positive": 170,
+      "precision": 0.33268101761252444,
+      "sensitivity": 0.9659090909090909,
+      "specificity": 0.6391534391534391,
+      "negative_predictive_value": 0.9901639344262295,
+      "f_beta": 0.6995884773662552,
+      "roc_auc": 0.8987073112073112,
+      "average_precision": 0.5999319045421065,
+      "brier_score": 0.12333402397737188,
+      "lesion_count": 1121,
+      "aggregation": "maximum-image-probability"
+    },
+    "project_summary": "output\\metadata\\baseline-project-summary.json"
   },
   "claim_boundaries": [
-    "The model does not provide autonomous diagnosis.",
-    "The model is not a substitute for dermatologist assessment.",
+    "The selected model does not provide autonomous diagnosis.",
+    "The selected model is not a substitute for dermatologist assessment.",
     "The derived target and operating threshold are not clinically validated.",
     "Subgroup results are descriptive and do not establish fairness or safety.",
     "External, prospective and workflow-specific validation would be required before clinical use."
   ],
   "artifacts": {
-    "final_metrics": "output\\metadata\\baseline-final-test-metrics.json",
     "reproducibility_manifest": "output\\metadata\\reproducibility-manifest.json",
-    "subgroup_review": "output\\tables\\test-subgroup-performance.csv",
-    "interpretability_summary": "output\\metadata\\grad-cam-review-summary.json"
+    "selected_model_metrics": "output\\metadata\\resnet18-transfer-final-test-metrics.json",
+    "selected_model_evaluation_summary": "output\\metadata\\resnet18-transfer-evaluation-summary.json",
+    "selected_model_bootstrap_intervals": "output\\tables\\resnet18-transfer-test-bootstrap-confidence-intervals.csv",
+    "selected_model_subgroup_review": "output\\tables\\resnet18-transfer-test-subgroup-performance.csv",
+    "validation_model_comparison": "output\\tables\\baseline-resnet18-validation-comparison.csv",
+    "test_model_comparison": "output\\tables\\final-model-test-comparison.csv",
+    "baseline_summary": "output\\metadata\\baseline-project-summary.json",
+    "baseline_metrics": "output\\metadata\\baseline-final-test-metrics.json",
+    "baseline_interpretability_summary": "output\\metadata\\grad-cam-review-summary.json"
   }
 }

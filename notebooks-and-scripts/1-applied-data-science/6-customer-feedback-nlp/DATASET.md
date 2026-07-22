@@ -34,10 +34,10 @@ The project uses the following files from the **All_Beauty** category.
 
 | File | Description |
 |------|-------------|
-| `All_Beauty.jsonl` | Customer reviews, ratings, timestamps, and auxiliary review information. |
-| `meta_All_Beauty.jsonl` | Product metadata including titles, descriptions, categories, pricing, and images. |
+| [`All_Beauty.jsonl`](https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023/resolve/main/raw/review_categories/All_Beauty.jsonl) | Customer reviews, ratings, timestamps, and auxiliary review information. |
+| [`meta_All_Beauty.jsonl`](https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023/resolve/main/raw/meta_categories/meta_All_Beauty.jsonl) | Product metadata including titles, descriptions, categories, pricing, and images. |
 
-Only `All_Beauty.jsonl` is required for the current implementation.
+Only **All_Beauty.jsonl** is required for the current implementation.
 
 The metadata file is included to support future extensions involving product-level analyses.
 
