@@ -1,0 +1,26 @@
+{
+  "model_checkpoint": "output\\models\\baseline-convnet-best.pt",
+  "test_threshold": 0.33811554312705994,
+  "target_layer": "features.12",
+  "examples_per_error_group": 3,
+  "selected_case_count": 12,
+  "selection_method": {
+    "true_positive": "highest-probability",
+    "true_negative": "lowest-probability",
+    "false_negative": "lowest-probability",
+    "false_positive": "highest-probability",
+    "tie_breaker": "image-id"
+  },
+  "class_attribution": "positive-priority-review-logit",
+  "interpretation_limits": [
+    "post-hoc sensitivity map rather than causal explanation",
+    "not a lesion segmentation mask",
+    "not evidence of clinically valid reasoning",
+    "not used to revise the model, threshold or test metrics"
+  ],
+  "artifacts": {
+    "selected_cases": "output\\tables\\qualitative-test-case-selection.csv",
+    "qualitative_predictions_figure": "output\\figures\\qualitative-test-predictions.png",
+    "grad_cam_figure": "output\\figures\\grad-cam-selected-test-cases.png"
+  }
+}

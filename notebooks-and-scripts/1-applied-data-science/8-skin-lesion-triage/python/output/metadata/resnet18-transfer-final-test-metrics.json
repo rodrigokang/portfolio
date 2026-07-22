@@ -1,0 +1,60 @@
+{
+  "model": "ResNet18Transfer",
+  "checkpoint_epoch": 12,
+  "checkpoint_stage": "layer4-and-head",
+  "threshold_selection": {
+    "threshold": 0.2761510908603668,
+    "true_negative": 819,
+    "false_positive": 388,
+    "false_negative": 20,
+    "true_positive": 279,
+    "precision": 0.41829085457271364,
+    "sensitivity": 0.9331103678929766,
+    "specificity": 0.6785418392709196,
+    "negative_predictive_value": 0.9761620977353993,
+    "f_beta": 0.7487922705314011,
+    "selection_partition": "validation",
+    "selection_rule": "maximum-f2",
+    "beta": 2.0,
+    "model": "resnet18-transfer"
+  },
+  "image_level_test_metrics": {
+    "threshold": 0.2761510908603668,
+    "true_negative": 810,
+    "false_positive": 402,
+    "false_negative": 15,
+    "true_positive": 268,
+    "precision": 0.4,
+    "sensitivity": 0.9469964664310954,
+    "specificity": 0.6683168316831684,
+    "negative_predictive_value": 0.9818181818181818,
+    "f_beta": 0.7436182019977802,
+    "roc_auc": 0.9098969084187571,
+    "average_precision": 0.7046871055258944,
+    "brier_score": 0.12770740096120875,
+    "image_count": 1495
+  },
+  "lesion_level_test_metrics": {
+    "threshold": 0.2761510908603668,
+    "true_negative": 678,
+    "false_positive": 267,
+    "false_negative": 5,
+    "true_positive": 171,
+    "precision": 0.3904109589041096,
+    "sensitivity": 0.9715909090909091,
+    "specificity": 0.7174603174603175,
+    "negative_predictive_value": 0.9926793557833089,
+    "f_beta": 0.7486865148861647,
+    "roc_auc": 0.9377705627705627,
+    "average_precision": 0.7351367180842385,
+    "brier_score": 0.11010522185993372,
+    "lesion_count": 1121,
+    "aggregation": "maximum-image-probability"
+  },
+  "limitations": [
+    "The binary target is project-derived rather than an original clinical referral label.",
+    "The threshold was selected internally on validation data and is not clinically validated.",
+    "HAM10000 acquisition, ground-truth and class composition may not represent deployment settings.",
+    "External and prospective validation would be required before any clinical use."
+  ]
+}

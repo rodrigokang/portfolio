@@ -1,0 +1,52 @@
+{
+  "model": "resnet18-transfer",
+  "primary_model_selected_on_validation": "resnet18-transfer",
+  "checkpoint": "output\\models\\resnet18-transfer-best.pt",
+  "selected_epoch": 12,
+  "selected_stage": "layer4-and-head",
+  "validation_selected_threshold": 0.2761510908603668,
+  "test_results": {
+    "image_level": {
+      "threshold": 0.2761510908603668,
+      "true_negative": 810,
+      "false_positive": 402,
+      "false_negative": 15,
+      "true_positive": 268,
+      "precision": 0.4,
+      "sensitivity": 0.9469964664310954,
+      "specificity": 0.6683168316831684,
+      "negative_predictive_value": 0.9818181818181818,
+      "f_beta": 0.7436182019977802,
+      "roc_auc": 0.9098969084187571,
+      "average_precision": 0.7046871055258944,
+      "brier_score": 0.12770740096120875,
+      "image_count": 1495
+    },
+    "lesion_level": {
+      "threshold": 0.2761510908603668,
+      "true_negative": 678,
+      "false_positive": 267,
+      "false_negative": 5,
+      "true_positive": 171,
+      "precision": 0.3904109589041096,
+      "sensitivity": 0.9715909090909091,
+      "specificity": 0.7174603174603175,
+      "negative_predictive_value": 0.9926793557833089,
+      "f_beta": 0.7486865148861647,
+      "roc_auc": 0.9377705627705627,
+      "average_precision": 0.7351367180842385,
+      "brier_score": 0.11010522185993372,
+      "lesion_count": 1121,
+      "aggregation": "maximum-image-probability"
+    }
+  },
+  "artifacts": {
+    "test_predictions": "output\\tables\\resnet18-transfer-test-predictions.csv",
+    "lesion_predictions": "output\\tables\\resnet18-transfer-test-lesion-predictions.csv",
+    "final_metrics": "output\\metadata\\resnet18-transfer-final-test-metrics.json",
+    "bootstrap_intervals": "output\\tables\\resnet18-transfer-test-bootstrap-confidence-intervals.csv",
+    "subgroup_review": "output\\tables\\resnet18-transfer-test-subgroup-performance.csv",
+    "model_comparison": "output\\tables\\final-model-test-comparison.csv"
+  },
+  "test_used": true
+}

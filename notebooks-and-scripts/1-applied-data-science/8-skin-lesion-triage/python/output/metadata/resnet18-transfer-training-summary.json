@@ -1,0 +1,42 @@
+{
+  "head_stage": {
+    "stage": "head-only",
+    "epochs_completed": 5,
+    "best_validation_average_precision": 0.5965541003317804,
+    "selected_global_epoch_if_improved": 5,
+    "stage_seconds": 1742.0642738000024,
+    "early_stopping_triggered": false
+  },
+  "fine_tune_stage": {
+    "stage": "layer4-and-head",
+    "epochs_completed": 8,
+    "best_validation_average_precision": 0.6942052537945895,
+    "selected_global_epoch_if_improved": 12,
+    "stage_seconds": 3340.7035673999926,
+    "early_stopping_triggered": false
+  },
+  "selected_epoch": 12,
+  "selected_stage": "layer4-and-head",
+  "selected_validation_metrics": {
+    "loss": 0.6541802015200079,
+    "roc_auc": 0.8974931627934042,
+    "average_precision": 0.6942052537945895,
+    "precision_at_0_5": 0.4948665297741273,
+    "sensitivity_at_0_5": 0.8060200668896321,
+    "specificity_at_0_5": 0.796188898094449,
+    "f1_at_0_5": 0.6132315521628499,
+    "accuracy_at_0_5": 0.798140770252324,
+    "balanced_accuracy_at_0_5": 0.8011044824920406,
+    "precision": 0.4948665297741273,
+    "recall": 0.8060200668896321,
+    "sensitivity": 0.8060200668896321,
+    "specificity": 0.796188898094449,
+    "f1_score": 0.6132315521628499,
+    "accuracy": 0.798140770252324,
+    "balanced_accuracy": 0.8011044824920406,
+    "reporting_threshold": 0.5,
+    "sample_count": 1506.0
+  },
+  "checkpoint_path": "output\\models\\resnet18-transfer-best.pt",
+  "test_used": false
+}
