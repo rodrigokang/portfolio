@@ -64,15 +64,15 @@ format:
     mermaid:
       theme: default
 
-  pdf:
-    include-in-header: header.tex
-    latex-engine: xelatex
-    documentclass: book
-    fontsize: 12pt
-    toc: true
-    toc-depth: 4
-    number-sections: true
-    mainfont: "Linux Libertine O"
-    link-citations: true
-    mermaid:
-      theme: default
+#  pdf:
+#    include-in-header: header.tex
+#    latex-engine: xelatex
+#    documentclass: book
+#    fontsize: 12pt
+#    toc: true
+#    toc-depth: 4
+#    number-sections: true
+#    mainfont: "Linux Libertine O"
+#    link-citations: true
+#    mermaid:
+#      theme: default

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,14 +54,15 @@ div.csl-indent {
 <link href="../1-applied-data-science/7-sediment-source-modeling.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-806c95bdecf85540f7beab145150c922.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,6 +91,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -115,7 +145,9 @@ div.csl-indent {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Data Science Across Domains</a> 
         <div class="sidebar-tools-main tools-wide">
@@ -280,8 +312,23 @@ div.csl-indent {
   <li><a href="#transfer-learning-with-resnet18" id="toc-transfer-learning-with-resnet18" class="nav-link" data-scroll-target="#transfer-learning-with-resnet18"><span class="header-section-number">8.3.7</span> Transfer Learning with ResNet18</a></li>
   <li><a href="#evaluation-protocol" id="toc-evaluation-protocol" class="nav-link" data-scroll-target="#evaluation-protocol"><span class="header-section-number">8.3.8</span> Evaluation Protocol</a></li>
   </ul></li>
-  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">8.4</span> Results, Discussion, and Limitations</a></li>
-  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">8.5</span> Technical Appendix (Optional)</a></li>
+  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">8.4</span> Results, Discussion, and Limitations</a>
+  <ul class="collapse">
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">8.4.1</span> Model Selection</a></li>
+  <li><a href="#test-set-performance" id="toc-test-set-performance" class="nav-link" data-scroll-target="#test-set-performance"><span class="header-section-number">8.4.2</span> Test Set Performance</a></li>
+  <li><a href="#receiver-operating-characteristic-and-precisionrecall-analysis" id="toc-receiver-operating-characteristic-and-precisionrecall-analysis" class="nav-link" data-scroll-target="#receiver-operating-characteristic-and-precisionrecall-analysis"><span class="header-section-number">8.4.3</span> Receiver Operating Characteristic and Precision–Recall Analysis</a></li>
+  <li><a href="#calibration" id="toc-calibration" class="nav-link" data-scroll-target="#calibration"><span class="header-section-number">8.4.4</span> Calibration</a></li>
+  <li><a href="#threshold-analysis" id="toc-threshold-analysis" class="nav-link" data-scroll-target="#threshold-analysis"><span class="header-section-number">8.4.5</span> Threshold Analysis</a></li>
+  <li><a href="#bootstrap-confidence-intervals" id="toc-bootstrap-confidence-intervals" class="nav-link" data-scroll-target="#bootstrap-confidence-intervals"><span class="header-section-number">8.4.6</span> Bootstrap Confidence Intervals</a></li>
+  <li><a href="#model-interpretability-with-grad-cam" id="toc-model-interpretability-with-grad-cam" class="nav-link" data-scroll-target="#model-interpretability-with-grad-cam"><span class="header-section-number">8.4.7</span> Model Interpretability with Grad-CAM</a></li>
+  </ul></li>
+  <li><a href="#technical-appendix-optional" id="toc-technical-appendix-optional" class="nav-link" data-scroll-target="#technical-appendix-optional"><span class="header-section-number">8.5</span> Technical Appendix (Optional)</a>
+  <ul class="collapse">
+  <li><a href="#convolutional-neural-networks" id="toc-convolutional-neural-networks" class="nav-link" data-scroll-target="#convolutional-neural-networks"><span class="header-section-number">8.5.1</span> Convolutional Neural Networks</a></li>
+  <li><a href="#transfer-learning" id="toc-transfer-learning" class="nav-link" data-scroll-target="#transfer-learning"><span class="header-section-number">8.5.2</span> Transfer Learning</a></li>
+  <li><a href="#performance-evaluation-for-binary-classification" id="toc-performance-evaluation-for-binary-classification" class="nav-link" data-scroll-target="#performance-evaluation-for-binary-classification"><span class="header-section-number">8.5.3</span> Performance Evaluation for Binary Classification</a></li>
+  <li><a href="#gradient-weighted-class-activation-mapping-grad-cam" id="toc-gradient-weighted-class-activation-mapping-grad-cam" class="nav-link" data-scroll-target="#gradient-weighted-class-activation-mapping-grad-cam"><span class="header-section-number">8.5.4</span> Gradient-weighted Class Activation Mapping (Grad-CAM)</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -343,46 +390,46 @@ Table&nbsp;8.1: Mapping from the original HAM10000 diagnostic categories to the 
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th style="text-align: left;">Original diagnosis</th>
+<th style="text-align: center;">Original diagnosis</th>
 <th style="text-align: center;">Label</th>
-<th style="text-align: left;">Project class</th>
+<th style="text-align: center;">Project class</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Melanoma</td>
+<td style="text-align: center;">Melanoma</td>
 <td style="text-align: center;"><code>mel</code></td>
-<td style="text-align: left;">Priority review</td>
+<td style="text-align: center;">Priority review</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Basal cell carcinoma</td>
+<td style="text-align: center;">Basal cell carcinoma</td>
 <td style="text-align: center;"><code>bcc</code></td>
-<td style="text-align: left;">Priority review</td>
+<td style="text-align: center;">Priority review</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Actinic keratosis / Bowen’s disease</td>
+<td style="text-align: center;">Actinic keratosis / Bowen’s disease</td>
 <td style="text-align: center;"><code>akiec</code></td>
-<td style="text-align: left;">Priority review</td>
+<td style="text-align: center;">Priority review</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Melanocytic naevus</td>
+<td style="text-align: center;">Melanocytic naevus</td>
 <td style="text-align: center;"><code>nv</code></td>
-<td style="text-align: left;">Non-priority</td>
+<td style="text-align: center;">Non-priority</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Benign keratosis</td>
+<td style="text-align: center;">Benign keratosis</td>
 <td style="text-align: center;"><code>bkl</code></td>
-<td style="text-align: left;">Non-priority</td>
+<td style="text-align: center;">Non-priority</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Dermatofibroma</td>
+<td style="text-align: center;">Dermatofibroma</td>
 <td style="text-align: center;"><code>df</code></td>
-<td style="text-align: left;">Non-priority</td>
+<td style="text-align: center;">Non-priority</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Vascular lesion</td>
+<td style="text-align: center;">Vascular lesion</td>
 <td style="text-align: center;"><code>vasc</code></td>
-<td style="text-align: left;">Non-priority</td>
+<td style="text-align: center;">Non-priority</td>
 </tr>
 </tbody>
 </table>
@@ -395,7 +442,7 @@ Table&nbsp;8.1: Mapping from the original HAM10000 diagnostic categories to the 
 <section id="exploratory-data-analysis" class="level3" data-number="8.3.2">
 <h3 data-number="8.3.2" class="anchored" data-anchor-id="exploratory-data-analysis"><span class="header-section-number">8.3.2</span> Exploratory Data Analysis</h3>
 <p>Before developing the classification models, an exploratory analysis was conducted to characterise the dataset and identify properties that could influence model development and evaluation. Rather than searching for predictive relationships, the objective of this stage was to verify the quality of the available data, understand the distribution of the target classes, and identify potential sources of bias that should be considered throughout the modelling process.</p>
-<p>The first step was to examine the distribution of the binary triage target. Figure <a href="#fig-binary-target-distribution" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> summarises the number of images and unique lesions assigned to each class. As expected, non-priority lesions represent the majority of observations, whereas lesions requiring priority review constitute a substantially smaller proportion of the dataset. This imbalance reflects routine dermatological practice, where benign lesions are considerably more common than lesions requiring immediate clinical attention, and motivates the use of evaluation metrics that extend beyond overall classification accuracy.</p>
+<p>The first step was to examine the distribution of the binary triage target. <a href="#fig-binary-target-distribution" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> summarises the number of images and unique lesions assigned to each class. As expected, non-priority lesions represent the majority of observations, whereas lesions requiring priority review constitute a substantially smaller proportion of the dataset. This imbalance reflects routine dermatological practice, where benign lesions are considerably more common than lesions requiring immediate clinical attention, and motivates the use of evaluation metrics that extend beyond overall classification accuracy.</p>
 <div id="fig-binary-target-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binary-target-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -406,7 +453,7 @@ Figure&nbsp;8.1: Distribution of images and unique lesions across the binary tri
 </figcaption>
 </figure>
 </div>
-<p>A second characteristic of HAM10000 is that multiple dermoscopic images may correspond to the same underlying lesion. Figure <a href="#fig-images-per-lesion" class="quarto-xref">Figure&nbsp;<span>8.2</span></a> illustrates the distribution of the number of images available for each lesion. While many lesions are represented by a single image, a substantial proportion includes multiple photographs captured from different viewpoints or magnifications. This characteristic reinforces the importance of performing lesion-level rather than image-level partitioning, ensuring that the evaluation reflects the model’s ability to generalise to previously unseen lesions rather than recognising repeated visual appearances of the same case.</p>
+<p>A second characteristic of HAM10000 is that multiple dermoscopic images may correspond to the same underlying lesion. <a href="#fig-images-per-lesion" class="quarto-xref">Figure&nbsp;<span>8.2</span></a> illustrates the distribution of the number of images available for each lesion. While many lesions are represented by a single image, a substantial proportion includes multiple photographs captured from different viewpoints or magnifications. This characteristic reinforces the importance of performing lesion-level rather than image-level partitioning, ensuring that the evaluation reflects the model’s ability to generalise to previously unseen lesions rather than recognising repeated visual appearances of the same case.</p>
 <div id="fig-images-per-lesion" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-images-per-lesion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -417,7 +464,7 @@ Figure&nbsp;8.2: Distribution of the number of images available for each unique 
 </figcaption>
 </figure>
 </div>
-<p>Patient demographics provide additional context regarding the composition of the study population. Figure <a href="#fig-age-by-target" class="quarto-xref">Figure&nbsp;<span>8.3</span></a> presents the age distribution for the two binary target classes. Most observations correspond to middle-aged and older adults, consistent with the epidemiology of pigmented skin lesions. Although the age distributions overlap considerably, this analysis provides useful context for interpreting the characteristics of the study population.</p>
+<p>Patient demographics provide additional context regarding the composition of the study population. <a href="#fig-age-by-target" class="quarto-xref">Figure&nbsp;<span>8.3</span></a> presents the age distribution for the two binary target classes. Most observations correspond to middle-aged and older adults, consistent with the epidemiology of pigmented skin lesions. Although the age distributions overlap considerably, this analysis provides useful context for interpreting the characteristics of the study population.</p>
 <div id="fig-age-by-target" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-age-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -428,7 +475,7 @@ Figure&nbsp;8.3: Patient age distribution stratified by binary triage class.
 </figcaption>
 </figure>
 </div>
-<p>The distribution of patients by biological sex is shown in Figure <a href="#fig-sex-by-target" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>. Male and female patients are both well represented across the two triage categories, reducing the likelihood that the classification models are driven primarily by differences in sex representation within the dataset.</p>
+<p>The distribution of patients by biological sex is shown in <a href="#fig-sex-by-target" class="quarto-xref">Figure&nbsp;<span>8.4</span></a>. Male and female patients are both well represented across the two triage categories, reducing the likelihood that the classification models are driven primarily by differences in sex representation within the dataset.</p>
 <div id="fig-sex-by-target" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sex-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -439,7 +486,7 @@ Figure&nbsp;8.4: Distribution of patient sex stratified by binary triage class.
 </figcaption>
 </figure>
 </div>
-<p>Figure <a href="#fig-anatomical-site-by-target" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> summarises the anatomical location of lesions across the binary target classes. Lesions originate from multiple body regions, with the trunk and lower extremities accounting for a substantial proportion of the observations. This diversity contributes to the visual variability of the dataset and reflects the heterogeneous clinical presentation of pigmented skin lesions encountered in routine practice.</p>
+<p><a href="#fig-anatomical-site-by-target" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> summarises the anatomical location of lesions across the binary target classes. Lesions originate from multiple body regions, with the trunk and lower extremities accounting for a substantial proportion of the observations. This diversity contributes to the visual variability of the dataset and reflects the heterogeneous clinical presentation of pigmented skin lesions encountered in routine practice.</p>
 <div id="fig-anatomical-site-by-target" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-anatomical-site-by-target-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -450,7 +497,7 @@ Figure&nbsp;8.5: Distribution of anatomical sites stratified by binary triage cl
 </figcaption>
 </figure>
 </div>
-<p>To better understand the composition of the binary target, the original diagnostic categories were also examined. Figure <a href="#fig-source-diagnoses" class="quarto-xref">Figure&nbsp;<span>8.6</span></a> shows the number of images and lesions contributed by each diagnostic class before collapsing them into the binary triage formulation. This analysis confirms that the priority-review group combines several clinically important but comparatively infrequent diagnoses, whereas benign melanocytic nevi dominate the dataset.</p>
+<p>To better understand the composition of the binary target, the original diagnostic categories were also examined. <a href="#fig-source-diagnoses" class="quarto-xref">Figure&nbsp;<span>8.6</span></a> shows the number of images and lesions contributed by each diagnostic class before collapsing them into the binary triage formulation. This analysis confirms that the priority-review group combines several clinically important but comparatively infrequent diagnoses, whereas benign melanocytic nevi dominate the dataset.</p>
 <div id="fig-source-diagnoses" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-source-diagnoses-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -461,7 +508,7 @@ Figure&nbsp;8.6: Distribution of images and lesions across the original diagnost
 </figcaption>
 </figure>
 </div>
-<p>Finally, Figure <a href="#fig-confirmation-method" class="quarto-xref">Figure&nbsp;<span>8.7</span></a> summarises the methods used to establish the reference diagnosis for each lesion. Histopathology represents the predominant confirmation method for malignant lesions, whereas benign lesions include a mixture of histopathological confirmation, expert consensus, and follow-up examinations. Understanding these differences provides additional context regarding the reliability of the ground-truth labels used throughout model development and evaluation.</p>
+<p>Finally, <a href="#fig-confirmation-method" class="quarto-xref">Figure&nbsp;<span>8.7</span></a> summarises the methods used to establish the reference diagnosis for each lesion. Histopathology represents the predominant confirmation method for malignant lesions, whereas benign lesions include a mixture of histopathological confirmation, expert consensus, and follow-up examinations. Understanding these differences provides additional context regarding the reliability of the ground-truth labels used throughout model development and evaluation.</p>
 <div id="fig-confirmation-method" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-confirmation-method-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -577,16 +624,337 @@ Table&nbsp;8.2: Summary of the lesion-level data partition used throughout model
 <p>To quantify the uncertainty associated with the reported results, confidence intervals were estimated using bootstrap resampling of the independent test set. This procedure generates repeated samples with replacement and estimates the variability of each performance metric without relying on strong distributional assumptions.</p>
 <p>Because the dataset contains multiple images of some lesions, predictions were also aggregated at the lesion level in addition to the image level. Aggregating predictions better reflects the intended clinical application, where the objective is to support the assessment of individual lesions rather than isolated photographs. This complementary analysis allows the robustness of the models to be evaluated under a more clinically meaningful perspective.</p>
 <p>Finally, model performance was examined across relevant demographic subgroups, including biological sex and age category. Although these analyses are exploratory, they provide useful insight into the consistency of predictive performance across different patient populations and help identify potential sources of performance variability that may warrant further investigation.</p>
-<p>The methodology described in this chapter is implemented in the accompanying Python notebook, available <a href="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/8-skin-lesion-triage.html">here</a>.</p>
+<p>The methodology described in this chapter is implemented in the accompanying Python notebook, available <a href="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/1-skin-lesion-triage.html">here</a>.</p>
 </section>
 </section>
 <section id="results-discussion-and-limitations" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">8.4</span> Results, Discussion, and Limitations</h2>
-<p><em>Section.</em></p>
+<p>This section presents the results obtained using the evaluation protocol described in the previous chapter. The analysis begins by comparing the two modelling approaches on the validation set to justify the final model selection before assessing predictive performance on the independent test set. Subsequent sections examine discrimination, calibration, lesion-level performance, uncertainty through bootstrap confidence intervals, subgroup consistency, and model interpretability. The chapter concludes with a discussion of the main findings and the principal limitations of the study.</p>
+<section id="model-selection" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="model-selection"><span class="header-section-number">8.4.1</span> Model Selection</h3>
+<p>Model selection was performed exclusively using the validation partition, which remained completely independent of both the training and test sets throughout model development. Consistent with the evaluation protocol described previously, the model corresponding to the highest validation Average Precision (AP) was retained rather than selecting the epoch with the lowest validation loss or the highest classification accuracy. Because the dataset exhibits moderate class imbalance and the primary objective is to identify lesions requiring priority review, Average Precision provides a more informative criterion for comparing candidate models across training epochs.</p>
+<p>The validation learning curves for both architectures are presented in <a href="#fig-validation-learning-curves" class="quarto-xref">Figure&nbsp;<span>8.8</span></a>. Both models exhibit stable optimisation behaviour throughout training; however, the transfer learning approach consistently achieves higher validation ROC AUC and Average Precision than the baseline convolutional network. The ResNet18 model also maintains a lower validation loss across most training epochs, consistent with its stronger validation discrimination.</p>
+<div id="fig-validation-learning-curves" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-validation-learning-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/baseline-validation-metrics-by-epoch.png" class="img-fluid figure-img"></p>
+<figcaption>Baseline CNN validation metrics.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/resnet18-transfer-validation-metrics-by-epoch.png" class="img-fluid figure-img"></p>
+<figcaption>ResNet18 validation metrics.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-validation-learning-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.8: Validation learning curves for the baseline convolutional neural network and the ResNet18 transfer learning model.
+</figcaption>
+</figure>
+</div>
+<p>The quantitative comparison between the selected models is presented in <a href="#tbl-validation-model-selection" class="quarto-xref">Table&nbsp;<span>8.3</span></a>. The ResNet18 model achieved the highest validation Average Precision (0.694), together with superior ROC AUC, lower validation loss, and improved specificity while maintaining comparable sensitivity. Consequently, the transfer learning model was selected for the final evaluation on the independent test set.</p>
+<div id="tbl-validation-model-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-validation-model-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8.3: Validation performance of the selected baseline CNN and ResNet18 models. AP = Average Precision.
+</figcaption>
+<div aria-describedby="tbl-validation-model-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 8%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Model</th>
+<th style="text-align: center;">Val. Loss</th>
+<th style="text-align: center;">ROC AUC</th>
+<th style="text-align: center;">AP</th>
+<th style="text-align: center;">Prec.</th>
+<th style="text-align: center;">Sens.</th>
+<th style="text-align: center;">Spec.</th>
+<th style="text-align: center;">F1</th>
+<th style="text-align: center;">Epoch</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Baseline CNN</td>
+<td style="text-align: center;">0.741</td>
+<td style="text-align: center;">0.854</td>
+<td style="text-align: center;">0.549</td>
+<td style="text-align: center;">0.444</td>
+<td style="text-align: center;">0.763</td>
+<td style="text-align: center;">0.764</td>
+<td style="text-align: center;">0.562</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ResNet18</td>
+<td style="text-align: center;">0.654</td>
+<td style="text-align: center;">0.898</td>
+<td style="text-align: center;">0.694</td>
+<td style="text-align: center;">0.496</td>
+<td style="text-align: center;">0.806</td>
+<td style="text-align: center;">0.797</td>
+<td style="text-align: center;">0.614</td>
+<td style="text-align: center;">12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Although both architectures converged successfully, the consistent improvement observed across the principal validation metrics suggests that transfer learning provides a more effective representation for this binary lesion triage task. The remaining analyses therefore focus on the performance of the selected ResNet18 model while retaining the baseline network as a reference for comparison where appropriate.</p>
+</section>
+<section id="test-set-performance" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="test-set-performance"><span class="header-section-number">8.4.2</span> Test Set Performance</h3>
+<p>After selecting the final model using the validation set, performance was assessed on the independent test partition using the operating threshold determined during model development. Because the test set remained completely isolated throughout training and model selection, the reported metrics provide an unbiased estimate of each model’s ability to generalise to previously unseen lesions.</p>
+<p>The overall performance of the baseline convolutional neural network and the ResNet18 transfer learning model is summarised in <a href="#tbl-test-performance" class="quarto-xref">Table&nbsp;<span>8.4</span></a>. Consistent with the validation results, the transfer learning approach achieved superior performance across the principal discrimination metrics. ResNet18 obtained a ROC AUC of 0.910 and an Average Precision of 0.705, compared with 0.849 and 0.558 for the baseline model, respectively.</p>
+<div id="tbl-test-performance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-test-performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8.4: Test-set performance of the baseline convolutional neural network and the ResNet18 model. AP = Average Precision; Thr. = decision threshold.
+</figcaption>
+<div aria-describedby="tbl-test-performance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Model</th>
+<th style="text-align: center;">ROC AUC</th>
+<th style="text-align: center;">AP</th>
+<th style="text-align: center;">Brier</th>
+<th style="text-align: center;">Prec.</th>
+<th style="text-align: center;">Sens.</th>
+<th style="text-align: center;">Spec.</th>
+<th style="text-align: center;">F2</th>
+<th style="text-align: center;">Thr.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Baseline CNN</td>
+<td style="text-align: center;">0.849</td>
+<td style="text-align: center;">0.558</td>
+<td style="text-align: center;">0.150</td>
+<td style="text-align: center;">0.323</td>
+<td style="text-align: center;">0.951</td>
+<td style="text-align: center;">0.534</td>
+<td style="text-align: center;">0.684</td>
+<td style="text-align: center;">0.299</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ResNet18</td>
+<td style="text-align: center;">0.910</td>
+<td style="text-align: center;">0.705</td>
+<td style="text-align: center;">0.128</td>
+<td style="text-align: center;">0.400</td>
+<td style="text-align: center;">0.947</td>
+<td style="text-align: center;">0.668</td>
+<td style="text-align: center;">0.744</td>
+<td style="text-align: center;">0.278</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Compared with the baseline architecture, the transfer learning model achieved higher discrimination, better probability calibration, and a more favourable balance between sensitivity and specificity. Although both models maintained similarly high sensitivity, ResNet18 substantially increased specificity and precision, reducing the number of benign lesions incorrectly prioritised for further assessment while preserving the ability to identify clinically important cases.</p>
+<p>These summary metrics provide an overall comparison of predictive performance but do not fully describe model behaviour across different operating thresholds. The following sections therefore examine discrimination, calibration, and threshold selection in greater detail before considering lesion-level performance and model interpretability.</p>
+</section>
+<section id="receiver-operating-characteristic-and-precisionrecall-analysis" class="level3" data-number="8.4.3">
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="receiver-operating-characteristic-and-precisionrecall-analysis"><span class="header-section-number">8.4.3</span> Receiver Operating Characteristic and Precision–Recall Analysis</h3>
+<p>The summary metrics reported previously evaluate model performance at the selected operating threshold. Receiver Operating Characteristic (ROC) and Precision–Recall (PR) curves provide a complementary perspective by assessing discrimination across the full range of possible decision thresholds, independently of any particular classification cutoff.</p>
+<p>The discrimination curves obtained on the independent test set for the selected ResNet18 model are shown in <a href="#fig-resnet18-test-discrimination-curves" class="quarto-xref">Figure&nbsp;<span>8.9</span></a>.</p>
+<div id="fig-resnet18-test-discrimination-curves" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resnet18-test-discrimination-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/resnet18-transfer-test-discrimination-curves.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resnet18-test-discrimination-curves-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.9: Receiver Operating Characteristic (ROC) and Precision–Recall (PR) curves for the selected ResNet18 model on the independent test set.
+</figcaption>
+</figure>
+</div>
+<p>The ROC curve demonstrates strong separation between lesions requiring priority assessment and lower-priority cases over the full range of decision thresholds. Rather than relying on a single operating point, the model maintains favourable discrimination across progressively different sensitivity–specificity trade-offs, indicating that its ranking of predicted probabilities is robust.</p>
+<p>The Precision–Recall curve provides a complementary assessment that is particularly informative in the presence of class imbalance. The curve remains consistently above the no-skill baseline throughout most of the recall range, indicating that increases in sensitivity are accompanied by comparatively moderate reductions in precision. This behaviour suggests that the model retains its ability to prioritise clinically relevant lesions without requiring an excessive number of false positive referrals.</p>
+<p>Taken together, the ROC and Precision–Recall analyses confirm that the selected ResNet18 model exhibits strong discriminative performance independently of the operating threshold ultimately chosen for deployment. The following section therefore examines whether the predicted probabilities are also well calibrated before considering threshold-dependent classification performance.</p>
+</section>
+<section id="calibration" class="level3" data-number="8.4.4">
+<h3 data-number="8.4.4" class="anchored" data-anchor-id="calibration"><span class="header-section-number">8.4.4</span> Calibration</h3>
+<p>Good discrimination alone is not sufficient for a probabilistic triage model. In addition to ranking lesions correctly, predicted probabilities should reflect the true likelihood of belonging to the priority class so that decision thresholds can be interpreted consistently across different operating scenarios.</p>
+<p>The calibration performance of the selected ResNet18 model on the independent test set is shown in <a href="#fig-resnet18-test-calibration" class="quarto-xref">Figure&nbsp;<span>8.10</span></a>.</p>
+<div id="fig-resnet18-test-calibration" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resnet18-test-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/resnet18-transfer-test-calibration-curve.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resnet18-test-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.10: Calibration curve for the selected ResNet18 model on the independent test set.
+</figcaption>
+</figure>
+</div>
+<p>The calibration curve shows good overall agreement between predicted probabilities and the observed event frequencies across most of the probability range. Although minor deviations from the ideal calibration line are visible in some intervals, the model generally preserves the expected correspondence between predicted risk and empirical outcomes, indicating that the estimated probabilities remain informative rather than serving solely as relative ranking scores.</p>
+<p>This behaviour is consistent with the favourable Brier score reported in the previous section and suggests that the model produces probability estimates that are sufficiently reliable for threshold-based clinical prioritisation. Well-calibrated predictions are particularly valuable in triage applications, where operating thresholds may be adjusted according to available clinical resources or the desired balance between missed priority cases and unnecessary referrals.</p>
+<p>Having established that the predicted probabilities are both discriminative and reasonably well calibrated, the following section examines how the principal performance metrics evolve across alternative decision thresholds.</p>
+</section>
+<section id="threshold-analysis" class="level3" data-number="8.4.5">
+<h3 data-number="8.4.5" class="anchored" data-anchor-id="threshold-analysis"><span class="header-section-number">8.4.5</span> Threshold Analysis</h3>
+<p>Although the previous sections evaluated discrimination independently of any particular operating point, practical deployment requires selecting a single decision threshold to distinguish lesions requiring priority assessment from lower-priority cases. Because this choice directly determines the balance between missed priority lesions and unnecessary referrals, threshold selection represents a clinically important component of the modelling process.</p>
+<p>The behaviour of the principal classification metrics across alternative decision thresholds is illustrated in <a href="#fig-resnet18-test-threshold-tradeoffs" class="quarto-xref">Figure&nbsp;<span>8.11</span></a>.</p>
+<div id="fig-resnet18-test-threshold-tradeoffs" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resnet18-test-threshold-tradeoffs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/resnet18-transfer-test-threshold-tradeoffs.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resnet18-test-threshold-tradeoffs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.11: Performance metrics across decision thresholds for the selected ResNet18 model on the independent test set.
+</figcaption>
+</figure>
+</div>
+<p>As expected, increasing the decision threshold produces a gradual increase in precision and specificity, accompanied by a corresponding reduction in sensitivity. Conversely, lower thresholds maximise the detection of priority lesions at the expense of a larger number of false positive referrals. The selected operating threshold lies within a stable region of the performance curves, providing a balanced compromise between these competing objectives rather than representing an extreme operating point.</p>
+<p>This behaviour is consistent with the intended role of the model as a triage tool. Missing clinically important lesions carries a substantially greater consequence than referring additional benign cases for further assessment. Consequently, the selected threshold favours maintaining high sensitivity while preserving a meaningful improvement in precision and specificity relative to the baseline convolutional network.</p>
+<p>The threshold analysis therefore demonstrates that the reported test-set performance is not the result of an arbitrary operating point but reflects a principled trade-off derived from the validation procedure described earlier. The following section extends the evaluation from individual images to lesion-level predictions, where multiple images belonging to the same lesion are aggregated before classification.</p>
+</section>
+<section id="bootstrap-confidence-intervals" class="level3" data-number="8.4.6">
+<h3 data-number="8.4.6" class="anchored" data-anchor-id="bootstrap-confidence-intervals"><span class="header-section-number">8.4.6</span> Bootstrap Confidence Intervals</h3>
+<p>Point estimates provide a convenient summary of model performance but do not convey the uncertainty associated with finite test samples. To quantify this uncertainty, confidence intervals for the principal evaluation metrics were estimated using bootstrap resampling of the independent test set, following the procedure described in the evaluation protocol.</p>
+<p>The resulting bootstrap confidence intervals for the selected ResNet18 model are presented in <a href="#fig-resnet18-bootstrap-confidence-intervals" class="quarto-xref">Figure&nbsp;<span>8.12</span></a>.</p>
+<div id="fig-resnet18-bootstrap-confidence-intervals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resnet18-bootstrap-confidence-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/resnet18-transfer-test-metric-confidence-intervals.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resnet18-bootstrap-confidence-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.12: Bootstrap confidence intervals for the principal performance metrics of the selected ResNet18 model on the independent test set.
+</figcaption>
+</figure>
+</div>
+<p>The bootstrap analysis indicates that the principal evaluation metrics remain stable across repeated resampled test sets. Although some variability is naturally observed, particularly for precision-based measures that depend on the relatively small number of priority lesions, the confidence intervals remain sufficiently narrow to support the overall conclusions drawn from the point estimates.</p>
+<p>The relatively limited uncertainty associated with ROC AUC, Average Precision, and the remaining performance measures suggests that the observed predictive performance is not driven by a small number of atypical observations. Instead, the results appear to be representative of the underlying test population, providing additional confidence in the robustness of the selected model.</p>
+<p>Having quantified the statistical uncertainty of the principal evaluation metrics, the following section examines whether model performance remains consistent across clinically relevant patient subgroups.</p>
+</section>
+<section id="model-interpretability-with-grad-cam" class="level3" data-number="8.4.7">
+<h3 data-number="8.4.7" class="anchored" data-anchor-id="model-interpretability-with-grad-cam"><span class="header-section-number">8.4.7</span> Model Interpretability with Grad-CAM</h3>
+<p>While quantitative performance metrics provide evidence of predictive accuracy, they do not indicate which image characteristics contribute to the model’s decisions. To improve the interpretability of the selected ResNet18 model, Gradient-weighted Class Activation Mapping (Grad-CAM) was applied to representative correctly classified test images.</p>
+<p>The resulting activation maps are presented in <a href="#fig-grad-cam" class="quarto-xref">Figure&nbsp;<span>8.13</span></a>.</p>
+<div id="fig-grad-cam" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-grad-cam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/grad-cam-selected-test-cases.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-grad-cam-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.13: Grad-CAM visualisations for representative correctly classified test images.
+</figcaption>
+</figure>
+</div>
+<p>The activation maps indicate that the model primarily focuses on the lesion itself rather than on surrounding skin or image background. Across the selected examples, the regions receiving the strongest attention generally coincide with clinically relevant structures, suggesting that the network bases its predictions on meaningful visual patterns instead of unrelated artefacts.</p>
+<p>Although Grad-CAM does not provide a complete explanation of the model’s internal decision process, it offers qualitative evidence that the learned representations are consistent with the visual information expected to support lesion assessment. This additional level of interpretability complements the quantitative evaluation presented in the previous sections and increases confidence that the model has learned features associated with the lesion rather than spurious characteristics of the images.</p>
+<p>Additional examples of model predictions on representative test images are shown in <a href="#fig-qualitative-test-predictions" class="quarto-xref">Figure&nbsp;<span>8.14</span></a>.</p>
+<div id="fig-qualitative-test-predictions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-qualitative-test-predictions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/8-skin-lesion-triage/python/output/figures/qualitative-test-predictions.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qualitative-test-predictions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.14: Representative predictions of the selected ResNet18 model on the independent test set.
+</figcaption>
+</figure>
+</div>
+<p>The qualitative examples illustrate the diversity of lesion appearances encountered in the test set and provide further context for interpreting the quantitative performance metrics. Correctly classified cases demonstrate the model’s ability to identify visually distinct lesion patterns, while the examples also highlight the inherent variability of dermoscopic images encountered in clinical practice.</p>
+<p>Collectively, the quantitative and qualitative analyses demonstrate that the transfer learning approach provides a robust solution for binary skin lesion triage within the scope of this study. Compared with the baseline convolutional network, the selected ResNet18 model consistently achieved stronger discrimination, improved probability calibration, and a more favourable balance between sensitivity and specificity while maintaining stable performance across the independent test set. The Grad-CAM visualisations further support these findings by indicating that the model primarily attends to clinically relevant regions of the lesion rather than to surrounding image artefacts, providing additional confidence that the learned representations reflect meaningful visual characteristics.</p>
+<p>These findings should nevertheless be interpreted within the context of several limitations. The analysis was conducted exclusively using the HAM10000 dataset, which may not fully represent the diversity of patient populations, imaging devices, or clinical settings encountered in routine practice. In addition, the study focused on a binary prioritisation task rather than full multi-class lesion diagnosis, reflecting the intended role of the model as a decision-support tool for clinical triage rather than a replacement for expert assessment. Future work could therefore evaluate external datasets, investigate more recent deep learning architectures, and assess model performance under prospective clinical conditions. Despite these limitations, the results demonstrate a complete and reproducible workflow for developing, evaluating, and interpreting a deep learning model for skin lesion triage using established machine learning practices.</p>
+</section>
 </section>
 <section id="technical-appendix-optional" class="level2" data-number="8.5">
 <h2 data-number="8.5" class="anchored" data-anchor-id="technical-appendix-optional"><span class="header-section-number">8.5</span> Technical Appendix (Optional)</h2>
-<p><em>Section.</em></p>
+<p>The main chapter focuses on the practical development and evaluation of a deep learning model for skin lesion triage. This appendix provides concise background on the principal concepts underlying the implementation. Rather than presenting a comprehensive treatment of deep learning, the objective is to explain the ideas that are most relevant for understanding the modelling decisions adopted throughout the project.</p>
+<section id="convolutional-neural-networks" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="convolutional-neural-networks"><span class="header-section-number">8.5.1</span> Convolutional Neural Networks</h3>
+<p>Convolutional Neural Networks (CNNs) were developed specifically to address the limitations of fully connected neural networks when processing images. A conventional neural network treats every input variable independently, ignoring the spatial relationships between neighbouring pixels. As image resolution increases, this approach rapidly becomes computationally inefficient while failing to exploit the two-dimensional structure that characterises visual data.</p>
+<p>CNNs overcome this limitation by learning small filters that are applied repeatedly across the image. Instead of assigning an independent parameter to every pixel, the same filter is shared over all spatial locations, allowing the network to recognise similar visual patterns regardless of where they appear. Early layers typically learn simple structures such as edges, colour transitions, and textures, while deeper layers progressively combine these elementary features into increasingly complex representations.</p>
+<p>Mathematically, the output of a convolutional layer is obtained by sliding a learnable kernel across the input image and computing a weighted sum within each local neighbourhood:</p>
+<p><span id="eq-convolution"><span class="math display">\[
+y_{i,j}^{(k)}
+=
+\sum_{u=1}^{m}
+\sum_{v=1}^{n}
+K_{u,v}^{(k)}
+\,x_{i+u,\;j+v}
++b^{(k)}
+\tag{8.1}\]</span></span></p>
+<p>where <span class="math inline">\(x\)</span> denotes the input image, <span class="math inline">\(K^{(k)}\)</span> is the <span class="math inline">\(k\)</span>-th convolutional kernel, <span class="math inline">\(b^{(k)}\)</span> is its associated bias term, and <span class="math inline">\(y^{(k)}\)</span> is the resulting feature map. Rather than operating on the entire image simultaneously, each kernel focuses on a small local region, enabling the network to detect meaningful visual structures while keeping the number of trainable parameters manageable.</p>
+<p>Following each convolution, a nonlinear activation function introduces the capacity to model complex relationships that cannot be represented by purely linear operations. Pooling layers are then commonly used to reduce the spatial resolution of intermediate feature maps, increasing computational efficiency while making the learned representations more robust to small translations and local image variations.</p>
+<p>Together, these operations allow convolutional networks to construct hierarchical representations of visual information. Low-level features extracted in the initial layers are progressively combined into higher-level patterns, enabling the network to distinguish between different lesion types based on increasingly abstract visual characteristics. This hierarchical feature extraction explains why CNNs have become the standard architecture for a wide range of computer vision tasks, including medical image analysis.</p>
+</section>
+<section id="transfer-learning" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="transfer-learning"><span class="header-section-number">8.5.2</span> Transfer Learning</h3>
+<p>Training a deep convolutional neural network from scratch typically requires very large annotated datasets. In many medical imaging applications, however, obtaining thousands of expertly labelled images is both expensive and time-consuming. Transfer learning addresses this limitation by reusing feature representations learned from a different, substantially larger dataset and adapting them to a new task.</p>
+<p>The underlying assumption is that many low-level visual patterns, such as edges, textures, and simple geometric structures, are common across natural and medical images. Rather than learning these features again, a pre-trained network provides a strong starting point that can be refined using the available task-specific data. This generally leads to faster convergence, improved predictive performance, and a reduced risk of overfitting compared with training an equivalent architecture from random initialisation.</p>
+<p>The implementation presented in this chapter uses ResNet18, a residual convolutional neural network originally trained on the ImageNet dataset. Beyond its relatively compact size, one of the defining characteristics of the ResNet family is the introduction of residual connections, which allow information to bypass one or more convolutional layers. Instead of learning a complete mapping directly, each residual block learns only the difference between its input and the desired output.</p>
+<p>Formally, a residual block can be expressed as</p>
+<p><span id="eq-residual-block"><span class="math display">\[
+y = F(x) + x,
+\tag{8.2}\]</span></span></p>
+<p>where <span class="math inline">\(x\)</span> represents the input to the block and <span class="math inline">\(F(x)\)</span> denotes the nonlinear transformation learned by the convolutional layers. The shortcut connection adds the original input directly to the transformed representation, allowing the network to preserve useful information while facilitating gradient propagation during optimisation.</p>
+<p>Residual learning makes it possible to train substantially deeper networks than earlier convolutional architectures without suffering the severe degradation in optimisation performance that often accompanies increasing model depth. Although ResNet18 is one of the smaller members of the ResNet family, it offers an effective compromise between representational capacity and computational efficiency, making it well suited to moderate-sized datasets such as HAM10000.</p>
+<p>In practice, transfer learning typically involves replacing the original classification layer with a task-specific output layer while retaining the pre-trained feature extractor. Depending on the amount of available data, either the entire network or only the final layers are subsequently fine-tuned using the new training dataset. In this project, this strategy enabled the model to adapt previously learned visual representations to the binary skin lesion triage task while requiring substantially fewer training examples than would be necessary for training a comparable architecture from scratch.</p>
+</section>
+<section id="performance-evaluation-for-binary-classification" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="performance-evaluation-for-binary-classification"><span class="header-section-number">8.5.3</span> Performance Evaluation for Binary Classification</h3>
+<p>Evaluating a binary classification model requires more than measuring the proportion of correctly classified observations. In applications such as skin lesion triage, the consequences of false negatives and false positives are not equivalent, making it important to assess different aspects of predictive performance rather than relying solely on overall accuracy.</p>
+<p>For this reason, the evaluation presented in this chapter combines complementary metrics that characterise discrimination, probability estimation, and decision-making under a chosen classification threshold.</p>
+<p>Measures such as sensitivity, specificity, precision, and the F-score describe model behaviour once a probability threshold has been selected. Sensitivity quantifies the proportion of clinically important lesions that are correctly identified, whereas specificity measures the ability to avoid unnecessary referrals among lower-priority cases. Precision reflects the proportion of predicted positive cases that are truly positive, while the F-score provides a single summary by balancing precision and recall according to the chosen weighting scheme.</p>
+<p>Threshold-independent metrics offer a broader view of model performance. The Receiver Operating Characteristic (ROC) curve evaluates discrimination across all possible decision thresholds by comparing the true positive rate with the false positive rate. Its associated Area Under the Curve (ROC AUC) summarises the probability that the model assigns a higher score to a randomly selected positive case than to a randomly selected negative case.</p>
+<p>When positive cases represent only a minority of the dataset, Precision–Recall curves often provide a more informative assessment because they focus exclusively on the trade-off between detecting clinically important lesions and limiting false alarms. For this reason, Average Precision (AP), defined as the area under the Precision–Recall curve, is frequently preferred when comparing models trained on imbalanced datasets.</p>
+<p>Beyond discrimination, reliable probability estimates are equally important in clinical decision support. A model may correctly rank patients according to risk while still producing poorly calibrated probabilities. Calibration therefore evaluates the agreement between predicted probabilities and the observed frequency of positive outcomes. In this project, calibration quality is assessed visually using calibration curves and quantitatively through the Brier Score, which measures the mean squared difference between predicted probabilities and observed outcomes. Lower Brier Scores indicate better calibrated probabilistic predictions.</p>
+<p>Finally, all reported performance measures are estimates derived from a finite test sample and are therefore subject to sampling variability. Bootstrap resampling provides a practical approach for quantifying this uncertainty by repeatedly sampling the test data with replacement and recalculating the evaluation metrics. The resulting confidence intervals offer additional context for interpreting model performance beyond single point estimates.</p>
+</section>
+<section id="gradient-weighted-class-activation-mapping-grad-cam" class="level3" data-number="8.5.4">
+<h3 data-number="8.5.4" class="anchored" data-anchor-id="gradient-weighted-class-activation-mapping-grad-cam"><span class="header-section-number">8.5.4</span> Gradient-weighted Class Activation Mapping (Grad-CAM)</h3>
+<p>Deep learning models are often criticised for behaving as “black boxes”, producing highly accurate predictions while offering limited insight into the reasoning behind their decisions. In medical imaging, where model outputs may influence clinical judgement, understanding which image regions contribute to a prediction is an important component of model evaluation.</p>
+<p>Gradient-weighted Class Activation Mapping (Grad-CAM) is a post-hoc interpretability technique that provides a visual explanation of a convolutional neural network’s predictions. Rather than modifying the trained model, Grad-CAM analyses the gradients associated with a target class to estimate the relative importance of each feature map in the final convolutional layer. These importance weights are then combined to produce a coarse localisation map highlighting the image regions that contributed most strongly to the prediction.</p>
+<p>The Grad-CAM heatmap is obtained by computing a weighted combination of the feature maps generated by the final convolutional layer,</p>
+<p><span id="eq-gradcam"><span class="math display">\[
+L_{\text{Grad-CAM}}^c
+=
+\mathrm{ReLU}
+\left(
+\sum_k
+\alpha_k^c
+A^k
+\right),
+\tag{8.3}\]</span></span></p>
+<p>where <span class="math inline">\(A^k\)</span> denotes the <span class="math inline">\(k\)</span>-th feature map, <span class="math inline">\(\alpha_k^c\)</span> represents its importance for class <span class="math inline">\(c\)</span>, and the ReLU operation retains only the features that contribute positively to the selected prediction. The resulting activation map is subsequently resized and superimposed on the original image to provide a visual interpretation of the model’s attention.</p>
+<p>Although Grad-CAM does not explain the complete decision-making process of a neural network, it offers a practical mechanism for assessing whether the model focuses on clinically plausible image regions. Heatmaps concentrated on the lesion itself increase confidence that the prediction is supported by relevant visual characteristics, whereas strong activation outside the lesion may indicate that the model has learned undesirable correlations or image artefacts.</p>
+<p>For this reason, Grad-CAM should be regarded as a complementary validation tool rather than as definitive evidence of model reasoning. It helps identify potential failure modes, supports qualitative model assessment, and facilitates communication between technical developers and clinical experts, but it cannot by itself establish that the network has learned medically meaningful features.</p>
 
 
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
@@ -597,6 +965,7 @@ Table&nbsp;8.2: Summary of the lesion-level data partition used throughout model
 <div class="csl-left-margin">[2] </div><div class="csl-right-inline">N. Codella <em>et al.</em>, <span>“Skin lesion analysis toward melanoma detection 2018: A challenge hosted by the international skin imaging collaboration (isic),”</span> <em>arXiv preprint arXiv:1902.03368</em>, 2019.</div>
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -651,13 +1020,14 @@ Table&nbsp;8.2: Summary of the lesion-level data partition used throughout model
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
