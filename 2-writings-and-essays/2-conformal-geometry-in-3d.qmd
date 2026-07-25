@@ -1,0 +1,223 @@
+# Conformal Geometry and Electrostatics in Three Dimensions
+
+![Schematic representation of a conformal transformation $f(x,y,z)$ mapping a region $R$ with boundary $\partial R$ in the $(x,y,z)$ coordinate system into a transformed region $R'$ with boundary $\partial R'$ in the $(x',y',z')$ coordinate system.](figures/conformal-transformation.png){#fig-conformal-transformation}
+
+Suppose we have a region $R$ in $xyz$ space in which a scalar field $\phi$ satisfies Laplace's equation
+
+$$
+\nabla^2 \phi = \frac{\partial ^2 \phi}{\partial x^2} +\frac{\partial ^2 \phi}{\partial y^2} + \frac{\partial ^2 \phi}{\partial z^2} = 0
+$$ {#eq-laplace-equation}
+
+We want to determine what conditions a transformation $f: R \rightarrow R'$ must satisfy such that Laplace's equation remains invariant under this transformation. 
+
+## Two-dimensional case
+
+For simplicity, let's consider the simplest case in $\mathbb{R}^2$.
+
+Applying the chain rule twice
+
+$$
+\begin{aligned}
+& \frac{\partial \phi}{\partial x} =
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial x}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial x} \\
+& \frac{\partial \phi}{\partial y} =
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial y}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial y}
+\end{aligned}
+$$ {#eq-first-derivative-chain-rule-2d}
+
+$$
+\begin{aligned}
+\frac{\partial^2 \phi}{\partial x^2} 
+& = 
+\frac{\partial}{\partial x} \left( \frac{\partial \phi}{\partial x'} \right) \frac{\partial x'}{\partial x}
++ 
+\frac{\partial \phi}{\partial x'} \frac{\partial^2 x'}{\partial x^2}
++
+\frac{\partial}{\partial x} \left( \frac{\partial \phi}{\partial y'} \right) \frac{\partial y'}{\partial x} 
++ 
+\frac{\partial \phi}{\partial y'} \frac{\partial^2 y'}{\partial x^2} \\
+& =
+\left( \frac{\partial^2\phi}{\partial x'^2} \frac{\partial x'}{\partial x} 
++ 
+\frac{\partial^2\phi}{\partial y' \partial x'} \frac{\partial y'}{\partial x}  \right) \frac{\partial x'}{\partial x} 
++ 
+\frac{\partial \phi}{\partial x'} \frac{\partial^2 x'}{\partial x^2} \\
+& +
+\left( \frac{\partial^2\phi}{\partial y'^2} \frac{\partial y'}{\partial x}
++ 
+\frac{\partial^2\phi}{\partial x' \partial y'} \frac{\partial x'}{\partial x}  \right) \frac{\partial y'}{\partial x}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial^2 y'}{\partial x^2} \\
+\end{aligned}
+$$ {#eq-second-derivative-x-chain-rule}
+
+$$
+\begin{aligned}
+\frac{\partial^2 \phi}{\partial y^2} 
+& = 
+\frac{\partial}{\partial y} \left( \frac{\partial \phi}{\partial x'} \right) \frac{\partial x'}{\partial y} 
++ 
+\frac{\partial \phi}{\partial x'} \frac{\partial^2 x'}{\partial y^2}
++
+\frac{\partial}{\partial y} \left( \frac{\partial \phi}{\partial y'} \right) \frac{\partial y'}{\partial y} 
++ 
+\frac{\partial \phi}{\partial y'} \frac{\partial^2 y'}{\partial y^2} \\
+& =
+\left( \frac{\partial^2\phi}{\partial x'^2} \frac{\partial x'}{\partial y} 
++ 
+\frac{\partial^2\phi}{\partial y' \partial x'} \frac{\partial y'}{\partial y}  \right) \frac{\partial x'}{\partial y} 
++ 
+\frac{\partial \phi}{\partial x'} \frac{\partial^2 x'}{\partial y^2} \\
+& +
+\left( \frac{\partial^2\phi}{\partial y'^2} \frac{\partial y'}{\partial y}
++ 
+\frac{\partial^2\phi}{\partial x' \partial y'} \frac{\partial x'}{\partial y}  \right) \frac{\partial y'}{\partial y}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial^2 y'}{\partial y^2}
+\end{aligned}
+$$ {#eq-second-derivative-y-chain-rule}
+
+Assuming that $\phi$ is a differentiable function, by Clauiraut's lemma
+
+$$
+\frac{\partial^2 \phi}{\partial x' \partial y'}
+=
+\frac{\partial^2 \phi}{\partial y' \partial x'}
+$$ {#eq-clauiraut}
+
+Adding the @eq-second-derivative-x-chain-rule and the @eq-second-derivative-y-chain-rule
+
+$$
+\begin{aligned}
+\frac{\partial^2 \phi}{\partial x^2} + \frac{\partial^2 \phi}{\partial y^2}
+& =
+\frac{\partial^2 \phi}{\partial x'^2} \left[ \left( \frac{\partial x'}{\partial x} \right)^2 + \left( \frac{\partial x'}{\partial y} \right)^2 \right]
++ 
+\frac{\partial^2 \phi}{\partial y'^2} \left[ \left( \frac{\partial y'}{\partial x} \right)^2 + \left( \frac{\partial y'}{\partial y} \right)^2 \right] \\
+& +
+\frac{\partial \phi}{\partial x'} \left( \frac{\partial^2 x'}{\partial x^2} + \frac{\partial^2 x'}{\partial y^2} \right)
++
+\frac{\partial \phi}{\partial y'} \left( \frac{\partial^2 y'}{\partial x^2} + \frac{\partial^2 y'}{\partial y^2} \right) \\
+& =
+2 \frac{\partial^2 \phi}{\partial y' \partial x'} 
+    \left( 
+        \frac{\partial x'}{\partial x}\frac{\partial y'}{\partial x} 
+        + \frac{\partial y'}{\partial y} \frac{\partial y'}{\partial y}
+    \right)
+\end{aligned}
+$$ {#eq-sum-second-derivative-1}
+
+If $x'$ and $y'$ are differentiable and the Cauchy–Riemann equations are satisfied, we have
+
+$$
+\begin{aligned}
+& \frac{\partial x'}{\partial x} = \frac{\partial y'}{\partial y} \\
+& \frac{\partial y'}{\partial x} = -\frac{\partial x'}{\partial y}
+\end{aligned}
+$$ {#eq-cauchy–riemann}
+
+and the Jacobian takes the following form
+
+$$
+\begin{aligned}
+\frac{\partial (x', y')}{\partial (x, y)} 
+=
+\text{det}
+\begin{bmatrix}
+\frac{\partial x'}{ \partial x} & \frac{\partial x'}{ \partial y} \\
+\frac{\partial y'}{ \partial x} & \frac{\partial y'}{ \partial y} 
+\end{bmatrix}
+=
+\left( \frac{\partial x'}{ \partial x} \right)^2 + \left( \frac{\partial x'}{ \partial y} \right)^2 
+=
+\left( \frac{\partial y'}{ \partial x} \right)^2 + \left( \frac{\partial y'}{ \partial y} \right)^2
+\end{aligned}
+$$ {#eq-jacobian}
+
+Furthermore, apart from the form of the Jacobian, the conditions given in the Cauchy-Riemann equation imply that the functions $x'$ and $y'$ are harmonic, that is, they satisfy:
+
+$$
+\begin{aligned}
+& \nabla^2 x' = 0 \\
+& \nabla^2 y' = 0
+\end{aligned}
+$$ {#eq-harmonic-functions}
+
+$$
+\frac{\partial x'}{\partial x}\frac{\partial y'}{\partial x} 
++ 
+\frac{\partial x'}{\partial x}\frac{\partial y'}{\partial x} 
+$$ {#eq-cauchy-riemann-conditions-involved}
+
+substituting @eq-jacobian, @eq-harmonic-functions, @eq-cauchy-riemann-conditions-involved in the @eq-sum-second-derivative-1 we obtain
+
+$$
+\begin{aligned}
+\frac{\partial^2 \phi}{\partial x^2} + \frac{\partial^2 \phi}{\partial y^2}
+& =
+\frac{\partial (x', y')}{\partial (x, y)}\left[ \frac{\partial^2 \phi}{\partial x'^2} + \frac{\partial^2 \phi}{\partial y'^2} \right]
+\end{aligned}
+$$ {#eq-sum-second-derivative-2}
+
+Therefore, for a function to be harmonic in both planes, the transformation
+
+$$
+F(x, y) = \left( x'(x, y), y'(x, y) \right)
+$$
+
+must satisfy the following conditions
+
+1. $x'$ and $y'$ must be differentiable
+2. the Cauchy-Riemann conditions
+3. The Jacobian must be nonzero
+
+## Three-dimensional case
+
+Let's consider the three-dimensional case
+
+Let us consider the three-dimensional case, that is, the case in $\mathbb{R}^3$
+
+$$
+\begin{aligned}
+& 
+\frac{\partial \phi}{\partial x} =
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial x}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial x} 
++
+\frac{\partial \phi}{\partial z'} \frac{\partial z'}{\partial x} 
+\\
+& 
+\frac{\partial \phi}{\partial y} =
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial y}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial y}
++
+\frac{\partial \phi}{\partial z'} \frac{\partial z'}{\partial y}
+\\
+& 
+\frac{\partial \phi}{\partial z} =
+\frac{\partial \phi}{\partial x'} \frac{\partial x'}{\partial z}
++
+\frac{\partial \phi}{\partial y'} \frac{\partial y'}{\partial z}
++
+\frac{\partial \phi}{\partial z'} \frac{\partial z'}{\partial z} 
+\end{aligned}
+$$ {#eq-first-derivative-chain-rule-3d}
+
+
+
+
+
+
+
+
+
+
+
+
+

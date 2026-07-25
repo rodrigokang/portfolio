@@ -590,77 +590,33 @@
     ]
   },
   {
-    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3-d.html",
-    "href": "2-writings-and-essays/2-conformal-geometry-in-3-d.html",
+    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3d.html",
+    "href": "2-writings-and-essays/2-conformal-geometry-in-3d.html",
     "title": "10  Conformal Geometry and Electrostatics in Three Dimensions",
     "section": "",
-    "text": "10.1 Problem Definition\nHeader.\nSection.",
+    "text": "10.1 Two-dimensional case\nSuppose we have a region \\(R\\) in \\(xyz\\) space in which a scalar field \\(\\phi\\) satisfies Laplace’s equation\n\\[\n\\nabla^2 \\phi = \\frac{\\partial ^2 \\phi}{\\partial x^2} +\\frac{\\partial ^2 \\phi}{\\partial y^2} + \\frac{\\partial ^2 \\phi}{\\partial z^2} = 0\n\\tag{10.1}\\]\nWe want to determine what conditions a transformation \\(f: R \\rightarrow R'\\) must satisfy such that Laplace’s equation remains invariant under this transformation.\nFor simplicity, let’s consider the simplest case in \\(\\mathbb{R}^2\\).\nApplying the chain rule twice\n\\[\n\\begin{aligned}\n& \\frac{\\partial \\phi}{\\partial x} =\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial x} \\\\\n& \\frac{\\partial \\phi}{\\partial y} =\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial y}\n\\end{aligned}\n\\tag{10.2}\\]\n\\[\n\\begin{aligned}\n\\frac{\\partial^2 \\phi}{\\partial x^2}\n& =\n\\frac{\\partial}{\\partial x} \\left( \\frac{\\partial \\phi}{\\partial x'} \\right) \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial^2 x'}{\\partial x^2}\n+\n\\frac{\\partial}{\\partial x} \\left( \\frac{\\partial \\phi}{\\partial y'} \\right) \\frac{\\partial y'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial^2 y'}{\\partial x^2} \\\\\n& =\n\\left( \\frac{\\partial^2\\phi}{\\partial x'^2} \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial^2\\phi}{\\partial y' \\partial x'} \\frac{\\partial y'}{\\partial x}  \\right) \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial^2 x'}{\\partial x^2} \\\\\n& +\n\\left( \\frac{\\partial^2\\phi}{\\partial y'^2} \\frac{\\partial y'}{\\partial x}\n+\n\\frac{\\partial^2\\phi}{\\partial x' \\partial y'} \\frac{\\partial x'}{\\partial x}  \\right) \\frac{\\partial y'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial^2 y'}{\\partial x^2} \\\\\n\\end{aligned}\n\\tag{10.3}\\]\n\\[\n\\begin{aligned}\n\\frac{\\partial^2 \\phi}{\\partial y^2}\n& =\n\\frac{\\partial}{\\partial y} \\left( \\frac{\\partial \\phi}{\\partial x'} \\right) \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial^2 x'}{\\partial y^2}\n+\n\\frac{\\partial}{\\partial y} \\left( \\frac{\\partial \\phi}{\\partial y'} \\right) \\frac{\\partial y'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial^2 y'}{\\partial y^2} \\\\\n& =\n\\left( \\frac{\\partial^2\\phi}{\\partial x'^2} \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial^2\\phi}{\\partial y' \\partial x'} \\frac{\\partial y'}{\\partial y}  \\right) \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial^2 x'}{\\partial y^2} \\\\\n& +\n\\left( \\frac{\\partial^2\\phi}{\\partial y'^2} \\frac{\\partial y'}{\\partial y}\n+\n\\frac{\\partial^2\\phi}{\\partial x' \\partial y'} \\frac{\\partial x'}{\\partial y}  \\right) \\frac{\\partial y'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial^2 y'}{\\partial y^2}\n\\end{aligned}\n\\tag{10.4}\\]\nAssuming that \\(\\phi\\) is a differentiable function, by Clauiraut’s lemma\n\\[\n\\frac{\\partial^2 \\phi}{\\partial x' \\partial y'}\n=\n\\frac{\\partial^2 \\phi}{\\partial y' \\partial x'}\n\\tag{10.5}\\]\nAdding the Equation 10.3 and the Equation 10.4\n\\[\n\\begin{aligned}\n\\frac{\\partial^2 \\phi}{\\partial x^2} + \\frac{\\partial^2 \\phi}{\\partial y^2}\n& =\n\\frac{\\partial^2 \\phi}{\\partial x'^2} \\left[ \\left( \\frac{\\partial x'}{\\partial x} \\right)^2 + \\left( \\frac{\\partial x'}{\\partial y} \\right)^2 \\right]\n+\n\\frac{\\partial^2 \\phi}{\\partial y'^2} \\left[ \\left( \\frac{\\partial y'}{\\partial x} \\right)^2 + \\left( \\frac{\\partial y'}{\\partial y} \\right)^2 \\right] \\\\\n& +\n\\frac{\\partial \\phi}{\\partial x'} \\left( \\frac{\\partial^2 x'}{\\partial x^2} + \\frac{\\partial^2 x'}{\\partial y^2} \\right)\n+\n\\frac{\\partial \\phi}{\\partial y'} \\left( \\frac{\\partial^2 y'}{\\partial x^2} + \\frac{\\partial^2 y'}{\\partial y^2} \\right) \\\\\n& =\n2 \\frac{\\partial^2 \\phi}{\\partial y' \\partial x'}\n    \\left(\n        \\frac{\\partial x'}{\\partial x}\\frac{\\partial y'}{\\partial x}\n        + \\frac{\\partial y'}{\\partial y} \\frac{\\partial y'}{\\partial y}\n    \\right)\n\\end{aligned}\n\\tag{10.6}\\]\nIf \\(x'\\) and \\(y'\\) are differentiable and the Cauchy–Riemann equations are satisfied, we have\n\\[\n\\begin{aligned}\n& \\frac{\\partial x'}{\\partial x} = \\frac{\\partial y'}{\\partial y} \\\\\n& \\frac{\\partial y'}{\\partial x} = -\\frac{\\partial x'}{\\partial y}\n\\end{aligned}\n\\tag{10.7}\\]\nand the Jacobian takes the following form\n\\[\n\\begin{aligned}\n\\frac{\\partial (x', y')}{\\partial (x, y)}\n=\n\\text{det}\n\\begin{bmatrix}\n\\frac{\\partial x'}{ \\partial x} & \\frac{\\partial x'}{ \\partial y} \\\\\n\\frac{\\partial y'}{ \\partial x} & \\frac{\\partial y'}{ \\partial y}\n\\end{bmatrix}\n=\n\\left( \\frac{\\partial x'}{ \\partial x} \\right)^2 + \\left( \\frac{\\partial x'}{ \\partial y} \\right)^2\n=\n\\left( \\frac{\\partial y'}{ \\partial x} \\right)^2 + \\left( \\frac{\\partial y'}{ \\partial y} \\right)^2\n\\end{aligned}\n\\tag{10.8}\\]\nFurthermore, apart from the form of the Jacobian, the conditions given in the Cauchy-Riemann equation imply that the functions \\(x'\\) and \\(y'\\) are harmonic, that is, they satisfy:\n\\[\n\\begin{aligned}\n& \\nabla^2 x' = 0 \\\\\n& \\nabla^2 y' = 0\n\\end{aligned}\n\\tag{10.9}\\]\n\\[\n\\frac{\\partial x'}{\\partial x}\\frac{\\partial y'}{\\partial x}\n+\n\\frac{\\partial x'}{\\partial x}\\frac{\\partial y'}{\\partial x}\n\\tag{10.10}\\]\nsubstituting Equation 10.8, Equation 10.9, Equation 10.10 in the Equation 10.6 we obtain\n\\[\n\\begin{aligned}\n\\frac{\\partial^2 \\phi}{\\partial x^2} + \\frac{\\partial^2 \\phi}{\\partial y^2}\n& =\n\\frac{\\partial (x', y')}{\\partial (x, y)}\\left[ \\frac{\\partial^2 \\phi}{\\partial x'^2} + \\frac{\\partial^2 \\phi}{\\partial y'^2} \\right]\n\\end{aligned}\n\\tag{10.11}\\]\nTherefore, for a function to be harmonic in both planes, the transformation\n\\[\nF(x, y) = \\left( x'(x, y), y'(x, y) \\right)\n\\]\nmust satisfy the following conditions",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
     ]
   },
   {
-    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#modeling-approach",
-    "href": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#modeling-approach",
+    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3d.html#two-dimensional-case",
+    "href": "2-writings-and-essays/2-conformal-geometry-in-3d.html#two-dimensional-case",
     "title": "10  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "10.2 Modeling Approach",
-    "text": "10.2 Modeling Approach\nSection.",
+    "section": "",
+    "text": "\\(x'\\) and \\(y'\\) must be differentiable\nthe Cauchy-Riemann conditions\nThe Jacobian must be nonzero",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
     ]
   },
   {
-    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#methodology-and-implementation",
-    "href": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#methodology-and-implementation",
+    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3d.html#three-dimensional-case",
+    "href": "2-writings-and-essays/2-conformal-geometry-in-3d.html#three-dimensional-case",
     "title": "10  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "10.3 Methodology and Implementation",
-    "text": "10.3 Methodology and Implementation\nSection.",
-    "crumbs": [
-      "Writings & Essays",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
-    ]
-  },
-  {
-    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#results-discussion-and-limitations",
-    "href": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#results-discussion-and-limitations",
-    "title": "10  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "10.4 Results, Discussion, and Limitations",
-    "text": "10.4 Results, Discussion, and Limitations\nSection.",
-    "crumbs": [
-      "Writings & Essays",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
-    ]
-  },
-  {
-    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#technical-appendix-optional",
-    "href": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#technical-appendix-optional",
-    "title": "10  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "10.5 Technical Appendix (Optional)",
-    "text": "10.5 Technical Appendix (Optional)\nSection.",
-    "crumbs": [
-      "Writings & Essays",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
-    ]
-  },
-  {
-    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#laplaces-equation",
-    "href": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#laplaces-equation",
-    "title": "10  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "10.6 Laplace’s equation",
-    "text": "10.6 Laplace’s equation\n\\[\n\\nabla^2 \\phi = \\frac{\\partial ^2 \\phi}{\\partial x^2} +\\frac{\\partial ^2 \\phi}{\\partial y^2} + \\frac{\\partial ^2 \\phi}{\\partial z^2} = 0\n\\tag{10.1}\\]",
-    "crumbs": [
-      "Writings & Essays",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"
-    ]
-  },
-  {
-    "objectID": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#conformal-mappings",
-    "href": "2-writings-and-essays/2-conformal-geometry-in-3-d.html#conformal-mappings",
-    "title": "10  Conformal Geometry and Electrostatics in Three Dimensions",
-    "section": "10.7 Conformal Mappings",
-    "text": "10.7 Conformal Mappings\n\n\n\n\n\n\nFigure 10.1: Schematic representation of a conformal transformation \\(f(x,y,z)\\) mapping a region \\(R\\) with boundary \\(\\partial R\\) in the \\((x,y,z)\\) coordinate system into a transformed region \\(R'\\) with boundary \\(\\partial R'\\) in the \\((x',y',z')\\) coordinate system.\n\n\n\nAs shown in Figure 10.1, …\nSuppose we have a region \\(R\\) in \\(xyz\\) space in which a scalar field \\(\\phi\\) satisfies Laplace’s equation Equation 10.1. We want to determine what conditions a transformation \\(f: R \\rightarrow R'\\) must satisfy such that Laplace’s equation remains invariant under this transformation. For simplicity, let’s consider the simplest case in \\(\\mathbb{R}^2\\).\nApplying the chain rule we have that:\n\\[\n\\begin{aligned}\n\\frac{\\partial \\phi}{\\partial x} &=\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial x} \\\\\n\\frac{\\partial \\phi}{\\partial y} &=\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial y}\n\\end{aligned}\n\\tag{10.2}\\]",
+    "section": "10.2 Three-dimensional case",
+    "text": "10.2 Three-dimensional case\nLet’s consider the three-dimensional case\nLet us consider the three-dimensional case, that is, the case in \\(\\mathbb{R}^3\\)\n\\[\n\\begin{aligned}\n&\n\\frac{\\partial \\phi}{\\partial x} =\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial x}\n+\n\\frac{\\partial \\phi}{\\partial z'} \\frac{\\partial z'}{\\partial x}\n\\\\\n&\n\\frac{\\partial \\phi}{\\partial y} =\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial y}\n+\n\\frac{\\partial \\phi}{\\partial z'} \\frac{\\partial z'}{\\partial y}\n\\\\\n&\n\\frac{\\partial \\phi}{\\partial z} =\n\\frac{\\partial \\phi}{\\partial x'} \\frac{\\partial x'}{\\partial z}\n+\n\\frac{\\partial \\phi}{\\partial y'} \\frac{\\partial y'}{\\partial z}\n+\n\\frac{\\partial \\phi}{\\partial z'} \\frac{\\partial z'}{\\partial z}\n\\end{aligned}\n\\tag{10.12}\\]",
     "crumbs": [
       "Writings & Essays",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Conformal Geometry and Electrostatics in Three Dimensions</span>"

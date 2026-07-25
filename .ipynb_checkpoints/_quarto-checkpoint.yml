@@ -44,7 +44,7 @@ book:
       chapters:
         - 2-writings-and-essays/0-overview.qmd
         - 2-writings-and-essays/1-data-science-age-of-hype.qmd
-        - 2-writings-and-essays/2-conformal-geometry-in-3-d.qmd
+        - 2-writings-and-essays/2-conformal-geometry-in-3d.qmd
 
     - references.qmd
 
