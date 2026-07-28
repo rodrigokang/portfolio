@@ -140,4 +140,4 @@ When practiced in this way, Data Science becomes more than a collection of analy
 
 ---
 
-*This chapter also led to a companion article published on Medium. You can read it [here](https://medium.com/@rodrigokang88/data-science-in-the-age-of-hype-4d19943f0398).*
+This chapter also led to a companion article published on Medium. You can read it [here](https://medium.com/@rodrigokang88/data-science-in-the-age-of-hype-4d19943f0398).

@@ -551,4 +551,4 @@ More broadly, this work illustrates a recurring principle in applied mathematics
 
 ---
 
-*This chapter also led to the Medium article *Before Improving the Algorithm, Improve the Problem: A Lesson from Conformal Geometry and Electrostatics in Three Dimensions*. You can read it [here](https://medium.com/@rodrigokang88/before-improving-the-algorithm-improve-the-problem-0dc4c9865f39).*
+This chapter also led to the Medium article *Before Improving the Algorithm, Improve the Problem: A Lesson from Conformal Geometry and Electrostatics in Three Dimensions*. You can read it [here](https://medium.com/@rodrigokang88/before-improving-the-algorithm-improve-the-problem-0dc4c9865f39).
