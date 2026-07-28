@@ -548,3 +548,7 @@ These examples also illustrate the complementary roles of analytical and numeric
 The methodology presented here is inherently limited to geometries for which suitable conformal transformations are available. Nevertheless, many classical electrostatic configurations involving spheres, planes and circles possess precisely the geometric structure required for inversion to be effective. Within this class of problems, the Kelvin transformation offers an elegant bridge between geometry and computation, reducing mathematical complexity while preserving the physical content of the solution.
 
 More broadly, this work illustrates a recurring principle in applied mathematics and scientific computing: an appropriate change of variables can be just as valuable as employing a more sophisticated numerical algorithm. By selecting coordinates adapted to the geometry, an apparently difficult boundary-value problem can often be reformulated so that it can be solved accurately using well-established computational techniques.
+
+---
+
+*This chapter also led to the Medium article *Before Improving the Algorithm, Improve the Problem: A Lesson from Conformal Geometry and Electrostatics in Three Dimensions*. You can read it [here](https://medium.com/@rodrigokang88/before-improving-the-algorithm-improve-the-problem-0dc4c9865f39).*

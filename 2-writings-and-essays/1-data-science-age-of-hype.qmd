@@ -138,4 +138,6 @@ What endures is something far more fundamental: the scientific mindset that unde
 
 When practiced in this way, Data Science becomes more than a collection of analytical techniques—it becomes a modern expression of the scientific method applied to data-rich environments. Its true power lies not in automation or predictive accuracy alone, but in its capacity to transform data into knowledge and knowledge into better decisions. In the end, the enduring value of Data Science does not come from the sophistication of its tools, but from the rigor of the thinking that guides their use.
 
-The original version is available on Medium [here](https://medium.com/@rodrigokang88/data-science-in-the-age-of-hype-4d19943f0398).
+---
+
+*This chapter also led to a companion article published on Medium. You can read it [here](https://medium.com/@rodrigokang88/data-science-in-the-age-of-hype-4d19943f0398).*
