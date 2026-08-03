@@ -387,3 +387,17 @@ The situation changes when the payoff depends on the entire history of the asset
 From this perspective, the implementation developed in this project can be viewed as a simplified introduction to a broader class of numerical techniques. The Monte Carlo and Metropolis-Hastings algorithms operate on the terminal distribution because the European call option permits this reduction. More complex derivatives would generally require sampling higher-dimensional objects, including entire asset-price trajectories.
 
 The objective of this chapter was not to build a complete path integral pricing engine, but rather to investigate whether ideas originating from the path integral framework could be translated into a practical computational workflow. The results suggest that, for simple European options, direct Monte Carlo simulation remains the most efficient approach among those considered. At the same time, the project establishes a foundation for exploring more sophisticated derivatives in which the trajectory itself becomes the central object of interest.
+
+## Further Reading
+
+::: {.content-visible when-format="html"}
+
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available [<i class="bi bi-file-earmark-pdf"></i>](../personal-notes/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf).
+ 
+:::
+
+::: {.content-visible when-format="pdf"}
+
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf}{\faFilePdf}.
+
+:::
