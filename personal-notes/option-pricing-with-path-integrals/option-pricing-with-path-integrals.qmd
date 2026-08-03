@@ -1603,7 +1603,7 @@ Algorithm @alg-metropolis-hastings summarizes the complete procedure.
 
 ::: {#alg-metropolis-hastings}
 
-**Algorithm. Metropolis–Hastings sampling**
+**Metropolis–Hastings sampling**
 
 **Input**
 
