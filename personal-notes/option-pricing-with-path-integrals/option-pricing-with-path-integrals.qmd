@@ -12,19 +12,20 @@ csl: ieee.csl
 nocite: |
   @black1973pricing
   @merton1973theory
-  @dash1989path
   @linetsky1997path
-  @devreese2010path
-  @capuozzo2021path
   @feynman2010quantum
-  @sakurai1995modern
-  @schaposnik2014cuantica
-  @falomir2021integrales
   @wiener1921average
+  @dash1989path
+  @ziemann2021physics
+  @capuozzo2021path
+  @devreese2010path
+  @montagna2002path
+  @baaquie2007quantum
   @cowan1998statistical
-  @rubinstein2016simulation
-  @press2007numerical
+  @sakurai1995modern
   @burden2011numerical
+  @press2007numerical
+  @rubinstein2016simulation
 
 format:
   pdf:
