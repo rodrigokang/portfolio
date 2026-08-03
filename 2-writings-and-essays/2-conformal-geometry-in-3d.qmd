@@ -549,6 +549,18 @@ The methodology presented here is inherently limited to geometries for which sui
 
 More broadly, this work illustrates a recurring principle in applied mathematics and scientific computing: an appropriate change of variables can be just as valuable as employing a more sophisticated numerical algorithm. By selecting coordinates adapted to the geometry, an apparently difficult boundary-value problem can often be reformulated so that it can be solved accurately using well-established computational techniques.
 
----
+## Further Reading
 
 This chapter also led to the Medium article *Before Improving the Algorithm, Improve the Problem: A Lesson from Conformal Geometry and Electrostatics in Three Dimensions*. You can read it [here](https://medium.com/@rodrigokang88/before-improving-the-algorithm-improve-the-problem-0dc4c9865f39).
+
+::: {.content-visible when-format="html"}
+
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available [<i class="bi bi-file-earmark-pdf"></i>](../personal-notes/conformal-geometry-in-3d/conformal-geometry-in-3d.pdf).
+ 
+:::
+
+::: {.content-visible when-format="pdf"}
+
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/conformal-geometry-in-3d/conformal-geometry-in-3d.pdf}{\faGithub}.
+
+:::

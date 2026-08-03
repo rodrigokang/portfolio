@@ -1,0 +1,9 @@
+Metric,Value
+Bottom Dirichlet error,0.0
+Left Dirichlet error,0.0
+Right Neumann error,0.0
+Top Neumann error,0.0
+Transformed symmetry error,1.362243651215067e-13
+Original symmetry error,1.362243651215067e-13
+Minimum original potential,0.0
+Maximum original potential,1.0
