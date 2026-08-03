@@ -66,7 +66,7 @@ This perspective turns Data Science into a **practical enactment of the Hypothet
 
 Consider the problem of **customer churn** in retail. A predictive model might accurately identify customers at risk of leaving based solely on behavioral correlations a purely inductive exercise. But if the goal is to determine whether a discount campaign will *reduce* churn, prediction alone is insufficient. The data scientist must investigate—and, when possible, formalize—**causal models** capturing how interventions alter outcomes. Prediction answers *who* is likely to churn; causality answers *why* and *what we can do about it*.
 
-Under the Hypothetico-Deductive paradigm, this iterative cycle can be summarized visually, as shown in @fig-hd_algorithm, and is typically composed of the following stages:
+Under the Hypothetico-Deductive paradigm, this iterative cycle can be summarized visually, as shown in @fig-hd-algorithm, and is typically composed of the following stages:
 
 - **Systematic observation** of a phenomenon
 - **Formulation of hypotheses** or models to explain observed patterns
@@ -74,35 +74,7 @@ Under the Hypothetico-Deductive paradigm, this iterative cycle can be summarized
 - **Empirical evaluation** of predictions via new data
 - **Revision or replacement** of hypotheses based on the evidence collected
 
-```{mermaid}
-%%| label: fig-hd_algorithm
-%%| fig-cap: "The hypothetico-deductive method as an iterative loop: observations motivate hypotheses (induction); hypotheses yield testable predictions (deduction); empirical results either support or challenge the hypothesis, leading to theory formation or revision and ultimately to new questions that restart the process."
-%%| fig-width: 5
-%%| fig-height: 7
-graph TB
-    A[Observations<br/>&<br/>Patterns in Nature]
-    C[Hypothesis]
-    D[Testable Predictions]
-    E[Experimentation<br/>&<br/>Data Collection]
-    F{Analysis of Results<br/>&<br/>Evaluation}
-    G[Hypothesis Supported]
-    H[Hypothesis Revised or Rejected]
-    T[Theory Development<br/>&<br/>Models]
-    Q[New Questions<br/>&<br/>Anomalies]
-    J[Revision or New Hypothesis]
-
-    A -->|Induction| C
-    C -->|Deduction| D
-    D --> E
-    E --> F
-    F -->|Corroboration| G
-    F -->|Falsification| H
-    G --> T
-    T --> Q
-    Q -->|New Observations| A
-    H --> J
-    J --> C
-```
+![The hypothetico-deductive method as an iterative loop: observations motivate hypotheses (induction); hypotheses yield testable predictions (deduction); empirical results either support or challenge the hypothesis, leading to theory formation or revision and ultimately to new questions that restart the process.](figures/hypothetico-deductive-method.png){#fig-hd-algorithm}
 
 Viewed from this angle, the role of a data scientist extends far beyond executing algorithms or statistical routines. It is the **iterative application of the scientific method** across diverse business contexts generating hypotheses, building predictive and causal models, confronting them with evidence, and allowing data to arbitrate which explanations survive. Data Science thus emerges not merely as a technical discipline, but as the **contemporary expression of scientific thinking** applied to data-rich environments, where distinguishing correlation from causation and prediction from explanation defines true professional excellence.
 

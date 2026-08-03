@@ -90,10 +90,6 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
-<meta name="mermaid-theme" content="default">
-<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -343,7 +339,7 @@ div.csl-indent {
 <p>Machine learning, by contrast, operationalizes the deductive stage of scientific reasoning through <strong>predictive validation</strong>. Each model can be viewed as a hypothesis about the functional relationship between predictors and outcomes. Training a model corresponds to formulating the hypothesis; evaluating it on unseen data corresponds to testing its empirical consequences. Performance metrics quantify how well the model withstands empirical scrutiny, and failures become informative, guiding the reformulation or replacement of the underlying hypothesis.</p>
 <p>This perspective turns Data Science into a <strong>practical enactment of the Hypothetico-Deductive Method</strong>. It combines inductive discovery of structure within data with deductive testing of the predictive consequences of that structure. More importantly, it enables Data Science to progress from mere correlation to <strong>genuine explanation</strong>, seeking models that capture mechanisms rather than patterns alone.</p>
 <p>Consider the problem of <strong>customer churn</strong> in retail. A predictive model might accurately identify customers at risk of leaving based solely on behavioral correlations a purely inductive exercise. But if the goal is to determine whether a discount campaign will <em>reduce</em> churn, prediction alone is insufficient. The data scientist must investigate—and, when possible, formalize—<strong>causal models</strong> capturing how interventions alter outcomes. Prediction answers <em>who</em> is likely to churn; causality answers <em>why</em> and <em>what we can do about it</em>.</p>
-<p>Under the Hypothetico-Deductive paradigm, this iterative cycle can be summarized visually, as shown in <a href="#fig-hd_algorithm" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>, and is typically composed of the following stages:</p>
+<p>Under the Hypothetico-Deductive paradigm, this iterative cycle can be summarized visually, as shown in <a href="#fig-hd-algorithm" class="quarto-xref">Figure&nbsp;<span>9.1</span></a>, and is typically composed of the following stages:</p>
 <ul>
 <li><strong>Systematic observation</strong> of a phenomenon</li>
 <li><strong>Formulation of hypotheses</strong> or models to explain observed patterns</li>
@@ -351,44 +347,15 @@ div.csl-indent {
 <li><strong>Empirical evaluation</strong> of predictions via new data</li>
 <li><strong>Revision or replacement</strong> of hypotheses based on the evidence collected</li>
 </ul>
-<div class="cell" data-fig-width="5" data-fig-height="7" data-layout-align="default">
-<div class="cell-output-display">
-<div id="fig-hd_algorithm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-hd-algorithm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-hd_algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div>
-<pre class="mermaid mermaid-js" data-label="fig-hd_algorithm">graph TB
-    A[Observations&lt;br/&gt;&amp;&lt;br/&gt;Patterns in Nature]
-    C[Hypothesis]
-    D[Testable Predictions]
-    E[Experimentation&lt;br/&gt;&amp;&lt;br/&gt;Data Collection]
-    F{Analysis of Results&lt;br/&gt;&amp;&lt;br/&gt;Evaluation}
-    G[Hypothesis Supported]
-    H[Hypothesis Revised or Rejected]
-    T[Theory Development&lt;br/&gt;&amp;&lt;br/&gt;Models]
-    Q[New Questions&lt;br/&gt;&amp;&lt;br/&gt;Anomalies]
-    J[Revision or New Hypothesis]
-
-    A --&gt;|Induction| C
-    C --&gt;|Deduction| D
-    D --&gt; E
-    E --&gt; F
-    F --&gt;|Corroboration| G
-    F --&gt;|Falsification| H
-    G --&gt; T
-    T --&gt; Q
-    Q --&gt;|New Observations| A
-    H --&gt; J
-    J --&gt; C
-</pre>
+<div aria-describedby="fig-hd-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/hypothetico-deductive-method.png" class="img-fluid figure-img">
 </div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hd_algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hd-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9.1: The hypothetico-deductive method as an iterative loop: observations motivate hypotheses (induction); hypotheses yield testable predictions (deduction); empirical results either support or challenge the hypothesis, leading to theory formation or revision and ultimately to new questions that restart the process.
 </figcaption>
 </figure>
-</div>
-</div>
 </div>
 <p>Viewed from this angle, the role of a data scientist extends far beyond executing algorithms or statistical routines. It is the <strong>iterative application of the scientific method</strong> across diverse business contexts generating hypotheses, building predictive and causal models, confronting them with evidence, and allowing data to arbitrate which explanations survive. Data Science thus emerges not merely as a technical discipline, but as the <strong>contemporary expression of scientific thinking</strong> applied to data-rich environments, where distinguishing correlation from causation and prediction from explanation defines true professional excellence.</p>
 </section>
