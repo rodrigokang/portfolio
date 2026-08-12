@@ -1,0 +1,3 @@
+This is the first txt file we wrote
+and we are doing it from Jupyter notebook!
+Y esta última línea se ha añadido posteriormente.

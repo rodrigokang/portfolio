@@ -1,0 +1,31 @@
+{
+    "0":{
+        "Producto": "Bolígrafo",
+        "Precio": "1.80",
+        "Cantidad": "3"
+    },
+    
+    "1":{
+        "Producto": "Lápiz",
+        "Precio": "0.30",
+        "Cantidad": "2"
+    },
+    
+    "2":{
+        "Producto": "Libreta",
+        "Precio": "5.20",
+        "Cantidad": "1"
+    },
+    
+    "3":{
+        "Producto": "Agenda",
+        "Precio": "9.99",
+        "Cantidad": "1"
+    },
+    
+    "4":{
+        "Producto": "Rotulador",
+        "Precio": "1.15",
+        "Cantidad": "5"
+    }
+}

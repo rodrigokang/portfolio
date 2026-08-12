@@ -1,0 +1,4 @@
+# To ignore files, save the name in this file
+
+ignore1.sh
+*.txt
