@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -27,15 +27,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="introduction-to-machine-learning_files/libs/clipboard/clipboard.min.js"></script>
 <script src="introduction-to-machine-learning_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="introduction-to-machine-learning_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="introduction-to-machine-learning_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="introduction-to-machine-learning_files/libs/quarto-html/popper.min.js"></script>
 <script src="introduction-to-machine-learning_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="introduction-to-machine-learning_files/libs/quarto-html/anchor.min.js"></script>
 <link href="introduction-to-machine-learning_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="introduction-to-machine-learning_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="introduction-to-machine-learning_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="introduction-to-machine-learning_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="introduction-to-machine-learning_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="introduction-to-machine-learning_files/libs/bootstrap/bootstrap-0df8dfdce555b5e457e6102d33c50900.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="introduction-to-machine-learning_files/libs/bootstrap/bootstrap-6e70023e03052827610af39d5bd37d6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -48,7 +47,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#machine-learning-modelling" id="toc-machine-learning-modelling" class="nav-link active" data-scroll-target="#machine-learning-modelling"><span class="header-section-number">1</span> Machine Learning Modelling</a></li>
+  <li><a href="#from-data-to-models" id="toc-from-data-to-models" class="nav-link active" data-scroll-target="#from-data-to-models"><span class="header-section-number">1</span> From Data to Models</a></li>
+  <li><a href="#machine-learning-modelling" id="toc-machine-learning-modelling" class="nav-link" data-scroll-target="#machine-learning-modelling"><span class="header-section-number">2</span> Machine Learning Modelling</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="introduction-to-machine-learning.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
 </div>
@@ -80,8 +80,61 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="machine-learning-modelling" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Machine Learning Modelling</h1>
+<section id="from-data-to-models" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> From Data to Models</h1>
+<p>The maxim commonly attributed to the English philosopher <a href="https://en.wikipedia.org/wiki/Francis_Bacon">Francis Bacon</a>, <strong><em>scientia potentia est</em></strong> — <a href="https://en.wikipedia.org/wiki/Knowledge_is_power"><em>knowledge is power</em></a> — provides a useful starting point for understanding both the scope and the limitations of what we now call <strong>Data Science</strong>. Although nothing resembling the modern discipline existed in Bacon’s time, his view of knowledge contains the germ of an idea that remains fundamental to Data Science: claims about the world should ultimately be accountable to empirical evidence.</p>
+<p>The debate over how human beings acquire knowledge long predates Bacon. It can be traced back to Greek philosophy, particularly Plato and Aristotle, and was later developed by medieval scholasticism through the <strong>problem of universals</strong> and the opposition between realism and nominalism. Bacon, however, placed particular emphasis on experience. He argued that scientific knowledge should be grounded in careful and systematic observation of nature, with <strong>inductive reasoning</strong> playing a central role in moving from particular observations towards more general claims. Although the specific procedures of the Baconian method did not have a lasting influence, the broader principles behind his approach were highly influential in the development of scientific methodology. For this reason, Bacon is commonly regarded as one of the founders of the scientific method and as the father of empiricism.</p>
+<p>This distinction provides a useful conceptual starting point for Data Science. We can separate two closely related components of the process of acquiring knowledge: the <strong>empirical evidence</strong> obtained from observations, represented by data, and the conceptual or mathematical structures through which we interpret that evidence, represented by models.</p>
+<p>In this context, a useful working definition is:</p>
+<blockquote class="blockquote">
+<p><strong>A model is an abstract and simplified representation of some aspect of reality.</strong></p>
+</blockquote>
+<p>This definition immediately establishes an important principle: <strong>models must be fitted to the data, not the data to the models</strong>.</p>
+<p>Data are not reality itself. They are observations or measurements of reality and may contain noise, measurement error, sampling bias, or other imperfections. Nevertheless, they constitute the empirical evidence against which our models must be evaluated. If a model is inconsistent with the available evidence, we should question, revise, or replace the model rather than manipulate the evidence merely to preserve it.</p>
+<p>Moreover, there is generally no single model capable of completely representing a phenomenon. Different models may capture different aspects of the same underlying process, rely on different assumptions, or provide different trade-offs between simplicity, interpretability, and predictive performance. Models should therefore be regarded as provisional representations that can be refined or replaced as new evidence becomes available.</p>
+<p>This relationship between data and models is summarised in <a href="#fig-data-and-models" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div id="fig-data-and-models" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-data-and-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/data-and-models.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-data-and-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Models are fitted to data: empirical evidence constrains the model, rather than the model determining the evidence.
+</figcaption>
+</figure>
+</div>
+<p>This emphasis on empirical evidence does not diminish the importance of constructing models to interpret the data. On the contrary, model construction is an essential part of scientific reasoning. To understand why, it is useful to return to the distinction between <strong>induction</strong> and <strong>deduction</strong>.</p>
+<p>Inductive reasoning allows us to move from particular observations towards more general hypotheses. It is therefore crucial for recognising patterns and generating explanations. However, induction has a fundamental limitation: observations can <em>support</em> a general conclusion, but they can never <em>prove</em> its universal truth with logical certainty.</p>
+<p>This difficulty was famously formulated by David Hume in the eighteenth century and is known as the <a href="https://en.wikipedia.org/wiki/Problem_of_induction"><strong><em>problem of induction</em></strong></a>. Past observations, however numerous or consistent, do not logically guarantee that the same regularity will continue to hold in the future.</p>
+<p>A well-known illustration of this problem is the <a href="https://en.wikipedia.org/wiki/Turkey_illusion"><strong><em>turkey illusion</em></strong></a>, a variation of an example originally introduced by Bertrand Russell using a chicken. Consider a turkey that observes that every morning its owner brings it food. After hundreds of consistent observations — on rainy days and sunny days, in warm weather and cold — the turkey becomes increasingly confident that it will continue to be fed every morning. Yet one day, instead of being fed, it is slaughtered. A single event contradicts a conclusion that appeared to be supported by an overwhelming amount of previous evidence.</p>
+<p>The lesson is fundamental: no number of past observations can logically guarantee the truth of a universal claim about the future. The turkey’s mistake was not that it relied on observations, but that it extrapolated an observed regularity without understanding the underlying mechanism responsible for it — in this case, the intentions of the person feeding it.</p>
+<p>Karl Popper developed this problem further by emphasising <strong>falsifiability</strong>. Induction cannot establish a universal scientific theory as certainly true merely by accumulating confirming observations, whereas evidence inconsistent with its predictions may provide grounds for rejecting or revising it. In practice, scientific testing is more complicated than a single observation mechanically falsifying an entire theory, but the underlying principle remains important: scientific models must expose themselves to empirical testing.</p>
+<p>None of this implies that induction is a poor method of reasoning. It serves a different purpose. Induction remains essential for identifying patterns and generating hypotheses and conjectures. It can be understood in probabilistic rather than absolute terms: observations can increase or decrease the degree of support for a hypothesis without certifying its truth.</p>
+<p>Scientific inquiry therefore combines <strong>induction</strong> and <strong>deduction</strong>. Induction helps us move from observations towards hypotheses; deduction allows us to derive testable predictions from those hypotheses and compare them with empirical evidence. Successful predictions provide support for a hypothesis under the conditions tested, but they do not establish it as an absolute truth. Failed predictions may require the hypothesis, its assumptions, or even the experimental procedure to be reconsidered.</p>
+<p>For our purposes, the scientific process can be usefully represented through a <strong>hypothetico-deductive cycle</strong>, consisting broadly of the following stages:</p>
+<ul>
+<li><strong>Systematic observation</strong> of a phenomenon.</li>
+<li><strong>Formulation of hypotheses or models</strong> to explain the observed patterns.</li>
+<li><strong>Deduction of testable predictions</strong> from those hypotheses.</li>
+<li><strong>Empirical evaluation</strong> of the predictions using new observations or data.</li>
+<li><strong>Revision, refinement, or replacement</strong> of the hypotheses in light of the evidence.</li>
+</ul>
+<p><a href="#fig-hd-algorithm" class="quarto-xref">Figure&nbsp;2</a> illustrates this iterative process.</p>
+<div id="fig-hd-algorithm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hd-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/hypothetico-deductive-method.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hd-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: The hypothetico-deductive method. Observations motivate hypotheses through induction; hypotheses generate testable predictions through deduction; empirical results support or challenge those hypotheses, leading to theory development or revision and, ultimately, to new questions that restart the process.
+</figcaption>
+</figure>
+</div>
+<p>The construction of useful models is, of course, considerably more difficult than this simplified representation might suggest. Choosing an appropriate representation, defining an objective, estimating model parameters, evaluating performance, and determining whether the resulting model generalises beyond the observed data introduce a new set of problems.</p>
+<p>For this reason, the process of building models deserves separate treatment and is the subject of the next section.</p>
+</section>
+<section id="machine-learning-modelling" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Machine Learning Modelling</h1>
 </section>
 
 </main>
@@ -137,14 +190,13 @@ ul.task-list li input[type="checkbox"] {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
