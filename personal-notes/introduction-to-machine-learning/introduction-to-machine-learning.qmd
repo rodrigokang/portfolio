@@ -54,7 +54,7 @@ editor: visual
 
 # From Data to Models
 
-The maxim commonly attributed to the English philosopher [Francis Bacon](https://en.wikipedia.org/wiki/Francis_Bacon), ***scientia potentia est*** — [*knowledge is power*](https://en.wikipedia.org/wiki/Knowledge_is_power) — provides a useful starting point for understanding both the scope and the limitations of what we now call **Data Science**. Although nothing resembling the modern discipline existed in Bacon's time, his view of knowledge contains the germ of an idea that remains fundamental to Data Science: claims about the world should ultimately be accountable to empirical evidence.
+The maxim commonly attributed to the English philosopher [Francis Bacon](https://en.wikipedia.org/wiki/Francis_Bacon), ***scientia potentia est*** — [*knowledge is power*](https://en.wikipedia.org/wiki/Knowledge_is_power) — provides a useful starting point for understanding both the scope and the limitations of what we now call **Data Science**. Although nothing resembling the modern discipline existed in Bacon's time, his view of knowledge contains the seed of an idea that remains fundamental to Data Science: claims about the world should ultimately be accountable to empirical evidence.
 
 The debate over how human beings acquire knowledge long predates Bacon. It can be traced back to Greek philosophy, particularly Plato and Aristotle, and was later developed by medieval scholasticism through the **problem of universals** and the opposition between realism and nominalism. Bacon, however, placed particular emphasis on experience. He argued that scientific knowledge should be grounded in careful and systematic observation of nature, with **inductive reasoning** playing a central role in moving from particular observations towards more general claims. Although the specific procedures of the Baconian method did not have a lasting influence, the broader principles behind his approach were highly influential in the development of scientific methodology. For this reason, Bacon is commonly regarded as one of the founders of the scientific method and as the father of empiricism.
 
@@ -107,3 +107,4 @@ The construction of useful models is, of course, considerably more difficult tha
 For this reason, the process of building models deserves separate treatment and is the subject of the next section.
 
 # Machine Learning Modelling
+
