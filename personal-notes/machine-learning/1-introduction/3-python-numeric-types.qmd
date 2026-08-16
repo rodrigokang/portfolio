@@ -1,0 +1,1495 @@
+---
+title: "Python numeric types"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Boolean Values and Propositional Logic
+
+Many computational decisions can be expressed in terms of two logical states: **true** or **false**. Python represents these states through the Boolean type, `bool`, whose two possible values are `True` and `False`.
+
+Boolean values provide the basis for conditions, comparisons, logical expressions, and control flow. Their conceptual foundation can be understood through **propositional logic**, the formal system used to reason about statements and their truth values.
+
+A **proposition** is a declarative statement to which a definite truth value can be assigned. Propositions are commonly represented symbolically by letters such as $p$, $q$, and $r$. For example:
+
+- "7 is a prime number" is a true proposition.
+- "2 + 3 = 6" is a false proposition.
+
+The essential characteristic is that each proposition is assigned one of two truth values: **true** or **false**. Boolean logic provides operations for combining and transforming these truth values, forming the logical basis of conditional computation.
+
+In Python, a Boolean value can be assigned directly:
+
+```{python}
+p = True
+
+type(p)
+```
+
+The built-in `type()` function returns the type of an object. In this case, `p` refers to an object of type `bool`.
+
+```{python}
+q = False
+
+type(q)
+```
+
+An implementation detail worth noting is that Python's `bool` type is a subclass of `int`. Consequently, `True` and `False` behave numerically as `1` and `0` in appropriate contexts:
+
+```{python}
+print(int(True))
+print(int(False))
+
+print(True == 1)
+print(False == 0)
+```
+
+Despite this relationship, Boolean values should generally be interpreted according to their logical meaning rather than treated simply as integers.
+
+## Logical Operators and Truth Tables
+
+Propositional logic defines operations that transform or combine truth values. Three fundamental operations correspond directly to Python's `not`, `and`, and `or` operators.
+
+### Negation
+
+The **negation** of a proposition $p$, denoted $\neg p$, reverses its truth value.
+
+| $p$   | $\neg p$ |
+|:-----:|:--------:|
+| True  | False    |
+| False | True     |
+
+: Truth table for logical negation. {#tbl-logical-negation}
+
+Python represents logical negation with the `not` operator:
+
+```{python}
+p = True
+
+not p
+```
+
+```{python}
+q = False
+
+not q
+```
+
+### Conjunction
+
+The **conjunction** of two propositions, denoted $p \land q$, is true only when both propositions are true.
+
+| $p$   | $q$   | $p \land q$ |
+|:-----:|:-----:|:-----------:|
+| True  | True  | True        |
+| True  | False | False       |
+| False | True  | False       |
+| False | False | False       |
+
+: Truth table for logical conjunction. {#tbl-logical-conjunction}
+
+Python represents conjunction with the `and` operator:
+
+```{python}
+p = True
+q = True
+
+p and q
+```
+
+Logical expressions can be combined:
+
+```{python}
+p and (not q)
+```
+
+### Disjunction
+
+The **disjunction** of two propositions, denoted $p \lor q$, is true when at least one of the propositions is true.
+
+| $p$   | $q$   | $p \lor q$ |
+|:-----:|:-----:|:----------:|
+| True  | True  | True       |
+| True  | False | True       |
+| False | True  | True       |
+| False | False | False      |
+
+: Truth table for logical disjunction. {#tbl-logical-disjunction}
+
+Python represents disjunction with the `or` operator:
+
+```{python}
+p = False
+q = False
+
+p or q
+```
+
+```{python}
+(not p) or q
+```
+
+These operators provide the logical machinery required to construct more complex conditions and decision rules.
+
+## Comparison Operators
+
+Boolean values are frequently produced by **comparison expressions**. Python provides several comparison operators:
+
+| Operator | Meaning                  |
+|:--------:|:------------------------:|
+| `>`      | Greater than             |
+| `>=`     | Greater than or equal to |
+| `<`      | Less than                |
+| `<=`     | Less than or equal to    |
+| `==`     | Equal to                 |
+| `!=`     | Not equal to             |
+
+: Comparison operators in Python. {#tbl-comparison-operators}
+
+Each comparison evaluates to a Boolean value:
+
+```{python}
+print(7 == 7.0)
+print(3.14 > 9)
+print(7 != "7")
+print(0.01 <= 1)
+```
+
+Python considers `7` and `7.0` numerically equal even though they have different types:
+
+```{python}
+print(7 == 7.0)
+print(type(7))
+print(type(7.0))
+```
+
+By contrast, the integer `7` and the string `"7"` represent different kinds of information and do not compare as equal:
+
+```{python}
+7 == "7"
+```
+
+Comparisons can be combined with logical operators to construct compound conditions:
+
+```{python}
+age = 17
+
+(age >= 16) and (age <= 40)
+```
+
+Python also supports **chained comparisons**, providing a more concise representation of the same condition:
+
+```{python}
+16 <= age <= 40
+```
+
+Both expressions evaluate whether `age` lies between the specified limits.
+
+# Integers and Floating-Point Numbers
+
+Numerical computation requires a representation of mathematical quantities within the finite resources of a computer.
+
+Consider the area of a circle:
+
+$$
+A = \pi r^2.
+$$ {#eq-circle-area}
+
+Here, $r$ represents the radius and $\pi$ is an irrational number whose decimal expansion begins with $3.14159\ldots$ and continues indefinitely without repeating.
+
+A computer, however, has finite memory and cannot store an arbitrary real number with infinitely many digits. This introduces a fundamental distinction between **mathematical numbers** and their **computational representations**.
+
+Python provides two principal built-in types for ordinary real-valued numerical computation:
+
+- `int` for integers;
+- `float` for floating-point numbers.
+
+Python also provides the `complex` type for complex-valued computation, which will be considered separately.
+
+## Integers
+
+The `int` type represents integer values:
+
+```{python}
+x = 5
+
+type(x)
+```
+
+Integers may be positive, negative, or zero:
+
+```{python}
+a = 100
+b = -25
+c = 0
+
+print(type(a))
+print(type(b))
+print(type(c))
+```
+
+Python integers support arbitrary precision: their size is not restricted to a fixed 32-bit or 64-bit range. In practice, the maximum size of an integer is constrained primarily by available memory.
+
+## Floating-Point Numbers
+
+The `float` type represents floating-point numbers:
+
+```{python}
+x = 3.14
+
+type(x)
+```
+
+A number containing a decimal point is interpreted as a `float`:
+
+```{python}
+print(type(5))
+print(type(5.0))
+```
+
+Python also accepts a trailing decimal point:
+
+```{python}
+print(type(3.0))
+print(type(3.))
+```
+
+Both `3.0` and `3.` represent the same floating-point value.
+
+The `int()` and `float()` constructors can be used for explicit numeric conversion:
+
+```{python}
+print(float(3))
+print(int(7.0))
+```
+
+Converting an integer to a floating-point number preserves its numerical value for integers that can be represented exactly within the available floating-point precision:
+
+```{python}
+float(7)
+```
+
+Converting a floating-point number to an integer discards the fractional part by truncating toward zero:
+
+```{python}
+print(int(3.5))
+print(int(-3.5))
+```
+
+This is not equivalent to rounding to the nearest integer.
+
+## Arithmetic Operations
+
+Python provides the standard arithmetic operators for numerical computation:
+
+| Operator | Operation      |
+|:--------:|:--------------:|
+| `+`      | Addition       |
+| `-`      | Subtraction    |
+| `*`      | Multiplication |
+| `/`      | True division  |
+| `//`     | Floor division |
+| `%`      | Modulo         |
+| `**`     | Exponentiation |
+
+: Arithmetic operators in Python. {#tbl-arithmetic-operators}
+
+For example:
+
+```{python}
+x = 7
+y = 3
+
+print(x + y)
+print(x - y)
+print(x * y)
+print(x / y)
+print(x // y)
+print(x % y)
+print(x ** y)
+```
+
+The `/` operator performs **true division** and returns a floating-point result:
+
+```{python}
+8 / 2
+```
+
+even when the mathematical result is an integer.
+
+The `//` operator performs **floor division**:
+
+```{python}
+7 // 2
+```
+
+It is important to distinguish floor division from simple truncation toward zero, particularly for negative values:
+
+```{python}
+-7 // 2
+```
+
+The result is `-4`, because floor division returns the floor of the quotient.
+
+The `%` operator returns the corresponding remainder:
+
+```{python}
+7 % 3
+```
+
+Floor division and modulo satisfy the relationship
+
+$$
+x = \left(x // y\right)y + \left(x \% y\right).
+$$ {#eq-floor-division-modulo}
+
+Exponentiation is performed with `**`:
+
+```{python}
+2 ** 3
+```
+
+Python also provides the built-in `pow()` function:
+
+```{python}
+pow(2, 3)
+```
+
+For ordinary two-argument use, both expressions compute $2^3$.
+
+# Decimal, Binary, and Positional Notation
+
+Understanding numerical representation begins with the **positional numeral system**. In a positional system, the value represented by a digit depends not only on the digit itself but also on its position within the numeral.
+
+The number of distinct digits available in a positional numeral system determines its **base**, conventionally denoted by $b$. Common systems include:
+
+| Base | Number system | Digits           |
+|:----:|:-------------:|:----------------:|
+| $2$  | Binary        | `0`, `1`         |
+| $8$  | Octal         | `0`–`7`          |
+| $10$ | Decimal       | `0`–`9`          |
+| $16$ | Hexadecimal   | `0`–`9`, `A`–`F` |
+
+: Common positional numeral systems. {#tbl-positional-systems}
+
+For a base $b$, a numeral with digits
+
+$$
+d_n d_{n-1} \ldots d_2 d_1 d_0
+$$
+
+represents the value
+
+$$
+\sum_{k=0}^{n} d_k b^k,
+$$ {#eq-positional-integer}
+
+where each digit satisfies
+
+$$
+0 \leq d_k < b.
+$$
+
+For example, the decimal number $472$ can be written as
+
+$$
+472
+=
+4 \times 10^2
++
+7 \times 10^1
++
+2 \times 10^0.
+$$ {#eq-decimal-expansion}
+
+The same principle applies in binary. The binary numeral $1011_2$ represents
+
+$$
+1011_2
+=
+1 \times 2^3
++
+0 \times 2^2
++
+1 \times 2^1
++
+1 \times 2^0
+=
+11_{10}.
+$$ {#eq-binary-expansion}
+
+Binary representation is particularly important in computing because digital systems ultimately encode information using two distinguishable states, conventionally represented as `0` and `1`.
+
+Python allows integer literals to be expressed directly in several bases:
+
+```{python}
+decimal_value = 11
+binary_value = 0b1011
+octal_value = 0o13
+hexadecimal_value = 0xB
+
+print(decimal_value)
+print(binary_value)
+print(octal_value)
+print(hexadecimal_value)
+```
+
+Although these literals use different numeral systems in the source code, they represent the same integer value:
+
+```{python}
+decimal_value == binary_value == octal_value == hexadecimal_value
+```
+
+Python also provides built-in functions for obtaining string representations of integers in different bases:
+
+```{python}
+x = 11
+
+print(bin(x))
+print(oct(x))
+print(hex(x))
+```
+
+The positional principle extends naturally to fractional values. Digits to the right of the radix point correspond to negative powers of the base. In decimal notation, for example,
+
+$$
+0.125
+=
+1 \times 10^{-1}
++
+2 \times 10^{-2}
++
+5 \times 10^{-3}.
+$$ {#eq-decimal-fraction}
+
+In binary,
+
+$$
+0.101_2
+=
+1 \times 2^{-1}
++
+0 \times 2^{-2}
++
+1 \times 2^{-3}
+=
+0.625_{10}.
+$$ {#eq-binary-fraction}
+
+This extension from integer to fractional positional representation provides the foundation for understanding how real-valued quantities can be approximated computationally. Because a computer has finite storage, not every real number—and not even every finite decimal fraction—can be represented exactly using a finite binary expansion. This limitation leads directly to **floating-point representation and floating-point arithmetic**.
+
+## Floating-Point Representation
+
+A computer can store only a finite amount of information. Consequently, while integers can be represented exactly within the available computational resources, arbitrary real numbers generally cannot. Many real numbers require infinitely many digits, and even some numbers with finite decimal representations have infinite representations in binary.
+
+For example, the decimal fraction $0.125$ has the finite binary representation
+
+$$
+0.125_{10} = 0.001_2,
+$$ {#eq-exact-binary-fraction}
+
+because
+
+$$
+0.001_2 = 1 \times 2^{-3} = \frac{1}{8}.
+$$
+
+By contrast, the decimal number $0.1$ cannot be represented by a finite binary fraction. Its binary expansion continues indefinitely:
+
+$$
+0.1_{10} = 0.00011001100110011\ldots_2.
+$$ {#eq-inexact-binary-fraction}
+
+A finite computer representation must therefore approximate such a value.
+
+Floating-point representation addresses this problem using an idea analogous to **scientific notation**. In decimal scientific notation, a number can be represented as a significand multiplied by a power of the base. For example,
+
+$$
+12345 = 1.2345 \times 10^4.
+$$ {#eq-decimal-scientific-notation}
+
+The same principle can be applied in binary. A non-zero binary number can be expressed in normalized form as
+
+$$
+(-1)^s \times m \times 2^e,
+$$ {#eq-binary-floating-point}
+
+where:
+
+- $s$ determines the sign;
+- $m$ is the **significand**;
+- $e$ is the **exponent**.
+
+The term **mantissa** is also commonly encountered, although *significand* is the more precise term in the context of floating-point representation.
+
+Most modern computers follow the **IEEE 754** standard for floating-point arithmetic. Python's built-in `float` type is typically implemented using IEEE 754 **binary64**, commonly known as double precision.
+
+A binary64 floating-point value occupies 64 bits, divided conceptually into three components:
+
+| Component | Bits | Purpose                                               |
+|:----------|:----:|:-----------------------------------------------------:|
+| Sign      | 1    | Determines whether the number is positive or negative |
+| Exponent  | 11   | Determines the scale of the number                    |
+| Fraction  | 52   | Stores the significant binary digits                  |
+
+: Main components of an IEEE 754 binary64 floating-point value. {#tbl-ieee754-binary64}
+
+For normal finite values, the represented number has the form
+
+$$
+(-1)^s
+\times
+(1.f)_2
+\times
+2^{e-1023},
+$$ {#eq-ieee754-binary64}
+
+where $f$ represents the stored fractional bits and $1023$ is the exponent bias used by binary64.
+
+Because the leading binary digit of a normalized significand is implicitly `1`, binary64 effectively provides **53 bits of significand precision**, even though only 52 fraction bits are explicitly stored.
+
+This corresponds to approximately 15–17 significant decimal digits of precision.
+
+Python exposes information about the floating-point implementation through `sys.float_info`:
+
+```{python}
+import sys
+
+sys.float_info
+```
+
+Some particularly useful properties are:
+
+```{python}
+print(sys.float_info.max)
+print(sys.float_info.min)
+print(sys.float_info.epsilon)
+```
+
+Here, `max` represents the largest finite positive floating-point value, `min` represents the smallest positive **normal** floating-point value, and `epsilon` represents the difference between `1.0` and the next larger representable floating-point number.
+
+An important distinction is therefore required between **range** and **precision**. Floating-point representation can describe numbers across an extremely large range of magnitudes, but only with a finite number of significant digits.
+
+## Floating-Point Arithmetic
+
+Because many real numbers cannot be represented exactly in binary floating-point form, arithmetic operations are performed on finite approximations. The result of an operation may itself need to be rounded to the nearest representable floating-point value.
+
+A familiar example is:
+
+```{python}
+0.1 + 0.2
+```
+
+Mathematically,
+
+$$
+0.1 + 0.2 = 0.3.
+$$
+
+However, Python evaluates:
+
+```{python}
+0.1 + 0.2 == 0.3
+```
+
+as `False`.
+
+This does not indicate an error in Python's arithmetic. The values `0.1`, `0.2`, and `0.3` cannot be represented exactly as finite binary fractions. Python instead stores nearby representable values, and the result of the arithmetic reflects those approximations.
+
+The difference can be inspected explicitly:
+
+```{python}
+(0.1 + 0.2) - 0.3
+```
+
+For this reason, direct equality comparisons between floating-point results are often inappropriate when values have been obtained through numerical computation.
+
+Python's `math` module provides `math.isclose()` for approximate comparison:
+
+```{python}
+import math
+
+math.isclose(0.1 + 0.2, 0.3)
+```
+
+The comparison is based on relative and absolute tolerances. Conceptually, two values $a$ and $b$ are considered sufficiently close when
+
+$$
+|a-b|
+\leq
+\max
+\left(
+\text{rel\_tol}\,\max(|a|,|b|),
+\text{abs\_tol}
+\right).
+$$ {#eq-isclose}
+
+The tolerances can be specified explicitly when the numerical context requires them:
+
+```{python}
+math.isclose(
+    0.1 + 0.2,
+    0.3,
+    rel_tol=1e-9,
+    abs_tol=0.0
+)
+```
+
+The appropriate tolerance depends on the scale of the quantities involved and on the requirements of the application; there is no universal tolerance suitable for every numerical problem.
+
+Floating-point errors can also accumulate across repeated operations. For example:
+
+```{python}
+total = 0.0
+
+for _ in range(10):
+    total += 0.1
+
+total
+```
+
+The mathematical result is exactly $1$, but the floating-point result may differ slightly because each operation is performed using finite approximations.
+
+Numerical error is not limited to the representation of individual values. Certain computational procedures can amplify small rounding errors. One important example is **catastrophic cancellation**, which can occur when subtracting two nearly equal floating-point numbers: significant leading digits cancel, leaving a result whose relative accuracy may be substantially reduced.
+
+These considerations lead to the broader concept of **numerical stability**. A numerically stable procedure is designed so that unavoidable representation and rounding errors do not grow excessively during computation.
+
+For Data Science and Machine Learning, the practical implication is not that floating-point arithmetic is unreliable. It is the standard foundation of numerical computation. Rather, numerical results should be interpreted with an understanding of finite precision, appropriate comparison tolerances, and the numerical behaviour of the algorithms being used.
+
+# Complex Numbers
+
+The real numbers are sufficient for many computational tasks, but some mathematical and scientific problems require an extension to the **complex numbers**.
+
+A complex number has the form
+
+$$
+z = a + bi,
+$$ {#eq-complex-number}
+
+where $a$ and $b$ are real numbers and $i$ is the imaginary unit satisfying
+
+$$
+i^2 = -1.
+$$ {#eq-imaginary-unit}
+
+The value $a$ is the **real part** of $z$, while $b$ is its **imaginary part**.
+
+Python provides the built-in `complex` type for representing complex numbers. Python uses `j` rather than $i$ for the imaginary unit:
+
+```{python}
+z = 3 + 4j
+
+type(z)
+```
+
+The use of `j` is conventional in electrical engineering and avoids potential ambiguity with identifiers commonly represented by `i`.
+
+The real and imaginary components can be accessed through the `.real` and `.imag` attributes:
+
+```{python}
+print(z.real)
+print(z.imag)
+```
+
+Both components are represented as floating-point values:
+
+```{python}
+print(type(z.real))
+print(type(z.imag))
+```
+
+Complex numbers can also be created explicitly using the `complex()` constructor:
+
+```{python}
+z = complex(3, 4)
+
+z
+```
+
+which represents
+
+$$
+z = 3 + 4i.
+$$
+
+## Complex Arithmetic
+
+Python supports the standard arithmetic operations for complex numbers:
+
+```{python}
+z1 = 3 + 4j
+z2 = 1 - 2j
+
+print(z1 + z2)
+print(z1 - z2)
+print(z1 * z2)
+print(z1 / z2)
+```
+
+The **complex conjugate** of
+
+$$
+z = a + bi
+$$
+
+is
+
+$$
+\overline{z} = a - bi.
+$$ {#eq-complex-conjugate}
+
+Python provides the `.conjugate()` method:
+
+```{python}
+z = 3 + 4j
+
+z.conjugate()
+```
+
+The magnitude, or modulus, of a complex number is
+
+$$
+|z| = \sqrt{a^2+b^2}.
+$$ {#eq-complex-modulus}
+
+For example,
+
+$$
+|3+4i| = 5.
+$$
+
+Python's built-in `abs()` function computes this magnitude:
+
+```{python}
+z = 3 + 4j
+
+abs(z)
+```
+
+## The `cmath` Module
+
+The standard `math` module is designed primarily for real-valued mathematical operations. Python provides the `cmath` module for mathematical functions defined over complex numbers.
+
+For example, attempting to compute the real square root of a negative number with `math.sqrt()` is outside the real domain, whereas `cmath.sqrt()` returns the corresponding complex value:
+
+```{python}
+import cmath
+
+cmath.sqrt(-1)
+```
+
+The module provides complex-valued versions of functions such as square roots, exponentials, logarithms, and trigonometric functions.
+
+For example:
+
+```{python}
+import cmath
+
+z = 1 + 1j
+
+print(cmath.exp(z))
+print(cmath.log(z))
+print(cmath.sin(z))
+```
+
+Complex numbers can also be represented in **polar form**. If
+
+$$
+z = a + bi,
+$$
+
+then
+
+$$
+z = r(\cos\theta + i\sin\theta),
+$$ {#eq-complex-polar}
+
+where
+
+$$
+r = |z|
+$$
+
+is the magnitude and $\theta$ is the phase angle.
+
+The `cmath.polar()` function converts a complex number to its magnitude and phase:
+
+```{python}
+z = 3 + 4j
+
+cmath.polar(z)
+```
+
+Conversely, `cmath.rect()` constructs a complex number from polar coordinates:
+
+```{python}
+r, theta = cmath.polar(z)
+
+cmath.rect(r, theta)
+```
+
+Euler's identity provides an important connection between complex exponentials and trigonometric functions:
+
+$$
+e^{i\pi} + 1 = 0.
+$$ {#eq-euler-identity}
+
+It can be evaluated numerically with:
+
+```{python}
+cmath.exp(1j * cmath.pi) + 1
+```
+
+The result may contain a very small imaginary component rather than being represented as exactly zero. This is another consequence of the finite-precision floating-point arithmetic discussed previously.
+
+# Problems
+
+The following problems review the main concepts introduced in this section and provide practice with Python's Boolean and numerical types, logical reasoning, numerical representation, and floating-point arithmetic.
+
+## Problem 1 — Boolean expressions
+
+Without executing the code, determine the value and type of each expression. Then verify your answers in Python.
+
+```python
+True and False
+True or False
+not True
+not (True and False)
+(True or False) and not False
+```
+
+## Problem 2 — Operator precedence
+
+Without executing the code, determine the result of each expression:
+
+```python
+True or False and False
+(True or False) and False
+not True or True
+not (True or True)
+```
+
+Explain how operator precedence affects the results.
+
+## Problem 3 — Comparisons
+
+Determine whether each expression evaluates to `True` or `False`:
+
+```python
+7 == 7.0
+7 == "7"
+True == 1
+False == 0
+3 < 5 < 10
+3 < 5 > 10
+```
+
+Explain any results that may initially appear surprising.
+
+## Problem 4 — Compound conditions
+
+Given:
+
+```python
+age = 32
+experience = 5
+has_degree = True
+```
+
+Write a Boolean expression that evaluates to `True` only when a candidate:
+
+- is at least 25 years old;
+- has at least 3 years of experience; and
+- either has a degree or has at least 7 years of experience.
+
+## Problem 5 — Chained comparisons
+
+Rewrite the following expression using Python's chained comparison syntax:
+
+```python
+x >= 0 and x <= 1
+```
+
+Then write a condition that determines whether a value lies in the interval
+
+$$
+-1 < x \leq 1.
+$$
+
+## Problem 6 — Logical equivalence
+
+For all possible Boolean values of `p` and `q`, compare:
+
+```python
+not (p and q)
+```
+
+with:
+
+```python
+(not p) or (not q)
+```
+
+Then compare:
+
+```python
+not (p or q)
+```
+
+with:
+
+```python
+(not p) and (not q)
+```
+
+Determine whether each pair is logically equivalent.
+
+## Problem 7 — Arithmetic operators
+
+Without executing the code, determine the result and type of each expression:
+
+```python
+7 + 3
+7 - 3
+7 * 3
+7 / 3
+7 // 3
+7 % 3
+7 ** 3
+```
+
+Then verify your answers in Python.
+
+## Problem 8 — Floor division
+
+Predict the result of:
+
+```python
+7 // 2
+-7 // 2
+7 // -2
+-7 // -2
+```
+
+Explain why floor division with negative numbers may differ from truncation toward zero.
+
+## Problem 9 — Division algorithm
+
+For several positive and negative integer values of `x` and non-zero values of `y`, verify computationally that:
+
+$$
+x = (x // y)y + (x \% y).
+$$
+
+Investigate how the sign of the remainder behaves when `y` is negative.
+
+## Problem 10 — Integer conversion
+
+Without executing the code, determine the result of:
+
+```python
+int(3.9)
+int(-3.9)
+float(7)
+int(True)
+int(False)
+```
+
+Explain the difference between integer conversion and rounding.
+
+## Positional and Binary Representation
+
+## Problem 11 — Decimal to binary
+
+Convert the following decimal integers to binary by hand:
+
+$$
+13,\qquad 42,\qquad 100.
+$$
+
+Verify your results using Python's `bin()` function.
+
+## Problem 12 — Binary to decimal
+
+Convert the following binary numbers to decimal without using Python:
+
+$$
+10101_2,\qquad
+111111_2,\qquad
+10000001_2.
+$$
+
+Verify the results computationally.
+
+## Problem 13 — Multiple representations
+
+Represent the decimal integer $255$ in:
+
+- binary;
+- octal;
+- hexadecimal.
+
+Verify that all representations correspond to the same Python integer.
+
+## Problem 14 — Fractional binary representation
+
+Convert the following finite binary fractions to decimal:
+
+$$
+0.1_2,\qquad
+0.01_2,\qquad
+0.101_2,\qquad
+0.111_2.
+$$
+
+## Problem 15 — Decimal fractions in binary
+
+Determine which of the following decimal fractions have finite binary representations:
+
+$$
+0.5,\qquad
+0.25,\qquad
+0.125,\qquad
+0.1,\qquad
+0.2,\qquad
+0.75.
+$$
+
+Explain the mathematical property that determines whether a rational number has a finite binary representation.
+
+## Problem 16 — The `0.1 + 0.2` problem
+
+Evaluate:
+
+```python
+0.1 + 0.2
+0.1 + 0.2 == 0.3
+```
+
+Explain precisely why the equality comparison does not produce the mathematically expected result.
+
+## Problem 17 — Exact and inexact representations
+
+Without relying only on the displayed decimal output, determine which of the following values can be represented exactly in binary floating-point form:
+
+```python
+0.5
+0.25
+0.125
+0.1
+0.2
+0.3
+```
+
+Relate your answer to their binary expansions.
+
+## Problem 18 — Floating-point equality
+
+Suppose a Data Science pipeline produces:
+
+```python
+expected = 0.3
+observed = 0.1 + 0.2
+```
+
+Explain why:
+
+```python
+expected == observed
+```
+
+is not an appropriate numerical comparison.
+
+Implement an appropriate comparison using `math.isclose()` and justify the tolerance used.
+
+## Problem 19 — Machine epsilon
+
+Use `sys.float_info.epsilon` to investigate the spacing between floating-point numbers near `1.0`.
+
+Compare:
+
+```python
+1.0 + sys.float_info.epsilon
+```
+
+and:
+
+```python
+1.0 + sys.float_info.epsilon / 2
+```
+
+with `1.0`.
+
+Explain the results in terms of finite floating-point precision.
+
+## Problem 20 — Precision depends on magnitude
+
+Investigate the following expressions:
+
+```python
+1e16 + 1
+1e16 + 2
+1e16 + 10
+```
+
+Determine which increments are distinguishable at this magnitude and explain why floating-point precision is not uniform across the real number line.
+
+## Problem 21 — Accumulation error
+
+Compare the following two computations:
+
+```python
+total = 0.0
+
+for _ in range(10):
+    total += 0.1
+```
+
+and:
+
+```python
+total = 10 * 0.1
+```
+
+Compare both results with `1.0` and explain any differences.
+
+## Problem 22 — Summation accuracy
+
+Construct a sequence containing floating-point values with substantially different magnitudes.
+
+Compare the results obtained using:
+
+```python
+sum(values)
+```
+
+and:
+
+```python
+math.fsum(values)
+```
+
+Investigate why the two approaches may produce different results.
+
+## Problem 23 — Catastrophic cancellation
+
+Consider the function
+
+$$
+f(x)=\sqrt{x+1}-\sqrt{x}.
+$$
+
+Evaluate it numerically for increasingly large values of $x$.
+
+Then derive an algebraically equivalent expression that avoids subtracting two nearly equal quantities and compare the numerical results.
+
+Explain the difference in terms of catastrophic cancellation.
+
+## Problem 24 — Stable computation
+
+The quadratic equation
+
+$$
+ax^2+bx+c=0
+$$
+
+has the standard solution
+
+$$
+x =
+\frac{-b\pm\sqrt{b^2-4ac}}{2a}.
+$$
+
+Investigate numerically what happens when $b^2$ is much larger than $4ac$ and one root involves subtraction between nearly equal quantities.
+
+Find an algebraically equivalent approach that improves numerical stability.
+
+## Problem 25 — Creating complex numbers
+
+Create the complex number
+
+$$
+z=3+4i
+$$
+
+in Python.
+
+Determine:
+
+- its type;
+- its real part;
+- its imaginary part;
+- its complex conjugate;
+- its magnitude.
+
+Verify the magnitude analytically.
+
+## Problem 26 — Complex arithmetic
+
+Given
+
+$$
+z_1=3+4i,
+\qquad
+z_2=1-2i,
+$$
+
+compute by hand and then verify in Python:
+
+$$
+z_1+z_2,
+\qquad
+z_1-z_2,
+\qquad
+z_1z_2,
+\qquad
+\frac{z_1}{z_2}.
+$$
+
+## Problem 27 — `math` versus `cmath`
+
+Compare the behaviour of:
+
+```python
+math.sqrt(-1)
+```
+
+and:
+
+```python
+cmath.sqrt(-1)
+```
+
+Explain why the two modules behave differently.
+
+## Problem 28 — Cartesian and polar representations
+
+For
+
+$$
+z=1+i,
+$$
+
+determine its magnitude and phase analytically.
+
+Use `cmath.polar()` to verify the result and reconstruct the original number using `cmath.rect()`.
+
+## Problem 29 — Euler's identity
+
+Evaluate:
+
+```python
+cmath.exp(1j * cmath.pi) + 1
+```
+
+Mathematically, Euler's identity states:
+
+$$
+e^{i\pi}+1=0.
+$$
+
+Explain why the computational result may not be exactly `0j`.
+
+## Problem 30 — Predict the output
+
+Without executing the code, determine the output and explain each result:
+
+```python
+print(True + True)
+print(True * 10)
+print(False + 5)
+print(isinstance(True, int))
+```
+
+## Problem 31 — Equality across numeric types
+
+Without executing the code, predict the result of:
+
+```python
+1 == 1.0
+1 == True
+1.0 == True
+0 == False
+```
+
+Explain the relationship between `bool`, `int`, and `float` that produces these results.
+
+## Problem 32 — A subtle dictionary key
+
+Predict the result of:
+
+```python
+data = {
+    True: "boolean",
+    1: "integer",
+    1.0: "float"
+}
+
+print(data)
+print(len(data))
+```
+
+Explain the result in terms of equality and hashing.
+
+## Problem 33 — Floating-point threshold
+
+A binary classifier returns a probability:
+
+```python
+probability = 0.7
+threshold = 0.7
+```
+
+A prediction is generated using:
+
+```python
+prediction = probability >= threshold
+```
+
+Discuss whether floating-point representation creates a practical concern here and under what circumstances a tolerance-based comparison would or would not be appropriate.
+
+## Problem 34 — Comparing model metrics
+
+Two evaluation procedures produce:
+
+```python
+score_a = 0.8000000001
+score_b = 0.8000000002
+```
+
+Determine whether it is meaningful to conclude that the second model is better solely from these values.
+
+Discuss the distinction between:
+
+- floating-point equality;
+- numerical tolerance;
+- statistical or practical significance.
+
+## Problem 35 — Large integer versus floating point
+
+Consider:
+
+```python
+x = 10**20
+y = float(x)
+```
+
+Investigate whether:
+
+```python
+x == y
+```
+
+is sufficient to conclude that `float` can exactly represent arbitrary integers of this magnitude.
+
+Determine how integer precision differs between Python's `int` and `float` types.
+
+## Problem 36 — Numerical preprocessing
+
+A preprocessing pipeline standardizes a feature using
+
+$$
+z = \frac{x-\mu}{\sigma}.
+$$
+
+Consider data for which $x$ and $\mu$ are both very large and extremely close to one another.
+
+Discuss the potential numerical issue in computing $x-\mu$ and identify the floating-point phenomenon involved.
+
+## Problem 37 — Probability normalization
+
+Suppose a model produces a vector of probabilities whose floating-point sum is:
+
+```text
+0.9999999999999999
+```
+
+rather than exactly `1.0`.
+
+Explain whether this necessarily indicates an error in the model or implementation, and describe how you would assess the result.
+
+## Problem 38 — Debugging a numerical comparison
+
+The following assertion occasionally fails in a Machine Learning test suite:
+
+```python
+assert calculated_score == expected_score
+```
+
+Both values are floating-point results produced through several numerical operations.
+
+Explain why the assertion may be fragile and propose a more appropriate testing strategy.
+
+## Problem 39 — Reasoning about numerical stability
+
+Two implementations compute the same mathematical quantity and produce nearly identical results on ordinary inputs. On very large or very small inputs, however, one implementation becomes inaccurate while the other remains stable.
+
+Explain why mathematically equivalent expressions can behave differently in floating-point arithmetic and describe how you would investigate which implementation is numerically preferable.
+
+## Problem 40 — Choosing a numeric representation
+
+For each of the following quantities, identify an appropriate Python representation and justify your choice:
+
+- the number of observations in a dataset;
+- a model accuracy score;
+- a Boolean indicator of whether a model has converged;
+- a monetary amount requiring exact decimal arithmetic;
+- a complex-valued Fourier coefficient;
+- an integer identifier containing 25 decimal digits.
+
+Where the built-in `int`, `float`, `bool`, or `complex` types are not appropriate, identify what additional representation you would consider.
