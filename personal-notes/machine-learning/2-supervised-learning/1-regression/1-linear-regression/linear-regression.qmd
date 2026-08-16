@@ -7,19 +7,6 @@ author: "Rodrigo Kang"
 lang: en
 
 format:
-  html:
-    toc: true
-    toc-depth: 6
-
-    number-sections: true
-    number-depth: 3
-
-    code-line-numbers: true
-    code-overflow: wrap
-
-    fig-cap-location: bottom
-    tbl-cap-location: bottom
-
   pdf:
     pdf-engine: xelatex
 
