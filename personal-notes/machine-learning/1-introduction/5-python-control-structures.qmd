@@ -1,0 +1,2565 @@
+---
+title: "Control Structures in Python"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Introduction
+
+A program is generally not executed as an unconditional sequence of instructions. Its behaviour often depends on the values encountered during execution: a model may be fitted only if the training data satisfy certain requirements, an iterative algorithm may continue until a convergence criterion is reached, or an observation may be processed differently depending on its characteristics.
+
+**Control structures** determine which statements are executed and how many times they are executed. They therefore control the **flow of execution** of a program.
+
+Python provides two fundamental forms of control flow:
+
+- **conditional execution**, which determines whether a block of code should be executed according to one or more conditions;
+- **iteration**, which repeatedly executes a block of code, either over the elements of an iterable or while a condition remains satisfied.
+
+These mechanisms are implemented primarily through statements such as `if`, `elif`, `else`, `for`, and `while`. Additional statements such as `break`, `continue`, and `pass` provide more specific control over execution.
+
+Before studying these structures, it is useful to understand how Python interprets conditions and how blocks of code are defined.
+
+# Conditions and Boolean Context
+
+Control-flow statements frequently need to decide whether a condition is satisfied. Conceptually, such a condition is evaluated in a **Boolean context**, in which Python determines whether an expression should be regarded as true or false.
+
+The simplest case is an expression whose result is already a Boolean value:
+
+```{python}
+x = 7
+
+x > 5
+```
+
+The comparison `x > 5` evaluates to `True`, so it can be used directly as a condition:
+
+```{python}
+x = 7
+
+if x > 5:
+    print("x is greater than 5")
+```
+
+Conditions can be constructed using comparison operators such as
+
+| Operator | Meaning |
+|:---:|:---:|
+| `==` | equal to |
+| `!=` | not equal to |
+| `<` | less than |
+| `<=` | less than or equal to |
+| `>` | greater than |
+| `>=` | greater than or equal to |
+
+: Common comparison operators in Python. {#tbl-comparison-operators}
+
+and combined using the Boolean operators `and`, `or`, and `not`.
+
+For example:
+
+```{python}
+x = 7
+
+x >= 0 and x <= 10
+```
+
+Python supports **chained comparisons**, so the previous condition can be expressed more naturally as
+
+```{python}
+0 <= x <= 10
+```
+
+This notation corresponds closely to the mathematical expression
+
+$$
+0 \leq x \leq 10.
+$$
+
+It is generally preferable to writing
+
+```python
+x >= 0 and x <= 10
+```
+
+when both expressions represent the same logical condition.
+
+## Truth Values
+
+A condition does not necessarily have to produce the Boolean objects `True` or `False` explicitly. Python can evaluate objects of many types in a Boolean context.
+
+For example:
+
+```{python}
+bool(0), bool(1)
+```
+
+```{python}
+bool(""), bool("Python")
+```
+
+```{python}
+bool([]), bool([1, 2, 3])
+```
+
+As a general rule, objects such as the following are considered false:
+
+- `False`;
+- `None`;
+- numeric zero values, such as `0` and `0.0`;
+- empty sequences and collections, such as `""`, `[]`, `()`, `{}`, and `set()`.
+
+Most other objects are considered true.
+
+This allows conditions to be written directly in terms of the object being tested. For example, rather than writing
+
+```python
+values = [2, 4, 6]
+
+if len(values) > 0:
+    print("The collection is not empty")
+```
+
+we can write
+
+```{python}
+values = [2, 4, 6]
+
+if values:
+    print("The collection is not empty")
+```
+
+The second form expresses the intended condition directly: execute the block if `values` is non-empty.
+
+This distinction between **truth values** and explicit comparisons with `True` or `False` is important in Python. In most cases, a Boolean expression should be used directly:
+
+```python
+if condition:
+    ...
+```
+
+rather than
+
+```python
+if condition == True:
+    ...
+```
+
+The first form is simpler and reflects the Boolean semantics of the expression itself.
+
+# Code Blocks and Indentation
+
+Control structures operate on **blocks of statements**. Unlike languages that delimit blocks using braces or explicit keywords, Python uses indentation as part of its syntax.
+
+Consider:
+
+```{python}
+x = 8
+
+if x > 0:
+    print("x is positive")
+    print("This statement belongs to the if block")
+
+print("This statement is outside the if block")
+```
+
+The two indented statements belong to the same block and are therefore controlled by the `if` statement. The final `print()` statement is not indented and is executed independently of the condition.
+
+The colon `:` marks the beginning of the suite associated with a compound statement, while indentation determines which statements belong to that suite.
+
+The conventional indentation level in Python is **four spaces**. More importantly, indentation must be structurally consistent. It is not merely a formatting convention: changing the indentation can change the meaning of a program or make it syntactically invalid.
+
+This becomes particularly important when control structures are nested:
+
+```{python}
+x = 8
+
+if x > 0:
+    print("x is positive")
+
+    if x % 2 == 0:
+        print("x is also even")
+```
+
+The second `if` belongs to the block controlled by the first `if`; consequently, it is evaluated only when `x > 0` is true.
+
+# Conditional Statements
+
+Conditional statements allow different parts of a program to be executed according to the result of one or more conditions.
+
+The basic conditional structure in Python is the `if` statement, which can be extended using `elif` and `else`.
+
+## The `if` Statement
+
+The simplest form of conditional execution is
+
+```python
+if condition:
+    statement
+```
+
+The condition is evaluated in a Boolean context. If it is true, the indented block is executed. If it is false, the block is skipped and execution continues with the first statement following the conditional structure.
+
+For example, suppose that a numerical algorithm produces an error measure and we want to report when that error is below a specified tolerance:
+
+```{python}
+error = 0.003
+tolerance = 0.01
+
+if error < tolerance:
+    print("Tolerance satisfied")
+```
+
+The logical flow can be represented as
+
+$$
+\text{condition}
+\longrightarrow
+\begin{cases}
+\text{execute block}, & \text{if true},\\
+\text{skip block}, & \text{if false}.
+\end{cases}
+$$
+
+The `if` statement does not require an alternative branch. It simply makes the execution of a block conditional.
+
+Multiple statements may belong to the same branch:
+
+```{python}
+error = 0.003
+tolerance = 0.01
+
+if error < tolerance:
+    converged = True
+    print("Tolerance satisfied")
+    print("The algorithm has converged")
+```
+
+All statements at the same indentation level belong to the `if` block.
+
+## The `if`-`else` Statement
+
+Frequently, a program must choose between two mutually exclusive alternatives. The `else` clause defines the block that is executed when the condition of the corresponding `if` statement is false.
+
+Its general structure is
+
+```python
+if condition:
+    statements_if_true
+else:
+    statements_if_false
+```
+
+For example:
+
+```{python}
+error = 0.03
+tolerance = 0.01
+
+if error < tolerance:
+    print("The algorithm has converged")
+else:
+    print("Further iterations are required")
+```
+
+Exactly one of the two branches is executed.
+
+Conceptually,
+
+$$
+\text{condition}
+\longrightarrow
+\begin{cases}
+\text{first block}, & \text{if true},\\
+\text{second block}, & \text{if false}.
+\end{cases}
+$$
+
+The branches should represent complementary outcomes of the same decision. This often makes an `if`-`else` structure clearer than two independent `if` statements.
+
+For example:
+
+```python
+if score >= threshold:
+    prediction = 1
+
+if score < threshold:
+    prediction = 0
+```
+
+can be written more clearly as
+
+```python
+if score >= threshold:
+    prediction = 1
+else:
+    prediction = 0
+```
+
+The second version makes explicit that the two alternatives belong to a single decision.
+
+## The `if`-`elif`-`else` Statement
+
+A decision may involve more than two possible outcomes. Python provides the `elif` clause---short for *else if*---to construct a sequence of mutually exclusive conditions.
+
+The general form is
+
+```python
+if condition_1:
+    statements_1
+elif condition_2:
+    statements_2
+elif condition_3:
+    statements_3
+else:
+    default_statements
+```
+
+Python evaluates the conditions **from top to bottom**. As soon as one condition evaluates to true, its corresponding block is executed and the remainder of the conditional chain is skipped.
+
+Consider a simple classification of a model error:
+
+```{python}
+error = 0.08
+
+if error < 0:
+    print("Invalid error value")
+elif error < 0.05:
+    print("Low error")
+elif error < 0.10:
+    print("Moderate error")
+else:
+    print("High error")
+```
+
+Since `error` is `0.08`:
+
+1. `error < 0` is false;
+2. `error < 0.05` is false;
+3. `error < 0.10` is true.
+
+The third block is therefore executed, and the final `else` is not considered.
+
+This reveals an important property of an `if`-`elif`-`else` chain: **the order of the conditions matters**.
+
+For example, reversing two of the previous conditions would change the logic:
+
+```{python}
+error = 0.03
+
+if error < 0.10:
+    print("Moderate error")
+elif error < 0.05:
+    print("Low error")
+```
+
+Although `error < 0.05` is also true, that condition is never evaluated because the first condition has already succeeded.
+
+Therefore, when conditions overlap, they should be ordered deliberately. In threshold-based classifications, this often means progressing from the most restrictive condition to increasingly general ones.
+
+The final `else` clause is optional. When it is present, it acts as a fallback for every case not captured by the preceding conditions.
+
+For example:
+
+```{python}
+temperature = 21
+
+if temperature < 10:
+    category = "low"
+elif temperature < 25:
+    category = "moderate"
+else:
+    category = "high"
+
+category
+```
+
+The conditions effectively partition the possible values of `temperature` into three mutually exclusive regions:
+
+$$
+(-\infty,10), \qquad [10,25), \qquad [25,\infty).
+$$
+
+## Independent Conditions versus Mutually Exclusive Branches
+
+Several consecutive `if` statements are not equivalent to an `if`-`elif` chain.
+
+Consider:
+
+```{python}
+x = 12
+
+if x > 0:
+    print("Positive")
+
+if x % 2 == 0:
+    print("Even")
+```
+
+Both conditions are evaluated independently, so both messages are printed.
+
+By contrast:
+
+```{python}
+x = 12
+
+if x > 0:
+    print("Positive")
+elif x % 2 == 0:
+    print("Even")
+```
+
+only prints `"Positive"`. Once the first condition is satisfied, Python skips the remaining branches.
+
+The appropriate structure therefore depends on the intended logic:
+
+- use **independent `if` statements** when several conditions may legitimately hold and several blocks may need to execute;
+- use an **`if`-`elif`-`else` chain** when the branches represent alternatives and only one should be selected.
+
+This distinction is particularly important when translating a mathematical or business rule into code. The syntax may be similar, but the logical models are different.
+
+# Nested Conditional Statements
+
+Conditional statements can be placed inside other conditional statements. This creates **nested conditionals**.
+
+For example:
+
+```{python}
+value = 12
+
+if value >= 0:
+    if value == 0:
+        print("Zero")
+    else:
+        print("Positive")
+else:
+    print("Negative")
+```
+
+The inner conditional is evaluated only when the outer condition `value >= 0` is satisfied.
+
+Nested structures are useful when a second decision is meaningful only after a first condition has been established. For instance:
+
+```{python}
+model_fitted = True
+validation_score = 0.87
+
+if model_fitted:
+    if validation_score >= 0.80:
+        print("Model ready for further evaluation")
+    else:
+        print("Model requires revision")
+else:
+    print("Fit the model first")
+```
+
+However, excessive nesting can make the flow of execution difficult to follow. When conditions can be expressed naturally as a single Boolean expression, combining them may produce clearer code.
+
+For example,
+
+```python
+if x > 0:
+    if x < 10:
+        print("x belongs to the interval")
+```
+
+can be written as
+
+```{python}
+x = 7
+
+if 0 < x < 10:
+    print("x belongs to the interval")
+```
+
+These forms are logically equivalent for this case, but the second expresses the condition more directly.
+
+Nesting should therefore represent a genuine hierarchy of decisions rather than being used simply because multiple conditions are involved.
+
+# Conditional Expressions
+
+Python also provides a compact expression for selecting between two values according to a condition:
+
+```python
+value_if_true if condition else value_if_false
+```
+
+This is called a **conditional expression**. It is also informally known as the *ternary operator* because it involves three components: the expression returned when the condition is true, the condition itself, and the expression returned otherwise.
+
+For example:
+
+```{python}
+x = 7
+
+sign = "non-negative" if x >= 0 else "negative"
+
+sign
+```
+
+The expression
+
+```python
+"non-negative" if x >= 0 else "negative"
+```
+
+evaluates to one of two values and that result is assigned to `sign`.
+
+An equivalent `if`-`else` statement would be
+
+```{python}
+x = 7
+
+if x >= 0:
+    sign = "non-negative"
+else:
+    sign = "negative"
+
+sign
+```
+
+The distinction is worth emphasizing. An `if` statement controls whether **statements or blocks of statements** are executed, whereas a conditional expression **produces a value**.
+
+Conditional expressions are particularly useful for short assignments:
+
+```{python}
+score = 0.83
+threshold = 0.80
+
+label = "accepted" if score >= threshold else "rejected"
+
+label
+```
+
+They should generally remain simple. Although conditional expressions can themselves be nested, code such as
+
+```python
+category = "low" if x < 0 else "medium" if x < 10 else "high"
+```
+
+is often less readable than the equivalent `if`-`elif`-`else` statement:
+
+```python
+if x < 0:
+    category = "low"
+elif x < 10:
+    category = "medium"
+else:
+    category = "high"
+```
+
+Compact syntax is useful only when it makes the intended logic at least as clear as the expanded form.
+
+# The `pass` Statement
+
+Python requires a syntactically valid statement inside a block. Occasionally, however, we want to define the structure of a program without performing any action yet.
+
+The `pass` statement performs no operation:
+
+```{python}
+x = 5
+
+if x > 0:
+    pass
+else:
+    print("x is not positive")
+```
+
+The `pass` statement is therefore a **null statement**: Python executes it and immediately continues with the next statement.
+
+It is commonly useful as a temporary placeholder while developing code:
+
+```python
+if condition:
+    # Implementation to be added later
+    pass
+```
+
+It can also be used in other contexts that require a non-empty block, such as loops, functions, and classes.
+
+`pass` should not be confused with `continue`, which will be introduced later. `pass` does not alter the normal flow of execution; `continue` explicitly terminates the current iteration of a loop and proceeds to the next one.
+
+# Iteration
+
+Conditional statements determine **whether** a block of code is executed. A second fundamental form of control flow determines **how many times** a block is executed.
+
+**Iteration** is the repeated execution of a block of statements. In Python, iteration is primarily implemented through two types of loops:
+
+- a `for` loop iterates over the elements produced by an iterable;
+- a `while` loop repeatedly executes a block while a condition remains true.
+
+Although both structures can sometimes be used to solve the same problem, they express different ideas. A `for` loop is generally appropriate when execution is organised around the elements of an iterable, whereas a `while` loop is appropriate when repetition is controlled primarily by a condition.
+
+# The `for` Loop
+
+The `for` statement is Python's fundamental construct for iterating over the elements of an iterable.
+
+Its general form is
+
+```python
+for variable in iterable:
+    statements
+```
+
+At each iteration, Python obtains the next element from the iterable, assigns it to `variable`, and executes the indented block. Iteration continues until no elements remain.
+
+For example:
+
+```{python}
+values = [2, 4, 6, 8]
+
+for value in values:
+    print(value)
+```
+
+The variable `value` successively refers to
+
+$$
+2,\quad 4,\quad 6,\quad 8.
+$$
+
+The same mechanism applies to other iterable objects. Strings, for example, can be iterated character by character:
+
+```{python}
+word = "Python"
+
+for character in word:
+    print(character)
+```
+
+The important idea is not that a `for` loop increments a counter automatically. Rather, Python repeatedly retrieves values from an **iterable**.
+
+This distinguishes Python's `for` statement from the counter-based loops commonly found in some other programming languages.
+
+For example, suppose that we want to compute the sum of a collection of values:
+
+```{python}
+values = [3, 7, 2, 5]
+
+total = 0
+
+for value in values:
+    total += value
+
+total
+```
+
+The execution can be viewed as a sequence of updates:
+
+$$
+\begin{aligned}
+S_0 &= 0,\\
+S_1 &= S_0 + 3,\\
+S_2 &= S_1 + 7,\\
+S_3 &= S_2 + 2,\\
+S_4 &= S_3 + 5.
+\end{aligned}
+$$
+
+At the end of the loop,
+
+$$
+S_4 = 17.
+$$
+
+Here, `total` is an **accumulator**: its value is updated at every iteration using information from the current element.
+
+This pattern occurs frequently in computational problems, although built-in functions or specialised numerical operations are often preferable when they already provide the required operation. For example, the previous calculation could simply be written as
+
+```{python}
+sum(values)
+```
+
+Understanding the explicit loop remains important because many algorithms require more complex operations than a single built-in function can express.
+
+## Iterables and Iteration Variables
+
+The object appearing after `in` must provide values that Python can iterate over. Such an object is called an **iterable**.
+
+Common iterable objects include
+
+- strings;
+- lists;
+- tuples;
+- dictionaries;
+- sets;
+- `range` objects;
+- many objects provided by scientific and data-processing libraries.
+
+Consider:
+
+```{python}
+models = ["linear regression", "decision tree", "random forest"]
+
+for model in models:
+    print(model)
+```
+
+The iteration variable `model` is assigned a different element of `models` during each iteration.
+
+The name of the iteration variable has no special significance to Python:
+
+```{python}
+for x in models:
+    print(x)
+```
+
+works in exactly the same way. However, descriptive names generally make the meaning of the loop clearer.
+
+The iteration variable continues to exist after the loop and normally retains the value assigned during the final iteration:
+
+```{python}
+values = [10, 20, 30]
+
+for value in values:
+    pass
+
+value
+```
+
+Although this behaviour is sometimes useful to know, code should rarely depend on the final value of an iteration variable unless that intention is explicit.
+
+# The `range()` Function
+
+A common requirement is to iterate over a sequence of integers. Python provides the `range()` function for this purpose.
+
+Its most general form is
+
+```python
+range(start, stop, step)
+```
+
+where
+
+- `start` specifies the first value;
+- `stop` defines the boundary at which the sequence stops;
+- `step` specifies the increment between consecutive values.
+
+The value specified by `stop` is **not included**.
+
+For example:
+
+```{python}
+list(range(1, 6))
+```
+
+produces the integers
+
+$$
+1,\quad 2,\quad 3,\quad 4,\quad 5.
+$$
+
+Thus,
+
+```{python}
+for i in range(1, 6):
+    print(i)
+```
+
+executes five iterations.
+
+If only one argument is supplied,
+
+```python
+range(stop)
+```
+
+the starting value defaults to `0` and the step defaults to `1`.
+
+For example:
+
+```{python}
+list(range(5))
+```
+
+produces
+
+$$
+0,\quad 1,\quad 2,\quad 3,\quad 4.
+$$
+
+Consequently,
+
+```{python}
+for i in range(5):
+    print(i)
+```
+
+performs five iterations even though the final value of `i` is `4`.
+
+This half-open convention,
+
+$$
+[\text{start},\text{stop}),
+$$
+
+is widespread in Python. It is particularly convenient when working with zero-based indices because
+
+```python
+range(n)
+```
+
+produces exactly
+
+$$
+0,1,\ldots,n-1,
+$$
+
+which are the valid positional indices of a sequence of length $n$.
+
+## The `step` Argument
+
+The optional `step` argument determines the difference between consecutive values.
+
+For example:
+
+```{python}
+list(range(0, 11, 2))
+```
+
+produces
+
+$$
+0,\quad 2,\quad 4,\quad 6,\quad 8,\quad 10.
+$$
+
+The step may also be negative:
+
+```{python}
+list(range(5, 0, -1))
+```
+
+which produces
+
+$$
+5,\quad 4,\quad 3,\quad 2,\quad 1.
+$$
+
+A negative step requires a starting value greater than the stopping boundary. For example:
+
+```{python}
+for i in range(5, 0, -1):
+    print(i)
+```
+
+can be used for a countdown.
+
+`range()` does not need to construct a list containing all the integers before iteration begins. It represents the integer sequence compactly and produces the required values during iteration.
+
+## Iterating Directly versus Iterating over Indices
+
+Suppose we have
+
+```python
+values = [4.2, 7.1, 3.8]
+```
+
+One possibility is to iterate over positions:
+
+```{python}
+values = [4.2, 7.1, 3.8]
+
+for i in range(len(values)):
+    print(values[i])
+```
+
+However, when the index itself is not needed, Python allows the more direct form
+
+```{python}
+for value in values:
+    print(value)
+```
+
+The second version better expresses the intended operation: process each value in the collection.
+
+Using indices is appropriate when the position itself is required, when different sequences must be accessed according to corresponding positions, or when the algorithm genuinely operates on indices. It should not be introduced merely to reproduce the behaviour of iteration available directly through the iterable.
+
+Later we will see that Python provides constructs such as `enumerate()` and `zip()` for many cases in which indices might otherwise be used explicitly.
+
+# The `while` Loop
+
+A `while` loop repeatedly executes a block of statements **while a condition remains true**.
+
+Its general form is
+
+```python
+while condition:
+    statements
+```
+
+Before every iteration, Python evaluates `condition` in a Boolean context:
+
+- if the condition is true, the loop body is executed;
+- after the body finishes, the condition is evaluated again;
+- when the condition becomes false, execution continues after the loop.
+
+For example:
+
+```{python}
+i = 1
+
+while i <= 5:
+    print(i)
+    i += 1
+```
+
+The state of `i` evolves as
+
+$$
+1 \rightarrow 2 \rightarrow 3 \rightarrow 4 \rightarrow 5 \rightarrow 6.
+$$
+
+When `i` becomes `6`, the condition
+
+```python
+i <= 5
+```
+
+is false and the loop terminates.
+
+Unlike a `for` loop, a `while` loop does not inherently advance through an iterable. Its continuation depends entirely on the Boolean condition.
+
+## State and Termination
+
+A `while` loop normally involves some **state** that changes during execution.
+
+Consider again:
+
+```python
+i = 1
+
+while i <= 5:
+    print(i)
+    i += 1
+```
+
+The statement
+
+```python
+i += 1
+```
+
+changes the state on which the condition depends. Without this update,
+
+```python
+i = 1
+
+while i <= 5:
+    print(i)
+```
+
+the condition would remain true indefinitely.
+
+This produces an **infinite loop**.
+
+Not every terminating `while` loop must modify a simple counter, but something affecting the continuation condition must eventually change if the loop is expected to terminate.
+
+This is particularly important in iterative numerical algorithms. Consider a simplified convergence process:
+
+```{python}
+error = 1.0
+tolerance = 0.01
+
+while error > tolerance:
+    error *= 0.5
+    print(error)
+```
+
+At each iteration,
+
+$$
+e_{k+1} = \frac{1}{2}e_k,
+$$
+
+so that
+
+$$
+e_k = \left(\frac{1}{2}\right)^k e_0.
+$$
+
+As the error decreases, the condition eventually becomes false and the loop terminates.
+
+This illustrates a natural use of `while`: the number of iterations need not be specified in advance. Execution continues until a state-dependent criterion is satisfied.
+
+# Choosing between `for` and `while`
+
+A `for` loop and a `while` loop can sometimes express the same computation.
+
+For example:
+
+```{python}
+for i in range(1, 6):
+    print(i)
+```
+
+and
+
+```{python}
+i = 1
+
+while i <= 5:
+    print(i)
+    i += 1
+```
+
+produce the same sequence of values.
+
+However, the two versions express different control-flow models.
+
+The `for` version says:
+
+> iterate over the integers from 1 through 5.
+
+The `while` version says:
+
+> continue executing while `i <= 5`.
+
+When the computation is fundamentally based on traversing an iterable or executing a known collection of iterations, `for` is generally clearer.
+
+When termination depends on a dynamically changing condition rather than on exhausting an iterable, `while` is generally more natural.
+
+A useful conceptual distinction is therefore:
+
+```text
+for   -> iteration over values
+while -> repetition while a condition holds
+```
+
+This is not an absolute rule, but it is a useful default when choosing between the two structures.
+
+# The `break` Statement
+
+Normally, a loop terminates when
+
+- a `for` loop exhausts its iterable, or
+- the condition of a `while` loop becomes false.
+
+The `break` statement allows the current loop to be terminated immediately.
+
+For example:
+
+```{python}
+values = [0.4, 0.7, 1.2, -0.3, 0.8]
+
+for value in values:
+    if value < 0:
+        print("Negative value found")
+        break
+
+    print(value)
+```
+
+Once the negative value is encountered, `break` terminates the `for` loop. The remaining elements are not processed.
+
+This pattern is useful when continuing the search or computation would no longer provide useful information.
+
+For example, suppose we want to determine the first iteration at which an error falls below a tolerance:
+
+```{python}
+errors = [0.42, 0.19, 0.08, 0.03, 0.009, 0.004]
+tolerance = 0.01
+
+for iteration in range(len(errors)):
+    if errors[iteration] < tolerance:
+        print(f"Convergence reached at iteration {iteration}")
+        break
+```
+
+Once convergence is detected, there is no need for the loop to continue.
+
+The same principle applies to `while` loops:
+
+```{python}
+iteration = 0
+error = 1.0
+
+while True:
+    error *= 0.5
+    iteration += 1
+
+    if error < 0.01:
+        break
+
+print(iteration, error)
+```
+
+Here, `while True` creates a loop whose condition is deliberately always true. Termination is instead controlled explicitly by `break`.
+
+This pattern can be appropriate when the termination condition is most naturally evaluated inside the body of the loop. However, it should be used deliberately: if no reachable `break` is executed, the loop is infinite.
+
+# The `continue` Statement
+
+The `continue` statement also changes the normal flow of a loop, but unlike `break`, it does not terminate the loop.
+
+Instead, `continue` terminates the **current iteration** and proceeds to the next one.
+
+For example:
+
+```{python}
+values = [3.2, -1.0, 4.5, -0.2, 2.1]
+
+for value in values:
+    if value < 0:
+        continue
+
+    print(value)
+```
+
+When `value` is negative, execution immediately moves to the next element. The `print()` statement is therefore executed only for non-negative values.
+
+This can be useful when certain observations should be skipped:
+
+```{python}
+observations = [1.8, None, 2.4, None, 3.1]
+
+for observation in observations:
+    if observation is None:
+        continue
+
+    print(observation ** 2)
+```
+
+Conceptually, `break` and `continue` have different effects:
+
+| Statement | Effect |
+|:---:|:---|
+| `break` | terminates the loop |
+| `continue` | terminates only the current iteration |
+
+: Effect of `break` and `continue` inside a loop. {#tbl-break-continue}
+
+Code using `continue` can often be written without it. For example,
+
+```python
+for value in values:
+    if value >= 0:
+        print(value)
+```
+
+may be preferable to
+
+```python
+for value in values:
+    if value < 0:
+        continue
+
+    print(value)
+```
+
+when the first form expresses the logic more directly.
+
+`continue` becomes particularly useful when skipping an invalid or irrelevant case early prevents the remainder of the loop body from becoming deeply nested.
+
+# The `else` Clause in Loops
+
+Python allows both `for` and `while` loops to have an `else` clause.
+
+For example:
+
+```{python}
+for i in range(3):
+    print(i)
+else:
+    print("Loop completed")
+```
+
+and
+
+```{python}
+i = 0
+
+while i < 3:
+    print(i)
+    i += 1
+else:
+    print("Loop completed")
+```
+
+In both cases, the `else` block is executed after the loop finishes normally.
+
+The important detail is that **loop `else` is not simply a block that runs after every loop**. Its behaviour is tied to `break`.
+
+The `else` block is executed when the loop terminates **without encountering a `break`**.
+
+Consider:
+
+```{python}
+values = [2, 4, 6, 8]
+target = 5
+
+for value in values:
+    if value == target:
+        print("Target found")
+        break
+else:
+    print("Target not found")
+```
+
+Since `5` is not present, the loop exhausts the iterable normally and the `else` block executes.
+
+Now consider:
+
+```{python}
+values = [2, 4, 6, 8]
+target = 6
+
+for value in values:
+    if value == target:
+        print("Target found")
+        break
+else:
+    print("Target not found")
+```
+
+This time, `break` is executed when `6` is encountered. The `else` block is therefore skipped.
+
+This structure is particularly useful for search problems:
+
+```python
+for element in iterable:
+    if desired_condition(element):
+        # Found
+        break
+else:
+    # No element satisfied the condition
+```
+
+The interpretation is better expressed as
+
+> execute `else` if the loop completed without being terminated by `break`
+
+rather than simply
+
+> execute `else` when the loop finishes.
+
+The same semantics apply to `while`.
+
+For example:
+
+```{python}
+attempt = 1
+
+while attempt <= 3:
+    success = attempt == 2
+
+    if success:
+        print("Successful attempt")
+        break
+
+    attempt += 1
+else:
+    print("No successful attempt")
+```
+
+Because the loop is terminated by `break`, the `else` clause is not executed.
+
+# Nested Loops
+
+A loop may contain another loop. Such structures are called **nested loops**.
+
+Consider:
+
+```{python}
+for i in range(3):
+    for j in range(2):
+        print(i, j)
+```
+
+For every value of `i`, the inner loop completes all of its iterations.
+
+The generated pairs are
+
+$$
+(0,0),\quad
+(0,1),\quad
+(1,0),\quad
+(1,1),\quad
+(2,0),\quad
+(2,1).
+$$
+
+If the outer loop has $m$ iterations and the inner loop has $n$ iterations for every outer iteration, the body of the inner loop executes
+
+$$
+mn
+$$
+
+times.
+
+This simple observation becomes important when considering computational cost. For example:
+
+```{python}
+values = [2, 5, 8]
+
+for x in values:
+    for y in values:
+        print(x, y)
+```
+
+examines every ordered pair of values and therefore performs
+
+$$
+n^2
+$$
+
+inner iterations for a collection of length $n$.
+
+Nested loops arise naturally in problems involving combinations of observations, matrices, grids, parameter combinations, and pairwise comparisons.
+
+For example, a simple traversal of a matrix represented as nested lists can be written as
+
+```{python}
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+]
+
+for row in matrix:
+    for value in row:
+        print(value)
+```
+
+The outer loop iterates over rows, while the inner loop iterates over the values within each row.
+
+## `break` and `continue` in Nested Loops
+
+When `break` is used inside nested loops, it terminates only the **innermost loop containing it**.
+
+For example:
+
+```{python}
+for i in range(3):
+    for j in range(3):
+        if j == 1:
+            break
+
+        print(i, j)
+```
+
+The `break` statement terminates the loop over `j`, but the outer loop over `i` continues.
+
+Similarly, `continue` affects only the loop in which it appears:
+
+```{python}
+for i in range(3):
+    for j in range(3):
+        if j == 1:
+            continue
+
+        print(i, j)
+```
+
+Here, the iteration with `j == 1` is skipped, but the inner loop continues with the next value of `j`.
+
+This distinction becomes important as nested control structures become more complex. Excessive nesting combined with multiple `break` and `continue` statements can make execution difficult to reason about. In such cases, reorganising the logic or separating part of the computation into functions often produces clearer code.
+
+# Common Control-Flow Considerations
+
+Although loops are syntactically simple, several recurring issues are worth keeping in mind.
+
+## Off-by-One Errors
+
+Because `range()` excludes its stopping value, incorrect boundaries can cause a loop to execute one iteration too many or one iteration too few.
+
+For example:
+
+```{python}
+list(range(1, 5))
+```
+
+contains
+
+$$
+1,\quad 2,\quad 3,\quad 4,
+$$
+
+not `5`.
+
+If the intention is to include `5`, the stopping boundary must be `6`:
+
+```{python}
+list(range(1, 6))
+```
+
+Errors of this type are commonly called **off-by-one errors**.
+
+## Infinite `while` Loops
+
+A `while` condition should be examined together with the state changes occurring inside the loop.
+
+For example,
+
+```python
+x = 1
+
+while x < 10:
+    print(x)
+```
+
+never changes `x` and therefore never makes the condition false.
+
+A terminating version could be
+
+```python
+x = 1
+
+while x < 10:
+    print(x)
+    x += 1
+```
+
+or termination could be controlled explicitly by `break`.
+
+## Modifying a Collection during Iteration
+
+Care is required when structurally modifying a collection while iterating over it.
+
+For example, removing elements from a list while traversing that same list can cause elements to be skipped because the positions of the remaining elements change during iteration.
+
+When the intention is to construct a filtered collection, it is generally clearer to create a new collection rather than mutate the iterable being traversed.
+
+For example:
+
+```{python}
+values = [3, -1, 5, -2, 8]
+
+non_negative = []
+
+for value in values:
+    if value >= 0:
+        non_negative.append(value)
+
+non_negative
+```
+
+Later, we will see more concise Python constructs for expressing transformations and filtering operations, but the explicit loop makes the underlying control flow clear.
+
+## Avoiding Unnecessary Loops
+
+An explicit loop is not always the clearest or most appropriate solution.
+
+For example,
+
+```python
+values = [1, 2, 3, 4]
+
+total = 0
+
+for value in values:
+    total += value
+```
+
+is valid, but
+
+```python
+total = sum(values)
+```
+
+expresses the operation more directly.
+
+Similarly, numerical and data-processing libraries frequently provide vectorised or specialised operations that are preferable to manually iterating over individual observations.
+
+The purpose of understanding loops is therefore not to use them everywhere. It is to understand the control-flow mechanism well enough to recognise when explicit iteration is necessary and when a higher-level operation expresses the computation more clearly.
+
+# Common Iteration Patterns
+
+The basic syntax of `for` is sufficient to express any ordinary iteration over an iterable. In practice, however, several recurring patterns occur often enough that Python provides constructs specifically designed for them.
+
+Understanding these constructs helps avoid unnecessary indexing and makes the intended relationship between the values being processed more explicit.
+
+# Iterating with `enumerate()`
+
+Sometimes both the value and its position are required during iteration.
+
+A direct approach is
+
+```{python}
+values = [4.2, 7.1, 3.8]
+
+for i in range(len(values)):
+    print(i, values[i])
+```
+
+This works, but the loop is conceptually about the elements of `values`, not about generating integers.
+
+Python provides `enumerate()` for this situation:
+
+```{python}
+values = [4.2, 7.1, 3.8]
+
+for i, value in enumerate(values):
+    print(i, value)
+```
+
+At each iteration, `enumerate()` provides a pair containing
+
+1. the current index;
+2. the corresponding element.
+
+The sequence of pairs is conceptually
+
+$$
+(0,4.2),\quad
+(1,7.1),\quad
+(2,3.8).
+$$
+
+The assignment
+
+```python
+for i, value in enumerate(values):
+```
+
+uses **unpacking**: the two components produced at each iteration are assigned to `i` and `value`, respectively.
+
+For example, suppose we want to identify the first observation exceeding a threshold:
+
+```{python}
+scores = [0.41, 0.58, 0.73, 0.86, 0.91]
+threshold = 0.80
+
+for i, score in enumerate(scores):
+    if score > threshold:
+        print(f"First score above threshold: index {i}, value {score}")
+        break
+```
+
+Here, both the position and the value are relevant, so `enumerate()` expresses the operation directly.
+
+## Changing the Starting Index
+
+By default, `enumerate()` starts counting at zero. A different starting value can be specified:
+
+```{python}
+models = ["linear", "tree", "forest"]
+
+for position, model in enumerate(models, start=1):
+    print(position, model)
+```
+
+This produces positions
+
+$$
+1,\quad 2,\quad 3
+$$
+
+without changing the underlying collection.
+
+Using `start=1` can be useful when the counter represents a human-readable position rather than a zero-based sequence index.
+
+# Parallel Iteration with `zip()`
+
+Another common pattern is processing corresponding elements from two or more iterables.
+
+Suppose that
+
+```python
+y_true = [1, 0, 1, 1]
+y_pred = [1, 1, 1, 0]
+```
+
+represent observed and predicted class labels.
+
+One approach would be to iterate over indices:
+
+```python
+for i in range(len(y_true)):
+    print(y_true[i], y_pred[i])
+```
+
+Python provides `zip()` to express the correspondence directly:
+
+```{python}
+y_true = [1, 0, 1, 1]
+y_pred = [1, 1, 1, 0]
+
+for observed, predicted in zip(y_true, y_pred):
+    print(observed, predicted)
+```
+
+Conceptually, `zip()` forms successive tuples
+
+$$
+(1,1),\quad
+(0,1),\quad
+(1,1),\quad
+(1,0),
+$$
+
+and the loop unpacks each tuple into `observed` and `predicted`.
+
+This pattern can be used, for example, to count classification errors explicitly:
+
+```{python}
+y_true = [1, 0, 1, 1]
+y_pred = [1, 1, 1, 0]
+
+errors = 0
+
+for observed, predicted in zip(y_true, y_pred):
+    if observed != predicted:
+        errors += 1
+
+errors
+```
+
+If $n$ observations are processed and $m$ are incorrectly classified, the empirical error rate is
+
+$$
+\frac{m}{n}.
+$$
+
+It could therefore be computed explicitly as
+
+```{python}
+error_rate = errors / len(y_true)
+
+error_rate
+```
+
+In real machine-learning code, specialised library functions would normally be used for model evaluation. The explicit loop is useful here because it makes the underlying control flow visible.
+
+## Iterables of Different Lengths
+
+By default, `zip()` stops when the shortest iterable is exhausted.
+
+For example:
+
+```{python}
+a = [1, 2, 3]
+b = [10, 20]
+
+for x, y in zip(a, b):
+    print(x, y)
+```
+
+produces only two pairs.
+
+This behaviour should be understood rather than assumed away. If corresponding collections are expected to have equal lengths, a mismatch may indicate a problem in the data or in the preceding computation.
+
+Modern Python also allows strict checking:
+
+```python
+zip(a, b, strict=True)
+```
+
+With `strict=True`, Python raises an exception if the iterables do not have the same length.
+
+This can be useful when unequal lengths represent an invalid state rather than an acceptable truncation.
+
+# Unpacking during Iteration
+
+The values produced by an iterable can themselves have structure.
+
+Suppose that each observation is represented by a pair:
+
+```{python}
+points = [(1, 2), (3, 5), (4, 1)]
+
+for x, y in points:
+    print(x, y)
+```
+
+Each tuple is unpacked directly into `x` and `y`.
+
+This can make the relationship between the data and the loop body clearer than repeatedly indexing each tuple:
+
+```python
+for point in points:
+    x = point[0]
+    y = point[1]
+```
+
+The same pattern works naturally with collections representing key-value pairs or other structured records.
+
+For example:
+
+```{python}
+metrics = [
+    ("accuracy", 0.91),
+    ("precision", 0.87),
+    ("recall", 0.84),
+]
+
+for metric, value in metrics:
+    print(metric, value)
+```
+
+The loop variables describe the components of each observation directly.
+
+# Control-Flow Patterns in Data Processing
+
+The individual control structures introduced in this chapter are simple. Their practical importance comes from combining them to express common computational patterns.
+
+## Validation before Processing
+
+A computation may only be meaningful for valid inputs.
+
+For example:
+
+```{python}
+values = [2.4, 5.1, -1.0, 3.8]
+
+for value in values:
+    if value < 0:
+        print("Invalid negative value")
+        continue
+
+    print(value ** 0.5)
+```
+
+The conditional acts as a **guard**: invalid observations are identified before the main computation is performed.
+
+The same idea can be expressed without `continue`:
+
+```{python}
+values = [2.4, 5.1, -1.0, 3.8]
+
+for value in values:
+    if value >= 0:
+        print(value ** 0.5)
+```
+
+Which version is preferable depends on the surrounding code. When the main processing block is long, handling exceptional cases early can reduce nesting and make the normal execution path easier to follow.
+
+## Searching for a Satisfying Element
+
+A common pattern is to inspect a collection until an element satisfying a criterion is found:
+
+```{python}
+scores = [0.41, 0.56, 0.73, 0.88, 0.91]
+
+for score in scores:
+    if score >= 0.85:
+        print("Suitable score found:", score)
+        break
+else:
+    print("No score satisfies the criterion")
+```
+
+This combines
+
+- iteration;
+- conditional execution;
+- early termination with `break`;
+- loop `else` to represent unsuccessful completion of the search.
+
+The structure is therefore
+
+```python
+for element in iterable:
+    if condition:
+        # successful search
+        break
+else:
+    # no element satisfied the condition
+```
+
+This is a useful Python pattern because it avoids maintaining a separate Boolean flag solely to determine whether the search succeeded.
+
+## Iteration until Convergence
+
+Many numerical algorithms repeatedly update a state until a stopping criterion is satisfied.
+
+A simplified form is
+
+```python
+while error > tolerance:
+    update_state()
+    recompute_error()
+```
+
+In practice, relying exclusively on convergence may be unsafe. If convergence does not occur, the loop could continue indefinitely.
+
+A more robust conceptual structure also imposes a maximum number of iterations:
+
+```{python}
+error = 1.0
+tolerance = 1e-4
+iteration = 0
+max_iterations = 100
+
+while error > tolerance and iteration < max_iterations:
+    error *= 0.6
+    iteration += 1
+
+print(iteration, error)
+```
+
+The loop terminates when either
+
+$$
+e_k \leq \varepsilon
+$$
+
+or
+
+$$
+k \geq k_{\max},
+$$
+
+where $\varepsilon$ is the tolerance and $k_{\max}$ is the maximum allowed number of iterations.
+
+This illustrates an important general principle: the stopping condition of an iterative algorithm often combines a **desired convergence criterion** with a **safety limit**.
+
+The same logic can be expressed using `break`:
+
+```{python}
+error = 1.0
+tolerance = 1e-4
+max_iterations = 100
+
+for iteration in range(1, max_iterations + 1):
+    error *= 0.6
+
+    if error <= tolerance:
+        break
+
+print(iteration, error)
+```
+
+The choice between these forms depends on which control-flow interpretation best reflects the algorithm.
+
+# Readability and Control Flow
+
+Correct control flow is not only a question of obtaining the expected output. The structure of the code should also make the logic easy to inspect.
+
+## Prefer Direct Conditions
+
+When a Boolean value already expresses the required condition, use it directly.
+
+Prefer
+
+```python
+if is_valid:
+    ...
+```
+
+to
+
+```python
+if is_valid == True:
+    ...
+```
+
+and prefer
+
+```python
+if not is_valid:
+    ...
+```
+
+to
+
+```python
+if is_valid == False:
+    ...
+```
+
+Similarly, when checking whether a collection contains elements,
+
+```python
+if values:
+    ...
+```
+
+usually communicates the intention more directly than
+
+```python
+if len(values) > 0:
+    ...
+```
+
+## Avoid Unnecessary Nesting
+
+Deeply nested conditionals can obscure the main execution path.
+
+For example:
+
+```python
+if value is not None:
+    if value >= 0:
+        if value <= 1:
+            process(value)
+```
+
+may be expressed more directly as
+
+```python
+if value is not None and 0 <= value <= 1:
+    process(value)
+```
+
+when the conditions belong naturally to the same logical test.
+
+In longer computations, handling invalid cases early can also reduce nesting:
+
+```python
+for value in values:
+    if value is None:
+        continue
+
+    if value < 0:
+        continue
+
+    process(value)
+```
+
+instead of
+
+```python
+for value in values:
+    if value is not None:
+        if value >= 0:
+            process(value)
+```
+
+The objective is not to minimise the number of lines, but to make the control flow easy to understand.
+
+## Do Not Use `break` or `continue` without a Clear Purpose
+
+`break` and `continue` are useful when they simplify the logical structure of a loop. Used excessively, they can make the path through a loop difficult to trace.
+
+For a short loop such as
+
+```python
+for value in values:
+    if value >= 0:
+        process(value)
+```
+
+introducing `continue`
+
+```python
+for value in values:
+    if value < 0:
+        continue
+
+    process(value)
+```
+
+does not necessarily improve the code.
+
+The second form becomes more useful when several statements follow the validation step and avoiding additional indentation makes the main processing path clearer.
+
+## Express Intent rather than Mechanics
+
+Python frequently provides a direct way to express a common operation.
+
+For example:
+
+```python
+for i in range(len(values)):
+    print(i, values[i])
+```
+
+works, but
+
+```python
+for i, value in enumerate(values):
+    print(i, value)
+```
+
+better expresses the fact that both the position and value are required.
+
+Likewise,
+
+```python
+for i in range(len(x)):
+    process(x[i], y[i])
+```
+
+can often be written as
+
+```python
+for x_i, y_i in zip(x, y):
+    process(x_i, y_i)
+```
+
+The preferred form is generally the one that communicates the structure of the computation most directly.
+
+# Problems
+
+The following problems are intended to reinforce the behaviour of conditional statements and loops rather than merely their syntax. Where possible, predict the behaviour of the code before executing it.
+
+## Problem 1 — Truth Values
+
+Without running the code, determine which messages are printed:
+
+```python
+values = []
+
+if values:
+    print("A")
+else:
+    print("B")
+
+if 0:
+    print("C")
+
+if "0":
+    print("D")
+```
+
+Explain each result in terms of Python's truth-value rules.
+
+## Problem 2 — Independent Conditions
+
+Predict the output:
+
+```python
+x = 12
+
+if x > 0:
+    print("positive")
+
+if x % 2 == 0:
+    print("even")
+
+if x > 20:
+    print("large")
+```
+
+Then explain how the behaviour would change if the second and third `if` statements were replaced by `elif`.
+
+## Problem 3 — Ordering Conditions
+
+Consider:
+
+```python
+score = 0.72
+
+if score >= 0.5:
+    category = "acceptable"
+elif score >= 0.7:
+    category = "good"
+elif score >= 0.9:
+    category = "excellent"
+else:
+    category = "poor"
+```
+
+What value is assigned to `category`?
+
+Explain why the program does not implement the likely intended classification and rewrite the ordering of the conditions appropriately.
+
+## Problem 4 — Conditional Expression
+
+Given a number `n`, assign either `"even"` or `"odd"` to a variable called `parity` using a conditional expression.
+
+Do not use an `if` statement.
+
+## Problem 5 — Point inside a Rectangle
+
+Given a point $(x,y)$, determine whether it belongs to the closed rectangle
+
+$$
+[a,b]\times[c,d].
+$$
+
+Write the condition using chained comparisons.
+
+Then determine how the condition should change if the boundary of the rectangle is excluded.
+
+## Problem 6 — Leap Year
+
+A year is a leap year if it is divisible by 4, except for years divisible by 100, unless they are also divisible by 400.
+
+Write a conditional structure that determines whether a given year is a leap year.
+
+Then attempt to express the same rule using a single Boolean expression.
+
+## Problem 7 — Predicting a `for` Loop
+
+Without executing the code, determine the final values of `total` and `x`:
+
+```python
+total = 0
+
+for x in [2, 5, 3]:
+    total += x
+```
+
+Explain the state of both variables after every iteration.
+
+## Problem 8 — `range()`
+
+Determine the values generated by each expression without executing them:
+
+```python
+range(5)
+range(2, 7)
+range(1, 10, 3)
+range(10, 1, -2)
+range(5, 5)
+```
+
+For each case, state how many iterations a corresponding `for` loop would perform.
+
+## Problem 9 — Off-by-One Error
+
+The following code is intended to print the integers from 1 through 10:
+
+```python
+for i in range(1, 10):
+    print(i)
+```
+
+Identify the problem and correct it.
+
+Explain the correction in terms of the half-open interval represented by `range()`.
+
+## Problem 10 — Accumulation
+
+Using a `for` loop, calculate
+
+$$
+S = \sum_{k=1}^{100} k.
+$$
+
+Do not use `sum()`.
+
+Then verify the result using the formula
+
+$$
+\sum_{k=1}^{n} k = \frac{n(n+1)}{2}.
+$$
+
+## Problem 11 — Arithmetic Progression
+
+An arithmetic progression is defined by
+
+$$
+a_k = a_0 + kd.
+$$
+
+Given `a0`, `d`, and an upper bound `b`, use `range()` and a `for` loop to calculate the sum of all progression terms not exceeding `b`.
+
+Assume that all values are integers and that `d > 0`.
+
+## Problem 12 — Counting Characters
+
+Given a string, count the number of vowels using an explicit loop.
+
+Do not use `str.count()`.
+
+Your solution should treat uppercase and lowercase letters equivalently.
+
+## Problem 13 — Reverse a String
+
+Given a string `s`, construct its reverse using a `for` loop.
+
+Do not use slicing with `[::-1]` and do not use `reversed()`.
+
+## Problem 14 — Filtering with `continue`
+
+Given
+
+```python
+values = [4, -2, 7, -1, 0, 9]
+```
+
+use a `for` loop and `continue` to print only the non-negative values.
+
+Then rewrite the solution without `continue`.
+
+Compare the control flow of the two versions.
+
+## Problem 15 — First Matching Value
+
+Given two integers `a` and `b`, find the first integer in the closed interval
+
+$$
+[a,b]
+$$
+
+that is divisible by 2, 3, and 5.
+
+Terminate the search immediately after finding the first valid number.
+
+If no such number exists, report that no match was found.
+
+## Problem 16 — `for`-`else`
+
+Rewrite Problem 15 using a `for`-`else` structure so that no additional Boolean variable is required to determine whether a valid number was found.
+
+Explain precisely when the `else` clause executes.
+
+## Problem 17 — Infinite Loop Diagnosis
+
+Consider:
+
+```python
+x = 1
+
+while x < 100:
+    x *= 0.5
+```
+
+Does this loop terminate?
+
+Explain the evolution of `x` and identify why the condition never becomes false.
+
+Modify the loop so that it terminates naturally.
+
+## Problem 18 — Iteration until Convergence
+
+Consider the recurrence
+
+$$
+x_{k+1}
+=
+\frac{1}{2}
+\left(
+x_k+\frac{a}{x_k}
+\right),
+$$
+
+with $a>0$ and $x_0>0$.
+
+This is an iterative method for approximating $\sqrt{a}$.
+
+Starting from
+
+```python
+a = 2
+x = 1.0
+```
+
+repeatedly compute the next approximation until
+
+$$
+|x_{k+1}-x_k| < 10^{-10}.
+$$
+
+Use a `while` loop and count the number of iterations required.
+
+Add a maximum number of iterations as a safety condition.
+
+## Problem 19 — `break` and State
+
+Predict the output:
+
+```python
+for i in range(10):
+    if i == 4:
+        break
+
+print(i)
+```
+
+Why does `i` still exist after the loop?
+
+What value would `i` have if the `break` statement were removed?
+
+## Problem 20 — `continue`
+
+Predict the output:
+
+```python
+total = 0
+
+for i in range(6):
+    if i % 2 == 0:
+        continue
+
+    total += i
+
+print(total)
+```
+
+Explain which values contribute to `total`.
+
+## Problem 21 — Nested Loops
+
+Without executing the code, determine how many times `print()` is called:
+
+```python
+for i in range(4):
+    for j in range(3):
+        print(i, j)
+```
+
+List the first three and final three pairs that are printed.
+
+Generalise the number of inner-loop executions when the outer loop runs $m$ times and the inner loop runs $n$ times.
+
+## Problem 22 — `break` in Nested Loops
+
+Predict the output:
+
+```python
+for i in range(3):
+    for j in range(4):
+        if j == 2:
+            break
+
+        print(i, j)
+```
+
+Explain why `break` does not terminate the outer loop.
+
+## Problem 23 — Matrix Traversal
+
+Given
+
+```python
+matrix = [
+    [2, 4, 6],
+    [1, 3, 5],
+    [7, 8, 9],
+]
+```
+
+use nested loops to calculate the sum of all matrix elements.
+
+Then calculate the sum of each row separately.
+
+Do not use `sum()`.
+
+## Problem 24 — Pairwise Comparisons
+
+Given
+
+```python
+values = [3, 8, 2, 7]
+```
+
+use nested loops to print every ordered pair $(x_i,x_j)$.
+
+How many pairs are produced?
+
+Then modify the loops so that each unordered pair of distinct elements is considered exactly once.
+
+For a collection containing $n$ elements, how many such pairs should be produced?
+
+## Problem 25 — `enumerate()`
+
+Given
+
+```python
+errors = [0.31, 0.18, 0.09, 0.04, 0.008]
+```
+
+use `enumerate()` to determine the index of the first error smaller than `0.01`.
+
+Terminate the loop immediately when the value is found.
+
+## Problem 26 — `zip()`
+
+Given
+
+```python
+observed = [1, 0, 1, 1, 0, 1]
+predicted = [1, 1, 1, 0, 0, 1]
+```
+
+use `zip()` to count
+
+- correct predictions;
+- incorrect predictions.
+
+Then calculate the accuracy
+
+$$
+\text{accuracy}
+=
+\frac{\text{correct predictions}}
+     {\text{total predictions}}.
+$$
+
+Do not use a machine-learning library.
+
+## Problem 27 — Different Lengths with `zip()`
+
+Predict what happens:
+
+```python
+x = [1, 2, 3, 4]
+y = [10, 20]
+
+for a, b in zip(x, y):
+    print(a, b)
+```
+
+How many iterations occur?
+
+Why can this behaviour be dangerous when the two collections are expected to represent corresponding observations?
+
+Investigate how `strict=True` changes the behaviour.
+
+## Problem 28 — Data Validation
+
+Suppose
+
+```python
+values = [0.41, None, 0.72, -0.1, 0.88, None, 0.93]
+```
+
+is a collection of measurements.
+
+Process the values according to the following rules:
+
+1. skip `None`;
+2. skip negative values;
+3. print every remaining value;
+4. stop immediately if a value greater than `0.9` is encountered.
+
+Use `continue` and `break` where appropriate.
+
+## Problem 29 — Threshold Classification
+
+Given a sequence of probabilities and a threshold $t$, convert each probability into a binary prediction according to
+
+$$
+\hat y =
+\begin{cases}
+1, & p \geq t,\\
+0, & p < t.
+\end{cases}
+$$
+
+For
+
+```python
+probabilities = [0.12, 0.51, 0.49, 0.87, 0.73]
+threshold = 0.5
+```
+
+construct a list called `predictions` using an explicit `for` loop.
+
+Do not use a list comprehension.
+
+## Problem 30 — Early Stopping
+
+Suppose the validation losses from successive training epochs are
+
+```python
+losses = [0.52, 0.44, 0.39, 0.36, 0.355, 0.354, 0.3545, 0.355]
+```
+
+Traverse the values in order.
+
+Stop when the current loss is greater than the previous loss and report the epoch at which this first occurs.
+
+Use `enumerate()` and keep track of the previous value explicitly.
+
+Explain why this is a simplified form of an **early-stopping** rule rather than a realistic complete implementation.
+
+## Problem 31 — Search without a Flag
+
+Given
+
+```python
+values = [8, 14, 22, 31, 47]
+```
+
+determine whether any value is divisible by both 3 and 5.
+
+Solve the problem using
+
+- a `for` loop;
+- `break`;
+- `else`.
+
+Do not introduce a variable such as `found = False`.
+
+## Problem 32 — Reasoning about Control Flow
+
+Without executing the code, determine the exact output:
+
+```python
+for i in range(1, 5):
+    if i == 2:
+        continue
+
+    for j in range(1, 4):
+        if j == 3:
+            break
+
+        print(i, j)
+else:
+    print("done")
+```
+
+Explain separately the effect of
+
+- `continue`;
+- the inner `break`;
+- the outer `else`.
+
+In particular, explain why the inner `break` does or does not prevent the final `else` from executing.
+
+# Summary
+
+Python control structures determine the order and repetition of program execution.
+
+Conditional execution is primarily expressed using `if`, `elif`, and `else`. Conditions are evaluated in a Boolean context, so objects may participate in control flow according to their truth values without necessarily being compared explicitly with `True` or `False`.
+
+Iteration is primarily expressed through `for` and `while` loops. A `for` loop traverses the values produced by an iterable, whereas a `while` loop repeats execution as long as a condition remains true.
+
+Statements such as `break` and `continue` modify the normal execution of a loop:
+
+- `break` terminates the current loop;
+- `continue` skips the remainder of the current iteration;
+- loop `else` executes when a loop completes without being terminated by `break`.
+
+Python provides additional constructs for common iteration patterns. `enumerate()` associates elements with positions, while `zip()` supports parallel iteration over corresponding elements from multiple iterables. Unpacking allows structured values to be assigned directly to multiple loop variables.
+
+The appropriate control structure should communicate the logic of the computation rather than merely reproduce its mechanics. Direct iteration is generally preferable to unnecessary indexing, conditions should express their intent clearly, and loops should be used deliberately when no more direct operation already represents the required computation.
+
+In numerical and machine-learning applications, these principles appear repeatedly in tasks such as data validation, sequential processing, convergence checks, searches, threshold-based decisions, and early termination. The syntax itself is simple; the more important skill is being able to reason precisely about the path that execution will follow.
