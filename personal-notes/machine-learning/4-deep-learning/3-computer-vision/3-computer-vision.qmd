@@ -1,0 +1,205 @@
+---
+title: "Computer Vision with Deep Learning"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Convolutional Neural Networks
+
+## Why Convolutions?
+
+### Spatial Structure
+
+### Local Connectivity
+
+### Parameter Sharing
+
+### Translation Equivariance
+
+## Convolution Operation
+
+### Kernels and Filters
+
+### Feature Maps
+
+### Stride
+
+### Padding
+
+### Channels
+
+## Pooling
+
+### Max Pooling
+
+### Average Pooling
+
+### Global Average Pooling
+
+## CNN Architecture
+
+### Convolutional Blocks
+
+### Hierarchical Feature Learning
+
+### Receptive Fields
+
+### Classification Heads
+
+## Classical CNN Architectures
+
+### LeNet
+
+### AlexNet
+
+### VGG
+
+### ResNet
+
+### Residual Connections
+
+## Modern CNN Concepts
+
+### Depthwise Separable Convolutions
+
+### Efficient Architectures
+
+### CNNs versus Vision Transformers
+
+# Computer Vision with Deep Learning
+
+## Image Representation
+
+### Pixels
+
+### Channels
+
+### Image Tensors
+
+### Normalisation
+
+## Image Classification
+
+### Binary Image Classification
+
+### Multiclass Image Classification
+
+## Data Augmentation
+
+### Flipping
+
+### Cropping
+
+### Rotation
+
+### Colour Transformations
+
+### Why Augmentation Works
+
+## Transfer Learning
+
+### Pretrained Models
+
+### Feature Extraction
+
+### Fine-Tuning
+
+### Freezing and Unfreezing Layers
+
+### Choosing a Pretrained Model
+
+## Object Detection
+
+### Classification versus Detection
+
+### Bounding Boxes
+
+### Intersection over Union
+
+### Non-Maximum Suppression
+
+### One-Stage and Two-Stage Detectors
+
+### YOLO — Conceptual Overview
+
+## Image Segmentation
+
+### Semantic Segmentation
+
+### Instance Segmentation
+
+### U-Net
+
+### Segmentation Metrics
+
+## Vision Transformers
+
+### Image Patches
+
+### Patch Embeddings
+
+### Self-Attention for Images
+
+### Vision Transformer Architecture
+
+### CNNs versus Vision Transformers
+
+# Key Takeaways
+
+# Problems

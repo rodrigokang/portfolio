@@ -1,0 +1,155 @@
+---
+title: "Deep Learning Systems"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Deep Learning in Production
+
+## Training versus Inference
+
+## Model Serialisation
+
+## Batch Inference
+
+## Online Inference
+
+## Latency and Throughput
+
+## Model Compression
+
+### Quantisation
+
+### Pruning
+
+### Distillation
+
+## Monitoring
+
+### Data Drift
+
+### Concept Drift
+
+### Prediction Drift
+
+### Performance Degradation
+
+## Retraining
+
+## Reproducibility and Versioning
+
+## Hardware Considerations
+
+### CPU
+
+### GPU
+
+### Accelerators
+
+## Distributed Training — Overview
+
+### Data Parallelism
+
+### Model Parallelism
+
+### Distributed Data Parallel Training
+
+# Responsible Deep Learning
+
+## Bias and Fairness
+
+## Privacy
+
+## Security
+
+## Robustness
+
+## Explainability
+
+## Dataset Quality
+
+## Model Misuse
+
+## Environmental and Computational Cost
+
+# Deep Learning System Design
+
+## Problem Definition
+
+## Data Requirements
+
+## Architecture Selection
+
+## Training Infrastructure
+
+## Experiment Tracking
+
+## Model Evaluation
+
+## Deployment Architecture
+
+## Monitoring
+
+## Retraining Strategy
+
+## Cost–Performance Trade-offs
+
+# Key Takeaways
+
+# Problems

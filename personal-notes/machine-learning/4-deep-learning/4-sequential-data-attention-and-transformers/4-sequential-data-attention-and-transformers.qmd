@@ -1,0 +1,187 @@
+---
+title: "Sequential Data, Attention, and Transformers"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Sequence Models
+
+## Sequential Data
+
+### Temporal Dependence
+
+### Variable-Length Sequences
+
+### Sequence-to-One Problems
+
+### Sequence-to-Sequence Problems
+
+## Recurrent Neural Networks
+
+### Recurrent State
+
+### Unrolling through Time
+
+### Backpropagation through Time
+
+### Vanishing Gradient Problem
+
+## Long Short-Term Memory Networks
+
+### Motivation
+
+### Cell State
+
+### Forget Gate
+
+### Input Gate
+
+### Output Gate
+
+## Gated Recurrent Units
+
+### GRU Architecture
+
+### LSTM versus GRU
+
+## Limitations of Recurrent Models
+
+# Attention and Transformers
+
+## Motivation for Attention
+
+### Limitations of Sequential Processing
+
+### Querying Relevant Information
+
+## Attention Mechanism
+
+### Queries
+
+### Keys
+
+### Values
+
+### Attention Scores
+
+### Scaled Dot-Product Attention
+
+## Self-Attention
+
+### Token-to-Token Relationships
+
+### Attention Matrix
+
+## Multi-Head Attention
+
+### Multiple Representation Subspaces
+
+### Concatenating Attention Heads
+
+## Positional Information
+
+### Why Position Must Be Represented
+
+### Positional Encoding
+
+### Learned Positional Embeddings
+
+## Transformer Architecture
+
+### Encoder
+
+### Decoder
+
+### Feedforward Networks
+
+### Residual Connections
+
+### Layer Normalisation
+
+## Encoder-Only Transformers
+
+### Representation Learning
+
+### BERT Family
+
+## Decoder-Only Transformers
+
+### Autoregressive Modelling
+
+### GPT Family
+
+## Encoder–Decoder Transformers
+
+### Sequence-to-Sequence Learning
+
+### Translation and Conditional Generation
+
+## Transformer Training
+
+### Masked Language Modelling
+
+### Causal Language Modelling
+
+### Teacher Forcing
+
+### Pretraining and Fine-Tuning
+
+# Key Takeaways
+
+# Problems

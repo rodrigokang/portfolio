@@ -1,0 +1,287 @@
+---
+title: "Natural Language Processing and Generative AI"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Natural Language Processing with Deep Learning
+
+## Representing Language
+
+### Tokens
+
+### Tokenisation
+
+### Vocabulary
+
+### Subword Tokenisation
+
+### Byte-Pair Encoding
+
+### Special Tokens
+
+## Word Representations
+
+### One-Hot Encoding
+
+### Distributed Representations
+
+### Word Embeddings
+
+### Word2Vec
+
+### GloVe
+
+### Contextual Embeddings
+
+## Text Classification
+
+### Document Representation
+
+### Neural Text Classifiers
+
+### Transformer-Based Classification
+
+## Sequence Labelling
+
+### Named Entity Recognition
+
+### Token Classification
+
+## Semantic Similarity
+
+### Embedding Spaces
+
+### Cosine Similarity
+
+### Sentence Embeddings
+
+## Information Retrieval
+
+### Sparse Retrieval
+
+### Dense Retrieval
+
+### Embedding-Based Search
+
+## Retrieval-Augmented Generation
+
+### Retrieval
+
+### Context Construction
+
+### Generation
+
+### Why RAG?
+
+### Limitations of RAG
+
+# Generative Deep Learning
+
+## Generative versus Discriminative Models
+
+## Probabilistic Generative Modelling
+
+### Learning a Data Distribution
+
+### Sampling
+
+### Latent Variables
+
+## Autoencoders
+
+### Encoder
+
+### Latent Representation
+
+### Decoder
+
+### Reconstruction Loss
+
+## Variational Autoencoders
+
+### Probabilistic Latent Space
+
+### Reparameterisation Trick
+
+### KL Divergence
+
+### Evidence Lower Bound
+
+## Generative Adversarial Networks
+
+### Generator
+
+### Discriminator
+
+### Adversarial Objective
+
+### GAN Training
+
+### Mode Collapse
+
+## Diffusion Models
+
+### Forward Diffusion Process
+
+### Reverse Denoising Process
+
+### Noise Prediction
+
+### Sampling
+
+### Conditional Diffusion
+
+## Autoregressive Models
+
+### Factorising Joint Probability
+
+### Next-Token Prediction
+
+### Sampling Strategies
+
+# Large Language Models
+
+## From Language Models to LLMs
+
+## Pretraining
+
+### Training Objective
+
+### Training Corpus
+
+### Scaling
+
+## Token Prediction
+
+### Logits
+
+### Probability Distribution
+
+### Sampling
+
+### Temperature
+
+### Top-k Sampling
+
+### Top-p Sampling
+
+## Context Windows
+
+### Attention and Context
+
+### Context-Length Limitations
+
+## Embeddings
+
+### Token Embeddings
+
+### Semantic Embeddings
+
+## Fine-Tuning
+
+### Full Fine-Tuning
+
+### Parameter-Efficient Fine-Tuning
+
+### LoRA — Conceptual Overview
+
+## Instruction Tuning
+
+## Preference Optimisation
+
+### Human Feedback — Conceptual Overview
+
+### Alignment
+
+## Inference
+
+### Prefill
+
+### Autoregressive Decoding
+
+### KV Cache — Conceptual Overview
+
+## Hallucination
+
+### Why Hallucinations Occur
+
+### Grounding
+
+### Evaluation
+
+## LLM Applications
+
+### Classification
+
+### Information Extraction
+
+### Summarisation
+
+### Question Answering
+
+### Retrieval-Augmented Generation
+
+### Tool Use
+
+### Agents — Conceptual Overview
+
+# Key Takeaways
+
+# Problems

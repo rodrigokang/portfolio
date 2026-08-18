@@ -1,0 +1,441 @@
+---
+title: "Foundations of Deep Learning"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Deep Learning: Foundations and Concepts
+
+## Motivation
+
+### From Machine Learning to Deep Learning
+
+### Representation Learning
+
+### Why Deep Learning?
+
+### When Deep Learning Is Appropriate
+
+### When Deep Learning Is Not Appropriate
+
+### Structured and Unstructured Data
+
+### The Role of Scale
+
+#### Data Scale
+
+#### Model Scale
+
+#### Computational Scale
+
+### Deep Learning as Function Approximation
+
+### Deep Learning as Representation Learning
+
+### Historical Perspective
+
+## Artificial Neurons
+
+### Biological Inspiration and Its Limits
+
+### The Perceptron
+
+### Linear Combination of Inputs
+
+### Bias Term
+
+### Activation Functions
+
+## Activation Functions
+
+### Linear Activation
+
+### Sigmoid
+
+### Hyperbolic Tangent
+
+### ReLU
+
+### Leaky ReLU
+
+### GELU
+
+### Softmax
+
+### Choosing an Activation Function
+
+## From a Neuron to a Neural Network
+
+### Input Layer
+
+### Hidden Layers
+
+### Output Layer
+
+### Fully Connected Layers
+
+### Feedforward Neural Networks
+
+### Network Depth and Width
+
+### Parameters and Hyperparameters
+
+## Forward Propagation
+
+### Layer-by-Layer Computation
+
+### Matrix Representation
+
+### Batch Representation
+
+### Computational Graphs
+
+## Loss Functions
+
+### Empirical Risk Minimisation
+
+### Mean Squared Error
+
+### Mean Absolute Error
+
+### Binary Cross-Entropy
+
+### Categorical Cross-Entropy
+
+### Sparse Categorical Cross-Entropy
+
+### Loss Function versus Evaluation Metric
+
+## Gradient-Based Learning
+
+### Derivatives and Partial Derivatives
+
+### Gradient
+
+### Chain Rule
+
+### Computational Graph Interpretation
+
+## Backpropagation
+
+### Motivation
+
+### Backpropagation through a Single Neuron
+
+### Backpropagation through Multiple Layers
+
+### Matrix Form of Backpropagation
+
+### Gradient Flow
+
+### Automatic Differentiation
+
+## Optimisation
+
+### Gradient Descent
+
+### Batch Gradient Descent
+
+### Stochastic Gradient Descent
+
+### Mini-Batch Gradient Descent
+
+### Learning Rate
+
+### Momentum
+
+### RMSProp
+
+### Adam
+
+### AdamW
+
+### Optimisation versus Learning
+
+## Training a Neural Network
+
+### Epochs
+
+### Batches
+
+### Iterations
+
+### Training Loop
+
+### Parameter Initialisation
+
+#### Zero Initialisation
+
+#### Random Initialisation
+
+#### Xavier / Glorot Initialisation
+
+#### He Initialisation
+
+### Shuffling
+
+### Validation during Training
+
+## Gradient Problems
+
+### Vanishing Gradients
+
+### Exploding Gradients
+
+### Saturating Activations
+
+### Dead ReLU Units
+
+### Gradient Clipping
+
+## Generalisation
+
+### Training Error and Generalisation Error
+
+### Underfitting
+
+### Overfitting
+
+### Bias and Variance
+
+### Model Capacity
+
+### Double Descent — Conceptual Overview
+
+## Regularisation
+
+### L1 and L2 Regularisation
+
+### Weight Decay
+
+### Dropout
+
+### Early Stopping
+
+### Data Augmentation
+
+### Noise Injection
+
+## Normalisation
+
+### Feature Scaling
+
+### Batch Normalisation
+
+### Layer Normalisation
+
+### Why Normalisation Helps
+
+## Training Diagnostics
+
+### Learning Curves
+
+### Training and Validation Loss
+
+### Diagnosing Underfitting
+
+### Diagnosing Overfitting
+
+### Diagnosing Optimisation Failure
+
+### Learning Rate Problems
+
+### Numerical Instability
+
+## Hyperparameter Selection
+
+### Learning Rate
+
+### Batch Size
+
+### Number of Layers
+
+### Number of Units
+
+### Activation Functions
+
+### Optimiser
+
+### Regularisation Strength
+
+### Training Duration
+
+## Reproducibility
+
+### Random Seeds
+
+### Deterministic Operations
+
+### Hardware Differences
+
+### Experiment Tracking
+
+# Implementing Neural Networks
+
+## Tensor Representation
+
+### Scalars
+
+### Vectors
+
+### Matrices
+
+### Higher-Order Tensors
+
+### Shape
+
+### Rank
+
+### Broadcasting
+
+### Batch Dimension
+
+## Deep Learning Frameworks
+
+### PyTorch
+
+### TensorFlow and Keras
+
+### Framework Abstractions
+
+## Building a Network
+
+### Layers
+
+### Models
+
+### Parameters
+
+### Forward Pass
+
+### Loss Computation
+
+### Backward Pass
+
+### Optimiser Step
+
+## The Training Loop
+
+### Training Mode
+
+### Evaluation Mode
+
+### Zeroing Gradients
+
+### Forward Pass
+
+### Backward Pass
+
+### Parameter Update
+
+## Data Pipelines
+
+### Dataset Abstraction
+
+### DataLoader
+
+### Batching
+
+### Shuffling
+
+### Parallel Data Loading
+
+## CPU and GPU Computation
+
+### Why GPUs?
+
+### Tensor Operations on GPUs
+
+### Moving Models and Data between Devices
+
+### GPU Memory
+
+### Training Bottlenecks
+
+## Saving and Loading Models
+
+### Model Parameters
+
+### Checkpoints
+
+### Resuming Training
+
+### Inference Mode
+
+# Representation Learning
+
+## Learned Representations
+
+## Embedding Spaces
+
+## Similarity
+
+## Latent Representations
+
+## Transfer Learning
+
+## Foundation Models
+
+## Fine-Tuning versus Feature Extraction
+
+## Multimodal Representations
+
+# Key Takeaways
+
+# Problems

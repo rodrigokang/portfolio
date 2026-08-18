@@ -1,0 +1,211 @@
+---
+title: "Deep Learning for Structured Prediction"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Deep Learning for Regression
+
+## Regression with Neural Networks
+
+### Problem Formulation
+
+### Network Architecture
+
+### Output Layer
+
+### Loss Functions
+
+### Evaluation Metrics
+
+## Data Preparation
+
+### Numerical Features
+
+### Categorical Features
+
+### Missing Values
+
+### Feature Scaling
+
+## Training
+
+### Architecture Selection
+
+### Optimisation
+
+### Regularisation
+
+### Validation
+
+## Evaluating Regression Models
+
+### MAE
+
+### MSE
+
+### RMSE
+
+### R-squared
+
+### Residual Analysis
+
+## Neural Networks versus Classical Regression
+
+### Linear Regression
+
+### Tree-Based Models
+
+### Gradient Boosting
+
+### When Neural Networks Add Value
+
+## Uncertainty in Neural Network Regression
+
+### Aleatoric Uncertainty
+
+### Epistemic Uncertainty
+
+### Prediction Intervals — Overview
+
+## Practical Regression Workflow
+
+# Deep Learning for Classification
+
+## Classification with Neural Networks
+
+### Binary Classification
+
+### Multiclass Classification
+
+### Multilabel Classification
+
+## Binary Classification
+
+### Output Layer
+
+### Sigmoid Activation
+
+### Binary Cross-Entropy
+
+### Decision Threshold
+
+## Multiclass Classification
+
+### Logits
+
+### Softmax
+
+### Categorical Cross-Entropy
+
+### Sparse Labels
+
+## Classification Metrics
+
+### Accuracy
+
+### Precision
+
+### Recall
+
+### Specificity
+
+### F1 Score
+
+### ROC Curve
+
+### ROC AUC
+
+### Precision–Recall Curve
+
+### Confusion Matrix
+
+## Classification Thresholds
+
+### Probability versus Decision
+
+### Threshold Selection
+
+### Cost-Sensitive Decisions
+
+## Class Imbalance
+
+### Why Accuracy Can Be Misleading
+
+### Class Weights
+
+### Resampling
+
+### Threshold Adjustment
+
+### Appropriate Metrics
+
+## Probability Calibration
+
+### Calibration Concept
+
+### Reliability Diagrams
+
+### Calibration versus Discrimination
+
+## Practical Classification Workflow
+
+# Key Takeaways
+
+# Problems
