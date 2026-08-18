@@ -1,0 +1,5523 @@
+---
+title: "Dataframes in Python"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Tabular Data and DataFrames
+
+A large proportion of applied data analysis begins with **tabular data**.
+
+In tabular form, data are organized into rows and columns:
+
+- each **row** usually represents an observation;
+- each **column** usually represents a variable;
+- each cell contains the value of a variable for a particular observation.
+
+For example, consider a small dataset containing information about four observations:
+
+| id | age | income | group |
+|:---:|:---:|:---:|:---:|
+| 1 | 25 | 42000 | A |
+| 2 | 31 | 51000 | B |
+| 3 | 28 | 47000 | A |
+| 4 | 40 | 68000 | B |
+
+The rows correspond to individual observations, while the columns describe their characteristics.
+
+If there are $n$ observations and $p$ variables, the data can be viewed conceptually as an $n \times p$ rectangular structure.
+
+However, real tabular datasets differ from ordinary numerical matrices in an important way: different columns may represent different types of information.
+
+For example:
+
+- `age` may contain integers;
+- `income` may contain floating-point values;
+- `group` may contain strings;
+- a date column may contain datetime values;
+- another column may contain Boolean values.
+
+This heterogeneous structure is one reason why NumPy arrays alone are not always the most convenient representation for tabular data.
+
+In Python, the `pandas` library provides the **DataFrame** abstraction for working with this type of data.
+
+The conventional import is:
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+# The pandas DataFrame
+
+A `DataFrame` is a mutable two-dimensional labelled data structure.
+
+Its two axes are:
+
+- the **row index**;
+- the **column index**.
+
+A simple DataFrame can be created from a dictionary:
+
+```{python}
+data = {
+    "x": [1, 2, 3, 4, 5],
+    "y": [2, 4, 6, 8, 10]
+}
+
+df = pd.DataFrame(data)
+
+df
+```
+
+The dictionary keys become column labels:
+
+```{python}
+df.columns
+```
+
+while pandas automatically creates a row index:
+
+```{python}
+df.index
+```
+
+The DataFrame therefore contains both the underlying values and labels describing their position.
+
+This distinction is fundamental.
+
+A DataFrame is not simply a two-dimensional NumPy array with prettier output. Its labelled axes influence:
+
+- selection;
+- alignment;
+- aggregation;
+- joining;
+- transformation.
+
+These behaviours become particularly important when working with real datasets.
+
+## Rows as Observations and Columns as Variables
+
+In most analytical datasets, the conventional interpretation is:
+
+$$
+\text{row}
+\longrightarrow
+\text{observation},
+$$
+
+and:
+
+$$
+\text{column}
+\longrightarrow
+\text{variable}.
+$$
+
+For example:
+
+```{python}
+people = pd.DataFrame({
+    "age": [25, 31, 28, 40],
+    "income": [42000, 51000, 47000, 68000],
+    "group": ["A", "B", "A", "B"]
+})
+
+people
+```
+
+Each row represents one person and each column describes one characteristic.
+
+This structure appears throughout Data Science and Machine Learning.
+
+A supervised learning dataset is often conceptually separated into:
+
+$$
+X
+=
+\text{predictor variables}
+$$
+
+and:
+
+$$
+y
+=
+\text{target variable}.
+$$
+
+Both commonly originate from columns of a DataFrame before being passed to a modelling library.
+
+# Creating DataFrames
+
+DataFrames can be created from several Python data structures.
+
+The most useful representations depend on how the original data are organized.
+
+## From a Dictionary
+
+A dictionary of lists is a natural representation when each dictionary entry corresponds to a variable:
+
+```{python}
+data = {
+    "x": [1, 2, 3, 4, 5],
+    "y": [2, 4, 6, 8, 10]
+}
+
+df = pd.DataFrame(data)
+
+df
+```
+
+The keys:
+
+```python
+"x"
+"y"
+```
+
+become column names.
+
+The corresponding lists provide the column values.
+
+All columns must be compatible with the number of rows being constructed.
+
+## From a List of Lists
+
+A DataFrame can also be constructed from records represented as lists:
+
+```{python}
+data = [
+    [1, 2],
+    [2, 4],
+    [3, 6],
+    [4, 8],
+    [5, 10]
+]
+
+df = pd.DataFrame(
+    data,
+    columns=["x", "y"]
+)
+
+df
+```
+
+Here, each inner list represents a row.
+
+Because the data themselves do not contain variable names, the column labels are supplied separately.
+
+## From a List of Dictionaries
+
+Another common representation is a list of records:
+
+```{python}
+data = [
+    {"x": 1, "y": 2},
+    {"x": 2, "y": 4},
+    {"x": 3, "y": 6},
+    {"x": 4, "y": 8},
+    {"x": 5, "y": 10}
+]
+
+df = pd.DataFrame(data)
+
+df
+```
+
+Each dictionary represents an observation, while the dictionary keys identify the variables.
+
+This record-oriented structure is conceptually close to formats such as JSON.
+
+## From Separate Sequences
+
+Suppose the variables already exist as separate sequences:
+
+```{python}
+x = [1, 2, 3, 4, 5]
+y = [2, 4, 6, 8, 10]
+```
+
+They can be combined directly:
+
+```{python}
+df = pd.DataFrame({
+    "x": x,
+    "y": y
+})
+
+df
+```
+
+The built-in `zip()` function can also combine the sequences into row-oriented records:
+
+```{python}
+data = list(
+    zip(x, y)
+)
+
+data
+```
+
+and then:
+
+```{python}
+df = pd.DataFrame(
+    data,
+    columns=["x", "y"]
+)
+
+df
+```
+
+Both approaches produce the same tabular structure, but the dictionary representation often communicates the column semantics more directly.
+
+## Custom Row Index
+
+A custom row index can be supplied during construction:
+
+```{python}
+df = pd.DataFrame(
+    {
+        "x": [1, 2, 3, 4, 5],
+        "y": [2, 4, 6, 8, 10]
+    },
+    index=[
+        "obs1",
+        "obs2",
+        "obs3",
+        "obs4",
+        "obs5"
+    ]
+)
+
+df
+```
+
+The labels:
+
+```text
+obs1
+obs2
+obs3
+obs4
+obs5
+```
+
+now identify the rows.
+
+An index is not necessarily an ordinary data variable. It is part of the DataFrame's labelling structure.
+
+Whether a particular identifier should remain a regular column or become an index depends on how the data will be used.
+
+# Understanding DataFrame Structure
+
+Before analysing an unfamiliar dataset, it is useful to inspect its basic structure.
+
+Consider:
+
+```{python}
+df = pd.DataFrame({
+    "age": [25, 31, 28, 40, 36],
+    "income": [
+        42000.0,
+        51000.0,
+        47000.0,
+        68000.0,
+        59000.0
+    ],
+    "group": [
+        "A",
+        "B",
+        "A",
+        "B",
+        "A"
+    ],
+    "active": [
+        True,
+        True,
+        False,
+        True,
+        False
+    ]
+})
+
+df
+```
+
+## Shape
+
+The `.shape` attribute returns:
+
+```{python}
+df.shape
+```
+
+The result has the form:
+
+```text
+(number of rows, number of columns)
+```
+
+If:
+
+```python
+df.shape == (5, 4)
+```
+
+then the DataFrame contains five observations and four variables.
+
+The number of dimensions can also be inspected using:
+
+```{python}
+df.ndim
+```
+
+A DataFrame is two-dimensional.
+
+## Column Names
+
+The column labels are available through:
+
+```{python}
+df.columns
+```
+
+The row labels are available through:
+
+```{python}
+df.index
+```
+
+These labels are part of the DataFrame structure and are used extensively in pandas operations.
+
+## Data Types
+
+Column data types can be inspected using:
+
+```{python}
+df.dtypes
+```
+
+Different columns may have different data types.
+
+For example:
+
+- `age` may be an integer;
+- `income` may be floating point;
+- `group` may contain strings;
+- `active` may be Boolean.
+
+This differs from an ordinary NumPy array, where all elements generally share a common `dtype`.
+
+## Information Summary
+
+The `.info()` method provides a compact structural summary:
+
+```{python}
+df.info()
+```
+
+It reports information such as:
+
+- number of rows;
+- column names;
+- number of non-null values;
+- data types;
+- approximate memory usage.
+
+This is often one of the first commands used when examining an unfamiliar DataFrame.
+
+## Inspecting the First and Last Rows
+
+The first rows can be displayed using:
+
+```{python}
+df.head()
+```
+
+or, for a specific number of rows:
+
+```{python}
+df.head(3)
+```
+
+Similarly:
+
+```{python}
+df.tail()
+```
+
+displays the final rows.
+
+These operations are useful for checking:
+
+- variable names;
+- approximate data structure;
+- unexpected values;
+- whether an import operation behaved as expected.
+
+They do not replace a systematic analysis of the data, but they provide a quick structural inspection.
+
+## Descriptive Summary
+
+For numerical columns:
+
+```{python}
+df.describe()
+```
+
+returns common descriptive statistics such as:
+
+- count;
+- mean;
+- standard deviation;
+- minimum;
+- quartiles;
+- maximum.
+
+These summaries are useful, but they compress the original data.
+
+For example, two variables can have similar means and standard deviations while having substantially different distributions.
+
+Descriptive statistics should therefore often be combined with the graphical analysis considered previously.
+
+# Series
+
+A pandas **Series** is a one-dimensional labelled data structure.
+
+A DataFrame column is usually represented as a Series.
+
+For example:
+
+```{python}
+age = df["age"]
+
+age
+```
+
+Its type is:
+
+```{python}
+type(age)
+```
+
+The Series contains:
+
+- values;
+- an index;
+- optionally, a name.
+
+These can be inspected using:
+
+```{python}
+age.index
+```
+
+```{python}
+age.name
+```
+
+and:
+
+```{python}
+age.dtype
+```
+
+A useful conceptual relationship is:
+
+$$
+\text{DataFrame}
+\approx
+\text{collection of aligned Series}.
+$$
+
+The word **aligned** is important because pandas uses index labels when combining many objects.
+
+This behaviour will be considered in more detail later.
+
+## Creating a Series Directly
+
+A Series can also be created independently:
+
+```{python}
+scores = pd.Series(
+    [72, 85, 91, 68],
+    index=[
+        "A",
+        "B",
+        "C",
+        "D"
+    ],
+    name="score"
+)
+
+scores
+```
+
+The index labels identify the observations.
+
+A Series therefore differs conceptually from an ordinary one-dimensional NumPy array because positions are accompanied by labels.
+
+# Selecting Columns
+
+Selecting data is one of the most common DataFrame operations.
+
+Consider:
+
+```{python}
+df = pd.DataFrame({
+    "name": [
+        "Alice",
+        "Bob",
+        "Carol",
+        "David",
+        "Eva"
+    ],
+    "age": [
+        25,
+        31,
+        28,
+        40,
+        36
+    ],
+    "income": [
+        42000,
+        51000,
+        47000,
+        68000,
+        59000
+    ],
+    "group": [
+        "A",
+        "B",
+        "A",
+        "B",
+        "A"
+    ]
+})
+
+df
+```
+
+A single column can be selected using:
+
+```{python}
+df["age"]
+```
+
+The result is a Series.
+
+This can be verified using:
+
+```{python}
+type(df["age"])
+```
+
+Several columns can be selected by providing a list of column names:
+
+```{python}
+df[
+    ["age", "income"]
+]
+```
+
+The result is a DataFrame:
+
+```{python}
+type(
+    df[["age", "income"]]
+)
+```
+
+This distinction is useful:
+
+```python
+df["age"]
+```
+
+returns a one-dimensional Series, whereas:
+
+```python
+df[["age"]]
+```
+
+returns a two-dimensional DataFrame containing one column.
+
+# Selecting Rows and Columns
+
+Pandas provides two central indexers for explicit selection:
+
+- `.loc[]`;
+- `.iloc[]`.
+
+The distinction between them is fundamental.
+
+## Label-Based Selection with `.loc[]`
+
+`.loc[]` selects data using **labels**.
+
+For example:
+
+```{python}
+df.loc[0]
+```
+
+returns the row whose index label is `0`.
+
+Rows and columns can be selected simultaneously:
+
+```{python}
+df.loc[
+    0,
+    "income"
+]
+```
+
+This selects the value at row label `0` and column `"income"`.
+
+Several rows and columns can also be selected:
+
+```{python}
+df.loc[
+    [0, 2, 4],
+    ["name", "income"]
+]
+```
+
+The general structure is:
+
+```python
+df.loc[
+    row_labels,
+    column_labels
+]
+```
+
+## Position-Based Selection with `.iloc[]`
+
+`.iloc[]` selects data according to **integer position**.
+
+For example:
+
+```{python}
+df.iloc[0]
+```
+
+returns the first row, regardless of its label.
+
+A single value can be selected using:
+
+```{python}
+df.iloc[
+    0,
+    2
+]
+```
+
+This means:
+
+- first row;
+- third column.
+
+Several positions can be selected:
+
+```{python}
+df.iloc[
+    [0, 2, 4],
+    [0, 2]
+]
+```
+
+The general structure is:
+
+```python
+df.iloc[
+    row_positions,
+    column_positions
+]
+```
+
+## Labels Are Not Positions
+
+The distinction becomes clearer when the DataFrame has a custom index.
+
+```{python}
+indexed_df = df.copy()
+
+indexed_df.index = [
+    10,
+    20,
+    30,
+    40,
+    50
+]
+
+indexed_df
+```
+
+Now:
+
+```{python}
+indexed_df.loc[20]
+```
+
+selects the row whose **label** is `20`.
+
+By contrast:
+
+```{python}
+indexed_df.iloc[1]
+```
+
+selects the **second row**.
+
+Both expressions return the same row in this example, but they do so for fundamentally different reasons.
+
+Confusing labels and positions is a common source of errors when working with pandas.
+
+# Slicing
+
+Both `.loc[]` and `.iloc[]` support slicing, but their endpoint behaviour differs.
+
+With `.iloc[]`, ordinary Python positional slicing rules apply:
+
+```{python}
+df.iloc[
+    1:4
+]
+```
+
+The row at position `4` is excluded.
+
+Thus the slice contains positions:
+
+```text
+1, 2, 3
+```
+
+With `.loc[]`, label slices generally include the final label:
+
+```{python}
+df.loc[
+    1:3
+]
+```
+
+This includes labels:
+
+```text
+1, 2, 3
+```
+
+This difference reflects the distinction between positional slicing and label-based slicing.
+
+# Boolean Filtering
+
+DataFrames are frequently filtered according to logical conditions.
+
+Suppose we want observations whose income exceeds 50,000.
+
+The comparison:
+
+```{python}
+df["income"] > 50000
+```
+
+returns a Boolean Series.
+
+Each row receives either:
+
+```text
+True
+```
+
+or:
+
+```text
+False
+```
+
+depending on whether the condition is satisfied.
+
+This Boolean Series can be used as a mask:
+
+```{python}
+df[
+    df["income"] > 50000
+]
+```
+
+Only rows for which the condition evaluates to `True` are retained.
+
+This operation can be understood conceptually as:
+
+$$
+\text{DataFrame}
++
+\text{Boolean condition}
+\longrightarrow
+\text{subset of observations}.
+$$
+
+## Filtering with `.loc[]`
+
+The same filtering operation can be written explicitly using `.loc[]`:
+
+```{python}
+df.loc[
+    df["income"] > 50000
+]
+```
+
+A useful advantage is that row filtering and column selection can be combined:
+
+```{python}
+df.loc[
+    df["income"] > 50000,
+    ["name", "income"]
+]
+```
+
+This expression means:
+
+1. retain rows where income exceeds 50,000;
+2. return only the `name` and `income` columns.
+
+## Multiple Conditions
+
+Conditions can be combined using:
+
+- `&` for element-wise AND;
+- `|` for element-wise OR;
+- `~` for element-wise NOT.
+
+Suppose we want observations where:
+
+$$
+\text{age} > 30
+$$
+
+and:
+
+$$
+\text{income} > 50000.
+$$
+
+We can write:
+
+```{python}
+df.loc[
+    (df["age"] > 30)
+    & (df["income"] > 50000)
+]
+```
+
+Parentheses around each comparison are important because of Python operator precedence.
+
+For an OR condition:
+
+```{python}
+df.loc[
+    (df["group"] == "A")
+    | (df["income"] > 60000)
+]
+```
+
+Negation can be written using:
+
+```{python}
+df.loc[
+    ~(df["group"] == "A")
+]
+```
+
+although an explicit inequality may be clearer in simple cases:
+
+```{python}
+df.loc[
+    df["group"] != "A"
+]
+```
+
+## Membership with `.isin()`
+
+Suppose observations should be retained when a column belongs to a collection of accepted values.
+
+For example:
+
+```{python}
+df.loc[
+    df["name"].isin(
+        ["Alice", "Carol", "Eva"]
+    )
+]
+```
+
+This is usually clearer than combining several equality comparisons with `|`.
+
+The corresponding negation is:
+
+```{python}
+df.loc[
+    ~df["name"].isin(
+        ["Alice", "Carol", "Eva"]
+    )
+]
+```
+
+## Filtering Missing Values
+
+Missing values require special treatment because comparisons involving missing data do not behave like ordinary equality comparisons.
+
+Pandas provides:
+
+```python
+.isna()
+```
+
+and:
+
+```python
+.notna()
+```
+
+for identifying missing and non-missing observations.
+
+For example:
+
+```{python}
+df_missing = pd.DataFrame({
+    "name": [
+        "Alice",
+        "Bob",
+        "Carol",
+        "David"
+    ],
+    "score": [
+        82.0,
+        np.nan,
+        91.0,
+        np.nan
+    ]
+})
+
+df_missing
+```
+
+Rows with missing scores can be selected using:
+
+```{python}
+df_missing.loc[
+    df_missing["score"].isna()
+]
+```
+
+Rows with observed scores can be selected using:
+
+```{python}
+df_missing.loc[
+    df_missing["score"].notna()
+]
+```
+
+Missing data will be considered in greater detail later because deciding how to handle them is an analytical question, not merely a syntactic operation.
+
+# Querying Versus Understanding
+
+Pandas makes complex filtering expressions compact.
+
+For example:
+
+```{python}
+df.loc[
+    (df["age"] >= 30)
+    & (df["income"] < 65000)
+    & df["group"].isin(["A", "B"]),
+    ["name", "age", "income"]
+]
+```
+
+However, compact syntax should not obscure the underlying logic.
+
+A useful way to reason about a filtering operation is:
+
+1. **What population does each row represent?**
+2. **What condition determines whether an observation is retained?**
+3. **Which variables are required in the resulting dataset?**
+4. **How should missing values affect the condition?**
+
+The objective is not simply to produce a syntactically valid expression. It is to ensure that the resulting subset corresponds to the intended analytical population.
+
+This distinction becomes particularly important in Data Science and Machine Learning, where an incorrect filter can silently change:
+
+- the training population;
+- class balance;
+- temporal coverage;
+- group representation;
+- estimated model performance.
+
+DataFrame manipulation is therefore part of the analytical reasoning process, not merely data-processing syntax.
+
+# Creating and Transforming Columns
+
+Data analysis frequently requires constructing new variables from existing ones.
+
+Consider:
+
+```{python}
+df = pd.DataFrame({
+    "product": [
+        "A",
+        "B",
+        "C",
+        "D"
+    ],
+    "price": [
+        10.0,
+        15.0,
+        8.0,
+        20.0
+    ],
+    "quantity": [
+        3,
+        2,
+        5,
+        4
+    ]
+})
+
+df
+```
+
+A new column can be created by assignment:
+
+```{python}
+df["revenue"] = (
+    df["price"]
+    * df["quantity"]
+)
+
+df
+```
+
+The operation is applied element by element:
+
+$$
+r_i
+=
+p_i q_i,
+$$
+
+where:
+
+- $p_i$ is the price of observation $i$;
+- $q_i$ is its quantity;
+- $r_i$ is the resulting revenue.
+
+This illustrates an important property of pandas: operations between compatible Series are generally **vectorized**.
+
+Instead of explicitly iterating through the rows, the transformation is expressed at the level of entire columns.
+
+## Vectorized Transformations
+
+Suppose prices must be increased by 10%.
+
+We can write:
+
+```{python}
+df["adjusted_price"] = (
+    df["price"] * 1.10
+)
+
+df
+```
+
+Similarly, a Boolean variable can be constructed from a logical condition:
+
+```{python}
+df["high_value"] = (
+    df["revenue"] >= 50
+)
+
+df
+```
+
+The resulting column contains Boolean values.
+
+A categorical variable can also be constructed conditionally:
+
+```{python}
+df["revenue_category"] = np.where(
+    df["revenue"] >= 50,
+    "High",
+    "Standard"
+)
+
+df
+```
+
+The general principle is:
+
+> When a transformation can be expressed naturally as an operation on complete columns, a vectorized expression is usually clearer than explicit row-by-row iteration.
+
+## Using `.assign()`
+
+New columns can also be created with `.assign()`:
+
+```{python}
+df = df.assign(
+    unit_tax=df["price"] * 0.15
+)
+
+df
+```
+
+One advantage of `.assign()` is that it fits naturally into method chains.
+
+For example:
+
+```{python}
+result = (
+    df
+    .assign(
+        total_cost=lambda x:
+            x["price"] * x["quantity"]
+    )
+    .sort_values(
+        "total_cost",
+        ascending=False
+    )
+)
+
+result
+```
+
+Method chaining can make a sequence of transformations easier to read when each step represents a clear analytical operation.
+
+However, long chains can also become difficult to inspect or debug.
+
+The objective is not to maximize compactness, but to express the transformation clearly.
+
+# Renaming Columns
+
+Column names often need to be changed because:
+
+- imported names are unclear;
+- naming conventions are inconsistent;
+- a variable has changed meaning after transformation;
+- names contain spaces or punctuation that make later code awkward.
+
+Columns can be renamed using:
+
+```{python}
+df = df.rename(
+    columns={
+        "price": "unit_price",
+        "quantity": "units"
+    }
+)
+
+df
+```
+
+A useful naming convention should make variables understandable without requiring unnecessary interpretation.
+
+For analytical code, names such as:
+
+```text
+unit_price
+order_date
+customer_id
+total_revenue
+```
+
+are generally more informative than abbreviated names whose meaning is not obvious.
+
+# Dropping Rows and Columns
+
+Columns can be removed using `.drop()`:
+
+```{python}
+df_reduced = df.drop(
+    columns=[
+        "revenue_category"
+    ]
+)
+
+df_reduced
+```
+
+Rows can also be removed by index label:
+
+```{python}
+df.drop(
+    index=[0]
+)
+```
+
+Dropping data should be treated as an analytical decision.
+
+Removing a column because it is genuinely irrelevant is different from removing it because its meaning is not yet understood.
+
+Similarly, removing observations can alter:
+
+- sample size;
+- class balance;
+- group representation;
+- estimated distributions;
+- downstream model performance.
+
+The operation is syntactically simple, but its analytical consequences may not be.
+
+# Data Types and Type Conversion
+
+The meaning of a column and its pandas data type should be compatible.
+
+Consider:
+
+```{python}
+data = pd.DataFrame({
+    "id": [
+        "1",
+        "2",
+        "3",
+        "4"
+    ],
+    "value": [
+        "10.5",
+        "12.7",
+        "9.8",
+        "15.1"
+    ]
+})
+
+data.dtypes
+```
+
+Both columns may initially be represented as strings.
+
+The numerical column can be converted using:
+
+```{python}
+data["value"] = (
+    data["value"]
+    .astype(float)
+)
+
+data.dtypes
+```
+
+Pandas also provides conversion functions such as:
+
+```python
+pd.to_numeric()
+pd.to_datetime()
+```
+
+For example:
+
+```{python}
+dates = pd.DataFrame({
+    "date": [
+        "2026-01-01",
+        "2026-01-15",
+        "2026-02-01"
+    ]
+})
+
+dates["date"] = pd.to_datetime(
+    dates["date"]
+)
+
+dates.dtypes
+```
+
+Correct data types matter because they determine which operations are meaningful.
+
+A date stored as an ordinary string cannot be manipulated as naturally as a datetime variable.
+
+Likewise, a numerical value stored as text can interfere with:
+
+- arithmetic;
+- sorting;
+- aggregation;
+- statistical modelling.
+
+# Missing Data
+
+Real datasets frequently contain missing values.
+
+In pandas, missing numerical values are commonly represented using `NaN`, although modern pandas supports several missing-value representations depending on the data type.
+
+Consider:
+
+```{python}
+df_missing = pd.DataFrame({
+    "age": [
+        25,
+        31,
+        np.nan,
+        40,
+        36
+    ],
+    "income": [
+        42000,
+        np.nan,
+        47000,
+        68000,
+        59000
+    ],
+    "group": [
+        "A",
+        "B",
+        "A",
+        None,
+        "A"
+    ]
+})
+
+df_missing
+```
+
+## Detecting Missing Values
+
+Missing values can be identified using:
+
+```{python}
+df_missing.isna()
+```
+
+The result is a Boolean DataFrame.
+
+The number of missing values in each column can be calculated using:
+
+```{python}
+df_missing.isna().sum()
+```
+
+This works because Boolean values can be aggregated numerically:
+
+$$
+\text{True} \rightarrow 1,
+\qquad
+\text{False} \rightarrow 0.
+$$
+
+The complementary operation is:
+
+```{python}
+df_missing.notna()
+```
+
+## Removing Missing Values
+
+Rows containing missing values can be removed using:
+
+```{python}
+df_missing.dropna()
+```
+
+A subset of columns can determine whether a row is removed:
+
+```{python}
+df_missing.dropna(
+    subset=["income"]
+)
+```
+
+This retains observations for which `income` is available, regardless of missing values elsewhere.
+
+However:
+
+> Missing observations should not be removed automatically simply because `dropna()` makes the operation easy.
+
+The consequences depend on **why the values are missing** and how the resulting dataset will be used.
+
+Dropping incomplete observations can:
+
+- reduce sample size;
+- alter distributions;
+- disproportionately remove particular groups;
+- introduce bias.
+
+## Filling Missing Values
+
+Missing values can be replaced using `.fillna()`.
+
+For example:
+
+```{python}
+df_filled = df_missing.copy()
+
+df_filled["income"] = (
+    df_filled["income"]
+    .fillna(
+        df_filled["income"].median()
+    )
+)
+
+df_filled
+```
+
+This replaces missing income values with the observed median.
+
+Although syntactically straightforward, this is an **imputation decision**.
+
+Median imputation changes the data distribution and does not preserve the uncertainty associated with the missing values.
+
+The appropriate treatment of missing data depends on:
+
+- the mechanism producing missingness;
+- the variable involved;
+- the analytical objective;
+- the downstream model.
+
+Pandas provides the operations, but it does not determine the correct statistical treatment.
+
+# Sorting Data
+
+Rows can be ordered according to one or more variables using `.sort_values()`.
+
+Consider:
+
+```{python}
+df = pd.DataFrame({
+    "name": [
+        "Alice",
+        "Bob",
+        "Carol",
+        "David",
+        "Eva"
+    ],
+    "age": [
+        25,
+        31,
+        28,
+        40,
+        36
+    ],
+    "income": [
+        42000,
+        51000,
+        47000,
+        68000,
+        59000
+    ],
+    "group": [
+        "A",
+        "B",
+        "A",
+        "B",
+        "A"
+    ]
+})
+```
+
+Sorting by income:
+
+```{python}
+df.sort_values(
+    "income"
+)
+```
+
+Descending order can be requested using:
+
+```{python}
+df.sort_values(
+    "income",
+    ascending=False
+)
+```
+
+Several variables can determine the ordering:
+
+```{python}
+df.sort_values(
+    by=[
+        "group",
+        "income"
+    ],
+    ascending=[
+        True,
+        False
+    ]
+)
+```
+
+This first orders observations by `group` and then orders observations within each group by decreasing income.
+
+## Sorting by Index
+
+Rows can also be sorted according to their index:
+
+```{python}
+df.sort_index()
+```
+
+Sorting does not generally change the underlying observations. It changes their order of presentation.
+
+Nevertheless, ordering can matter when:
+
+- inspecting results;
+- constructing reports;
+- working with temporal observations;
+- calculating operations that depend on sequence.
+
+# Grouping and Aggregation
+
+Many analytical questions concern **groups of observations** rather than individual rows.
+
+Examples include:
+
+- average income by region;
+- total sales by product;
+- number of customers by country;
+- mean model error by class;
+- monthly revenue;
+- number of transactions by customer.
+
+Pandas provides the `groupby()` mechanism for this purpose.
+
+Consider:
+
+```{python}
+sales = pd.DataFrame({
+    "region": [
+        "North",
+        "North",
+        "South",
+        "South",
+        "South",
+        "West"
+    ],
+    "sales": [
+        100,
+        150,
+        120,
+        180,
+        200,
+        140
+    ]
+})
+
+sales
+```
+
+The mean sales by region can be calculated using:
+
+```{python}
+sales.groupby(
+    "region"
+)["sales"].mean()
+```
+
+Conceptually, this operation performs three steps:
+
+1. **split** observations into groups;
+2. **apply** an operation within each group;
+3. **combine** the results.
+
+This is often described as the:
+
+> **split–apply–combine** strategy.
+
+If the observations are partitioned into groups:
+
+$$
+G_1,G_2,\ldots,G_k,
+$$
+
+then an aggregation applies a function $f$ independently:
+
+$$
+G_j
+\longrightarrow
+f(G_j).
+$$
+
+For a mean:
+
+$$
+\bar{x}_j
+=
+\frac{1}{n_j}
+\sum_{i \in G_j} x_i.
+$$
+
+## Common Aggregations
+
+Common aggregation methods include:
+
+```python
+.mean()
+.sum()
+.count()
+.size()
+.min()
+.max()
+.median()
+.std()
+```
+
+For example:
+
+```{python}
+sales.groupby(
+    "region"
+)["sales"].sum()
+```
+
+returns total sales by region.
+
+The number of rows in each group can be obtained with:
+
+```{python}
+sales.groupby(
+    "region"
+).size()
+```
+
+## Aggregating Several Variables
+
+Consider:
+
+```{python}
+employees = pd.DataFrame({
+    "department": [
+        "A",
+        "A",
+        "B",
+        "B",
+        "B",
+        "C"
+    ],
+    "salary": [
+        60000,
+        65000,
+        70000,
+        72000,
+        68000,
+        75000
+    ],
+    "experience": [
+        2,
+        4,
+        5,
+        6,
+        3,
+        8
+    ]
+})
+```
+
+Several numerical variables can be aggregated simultaneously:
+
+```{python}
+employees.groupby(
+    "department"
+)[
+    ["salary", "experience"]
+].mean()
+```
+
+The result contains one row per department.
+
+This illustrates an important change in **granularity**.
+
+Before aggregation:
+
+$$
+\text{one row}
+\longrightarrow
+\text{one employee}.
+$$
+
+After aggregation:
+
+$$
+\text{one row}
+\longrightarrow
+\text{one department}.
+$$
+
+Understanding the granularity represented by each row is essential when manipulating tabular data.
+
+# Multiple Aggregations
+
+The `.agg()` method allows several statistics to be calculated together:
+
+```{python}
+employees.groupby(
+    "department"
+)["salary"].agg([
+    "count",
+    "mean",
+    "median",
+    "min",
+    "max"
+])
+```
+
+Named aggregations can produce more explicit output:
+
+```{python}
+summary = (
+    employees
+    .groupby("department")
+    .agg(
+        employee_count=(
+            "salary",
+            "size"
+        ),
+        mean_salary=(
+            "salary",
+            "mean"
+        ),
+        median_salary=(
+            "salary",
+            "median"
+        ),
+        mean_experience=(
+            "experience",
+            "mean"
+        )
+    )
+)
+
+summary
+```
+
+This form is particularly useful when the resulting table will be used later because the output variable names communicate their meaning directly.
+
+# Aggregation Versus Transformation
+
+Aggregation reduces several observations to a smaller number of group-level results.
+
+Sometimes, however, we need a group statistic while preserving the original number of rows.
+
+Consider:
+
+```{python}
+employees["department_mean_salary"] = (
+    employees
+    .groupby("department")["salary"]
+    .transform("mean")
+)
+
+employees
+```
+
+Each employee now receives the mean salary of their department.
+
+The number of rows has not changed.
+
+This distinction is fundamental:
+
+```text
+aggregation
+    many rows → fewer rows
+
+transformation
+    many rows → same number of rows
+```
+
+For example, salary relative to the department mean can be calculated as:
+
+```{python}
+employees["salary_difference"] = (
+    employees["salary"]
+    - employees["department_mean_salary"]
+)
+
+employees
+```
+
+This type of group-relative feature construction is common in feature engineering.
+
+# Combining DataFrames
+
+Analytical information is frequently distributed across multiple tables.
+
+Pandas provides several mechanisms for combining tabular data.
+
+Two important operations are:
+
+- **concatenation**;
+- **merging**.
+
+They solve different problems.
+
+# Concatenation
+
+`pd.concat()` combines DataFrames along an axis.
+
+Consider two batches of observations:
+
+```{python}
+df_a = pd.DataFrame({
+    "id": [1, 2],
+    "value": [10, 20]
+})
+
+df_b = pd.DataFrame({
+    "id": [3, 4],
+    "value": [30, 40]
+})
+```
+
+They can be stacked vertically:
+
+```{python}
+combined = pd.concat(
+    [df_a, df_b],
+    ignore_index=True
+)
+
+combined
+```
+
+The operation can be understood as:
+
+$$
+\begin{bmatrix}
+A
+\end{bmatrix}
++
+\begin{bmatrix}
+B
+\end{bmatrix}
+\longrightarrow
+\begin{bmatrix}
+A\\
+B
+\end{bmatrix}.
+$$
+
+This is appropriate when both DataFrames represent the same variables for different observations.
+
+## Column-Wise Concatenation
+
+DataFrames can also be concatenated horizontally:
+
+```{python}
+left = pd.DataFrame({
+    "x": [1, 2, 3]
+})
+
+right = pd.DataFrame({
+    "y": [10, 20, 30]
+})
+
+pd.concat(
+    [left, right],
+    axis=1
+)
+```
+
+However, horizontal concatenation uses the index to align rows.
+
+This means that it should not be interpreted as simply placing columns next to each other without considering labels.
+
+# Merging DataFrames
+
+`merge()` combines DataFrames according to one or more **keys**.
+
+Consider:
+
+```{python}
+customers = pd.DataFrame({
+    "customer_id": [
+        1,
+        2,
+        3
+    ],
+    "customer_name": [
+        "Alpha",
+        "Beta",
+        "Gamma"
+    ]
+})
+
+orders = pd.DataFrame({
+    "order_id": [
+        101,
+        102,
+        103,
+        104
+    ],
+    "customer_id": [
+        1,
+        2,
+        1,
+        3
+    ],
+    "amount": [
+        50,
+        80,
+        30,
+        120
+    ]
+})
+```
+
+The tables contain different information but share:
+
+```text
+customer_id
+```
+
+They can be merged using:
+
+```{python}
+customer_orders = orders.merge(
+    customers,
+    on="customer_id"
+)
+
+customer_orders
+```
+
+The resulting table combines information from both DataFrames according to matching key values.
+
+This operation is conceptually similar to a relational database join.
+
+# Join Types
+
+The `how` parameter controls which keys are retained.
+
+## Inner Join
+
+```{python}
+orders.merge(
+    customers,
+    on="customer_id",
+    how="inner"
+)
+```
+
+An inner join retains only keys that match in both tables.
+
+If:
+
+$$
+K_L
+$$
+
+is the set of keys in the left table and:
+
+$$
+K_R
+$$
+
+the set in the right table, then an inner join retains:
+
+$$
+K_L \cap K_R.
+$$
+
+## Left Join
+
+```{python}
+orders.merge(
+    customers,
+    on="customer_id",
+    how="left"
+)
+```
+
+A left join preserves all rows from the left table.
+
+When no corresponding key exists in the right table, columns contributed by the right table contain missing values.
+
+## Right Join
+
+A right join preserves all rows from the right table:
+
+```python
+left.merge(
+    right,
+    how="right"
+)
+```
+
+## Outer Join
+
+An outer join retains keys appearing in either table:
+
+$$
+K_L \cup K_R.
+$$
+
+In pandas:
+
+```python
+left.merge(
+    right,
+    how="outer"
+)
+```
+
+Unmatched information is represented using missing values.
+
+# Keys and Cardinality
+
+A merge is not defined only by the column names used as keys.
+
+The **cardinality** of the relationship matters.
+
+Common relationships include:
+
+- one-to-one;
+- one-to-many;
+- many-to-one;
+- many-to-many.
+
+Consider the customer and order example.
+
+Each customer appears once in `customers`, but a customer may appear several times in `orders`.
+
+Therefore:
+
+$$
+\text{Customers}
+\rightarrow
+\text{Orders}
+$$
+
+is a one-to-many relationship.
+
+When the tables are merged, customer information is repeated for each matching order.
+
+This repetition is not necessarily duplication in the sense of a data-quality error. It follows from the granularity of the resulting table:
+
+$$
+\text{one row}
+\longrightarrow
+\text{one order}.
+$$
+
+## Validating Merge Assumptions
+
+Pandas can validate expected merge cardinality.
+
+For example:
+
+```{python}
+customer_orders = orders.merge(
+    customers,
+    on="customer_id",
+    how="left",
+    validate="many_to_one"
+)
+
+customer_orders
+```
+
+This states that:
+
+- many rows may contain the same `customer_id` in `orders`;
+- each `customer_id` should occur at most once in `customers`.
+
+If the assumption is violated, pandas raises an error.
+
+This can be extremely useful because unintended duplicate keys can silently multiply rows after a merge.
+
+# Row Multiplication
+
+Suppose both tables contain repeated values for the merge key.
+
+Then a many-to-many merge can create several combinations for the same key.
+
+For example:
+
+```{python}
+left = pd.DataFrame({
+    "key": ["A", "A"],
+    "x": [1, 2]
+})
+
+right = pd.DataFrame({
+    "key": ["A", "A", "A"],
+    "y": [10, 20, 30]
+})
+
+left.merge(
+    right,
+    on="key"
+)
+```
+
+There are:
+
+$$
+2
+$$
+
+matching rows on the left and:
+
+$$
+3
+$$
+
+on the right.
+
+The result therefore contains:
+
+$$
+2 \times 3 = 6
+$$
+
+rows for key `A`.
+
+This behaviour is correct according to relational join semantics.
+
+The analytical question is whether such a relationship was intended.
+
+For this reason, after important merges it is useful to inspect:
+
+- row counts;
+- key uniqueness;
+- unmatched keys;
+- expected cardinality.
+
+# Indexes
+
+Every DataFrame has an index.
+
+Consider:
+
+```{python}
+df = pd.DataFrame({
+    "customer_id": [
+        101,
+        102,
+        103
+    ],
+    "name": [
+        "Alpha",
+        "Beta",
+        "Gamma"
+    ],
+    "value": [
+        10,
+        20,
+        30
+    ]
+})
+
+df
+```
+
+The default index is:
+
+```{python}
+df.index
+```
+
+A column can be moved into the index using:
+
+```{python}
+indexed = df.set_index(
+    "customer_id"
+)
+
+indexed
+```
+
+Now:
+
+```{python}
+indexed.loc[102]
+```
+
+selects the observation whose customer identifier is `102`.
+
+The index can be converted back into a regular column:
+
+```{python}
+indexed.reset_index()
+```
+
+Indexes can be useful for:
+
+- labelled selection;
+- alignment;
+- time-series operations;
+- identifying observations.
+
+However, not every identifier should automatically become an index.
+
+Keeping identifiers as ordinary columns is often clearer when they are:
+
+- merge keys;
+- model features;
+- exported to external systems;
+- manipulated explicitly.
+
+# Index Alignment
+
+One of the most important pandas behaviours is **automatic alignment by index label**.
+
+Consider:
+
+```{python}
+a = pd.Series(
+    [10, 20, 30],
+    index=[
+        "A",
+        "B",
+        "C"
+    ]
+)
+
+b = pd.Series(
+    [1, 2, 3],
+    index=[
+        "C",
+        "B",
+        "A"
+    ]
+)
+```
+
+Now calculate:
+
+```{python}
+a + b
+```
+
+Pandas does not simply add values according to physical position.
+
+Instead, it aligns the Series by their labels.
+
+The operation is therefore:
+
+$$
+a_A+b_A,
+$$
+
+$$
+a_B+b_B,
+$$
+
+$$
+a_C+b_C.
+$$
+
+This is fundamentally different from ordinary positional NumPy arithmetic.
+
+## Alignment with Missing Labels
+
+Consider:
+
+```{python}
+a = pd.Series(
+    [10, 20, 30],
+    index=[
+        "A",
+        "B",
+        "C"
+    ]
+)
+
+b = pd.Series(
+    [1, 2, 3],
+    index=[
+        "B",
+        "C",
+        "D"
+    ]
+)
+```
+
+Then:
+
+```{python}
+a + b
+```
+
+produces missing values where one of the labels is absent.
+
+Only labels present in both Series can be added directly.
+
+This behaviour is powerful because it reduces the risk of combining values belonging to different observations merely because they occupy the same physical position.
+
+However, it can also produce unexpected missing values if index alignment is not understood.
+
+# Alignment in DataFrames
+
+The same principle applies when DataFrames are combined or assigned.
+
+Consider:
+
+```{python}
+df = pd.DataFrame(
+    {
+        "value": [
+            100,
+            200,
+            300
+        ]
+    },
+    index=[
+        "A",
+        "B",
+        "C"
+    ]
+)
+
+adjustment = pd.Series(
+    [10, 20, 30],
+    index=[
+        "C",
+        "A",
+        "B"
+    ]
+)
+
+df["adjustment"] = adjustment
+
+df
+```
+
+The values are assigned according to matching index labels rather than according to their original order in the Series.
+
+This is one of the defining features of pandas.
+
+A useful mental model is:
+
+> NumPy primarily reasons about array positions and shapes; pandas additionally reasons about labels.
+
+Both abstractions are useful, but they solve different problems.
+
+# Duplicates
+
+Duplicate rows can be detected using:
+
+```{python}
+duplicate_data = pd.DataFrame({
+    "id": [
+        1,
+        2,
+        2,
+        3
+    ],
+    "value": [
+        10,
+        20,
+        20,
+        30
+    ]
+})
+
+duplicate_data.duplicated()
+```
+
+They can be removed using:
+
+```{python}
+duplicate_data.drop_duplicates()
+```
+
+Duplicates can also be defined relative to selected columns:
+
+```{python}
+duplicate_data.duplicated(
+    subset=["id"]
+)
+```
+
+However, repeated values are not automatically duplicate observations.
+
+For example, in an order table a customer identifier may legitimately appear many times because one customer can place many orders.
+
+Whether repeated values indicate duplication depends on the expected **granularity** and **key structure** of the table.
+
+This connects directly with merge cardinality.
+
+# Granularity
+
+One of the most useful questions when working with DataFrames is:
+
+> **What does one row represent?**
+
+Possible answers include:
+
+- one customer;
+- one transaction;
+- one product;
+- one customer per month;
+- one measurement at one time point;
+- one model prediction;
+- one order line.
+
+This property is often called the **granularity** or **grain** of the dataset.
+
+Many DataFrame errors can be understood as failures to keep track of grain.
+
+For example:
+
+- `groupby()` changes grain;
+- aggregation changes grain;
+- a one-to-many merge may preserve the grain of the many-side table;
+- a many-to-many merge may create a new and unexpected grain;
+- `drop_duplicates()` can destroy legitimate observations if repeated keys are expected.
+
+Before and after an important transformation, it is useful to ask:
+
+1. What does one row represent?
+2. Which columns uniquely identify a row?
+3. Has the operation changed that interpretation?
+4. Is the resulting number of rows plausible?
+
+These questions are often more important than remembering the exact pandas method used to perform the operation.
+
+# Data Transformation as Analytical Reasoning
+
+Pandas makes transformations concise, but a valid operation is not necessarily a valid analytical operation.
+
+For example:
+
+```python
+df.groupby(...)
+df.merge(...)
+df.dropna(...)
+df.drop_duplicates(...)
+```
+
+can all execute successfully while producing a dataset that does not represent the intended population.
+
+A robust DataFrame workflow therefore combines syntax with explicit reasoning about:
+
+- data types;
+- missingness;
+- keys;
+- cardinality;
+- granularity;
+- aggregation;
+- alignment.
+
+These concepts become particularly important when DataFrames are constructed from relational databases, where the structure of the source tables explicitly encodes relationships between entities.
+
+The next step is therefore to connect pandas with **external tabular data and relational databases**.
+
+# Reading and Writing Tabular Data
+
+In practice, DataFrames are usually created from external data rather than manually constructed inside Python.
+
+Common sources include:
+
+- CSV files;
+- spreadsheets;
+- relational databases;
+- columnar storage formats;
+- application APIs;
+- other analytical systems.
+
+Pandas provides functions that convert many of these external representations into DataFrames.
+
+The general pattern is:
+
+$$
+\text{external data source}
+\longrightarrow
+\text{DataFrame}
+\longrightarrow
+\text{analysis or transformation}.
+$$
+
+The DataFrame acts as an in-memory tabular representation on which pandas operations can be performed.
+
+## Reading CSV Files
+
+A CSV file can be loaded using:
+
+```python
+df = pd.read_csv(
+    "data.csv"
+)
+```
+
+The resulting object is a DataFrame:
+
+```python
+type(df)
+```
+
+After loading an unfamiliar file, useful first checks include:
+
+```python
+df.head()
+```
+
+```python
+df.shape
+```
+
+```python
+df.info()
+```
+
+```python
+df.isna().sum()
+```
+
+These operations help answer basic questions:
+
+- Were the columns interpreted correctly?
+- How many observations were loaded?
+- Which data types were inferred?
+- Are missing values present?
+- Does the imported structure match expectations?
+
+Reading a file successfully does not guarantee that it has been interpreted correctly.
+
+## Controlling Import Behaviour
+
+Real files may require additional information during import.
+
+For example:
+
+```python
+df = pd.read_csv(
+    "data.csv",
+    usecols=[
+        "customer_id",
+        "order_date",
+        "amount"
+    ]
+)
+```
+
+selects only the required columns.
+
+Missing-value conventions can also be specified:
+
+```python
+df = pd.read_csv(
+    "data.csv",
+    na_values=[
+        "",
+        "NA",
+        "missing"
+    ]
+)
+```
+
+Date parsing can be performed after loading:
+
+```python
+df["order_date"] = pd.to_datetime(
+    df["order_date"]
+)
+```
+
+The important principle is that **data import is part of data interpretation**.
+
+Choices made during import determine:
+
+- data types;
+- missing-value representations;
+- columns available downstream;
+- sometimes the apparent values themselves.
+
+## Writing CSV Files
+
+A DataFrame can be exported using:
+
+```python
+df.to_csv(
+    "output.csv",
+    index=False
+)
+```
+
+Using:
+
+```python
+index=False
+```
+
+prevents the DataFrame index from being written as an additional column when that index is not part of the intended dataset.
+
+Before exporting, it is useful to ask whether:
+
+- the index represents meaningful data;
+- column names are appropriate;
+- data types will survive the format;
+- important metadata may be lost.
+
+CSV is widely compatible but stores relatively little information about types and metadata.
+
+# String Data
+
+Text columns frequently require transformations before they can be analysed or used as model inputs.
+
+Pandas provides vectorized string operations through the `.str` accessor.
+
+Consider:
+
+```{python}
+customers = pd.DataFrame({
+    "name": [
+        "  Alice Smith ",
+        "BOB JONES",
+        "Carol Brown"
+    ],
+    "city": [
+        "Auckland",
+        "WELLINGTON",
+        "christchurch"
+    ]
+})
+
+customers
+```
+
+Whitespace can be removed using:
+
+```{python}
+customers["name"] = (
+    customers["name"]
+    .str.strip()
+)
+
+customers
+```
+
+Text can be converted to lower case:
+
+```{python}
+customers["city_lower"] = (
+    customers["city"]
+    .str.lower()
+)
+
+customers
+```
+
+or title case:
+
+```{python}
+customers["city_clean"] = (
+    customers["city"]
+    .str.title()
+)
+
+customers
+```
+
+These operations are vectorized over the Series.
+
+## Searching within Strings
+
+String values can be tested using operations such as:
+
+```python
+.str.contains()
+.str.startswith()
+.str.endswith()
+```
+
+For example:
+
+```{python}
+customers.loc[
+    customers["name"].str.contains(
+        "Alice",
+        case=False,
+        na=False
+    )
+]
+```
+
+The result of `.str.contains()` is a Boolean Series that can be used as a filter.
+
+## Extracting Components
+
+Suppose identifiers follow a structured pattern:
+
+```{python}
+data = pd.DataFrame({
+    "code": [
+        "NZ-AKL-001",
+        "NZ-WLG-002",
+        "NZ-CHC-003"
+    ]
+})
+```
+
+The code can be split:
+
+```{python}
+data[
+    ["country", "city", "id"]
+] = (
+    data["code"]
+    .str.split(
+        "-",
+        expand=True
+    )
+)
+
+data
+```
+
+String manipulation therefore allows information encoded inside text fields to be converted into explicit variables.
+
+However, transformations should reflect actual semantics rather than merely convenient patterns.
+
+# Datetime Data
+
+Dates and times frequently appear in transactional, operational, and machine learning datasets.
+
+A string such as:
+
+```text
+2026-08-18
+```
+
+may visually resemble a date while still being stored as text.
+
+Datetime conversion can be performed using:
+
+```{python}
+events = pd.DataFrame({
+    "event_date": [
+        "2026-01-15",
+        "2026-02-03",
+        "2026-03-21"
+    ]
+})
+
+events["event_date"] = pd.to_datetime(
+    events["event_date"]
+)
+
+events.dtypes
+```
+
+Once a Series has a datetime dtype, pandas provides the `.dt` accessor.
+
+## Extracting Datetime Components
+
+For example:
+
+```{python}
+events["year"] = (
+    events["event_date"].dt.year
+)
+
+events["month"] = (
+    events["event_date"].dt.month
+)
+
+events["day"] = (
+    events["event_date"].dt.day
+)
+
+events
+```
+
+Other useful components include:
+
+```python
+.dt.dayofweek
+.dt.day_name()
+.dt.month_name()
+.dt.quarter
+```
+
+These can support exploratory analysis and feature construction.
+
+## Time Differences
+
+Datetime values can be subtracted:
+
+```{python}
+dates = pd.DataFrame({
+    "start": pd.to_datetime([
+        "2026-01-01",
+        "2026-02-01"
+    ]),
+    "end": pd.to_datetime([
+        "2026-01-10",
+        "2026-02-20"
+    ])
+})
+
+dates["duration"] = (
+    dates["end"]
+    - dates["start"]
+)
+
+dates
+```
+
+The result is a timedelta.
+
+The duration in days can be obtained with:
+
+```{python}
+dates["duration_days"] = (
+    dates["duration"].dt.days
+)
+
+dates
+```
+
+Datetime operations are particularly important when observations have a temporal structure.
+
+In machine learning, temporal information also requires care because random train/test splitting may be inappropriate when future observations must be predicted from past data.
+
+# Categorical Summaries
+
+For categorical variables, frequency-based methods provide useful summaries.
+
+Consider:
+
+```{python}
+customers = pd.DataFrame({
+    "country": [
+        "NZ",
+        "AU",
+        "NZ",
+        "US",
+        "NZ",
+        "AU"
+    ]
+})
+```
+
+Frequencies can be calculated using:
+
+```{python}
+customers["country"].value_counts()
+```
+
+Relative frequencies can be obtained using:
+
+```{python}
+customers[
+    "country"
+].value_counts(
+    normalize=True
+)
+```
+
+The number of unique observed values is:
+
+```{python}
+customers["country"].nunique()
+```
+
+and the unique values themselves can be inspected using:
+
+```{python}
+customers["country"].unique()
+```
+
+These operations are useful when checking:
+
+- categorical distributions;
+- unexpected levels;
+- class imbalance;
+- high-cardinality variables.
+
+# Mapping and Replacing Values
+
+Known values can be mapped to alternative representations.
+
+For example:
+
+```{python}
+status = pd.DataFrame({
+    "code": [
+        0,
+        1,
+        1,
+        0
+    ]
+})
+```
+
+A mapping can be defined:
+
+```{python}
+status["label"] = (
+    status["code"]
+    .map({
+        0: "inactive",
+        1: "active"
+    })
+)
+
+status
+```
+
+`.map()` is useful when a Series value has a direct mapping to another value.
+
+Values can also be replaced using:
+
+```{python}
+status["code"].replace({
+    0: False,
+    1: True
+})
+```
+
+The appropriate operation depends on whether the task represents:
+
+- recoding;
+- lookup;
+- transformation;
+- cleaning.
+
+# Reshaping Tabular Data
+
+The same information can often be represented using different table layouts.
+
+Two common structures are **wide** and **long** formats.
+
+Consider:
+
+```{python}
+wide = pd.DataFrame({
+    "customer": [
+        "A",
+        "B",
+        "C"
+    ],
+    "sales_2024": [
+        100,
+        150,
+        120
+    ],
+    "sales_2025": [
+        130,
+        160,
+        140
+    ]
+})
+
+wide
+```
+
+Each year appears as a separate column.
+
+This is a wide representation.
+
+A long representation might instead contain:
+
+```text
+customer | year | sales
+```
+
+with multiple rows per customer.
+
+## Wide to Long with `melt()`
+
+Pandas can reshape the table using:
+
+```{python}
+long = wide.melt(
+    id_vars="customer",
+    value_vars=[
+        "sales_2024",
+        "sales_2025"
+    ],
+    var_name="year",
+    value_name="sales"
+)
+
+long
+```
+
+The grain changes from:
+
+$$
+\text{one row per customer}
+$$
+
+to:
+
+$$
+\text{one row per customer-year}.
+$$
+
+This illustrates why reshaping should be understood in terms of data meaning, not only table appearance.
+
+## Long to Wide with `pivot()`
+
+The long representation can be reshaped:
+
+```{python}
+long.pivot(
+    index="customer",
+    columns="year",
+    values="sales"
+)
+```
+
+`pivot()` reorganizes existing values without aggregation.
+
+If multiple rows exist for the same combination of index and column keys, a simple pivot is ambiguous.
+
+# Pivot Tables
+
+When several observations correspond to the same combination of groups, aggregation may be required.
+
+Consider:
+
+```{python}
+sales = pd.DataFrame({
+    "region": [
+        "North",
+        "North",
+        "North",
+        "South",
+        "South",
+        "South"
+    ],
+    "product": [
+        "A",
+        "A",
+        "B",
+        "A",
+        "B",
+        "B"
+    ],
+    "amount": [
+        100,
+        120,
+        80,
+        140,
+        110,
+        130
+    ]
+})
+```
+
+A pivot table can calculate mean sales for each region-product combination:
+
+```{python}
+sales.pivot_table(
+    index="region",
+    columns="product",
+    values="amount",
+    aggfunc="mean"
+)
+```
+
+The operation combines:
+
+- grouping;
+- aggregation;
+- reshaping.
+
+A pivot table therefore changes both the numerical summary and the layout of the data.
+
+# Relational Data
+
+Tabular data are frequently stored in relational databases rather than in a single flat table.
+
+A relational database separates information into tables representing different entities and relationships.
+
+The Northwind schema provides a useful example.
+
+Its `Customers` table stores customer information, while `Orders` contains a `CustomerID` foreign key linking each order to a customer. `Orders` also links to `Employees` and `Shippers`. `OrderDetails` links individual order lines to both `Orders` and `Products`. :contentReference[oaicite:0]{index=0} :contentReference[oaicite:1]{index=1}
+
+This structure separates different grains:
+
+```text
+Customers
+    one row → one customer
+
+Orders
+    one row → one order
+
+OrderDetails
+    one row → one order line
+
+Products
+    one row → one product
+```
+
+This is precisely why keys and cardinality matter.
+
+# Primary and Foreign Keys
+
+A **primary key** uniquely identifies a row within a table.
+
+In Northwind:
+
+```text
+CustomerID
+```
+
+is the primary key of `Customers`, and:
+
+```text
+OrderID
+```
+
+is the primary key of `Orders`. :contentReference[oaicite:2]{index=2} :contentReference[oaicite:3]{index=3}
+
+A **foreign key** references a key in another table.
+
+For example, `Orders.CustomerID` references `Customers.CustomerID`. Similarly, `OrderDetails.OrderID` references `Orders.OrderID`, while `OrderDetails.ProductID` references `Products.ProductID`. :contentReference[oaicite:4]{index=4}
+
+These relationships encode how separate tables can be combined.
+
+# SQL and pandas
+
+SQL and pandas provide overlapping but different mechanisms for working with tabular data.
+
+SQL operates naturally where the data are stored in a relational database.
+
+Pandas operates naturally once data have been loaded into Python memory.
+
+A common workflow is:
+
+$$
+\text{database}
+\longrightarrow
+\text{SQL query}
+\longrightarrow
+\text{DataFrame}
+\longrightarrow
+\text{analysis}.
+$$
+
+The boundary between SQL and pandas should be chosen deliberately.
+
+Filtering and aggregation that can be performed efficiently inside a database may be preferable to loading an unnecessarily large raw table into memory.
+
+# SQLite
+
+Python includes support for SQLite through the standard-library `sqlite3` module.
+
+A connection to a Northwind SQLite database can be created using:
+
+```python
+import sqlite3
+
+connection = sqlite3.connect(
+    "Northwind.db"
+)
+```
+
+The SQL script supplied for these notes creates the Northwind tables in SQLite and can also be executed directly using the SQLite command-line interface. :contentReference[oaicite:5]{index=5}
+
+Once a connection exists, pandas can execute SQL queries and load the result directly into a DataFrame.
+
+# Reading SQL Queries into DataFrames
+
+For example:
+
+```python
+query = """
+SELECT
+    CustomerID,
+    CustomerName,
+    Country
+FROM Customers
+"""
+
+customers = pd.read_sql_query(
+    query,
+    connection
+)
+```
+
+The resulting `customers` object is an ordinary DataFrame.
+
+Pandas operations can then be applied:
+
+```python
+customers.head()
+```
+
+```python
+customers[
+    "Country"
+].value_counts()
+```
+
+SQL determines which data are returned from the database; pandas determines how the resulting in-memory table is manipulated afterward.
+
+# Filtering in SQL
+
+Suppose only customers from a particular country are required.
+
+The filtering can happen inside the SQL query:
+
+```python
+query = """
+SELECT
+    CustomerID,
+    CustomerName,
+    Country
+FROM Customers
+WHERE Country = 'Germany'
+"""
+```
+
+rather than loading the full customer table and then applying:
+
+```python
+customers.loc[
+    customers["Country"] == "Germany"
+]
+```
+
+Both approaches can produce the same analytical subset.
+
+The difference is **where the operation occurs**.
+
+For small datasets, the distinction may have little practical effect.
+
+For large databases, filtering before transferring the data can substantially reduce:
+
+- memory consumption;
+- network transfer;
+- processing inside Python.
+
+# Aggregation in SQL
+
+SQL can also perform group-level aggregation.
+
+For example:
+
+```python
+query = """
+SELECT
+    Country,
+    COUNT(*) AS customer_count
+FROM Customers
+GROUP BY Country
+ORDER BY customer_count DESC
+"""
+```
+
+The result can be loaded directly:
+
+```python
+customer_counts = pd.read_sql_query(
+    query,
+    connection
+)
+```
+
+The equivalent conceptual pandas workflow would be based on:
+
+```python
+customers.groupby(
+    "Country"
+).size()
+```
+
+The syntax differs, but both operations express the same analytical idea:
+
+$$
+\text{group observations}
+\longrightarrow
+\text{aggregate within groups}.
+$$
+
+# SQL Joins
+
+The relationships defined in Northwind make joins particularly useful.
+
+For example, each order contains a `CustomerID`, while customer names and countries are stored separately in `Customers`. :contentReference[oaicite:6]{index=6} :contentReference[oaicite:7]{index=7}
+
+A SQL join can combine them:
+
+```python
+query = """
+SELECT
+    o.OrderID,
+    o.OrderDate,
+    c.CustomerName,
+    c.Country
+FROM Orders AS o
+JOIN Customers AS c
+    ON o.CustomerID = c.CustomerID
+"""
+```
+
+Loading the query:
+
+```python
+orders = pd.read_sql_query(
+    query,
+    connection
+)
+```
+
+produces a DataFrame whose grain remains:
+
+$$
+\text{one row per order}.
+$$
+
+Customer information is repeated across the orders belonging to the same customer because the relationship is:
+
+$$
+\text{one customer}
+\longrightarrow
+\text{many orders}.
+$$
+
+# Joining Order Details and Products
+
+Northwind also provides a more granular relationship.
+
+`OrderDetails` contains `OrderID`, `ProductID`, and `Quantity`, while `Products` contains the corresponding product information and price. :contentReference[oaicite:8]{index=8}
+
+A query can construct order-line information:
+
+```python
+query = """
+SELECT
+    od.OrderID,
+    od.ProductID,
+    p.ProductName,
+    od.Quantity,
+    p.Price
+FROM OrderDetails AS od
+JOIN Products AS p
+    ON od.ProductID = p.ProductID
+"""
+```
+
+The resulting DataFrame has grain:
+
+$$
+\text{one row per order line}.
+$$
+
+A derived value can then be constructed in pandas:
+
+```python
+order_lines["line_value"] = (
+    order_lines["Quantity"]
+    * order_lines["Price"]
+)
+```
+
+This example demonstrates a realistic division of responsibilities:
+
+- SQL resolves relational structure;
+- pandas performs subsequent analytical transformations.
+
+# Combining Several Relational Tables
+
+A richer query can combine:
+
+- orders;
+- customers;
+- order details;
+- products.
+
+Conceptually:
+
+```text
+Customers
+    ↓ CustomerID
+Orders
+    ↓ OrderID
+OrderDetails
+    ↓ ProductID
+Products
+```
+
+For example:
+
+```python
+query = """
+SELECT
+    o.OrderID,
+    o.OrderDate,
+    c.CustomerName,
+    c.Country,
+    p.ProductName,
+    od.Quantity,
+    p.Price
+FROM Orders AS o
+JOIN Customers AS c
+    ON o.CustomerID = c.CustomerID
+JOIN OrderDetails AS od
+    ON o.OrderID = od.OrderID
+JOIN Products AS p
+    ON od.ProductID = p.ProductID
+"""
+```
+
+The resulting grain is no longer one row per order.
+
+Because one order may contain several order details, the result represents:
+
+$$
+\text{one row per order line}.
+$$
+
+This illustrates a critical principle:
+
+> A join can change the number of rows and the meaning of each row even when every join condition is technically correct.
+
+# SQL or pandas?
+
+There is no universal rule stating that transformation should happen exclusively in SQL or exclusively in pandas.
+
+SQL is often preferable for:
+
+- selecting required rows;
+- selecting required columns;
+- joining large relational tables;
+- aggregating data before transfer;
+- leveraging database query engines.
+
+Pandas is often convenient for:
+
+- exploratory transformations;
+- feature engineering;
+- statistical analysis;
+- integration with Python libraries;
+- model preparation;
+- complex in-memory workflows.
+
+A common practical strategy is:
+
+> Use SQL to retrieve an appropriately shaped analytical dataset, then use pandas for analysis and modelling transformations.
+
+The appropriate boundary depends on:
+
+- data volume;
+- database capabilities;
+- workflow architecture;
+- maintainability;
+- reproducibility.
+
+# DataFrames and Machine Learning
+
+Pandas DataFrames are commonly used during the stages immediately preceding model fitting.
+
+Consider:
+
+```{python}
+df = pd.DataFrame({
+    "age": [
+        25,
+        31,
+        28,
+        40,
+        36
+    ],
+    "income": [
+        42000,
+        51000,
+        47000,
+        68000,
+        59000
+    ],
+    "segment": [
+        "A",
+        "B",
+        "A",
+        "B",
+        "A"
+    ],
+    "target": [
+        0,
+        1,
+        0,
+        1,
+        1
+    ]
+})
+```
+
+The predictors and target can be separated:
+
+```{python}
+X = df[
+    [
+        "age",
+        "income",
+        "segment"
+    ]
+]
+
+y = df["target"]
+```
+
+Here:
+
+```python
+X
+```
+
+is a DataFrame, while:
+
+```python
+y
+```
+
+is a Series.
+
+The conceptual structure is:
+
+$$
+X
+\in
+\text{tabular feature space},
+$$
+
+and:
+
+$$
+y
+\in
+\text{target space}.
+$$
+
+# Categorical Features
+
+Many machine learning algorithms ultimately require numerical input.
+
+A categorical column such as:
+
+```text
+segment
+```
+
+therefore cannot always be passed directly to an estimator.
+
+Pandas can produce indicator variables using:
+
+```{python}
+X_encoded = pd.get_dummies(
+    X,
+    columns=[
+        "segment"
+    ],
+    dtype=int
+)
+
+X_encoded
+```
+
+The categorical variable is replaced by binary indicator columns.
+
+This is commonly called **one-hot encoding**.
+
+However, encoding is not simply a formatting step.
+
+Its appropriateness depends on:
+
+- the meaning of the category;
+- the model being used;
+- category cardinality;
+- how unseen categories will be handled later.
+
+In production modelling workflows, transformations are often incorporated into reusable preprocessing pipelines rather than performed manually on the complete dataset.
+
+# From DataFrame to NumPy
+
+A DataFrame can be converted to a NumPy array:
+
+```{python}
+X_array = X_encoded.to_numpy()
+
+X_array
+```
+
+Its shape can be inspected using:
+
+```{python}
+X_array.shape
+```
+
+This connects the DataFrame abstraction with the array abstraction considered previously.
+
+The distinction is useful:
+
+```text
+DataFrame
+    labelled columns
+    heterogeneous tabular structure
+    index-aware operations
+
+NumPy array
+    homogeneous numerical representation
+    shape-based computation
+    no semantic column labels
+```
+
+Many machine learning libraries can accept DataFrames directly, but the underlying numerical computation is ultimately often array-based.
+
+# Avoiding Target Leakage
+
+DataFrame transformations can introduce modelling errors even when the pandas code itself is correct.
+
+One particularly important example is **target leakage**.
+
+Suppose a feature is constructed using information that would not be available at prediction time.
+
+The resulting model may appear to perform extremely well while relying on information it could never legitimately access in deployment.
+
+Leakage can arise during:
+
+- feature construction;
+- aggregation;
+- missing-value imputation;
+- scaling;
+- train/test preparation;
+- joins with future information.
+
+The relevant question is not only:
+
+> Does this transformation run correctly?
+
+but also:
+
+> Would this information genuinely be available when a prediction must be made?
+
+# Train/Test Contamination
+
+Suppose missing values are filled using a mean calculated from the complete dataset before train/test splitting.
+
+Then information from the test observations has influenced the training transformation.
+
+Similarly, fitting category encodings, scalers, or feature-selection procedures using all observations can contaminate model evaluation.
+
+The safer conceptual workflow is:
+
+$$
+\text{split data}
+\longrightarrow
+\text{fit preprocessing on training data}
+\longrightarrow
+\text{apply to validation/test data}.
+$$
+
+This issue lies beyond pandas syntax itself, but it is essential when DataFrames are used in machine learning workflows.
+
+# Common DataFrame Problems
+
+Many pandas errors are not syntax errors.
+
+They arise because the code executes successfully while the resulting table no longer represents the intended analytical data.
+
+## Unintended Row Multiplication
+
+A many-to-many merge may silently increase the number of rows.
+
+After important merges, inspect:
+
+```python
+result.shape
+```
+
+and validate expected cardinality where possible.
+
+## Unexpected Missing Values after Alignment
+
+Series and DataFrames align by index labels.
+
+If indexes differ unexpectedly, arithmetic or assignment may introduce missing values.
+
+Inspect:
+
+```python
+df.index
+```
+
+when alignment behaviour is surprising.
+
+## Incorrect Data Types
+
+A numeric variable imported as text can alter:
+
+- arithmetic;
+- sorting;
+- aggregation.
+
+Inspect:
+
+```python
+df.dtypes
+```
+
+rather than assuming imported types are correct.
+
+## Silent Changes in Grain
+
+Operations such as:
+
+```python
+groupby()
+merge()
+pivot_table()
+melt()
+```
+
+can change what one row represents.
+
+Always reconsider the dataset grain after structural transformations.
+
+## Chained Assignment
+
+Expressions that combine multiple indexing operations can make assignment behaviour ambiguous.
+
+For example:
+
+```python
+df[df["income"] > 50000]["flag"] = True
+```
+
+should generally be avoided.
+
+Explicit `.loc[]` assignment is clearer:
+
+```python
+df.loc[
+    df["income"] > 50000,
+    "flag"
+] = True
+```
+
+This states directly which rows and column are being modified.
+
+## Row-Wise Iteration
+
+Pandas provides methods for iterating through rows, but explicit row-by-row processing is often unnecessary for numerical or logical transformations.
+
+Before writing a loop, consider whether the operation can be expressed using:
+
+- vectorized arithmetic;
+- Boolean masks;
+- `.map()`;
+- string accessors;
+- datetime accessors;
+- `groupby()`;
+- joins.
+
+Vectorized expressions are often clearer and better aligned with the tabular abstraction.
+
+# A Systematic DataFrame Workflow
+
+When working with an unfamiliar DataFrame, a useful sequence of questions is:
+
+1. **What does one row represent?**
+2. **What does each column represent?**
+3. **Which columns identify observations uniquely?**
+4. **What are the data types?**
+5. **Where are values missing?**
+6. **Are categorical levels plausible?**
+7. **Are repeated keys expected?**
+8. **Will any merge change the grain?**
+9. **Are indexes being used intentionally?**
+10. **What information will ultimately become predictors and target?**
+
+These questions provide a stronger foundation than memorizing isolated pandas methods.
+
+# Key Takeaways
+
+A pandas DataFrame is a two-dimensional labelled tabular structure in which rows usually represent observations and columns represent variables.
+
+Unlike NumPy arrays, DataFrames can naturally contain columns with different data types and use explicit row and column labels.
+
+A DataFrame column is usually represented as a Series. Series and DataFrames use index labels for alignment, which distinguishes pandas operations from purely positional array computation.
+
+`.loc[]` performs label-based selection, while `.iloc[]` performs position-based selection. Understanding the distinction between labels and positions is fundamental to reliable DataFrame manipulation.
+
+Boolean masks allow observations to be filtered according to analytical conditions. Multiple conditions can be combined using element-wise logical operators.
+
+Column transformations are usually most naturally expressed as vectorized operations. Pandas also provides specialized interfaces for strings, datetimes, mappings, categorical summaries, and group-level transformations.
+
+Missing data should be identified explicitly, but their treatment is an analytical decision rather than simply a choice between `dropna()` and `fillna()`.
+
+`groupby()` implements the split–apply–combine pattern. Aggregation reduces groups to fewer rows, while transformation can calculate group-level quantities while preserving the original number of observations.
+
+`pd.concat()` combines tabular structures along an axis, while `merge()` combines tables according to keys. Join type, key uniqueness, cardinality, and grain determine the meaning and size of the resulting table.
+
+Pandas indexes are not merely row numbers. They participate in label-based selection and automatic alignment.
+
+Wide and long representations encode the same information using different table structures. `melt()`, `pivot()`, and `pivot_table()` provide mechanisms for moving between these representations.
+
+External data can be loaded from files or databases. Import should be treated as part of data interpretation because inferred data types, missing-value conventions, and selected columns affect all downstream analysis.
+
+Relational databases separate entities into related tables. Primary and foreign keys define those relationships, while SQL joins can construct analytical tables from them. In Northwind, the relationships among customers, orders, order details, and products provide a concrete example of one-to-many relational structure. :contentReference[oaicite:9]{index=9} :contentReference[oaicite:10]{index=10}
+
+SQL and pandas are complementary. SQL can efficiently retrieve and shape relational data near its source, while pandas provides a flexible in-memory environment for analysis, feature engineering, and integration with the Python machine learning ecosystem.
+
+In machine learning workflows, DataFrames often form the interface between raw data and numerical modelling. Their labels and heterogeneous types support data preparation, while the final model representation is often numerical and array-like.
+
+Reliable DataFrame work therefore depends less on memorizing pandas methods than on maintaining a clear understanding of **data types, labels, keys, cardinality, missingness, alignment, and the grain represented by each row**.
+
+# Problems
+
+The following problems review the main concepts introduced in this chapter. They progress from basic DataFrame construction and selection to grouping, relational operations, reshaping, SQL integration, and DataFrame reasoning in machine learning workflows.
+
+## Problem 1 — Creating a DataFrame
+
+Create the following DataFrame:
+
+```python
+data = {
+    "name": [
+        "Alice",
+        "Bob",
+        "Carol",
+        "David"
+    ],
+    "age": [
+        25,
+        31,
+        28,
+        40
+    ],
+    "income": [
+        42000,
+        51000,
+        47000,
+        68000
+    ]
+}
+```
+
+Inspect:
+
+- its type;
+- shape;
+- number of dimensions;
+- column labels;
+- row index;
+- column data types.
+
+Explain what one row represents and what one column represents.
+
+## Problem 2 — Series Versus DataFrame
+
+Using the DataFrame from Problem 1, compare:
+
+```python
+df["age"]
+```
+
+with:
+
+```python
+df[["age"]]
+```
+
+Determine:
+
+- the type of each result;
+- the dimensionality of each result;
+- the shape of each result.
+
+Explain why the distinction between a Series and a one-column DataFrame can matter in later operations.
+
+## Problem 3 — Structural Inspection
+
+Create a DataFrame containing:
+
+- one integer column;
+- one floating-point column;
+- one string column;
+- one Boolean column.
+
+Use:
+
+```python
+df.head()
+df.tail()
+df.info()
+df.describe()
+df.dtypes
+```
+
+Explain what information each operation provides.
+
+Which of these operations are most useful when first inspecting an unfamiliar dataset?
+
+## Problem 4 — Label-Based and Position-Based Selection
+
+Consider:
+
+```python
+df = pd.DataFrame(
+    {
+        "name": [
+            "Alice",
+            "Bob",
+            "Carol",
+            "David"
+        ],
+        "score": [
+            82,
+            91,
+            76,
+            88
+        ]
+    },
+    index=[
+        10,
+        20,
+        30,
+        40
+    ]
+)
+```
+
+Determine the result of:
+
+```python
+df.loc[20]
+df.iloc[1]
+df.loc[20, "score"]
+df.iloc[1, 1]
+```
+
+Explain why:
+
+```python
+df.loc[1]
+```
+
+and:
+
+```python
+df.iloc[1]
+```
+
+do not mean the same thing.
+
+## Problem 5 — Slicing with `.loc[]` and `.iloc[]`
+
+Using the same DataFrame, compare:
+
+```python
+df.loc[10:30]
+```
+
+with:
+
+```python
+df.iloc[0:3]
+```
+
+Determine which rows are included in each case.
+
+Explain the difference between the endpoint semantics of label-based and position-based slicing.
+
+## Problem 6 — Boolean Filtering
+
+Given:
+
+```python
+df = pd.DataFrame({
+    "name": [
+        "Alice",
+        "Bob",
+        "Carol",
+        "David",
+        "Eva"
+    ],
+    "age": [
+        25,
+        31,
+        28,
+        40,
+        36
+    ],
+    "income": [
+        42000,
+        51000,
+        47000,
+        68000,
+        59000
+    ],
+    "group": [
+        "A",
+        "B",
+        "A",
+        "B",
+        "A"
+    ]
+})
+```
+
+Select all rows satisfying:
+
+$$
+\text{age} > 30
+$$
+
+and:
+
+$$
+\text{income} < 65000.
+$$
+
+Return only:
+
+```text
+name
+age
+income
+```
+
+Use `.loc[]`.
+
+## Problem 7 — Combining Boolean Conditions
+
+Using the same DataFrame, select observations satisfying either:
+
+$$
+\text{group} = A
+$$
+
+or:
+
+$$
+\text{income} > 60000.
+$$
+
+Then select observations satisfying both:
+
+$$
+\text{group} = A
+$$
+
+and:
+
+$$
+\text{age} \geq 30.
+$$
+
+Explain why `&` and `|` are used rather than Python's scalar `and` and `or`.
+
+## Problem 8 — Membership Filtering
+
+Using the previous DataFrame, select observations whose names belong to:
+
+```python
+[
+    "Alice",
+    "Carol",
+    "Eva"
+]
+```
+
+using `.isin()`.
+
+Then select all observations whose names do **not** belong to this collection.
+
+## Problem 9 — Creating a Derived Numerical Column
+
+Consider:
+
+```python
+sales = pd.DataFrame({
+    "product": [
+        "A",
+        "B",
+        "C",
+        "D"
+    ],
+    "price": [
+        10.0,
+        15.0,
+        8.0,
+        20.0
+    ],
+    "quantity": [
+        3,
+        2,
+        5,
+        4
+    ]
+})
+```
+
+Create:
+
+```text
+revenue
+```
+
+where:
+
+$$
+\text{revenue}_i
+=
+\text{price}_i
+\times
+\text{quantity}_i.
+$$
+
+Do not use an explicit Python loop.
+
+Explain why this is a vectorized transformation.
+
+## Problem 10 — Conditional Columns
+
+Using the DataFrame from Problem 9, create:
+
+```text
+high_value
+```
+
+that is `True` whenever:
+
+$$
+\text{revenue} \geq 50.
+$$
+
+Then create:
+
+```text
+revenue_category
+```
+
+with values:
+
+```text
+High
+Standard
+```
+
+using `np.where()`.
+
+## Problem 11 — `.assign()` and Method Chaining
+
+Rewrite the revenue calculation using `.assign()`.
+
+Then construct a method chain that:
+
+1. calculates revenue;
+2. retains rows where revenue is at least 30;
+3. sorts the result from highest to lowest revenue.
+
+Explain one advantage and one potential disadvantage of method chaining.
+
+## Problem 12 — Renaming and Dropping Columns
+
+Given:
+
+```python
+df = pd.DataFrame({
+    "p": [10, 20, 30],
+    "q": [2, 4, 5],
+    "unused": [0, 0, 0]
+})
+```
+
+rename:
+
+```text
+p → price
+q → quantity
+```
+
+and remove:
+
+```text
+unused
+```
+
+Return the transformed DataFrame.
+
+## Problem 13 — Type Conversion
+
+Consider:
+
+```python
+df = pd.DataFrame({
+    "id": [
+        "1",
+        "2",
+        "3"
+    ],
+    "amount": [
+        "10.5",
+        "7.2",
+        "14.8"
+    ],
+    "date": [
+        "2026-01-01",
+        "2026-01-02",
+        "2026-01-03"
+    ]
+})
+```
+
+Convert:
+
+- `amount` to a numerical type;
+- `date` to datetime.
+
+Inspect the data types before and after conversion.
+
+Explain why type correctness is analytically important.
+
+## Problem 14 — Detecting Missing Values
+
+Given:
+
+```python
+df = pd.DataFrame({
+    "age": [
+        25,
+        np.nan,
+        31,
+        40
+    ],
+    "income": [
+        42000,
+        51000,
+        np.nan,
+        68000
+    ],
+    "group": [
+        "A",
+        "B",
+        None,
+        "B"
+    ]
+})
+```
+
+determine:
+
+1. which individual values are missing;
+2. the number of missing values in each column;
+3. the rows containing a missing `income`;
+4. the rows with an observed `income`.
+
+## Problem 15 — Dropping Missing Values
+
+Using the previous DataFrame, compare:
+
+```python
+df.dropna()
+```
+
+with:
+
+```python
+df.dropna(
+    subset=["income"]
+)
+```
+
+Explain why the second operation can retain more observations.
+
+Discuss why dropping all incomplete rows automatically may be analytically inappropriate.
+
+## Problem 16 — Simple Imputation
+
+Replace missing income values with the median of the observed income values.
+
+Then compare:
+
+```python
+df["income"].median()
+```
+
+before and after the replacement.
+
+Explain why median imputation is a modelling decision rather than merely a pandas operation.
+
+## Problem 17 — Sorting
+
+Using an appropriate DataFrame, sort:
+
+1. income from lowest to highest;
+2. income from highest to lowest;
+3. first by group alphabetically and then by income descending.
+
+Explain what changes and what does not change when rows are sorted.
+
+## Problem 18 — Frequency Tables
+
+Consider:
+
+```python
+df = pd.DataFrame({
+    "country": [
+        "NZ",
+        "AU",
+        "NZ",
+        "US",
+        "NZ",
+        "AU",
+        "UK",
+        "NZ"
+    ]
+})
+```
+
+calculate:
+
+```python
+value_counts()
+value_counts(normalize=True)
+nunique()
+unique()
+```
+
+Explain what each result tells you.
+
+## Problem 19 — String Cleaning
+
+Given:
+
+```python
+df = pd.DataFrame({
+    "name": [
+        "  alice smith",
+        "BOB JONES ",
+        " Carol Brown "
+    ],
+    "city": [
+        "auckland",
+        "WELLINGTON",
+        "christchurch"
+    ]
+})
+```
+
+transform the data so that:
+
+- leading and trailing whitespace is removed;
+- names are title-cased;
+- cities are title-cased.
+
+Use vectorized `.str` operations.
+
+## Problem 20 — String Filtering
+
+Using an appropriate text column, select rows whose value:
+
+1. contains `"north"`, ignoring case;
+2. starts with `"A"`;
+3. ends with `"Ltd"`.
+
+Explain why `na=False` can be useful when using `.str.contains()`.
+
+## Problem 21 — Splitting Structured Text
+
+Given:
+
+```python
+df = pd.DataFrame({
+    "code": [
+        "NZ-AKL-001",
+        "NZ-WLG-002",
+        "AU-SYD-003"
+    ]
+})
+```
+
+split `code` into:
+
+```text
+country
+city
+id
+```
+
+using:
+
+```python
+.str.split(
+    "-",
+    expand=True
+)
+```
+
+Explain how information embedded in text has been transformed into explicit variables.
+
+## Problem 22 — Datetime Components
+
+Given:
+
+```python
+df = pd.DataFrame({
+    "date": [
+        "2026-01-15",
+        "2026-03-21",
+        "2026-07-04"
+    ]
+})
+```
+
+convert `date` to datetime and create:
+
+```text
+year
+month
+day
+day_name
+quarter
+```
+
+using `.dt`.
+
+## Problem 23 — Time Differences
+
+Create two datetime columns:
+
+```text
+start
+end
+```
+
+and calculate:
+
+```text
+duration
+duration_days
+```
+
+Explain the difference between a datetime value and a timedelta value.
+
+## Problem 24 — GroupBy and Mean
+
+Consider:
+
+```python
+sales = pd.DataFrame({
+    "region": [
+        "North",
+        "North",
+        "South",
+        "South",
+        "South",
+        "West"
+    ],
+    "sales": [
+        100,
+        150,
+        120,
+        180,
+        200,
+        140
+    ]
+})
+```
+
+calculate:
+
+- mean sales by region;
+- total sales by region;
+- number of observations by region.
+
+Explain the split–apply–combine interpretation of each operation.
+
+## Problem 25 — Multiple Group Aggregations
+
+Given:
+
+```python
+employees = pd.DataFrame({
+    "department": [
+        "A",
+        "A",
+        "B",
+        "B",
+        "B",
+        "C"
+    ],
+    "salary": [
+        60000,
+        65000,
+        70000,
+        72000,
+        68000,
+        75000
+    ],
+    "experience": [
+        2,
+        4,
+        5,
+        6,
+        3,
+        8
+    ]
+})
+```
+
+produce a summary containing, for each department:
+
+- employee count;
+- mean salary;
+- median salary;
+- mean experience.
+
+Use named aggregation.
+
+## Problem 26 — Aggregation Changes Grain
+
+Using the employees DataFrame, explain the grain:
+
+1. before grouping;
+2. after aggregating by department.
+
+Why is it important to recognize that the resulting rows no longer represent individual employees?
+
+## Problem 27 — Group-Level Transformation
+
+Add:
+
+```text
+department_mean_salary
+```
+
+to every employee using:
+
+```python
+groupby(...).transform(...)
+```
+
+Then create:
+
+```text
+salary_difference
+```
+
+defined as:
+
+$$
+\text{salary}
+-
+\text{department mean salary}.
+$$
+
+Explain why `transform()` preserves the original number of rows while `agg()` does not.
+
+## Problem 28 — Concatenating Observations
+
+Given:
+
+```python
+df_a = pd.DataFrame({
+    "id": [1, 2],
+    "value": [10, 20]
+})
+
+df_b = pd.DataFrame({
+    "id": [3, 4],
+    "value": [30, 40]
+})
+```
+
+combine them vertically using `pd.concat()`.
+
+Reset the resulting index appropriately.
+
+Explain why concatenation is appropriate here rather than a merge.
+
+## Problem 29 — Horizontal Concatenation and Index Alignment
+
+Consider:
+
+```python
+left = pd.DataFrame(
+    {"x": [1, 2, 3]},
+    index=["A", "B", "C"]
+)
+
+right = pd.DataFrame(
+    {"y": [10, 20, 30]},
+    index=["C", "B", "A"]
+)
+```
+
+Predict the result of:
+
+```python
+pd.concat(
+    [left, right],
+    axis=1
+)
+```
+
+Explain why the rows are aligned by index label rather than by physical position.
+
+## Problem 30 — Basic Merge
+
+Given:
+
+```python
+customers = pd.DataFrame({
+    "customer_id": [1, 2, 3],
+    "customer_name": [
+        "Alpha",
+        "Beta",
+        "Gamma"
+    ]
+})
+
+orders = pd.DataFrame({
+    "order_id": [
+        101,
+        102,
+        103,
+        104
+    ],
+    "customer_id": [
+        1,
+        2,
+        1,
+        3
+    ],
+    "amount": [
+        50,
+        80,
+        30,
+        120
+    ]
+})
+```
+
+merge the two DataFrames so that each order contains the corresponding customer name.
+
+Determine the grain of the resulting DataFrame.
+
+## Problem 31 — Join Types
+
+Modify the previous example so that:
+
+- one customer has no orders;
+- one order refers to a customer not present in the customer table.
+
+Compare:
+
+```python
+how="inner"
+how="left"
+how="right"
+how="outer"
+```
+
+For each result, explain which keys are retained.
+
+## Problem 32 — Cardinality
+
+For the original customer/order relationship, determine whether the merge is:
+
+- one-to-one;
+- one-to-many;
+- many-to-one;
+- many-to-many.
+
+Then use:
+
+```python
+validate="many_to_one"
+```
+
+during the merge.
+
+Explain which table represents the "many" side and which represents the "one" side.
+
+## Problem 33 — Unexpected Row Multiplication
+
+Consider:
+
+```python
+left = pd.DataFrame({
+    "key": ["A", "A"],
+    "x": [1, 2]
+})
+
+right = pd.DataFrame({
+    "key": ["A", "A", "A"],
+    "y": [10, 20, 30]
+})
+```
+
+Predict how many rows result from:
+
+```python
+left.merge(
+    right,
+    on="key"
+)
+```
+
+Explain why.
+
+Why can this behaviour be dangerous when repeated keys are unexpected?
+
+## Problem 34 — Index Alignment in Series
+
+Consider:
+
+```python
+a = pd.Series(
+    [10, 20, 30],
+    index=[
+        "A",
+        "B",
+        "C"
+    ]
+)
+
+b = pd.Series(
+    [1, 2, 3],
+    index=[
+        "C",
+        "B",
+        "A"
+    ]
+)
+```
+
+Predict:
+
+```python
+a + b
+```
+
+Explain why pandas does not calculate:
+
+```text
+10 + 1
+20 + 2
+30 + 3
+```
+
+according to physical position.
+
+## Problem 35 — Missing Labels During Alignment
+
+Consider:
+
+```python
+a = pd.Series(
+    [10, 20, 30],
+    index=[
+        "A",
+        "B",
+        "C"
+    ]
+)
+
+b = pd.Series(
+    [1, 2, 3],
+    index=[
+        "B",
+        "C",
+        "D"
+    ]
+)
+```
+
+Predict:
+
+```python
+a + b
+```
+
+Explain why some results are missing.
+
+## Problem 36 — Duplicate Rows Versus Repeated Keys
+
+Create a DataFrame where:
+
+- two rows are exact duplicates;
+- several rows share the same customer identifier but represent different orders.
+
+Use:
+
+```python
+duplicated()
+drop_duplicates()
+duplicated(subset=...)
+```
+
+Explain why repeated customer identifiers are not necessarily duplicate observations.
+
+## Problem 37 — Wide to Long Format
+
+Given:
+
+```python
+wide = pd.DataFrame({
+    "customer": [
+        "A",
+        "B",
+        "C"
+    ],
+    "sales_2024": [
+        100,
+        150,
+        120
+    ],
+    "sales_2025": [
+        130,
+        160,
+        140
+    ]
+})
+```
+
+convert the DataFrame to long format with columns:
+
+```text
+customer
+year
+sales
+```
+
+using `melt()`.
+
+Describe the grain before and after reshaping.
+
+## Problem 38 — Long to Wide Format
+
+Using the result from Problem 37, reconstruct a wide representation using `pivot()`.
+
+Explain why `pivot()` requires one unique value for every combination of index and column keys.
+
+## Problem 39 — Pivot Table with Aggregation
+
+Consider:
+
+```python
+sales = pd.DataFrame({
+    "region": [
+        "North",
+        "North",
+        "North",
+        "South",
+        "South",
+        "South"
+    ],
+    "product": [
+        "A",
+        "A",
+        "B",
+        "A",
+        "B",
+        "B"
+    ],
+    "amount": [
+        100,
+        120,
+        80,
+        140,
+        110,
+        130
+    ]
+})
+```
+
+create a pivot table showing mean `amount` for each region-product combination.
+
+Explain why `pivot_table()` is appropriate while a simple `pivot()` is not.
+
+## Problem 40 — Reading a CSV
+
+Suppose a file named:
+
+```text
+transactions.csv
+```
+
+contains:
+
+```text
+customer_id
+transaction_date
+amount
+status
+```
+
+Write code that:
+
+1. loads the file;
+2. keeps only these four columns;
+3. converts `transaction_date` to datetime;
+4. inspects missing values;
+5. displays the first five rows.
+
+Explain which checks should be performed before using the DataFrame analytically.
+
+## Problem 41 — Writing a DataFrame
+
+Export a transformed DataFrame to:
+
+```text
+processed.csv
+```
+
+without writing its index.
+
+Explain when writing the index might instead be appropriate.
+
+## Problem 42 — Northwind Schema Reasoning
+
+Using the Northwind schema, identify the grain of the following tables:
+
+```text
+Customers
+Orders
+OrderDetails
+Products
+```
+
+Then identify the keys that relate:
+
+```text
+Customers → Orders
+Orders → OrderDetails
+Products → OrderDetails
+```
+
+Explain the expected cardinality of each relationship.
+
+## Problem 43 — Northwind Customers Query
+
+Using SQLite and pandas, write a query that returns:
+
+```text
+CustomerID
+CustomerName
+Country
+```
+
+from `Customers`.
+
+Load the result using:
+
+```python
+pd.read_sql_query()
+```
+
+Then use pandas to determine the number of customers in each country.
+
+## Problem 44 — Filtering in SQL Versus pandas
+
+Using Northwind, retrieve customers from Germany in two ways:
+
+1. filter directly in SQL using `WHERE`;
+2. load all customers and filter afterward using pandas.
+
+Compare the results conceptually.
+
+Which approach is generally preferable when the source table is extremely large?
+
+Explain why.
+
+## Problem 45 — Northwind Orders and Customers
+
+Write a SQL query joining:
+
+```text
+Orders
+Customers
+```
+
+and returning:
+
+```text
+OrderID
+OrderDate
+CustomerName
+Country
+```
+
+Explain why the resulting grain is still:
+
+```text
+one row per order
+```
+
+even though customer information is repeated.
+
+## Problem 46 — Northwind Order Lines
+
+Join:
+
+```text
+OrderDetails
+Products
+```
+
+and return:
+
+```text
+OrderID
+ProductID
+ProductName
+Quantity
+Price
+```
+
+Load the result into pandas and create:
+
+```text
+line_value
+```
+
+where:
+
+$$
+\text{line value}
+=
+\text{Quantity}
+\times
+\text{Price}.
+$$
+
+Then calculate total line value by `OrderID`.
+
+## Problem 47 — Northwind Multi-Table Join
+
+Construct a query combining:
+
+```text
+Orders
+Customers
+OrderDetails
+Products
+```
+
+and returning:
+
+```text
+OrderID
+OrderDate
+CustomerName
+Country
+ProductName
+Quantity
+Price
+```
+
+Before executing the query, answer:
+
+1. What should one row represent?
+2. Why will an order with several products appear in several rows?
+3. Which join causes the grain to change from order-level to order-line-level?
+
+## Problem 48 — SQL Aggregation
+
+Using Northwind, write a query that calculates the number of orders per customer.
+
+Return:
+
+```text
+CustomerID
+CustomerName
+order_count
+```
+
+Sort the result from highest to lowest number of orders.
+
+Then describe how the same calculation could conceptually be performed using pandas after loading the relevant tables.
+
+## Problem 49 — SQL or pandas?
+
+For each task below, decide whether you would generally prefer SQL, pandas, or whether either could reasonably be used.
+
+1. Filter a database table containing 500 million rows to one country.
+2. Join three large relational tables before transferring data to Python.
+3. Experiment interactively with several derived features on a 50,000-row analytical DataFrame.
+4. Calculate model residuals from arrays already in Python.
+5. Aggregate billions of transactions before loading a customer-level modelling table.
+6. Create exploratory categorical summaries after data have already been loaded.
+
+Justify each choice.
+
+## Problem 50 — Preparing Predictors and Target
+
+Given:
+
+```python
+df = pd.DataFrame({
+    "age": [
+        25,
+        31,
+        28,
+        40,
+        36
+    ],
+    "income": [
+        42000,
+        51000,
+        47000,
+        68000,
+        59000
+    ],
+    "segment": [
+        "A",
+        "B",
+        "A",
+        "B",
+        "A"
+    ],
+    "target": [
+        0,
+        1,
+        0,
+        1,
+        1
+    ]
+})
+```
+
+construct:
+
+```python
+X
+y
+```
+
+where:
+
+- `X` contains the predictors;
+- `y` contains the target.
+
+Determine the type and shape of both objects.
+
+## Problem 51 — One-Hot Encoding
+
+Using the DataFrame from Problem 50, encode:
+
+```text
+segment
+```
+
+using:
+
+```python
+pd.get_dummies()
+```
+
+with integer indicator variables.
+
+Inspect the resulting columns.
+
+Explain why a categorical variable may require encoding before numerical modelling.
+
+## Problem 52 — DataFrame to NumPy
+
+Convert the encoded predictor DataFrame from Problem 51 to a NumPy array using:
+
+```python
+.to_numpy()
+```
+
+Compare:
+
+- shape;
+- labels;
+- dtype;
+- structural information
+
+between the DataFrame and the NumPy array.
+
+What information is lost during conversion?
+
+## Problem 53 — Chained Assignment
+
+Consider:
+
+```python
+df[df["income"] > 50000]["high_income"] = True
+```
+
+Explain why this style should generally be avoided.
+
+Rewrite the operation using:
+
+```python
+.loc[]
+```
+
+so that the intended rows and target column are explicit.
+
+## Problem 54 — Vectorization Versus Row Iteration
+
+Suppose:
+
+```python
+df["revenue"]
+```
+
+must be calculated from:
+
+```python
+df["price"]
+df["quantity"]
+```
+
+Compare:
+
+1. explicit row iteration;
+2. vectorized multiplication.
+
+Explain why the vectorized implementation is generally preferable.
+
+## Problem 55 — Diagnose a Merge Bug
+
+Suppose:
+
+```python
+customers.shape == (1000, 5)
+orders.shape == (10000, 4)
+```
+
+and `CustomerID` is expected to be unique in `customers`.
+
+After merging:
+
+```python
+result = orders.merge(
+    customers,
+    on="CustomerID",
+    how="left"
+)
+```
+
+the result unexpectedly contains 12,500 rows.
+
+What is the most likely structural explanation?
+
+Describe how you would diagnose the problem using:
+
+- key uniqueness;
+- duplicated keys;
+- merge validation;
+- row counts.
+
+## Problem 56 — Diagnose an Alignment Bug
+
+Consider:
+
+```python
+df = pd.DataFrame(
+    {
+        "value": [
+            100,
+            200,
+            300
+        ]
+    },
+    index=[
+        "A",
+        "B",
+        "C"
+    ]
+)
+
+adjustment = pd.Series(
+    [10, 20, 30],
+    index=[
+        "C",
+        "A",
+        "B"
+    ]
+)
+
+df["adjustment"] = adjustment
+```
+
+Predict the resulting `adjustment` column.
+
+Explain why pandas assigns values according to labels rather than according to their original order.
+
+## Problem 57 — Data Leakage Through Imputation
+
+Suppose a machine learning workflow performs:
+
+```python
+df["income"] = (
+    df["income"]
+    .fillna(
+        df["income"].mean()
+    )
+)
+
+X_train, X_test, y_train, y_test = ...
+```
+
+where the mean is calculated before splitting the complete dataset.
+
+Explain why this can introduce train/test contamination.
+
+Describe the correct conceptual sequence.
+
+## Problem 58 — Leakage Through Aggregation
+
+Suppose a model predicts customer churn at the beginning of each month.
+
+A feature is created using:
+
+```text
+total customer spending over the complete year
+```
+
+including transactions that occur after the prediction date.
+
+Explain why this is target leakage even if the pandas aggregation is technically correct.
+
+How should the feature be constructed instead?
+
+## Problem 59 — Grain Reasoning
+
+Suppose three datasets have the following grains:
+
+```text
+customers:
+    one row per customer
+
+orders:
+    one row per order
+
+order_lines:
+    one row per order-product combination
+```
+
+You need to build a modelling table with:
+
+```text
+one row per customer
+```
+
+containing:
+
+- number of orders;
+- total quantity purchased;
+- total expenditure.
+
+Describe the sequence of grouping and merging operations required.
+
+At each stage, state the grain of the intermediate DataFrame.
+
+## Problem 60 — Integrated DataFrame Reasoning
+
+Consider the following pipeline:
+
+```python
+result = (
+    orders
+    .merge(
+        customers,
+        on="customer_id",
+        how="left",
+        validate="many_to_one"
+    )
+    .assign(
+        order_month=lambda x:
+            x["order_date"].dt.to_period("M")
+    )
+    .groupby(
+        [
+            "customer_id",
+            "customer_name",
+            "order_month"
+        ],
+        as_index=False
+    )
+    .agg(
+        order_count=(
+            "order_id",
+            "nunique"
+        ),
+        total_amount=(
+            "amount",
+            "sum"
+        )
+    )
+    .sort_values(
+        [
+            "customer_id",
+            "order_month"
+        ]
+    )
+)
+```
+
+Without executing the code, explain every stage.
+
+Your answer should identify:
+
+1. the grain of `orders`;
+2. the cardinality expected by `validate="many_to_one"`;
+3. why customer information can be merged without changing order-level grain;
+4. what `order_month` represents;
+5. which variables define the groups;
+6. the grain after aggregation;
+7. the difference between `nunique()` and a simple row count in this context;
+8. why sorting does not change the grain;
+9. the final meaning of one row in `result`.
+
+Finally, describe the pipeline conceptually in one or two sentences.

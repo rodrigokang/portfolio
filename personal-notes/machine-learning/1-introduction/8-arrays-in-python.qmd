@@ -1,0 +1,4190 @@
+--- 
+title: "Arrays in Python" 
+subtitle: "Technical Notes" 
+ 
+author: "Rodrigo Kang" 
+ 
+lang: en 
+ 
+execute: 
+  echo: true 
+  output: true 
+ 
+format: 
+  pdf: 
+    pdf-engine: xelatex 
+ 
+    mainfont: "TeX Gyre Pagella" 
+    sansfont: "TeX Gyre Pagella" 
+    monofont: "TeX Gyre Pagella" 
+ 
+    fontsize: 11pt 
+    linestretch: 1.15 
+ 
+    geometry: 
+      - margin=2.8cm 
+ 
+    toc: true 
+    toc-depth: 6 
+ 
+    number-sections: true 
+    number-depth: 3 
+    number-equations: true 
+ 
+    colorlinks: true 
+ 
+    fig-cap-location: bottom 
+    tbl-cap-location: bottom 
+ 
+    code-line-numbers: true 
+    code-block-font-size: \scriptsize 
+ 
+    syntax-highlighting: idiomatic 
+ 
+    include-in-header: 
+      text: | 
+        \usepackage{listings} 
+        \usepackage{etoolbox} 
+ 
+        \lstset{ 
+          breaklines=true, 
+          breakatwhitespace=false, 
+          columns=fullflexible, 
+          keepspaces=true, 
+          showstringspaces=false, 
+          postbreak=\mbox{\(\hookrightarrow\)\space} 
+        } 
+ 
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize} 
+ 
+editor: visual 
+---
+
+# Arrays
+
+Numerical computing frequently requires performing the same operations over collections of values. In data science and machine learning, these collections may represent observations, features, model parameters, predictions, images, time series, or intermediate numerical results.
+
+Python's built-in data structures, particularly lists, can represent collections of numeric values:
+
+```{python}
+values = [1.0, 2.0, 3.0, 4.0]
+```
+
+However, general-purpose Python lists are not designed specifically for large-scale numerical computation. Their flexibility allows them to contain objects of different types:
+
+```{python}
+values = [1, 2.5, "three", True]
+```
+
+Numerical algorithms usually benefit from a more specialized representation in which values have a consistent data type and operations can be performed efficiently over entire collections.
+
+This is the role of **arrays**.
+
+In these notes, the term *array* refers primarily to NumPy's `ndarray`, which is the standard array representation used throughout the scientific Python ecosystem.
+
+## NumPy and the `ndarray`
+
+**NumPy** (*Numerical Python*) is a Python library designed for numerical computing. Its central data structure is the **N-dimensional array**, represented by the `ndarray` class.
+
+By convention, NumPy is imported as:
+
+```{python}
+import numpy as np
+```
+
+A simple one-dimensional array can be created from a Python list:
+
+```{python}
+values = np.array([1, 2, 3, 4, 5])
+
+values
+```
+
+The resulting object is not a Python list:
+
+```{python}
+type(values)
+```
+
+It is an instance of `numpy.ndarray`.
+
+The name `ndarray` stands for **N-dimensional array**. The same data structure can represent a scalar-like zero-dimensional array, a vector-like one-dimensional array, a matrix-like two-dimensional array, or an array with any higher number of dimensions.
+
+For example:
+
+```{python}
+vector = np.array([1, 2, 3])
+
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+```
+
+Although terms such as *vector* and *matrix* are useful mathematical interpretations, NumPy represents both objects using the same underlying `ndarray` abstraction.
+
+This is important in machine learning, where the shape of an array often gives it its meaning. A two-dimensional array with shape
+
+$$
+(n, p)
+$$
+
+can naturally represent a dataset containing \(n\) observations and \(p\) features.
+
+In this interpretation:
+
+- rows correspond to observations;
+- columns correspond to features.
+
+For example:
+
+```{python}
+X = np.array([
+    [1.2, 3.4, 5.1],
+    [2.1, 2.8, 4.7],
+    [0.9, 3.7, 5.5],
+    [1.8, 3.1, 4.9]
+])
+
+X.shape
+```
+
+The shape `(4, 3)` indicates four observations and three features.
+
+The array abstraction therefore provides more than a container for numbers. It provides a structured representation in which **dimensionality, shape, data type, and numerical operations** are explicitly defined.
+
+## Creating Arrays
+
+The most direct way to create a NumPy array is with `np.array()`.
+
+### Creating Arrays from Python Sequences
+
+A Python list can be converted into an array:
+
+```{python}
+a = np.array([1, 2, 3, 4, 5])
+
+a
+```
+
+A tuple can be used as well:
+
+```{python}
+b = np.array((10, 20, 30, 40))
+
+b
+```
+
+Nested sequences produce multidimensional arrays:
+
+```{python}
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+matrix
+```
+
+The nested structure determines the dimensions and shape of the resulting array.
+
+For regular numerical arrays, the nested sequences should have compatible lengths. Conceptually, a two-dimensional array represents a rectangular structure rather than an arbitrary collection of differently sized rows.
+
+### Homogeneous Data Types
+
+Unlike a general Python list, a NumPy array normally stores elements using a single **data type**.
+
+Consider:
+
+```{python}
+integers = np.array([1, 2, 3, 4])
+
+integers.dtype
+```
+
+NumPy determines an appropriate integer data type for the array.
+
+If integers and floating-point values are combined:
+
+```{python}
+values = np.array([1, 2.5, 3, 4])
+
+values
+```
+
+```{python}
+values.dtype
+```
+
+NumPy chooses a common type capable of representing the values. In this case, the integer values are represented as floating-point numbers as part of the same array.
+
+This differs fundamentally from a Python list:
+
+```{python}
+values_list = [1, 2.5, 3, 4]
+
+[type(value) for value in values_list]
+```
+
+The list stores references to individual Python objects, which may have different types. A NumPy array instead provides a homogeneous numerical representation.
+
+This homogeneous representation is one of the properties that makes NumPy arrays suitable for efficient numerical computation.
+
+## Dimensions
+
+The **dimension**, or number of axes, of an array describes how many indices are required to identify an element within its structure.
+
+NumPy exposes this information through the `ndim` attribute.
+
+### Zero-Dimensional Arrays
+
+A scalar value can be represented as a zero-dimensional array:
+
+```{python}
+a = np.array(42)
+
+a
+```
+
+```{python}
+a.ndim
+```
+
+The result is `0`.
+
+Although the array contains a value, there is no axis along which elements are arranged.
+
+### One-Dimensional Arrays
+
+A sequence of values produces a one-dimensional array:
+
+```{python}
+a = np.array([1, 2, 3, 4, 5])
+
+a.ndim
+```
+
+This structure has one axis.
+
+It is often interpreted as a **vector**, although NumPy itself does not distinguish between row vectors and column vectors at this dimensionality.
+
+### Two-Dimensional Arrays
+
+Nested sequences can produce a two-dimensional array:
+
+```{python}
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+A.ndim
+```
+
+A two-dimensional array has two axes and can naturally be interpreted as a matrix.
+
+For the array above, an element requires two indices:
+
+$$
+A_{ij},
+$$
+
+where \(i\) identifies a row and \(j\) identifies a column.
+
+### Higher-Dimensional Arrays
+
+NumPy arrays are not restricted to vectors and matrices.
+
+For example:
+
+```{python}
+A = np.array([
+    [
+        [1, 2],
+        [3, 4]
+    ],
+    [
+        [5, 6],
+        [7, 8]
+    ]
+])
+
+A.ndim
+```
+
+This array has three dimensions.
+
+Higher-dimensional arrays arise naturally in machine learning. For example, a collection of RGB images may be represented conceptually with dimensions corresponding to
+
+$$
+(\text{samples}, \text{height}, \text{width}, \text{channels}).
+$$
+
+The number of dimensions therefore reflects the structure of the data rather than merely its total number of values.
+
+## Shape
+
+While `ndim` tells us **how many axes** an array has, `shape` tells us **how many elements exist along each axis**.
+
+Consider:
+
+```{python}
+a = np.array([10, 20, 30, 40, 50])
+
+a.shape
+```
+
+The result is:
+
+```text
+(5,)
+```
+
+This notation indicates a one-dimensional array containing five elements.
+
+The trailing comma is significant in Python: `(5,)` represents a tuple with one element.
+
+For a two-dimensional array:
+
+```{python}
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+A.shape
+```
+
+the result is:
+
+```text
+(2, 3)
+```
+
+The array has:
+
+- 2 elements along axis 0;
+- 3 elements along axis 1.
+
+When interpreted as a matrix, this corresponds to 2 rows and 3 columns.
+
+For a three-dimensional array:
+
+```{python}
+A = np.array([
+    [
+        [1, 2, 3],
+        [4, 5, 6]
+    ],
+    [
+        [7, 8, 9],
+        [10, 11, 12]
+    ]
+])
+
+A.shape
+```
+
+the result is:
+
+```text
+(2, 2, 3)
+```
+
+The array therefore has three axes whose lengths are 2, 2, and 3.
+
+### Shape as Structural Information
+
+The shape of an array is fundamental in numerical computing because it determines which operations are structurally compatible.
+
+For example, consider a typical machine learning feature matrix:
+
+```{python}
+X = np.array([
+    [1.2, 2.3, 3.1],
+    [1.8, 2.7, 3.5],
+    [0.9, 2.1, 2.8],
+    [1.5, 2.5, 3.2]
+])
+
+X.shape
+```
+
+If `X.shape` is `(4, 3)`, then under the usual machine learning convention:
+
+$$
+X \in \mathbb{R}^{4 \times 3},
+$$
+
+meaning that the dataset contains four observations and three features.
+
+A corresponding target array might be:
+
+```{python}
+y = np.array([0, 1, 0, 1])
+
+y.shape
+```
+
+Its shape is `(4,)`, indicating one target value for each of the four observations.
+
+Reasoning about shapes is therefore a central skill when working with numerical and machine learning code.
+
+## Size
+
+The `size` attribute gives the total number of elements contained in an array.
+
+For example:
+
+```{python}
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+A.size
+```
+
+The array has shape `(2, 3)`, so its total number of elements is
+
+$$
+2 \times 3 = 6.
+$$
+
+More generally, if an array has shape
+
+$$
+(d_1, d_2, \ldots, d_k),
+$$
+
+then its total size is
+
+$$
+N = \prod_{i=1}^{k} d_i.
+$$ {#eq-array-size}
+
+For example:
+
+```{python}
+A = np.zeros((2, 3, 4))
+
+print(A.shape)
+print(A.size)
+```
+
+The size is
+
+$$
+2 \times 3 \times 4 = 24.
+$$
+
+The concepts should therefore be distinguished carefully:
+
+- `ndim` gives the number of axes;
+- `shape` gives the length of each axis;
+- `size` gives the total number of elements.
+
+## Data Type
+
+Every NumPy array has an associated data type, or **dtype**, accessible through the `dtype` attribute.
+
+For example:
+
+```{python}
+integers = np.array([1, 2, 3, 4])
+
+integers.dtype
+```
+
+and:
+
+```{python}
+floating_values = np.array([1.0, 2.0, 3.0, 4.0])
+
+floating_values.dtype
+```
+
+The exact representation may depend on the platform and NumPy configuration, but the distinction between integer and floating-point storage remains important.
+
+A data type can also be specified explicitly when the array is created:
+
+```{python}
+values = np.array([1, 2, 3, 4], dtype=float)
+
+values
+```
+
+```{python}
+values.dtype
+```
+
+This converts the values to an appropriate floating-point representation.
+
+Similarly:
+
+```{python}
+values = np.array([1.2, 2.8, 3.4], dtype=int)
+
+values
+```
+
+Converting floating-point values to an integer dtype removes their fractional components. Type conversion can therefore alter information and should be performed deliberately.
+
+The dtype of an array affects:
+
+- how values are represented in memory;
+- the range and precision of representable values;
+- memory consumption;
+- the behaviour of some numerical operations.
+
+These considerations become particularly important when working with large datasets, numerical precision, and machine learning frameworks.
+
+## Creating Structured Arrays
+
+Arrays do not always need to be constructed from existing Python sequences. NumPy provides functions for creating arrays with particular structures directly.
+
+### Arrays of Zeros
+
+`np.zeros()` creates an array filled with zeros:
+
+```{python}
+np.zeros(5)
+```
+
+A multidimensional shape can be supplied as a tuple:
+
+```{python}
+np.zeros((3, 4))
+```
+
+By default, the resulting values are floating-point numbers.
+
+A different dtype can be requested explicitly:
+
+```{python}
+np.zeros((3, 4), dtype=int)
+```
+
+Arrays of zeros are commonly used to initialize storage for numerical results.
+
+### Arrays of Ones
+
+Similarly, `np.ones()` creates arrays filled with ones:
+
+```{python}
+np.ones(5)
+```
+
+or:
+
+```{python}
+np.ones((2, 3))
+```
+
+### Arrays Filled with a Constant
+
+`np.full()` creates an array with a specified shape and fills it with a chosen value:
+
+```{python}
+np.full((2, 4), 7)
+```
+
+This can be useful when a computation requires a particular initial value rather than zero or one.
+
+### Numerical Sequences with `arange()`
+
+`np.arange()` creates regularly spaced values and behaves similarly to Python's `range()`:
+
+```{python}
+np.arange(5)
+```
+
+A starting point and endpoint can be specified:
+
+```{python}
+np.arange(2, 10)
+```
+
+as well as a step:
+
+```{python}
+np.arange(2, 10, 2)
+```
+
+As with `range()`, the endpoint is excluded.
+
+`arange()` can also produce floating-point sequences:
+
+```{python}
+np.arange(0, 1, 0.2)
+```
+
+However, floating-point steps can interact with finite-precision representation. When a specific number of evenly spaced points over an interval is required, `linspace()` is often a clearer choice.
+
+### Evenly Spaced Values with `linspace()`
+
+`np.linspace()` creates a specified number of evenly spaced values over an interval.
+
+For example:
+
+```{python}
+np.linspace(0, 1, 5)
+```
+
+By default, both endpoints are included.
+
+Mathematically, for an interval \([a,b]\) divided into \(n\) equally spaced values, the spacing is
+
+$$
+\Delta x = \frac{b-a}{n-1}.
+$$ {#eq-linspace-spacing}
+
+For example:
+
+```{python}
+x = np.linspace(0, 10, 6)
+
+x
+```
+
+produces six values spanning the interval from 0 to 10.
+
+This distinction between `arange()` and `linspace()` is useful:
+
+- `arange()` is naturally specified in terms of a **step size**;
+- `linspace()` is naturally specified in terms of a **number of points**.
+
+For numerical work over continuous intervals, `linspace()` is often particularly convenient.
+
+### Identity Matrices
+
+NumPy can construct an identity matrix using `np.eye()`:
+
+```{python}
+I = np.eye(4)
+
+I
+```
+
+The identity matrix \(I_n\) is defined by
+
+$$
+(I_n)_{ij}
+=
+\begin{cases}
+1, & i=j, \\
+0, & i\neq j.
+\end{cases}
+$$ {#eq-identity-matrix}
+
+Identity matrices arise frequently in linear algebra, statistical modelling, optimization, and numerical algorithms.
+
+### Inspecting Array Structure
+
+Several structural properties can be inspected together:
+
+```{python}
+A = np.zeros((3, 4), dtype=float)
+
+print("Number of dimensions:", A.ndim)
+print("Shape:", A.shape)
+print("Size:", A.size)
+print("Data type:", A.dtype)
+```
+
+These four attributes provide a concise description of an array:
+
+- `ndim`: how many axes the array has;
+- `shape`: the length of each axis;
+- `size`: the total number of elements;
+- `dtype`: how those elements are represented.
+
+When working with unfamiliar numerical code, inspecting these properties is often one of the first steps in understanding the data being processed.
+
+# Indexing and Slicing
+
+Once an array has been created, individual elements or subsets of elements can be accessed through **indexing** and **slicing**.
+
+These operations are fundamental in numerical computing because datasets are rarely processed only as complete objects. We frequently need to select observations, extract features, isolate regions of an image, or operate on particular dimensions of a larger array.
+
+## Indexing One-Dimensional Arrays
+
+Indexing a one-dimensional NumPy array closely resembles indexing a Python list.
+
+Consider:
+
+```{python}
+a = np.array([10, 20, 30, 40, 50])
+```
+
+The first element is accessed with index `0`:
+
+```{python}
+a[0]
+```
+
+The third element is:
+
+```{python}
+a[2]
+```
+
+Python uses **zero-based indexing**, so an array containing \(n\) elements has valid positive indices from \(0\) through \(n-1\).
+
+Negative indices count backward from the end:
+
+```{python}
+a[-1]
+```
+
+```{python}
+a[-2]
+```
+
+Thus, `a[-1]` refers to the last element and `a[-2]` to the second-to-last element.
+
+## Indexing Multidimensional Arrays
+
+For a two-dimensional array, an element can be selected by providing one index for each axis.
+
+Consider:
+
+```{python}
+A = np.array([
+    [10, 20, 30],
+    [40, 50, 60],
+    [70, 80, 90]
+])
+
+A
+```
+
+The element in the first row and second column is:
+
+```{python}
+A[0, 1]
+```
+
+Similarly:
+
+```{python}
+A[2, 0]
+```
+
+selects the element in the third row and first column.
+
+The notation
+
+```python
+A[i, j]
+```
+
+corresponds naturally to the mathematical notation
+
+$$
+A_{ij},
+$$
+
+with the important difference that NumPy indices begin at zero.
+
+It is also possible to write:
+
+```{python}
+A[0][1]
+```
+
+However,
+
+```python
+A[0, 1]
+```
+
+is generally preferable because it expresses multidimensional indexing directly rather than performing two successive indexing operations.
+
+For arrays with more dimensions, one index can be supplied for each axis:
+
+```{python}
+B = np.arange(24).reshape(2, 3, 4)
+
+B
+```
+
+```{python}
+B[1, 2, 3]
+```
+
+The number of indices required to select a single scalar element corresponds to the number of dimensions of the array.
+
+# Slicing
+
+**Slicing** selects a range of elements rather than a single element.
+
+The general syntax is:
+
+```python
+array[start:stop:step]
+```
+
+where:
+
+- `start` is the first included index;
+- `stop` is the first excluded index;
+- `step` determines the spacing between selected indices.
+
+As with Python sequences, the `stop` position is not included.
+
+Consider:
+
+```{python}
+a = np.array([10, 20, 30, 40, 50, 60])
+```
+
+The slice
+
+```{python}
+a[1:4]
+```
+
+selects the elements at indices 1, 2, and 3.
+
+Omitting `start` begins at the start of the array:
+
+```{python}
+a[:3]
+```
+
+Omitting `stop` continues to the end:
+
+```{python}
+a[3:]
+```
+
+A step can also be specified:
+
+```{python}
+a[::2]
+```
+
+Negative steps can reverse the direction:
+
+```{python}
+a[::-1]
+```
+
+## Slicing Multidimensional Arrays
+
+Slicing can be applied independently along each axis.
+
+Consider:
+
+```{python}
+A = np.array([
+    [1,  2,  3,  4],
+    [5,  6,  7,  8],
+    [9, 10, 11, 12]
+])
+
+A
+```
+
+To select the first two rows:
+
+```{python}
+A[:2, :]
+```
+
+The colon `:` means that all elements along that axis should be selected.
+
+To select the second and third columns:
+
+```{python}
+A[:, 1:3]
+```
+
+To select the first two rows and the last two columns:
+
+```{python}
+A[:2, 2:]
+```
+
+This notation becomes particularly important in machine learning.
+
+Suppose `X` represents a feature matrix with shape
+
+$$
+(n, p),
+$$
+
+where rows correspond to observations and columns correspond to features.
+
+Then:
+
+```python
+X[:100, :]
+```
+
+selects the first 100 observations, while
+
+```python
+X[:, :3]
+```
+
+selects the first three features for every observation.
+
+The expression
+
+```python
+X[i, j]
+```
+
+therefore has a structural interpretation:
+
+- the first index operates along axis 0;
+- the second index operates along axis 1.
+
+Understanding this relationship between indexing and axes is essential when working with multidimensional numerical data.
+
+## Dimensionality After Indexing
+
+An important distinction exists between selecting an element along an axis and selecting a slice of that axis.
+
+Consider:
+
+```{python}
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+```
+
+Selecting the first row using an integer index:
+
+```{python}
+row = A[0]
+
+print(row)
+print(row.shape)
+```
+
+produces a one-dimensional array with shape:
+
+```text
+(3,)
+```
+
+By contrast:
+
+```{python}
+row = A[0:1]
+
+print(row)
+print(row.shape)
+```
+
+produces a two-dimensional array with shape:
+
+```text
+(1, 3)
+```
+
+The values are closely related, but their shapes are different.
+
+This distinction can be important when subsequent operations expect a particular number of dimensions.
+
+For example, in machine learning code:
+
+```python
+X[0]
+```
+
+often represents one observation as a one-dimensional feature vector, whereas:
+
+```python
+X[0:1]
+```
+
+preserves the two-dimensional structure of a feature matrix containing one observation.
+
+Shape should therefore be considered part of the meaning of an array, not merely a formatting detail.
+
+# Boolean Indexing and Filtering
+
+NumPy arrays can be indexed using arrays of boolean values.
+
+This provides a concise and powerful mechanism for filtering numerical data.
+
+Consider:
+
+```{python}
+values = np.array([12, 5, 18, 7, 21, 3])
+```
+
+A comparison applied to the entire array produces a boolean array:
+
+```{python}
+values > 10
+```
+
+Conceptually, NumPy evaluates the condition element by element:
+
+$$
+m_i =
+\begin{cases}
+\text{True}, & x_i > 10, \\
+\text{False}, & x_i \leq 10.
+\end{cases}
+$$
+
+The resulting boolean array is often called a **mask**.
+
+It can be used directly to select elements:
+
+```{python}
+mask = values > 10
+
+values[mask]
+```
+
+The operation can also be written more compactly:
+
+```{python}
+values[values > 10]
+```
+
+Only elements for which the corresponding condition is `True` are returned.
+
+## Combining Conditions
+
+Multiple boolean conditions can be combined.
+
+For example:
+
+```{python}
+values[(values >= 5) & (values <= 18)]
+```
+
+The operator `&` performs element-wise logical AND.
+
+Similarly, `|` performs element-wise logical OR:
+
+```{python}
+values[(values < 5) | (values > 18)]
+```
+
+and `~` negates a boolean mask:
+
+```{python}
+mask = values > 10
+
+values[~mask]
+```
+
+Parentheses around individual comparisons are important because of Python's operator precedence rules.
+
+For NumPy arrays, expressions such as
+
+```python
+(values >= 5) & (values <= 18)
+```
+
+should be used rather than Python's scalar logical form:
+
+```python
+values >= 5 and values <= 18
+```
+
+The operators `and` and `or` evaluate the truth value of complete Python objects, whereas `&` and `|` operate element by element on boolean arrays.
+
+## Filtering Multidimensional Data
+
+Boolean indexing becomes especially useful when rows represent observations.
+
+Consider:
+
+```{python}
+X = np.array([
+    [25, 50000],
+    [42, 72000],
+    [31, 61000],
+    [55, 90000],
+    [28, 48000]
+])
+```
+
+Suppose the first column represents age and the second represents income.
+
+We can identify observations with age greater than 30:
+
+```{python}
+mask = X[:, 0] > 30
+
+mask
+```
+
+and use the mask to select complete rows:
+
+```{python}
+X[mask]
+```
+
+A condition based on one feature can therefore determine which observations are retained from the entire feature matrix.
+
+This pattern occurs frequently during exploratory data analysis, preprocessing, and validation.
+
+# Reshaping Arrays
+
+The same collection of values can often be interpreted using different array shapes.
+
+NumPy's `reshape()` operation changes the shape of an array without changing its number of elements.
+
+Consider:
+
+```{python}
+a = np.arange(12)
+
+a
+```
+
+Its shape is:
+
+```{python}
+a.shape
+```
+
+The 12 values can be reorganized into a \(3 \times 4\) array:
+
+```{python}
+A = a.reshape(3, 4)
+
+A
+```
+
+```{python}
+A.shape
+```
+
+The original and reshaped arrays contain the same number of elements:
+
+$$
+12 = 3 \times 4.
+$$
+
+Consequently, the following reshape is not possible:
+
+```python
+a.reshape(5, 3)
+```
+
+because
+
+$$
+12 \neq 5 \times 3.
+$$
+
+More generally, if an array has \(N\) elements, a reshape from dimensions
+
+$$
+(d_1, d_2, \ldots, d_k)
+$$
+
+to
+
+$$
+(e_1, e_2, \ldots, e_m)
+$$
+
+requires
+
+$$
+\prod_{i=1}^{k} d_i
+=
+\prod_{j=1}^{m} e_j
+=
+N.
+$$ {#eq-reshape-size}
+
+Reshaping changes the structural interpretation of the data, but it cannot create or remove elements.
+
+## Inferring a Dimension
+
+One dimension can be specified as `-1`, allowing NumPy to infer its size.
+
+For example:
+
+```{python}
+a = np.arange(12)
+
+a.reshape(3, -1)
+```
+
+Since the array contains 12 elements and the first dimension is 3, NumPy infers:
+
+$$
+\frac{12}{3} = 4.
+$$
+
+The resulting shape is therefore `(3, 4)`.
+
+Similarly:
+
+```{python}
+a.reshape(-1, 2)
+```
+
+produces shape `(6, 2)`.
+
+Only one dimension can be inferred in this way because the remaining dimensions must provide enough information to determine it uniquely.
+
+## Flattening an Array
+
+A multidimensional array can be converted into a one-dimensional representation.
+
+For example:
+
+```{python}
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+
+A.reshape(-1)
+```
+
+NumPy also provides methods such as `flatten()` and `ravel()`:
+
+```{python}
+A.flatten()
+```
+
+```{python}
+A.ravel()
+```
+
+Although these operations can produce the same visible values, their memory behaviour is not necessarily identical.
+
+In particular, `flatten()` returns a copy, whereas `ravel()` returns a view whenever possible.
+
+This distinction leads to an important aspect of NumPy arrays: the relationship between an array's logical structure and the underlying memory in which its values are stored.
+
+# Copies and Views
+
+When working with Python objects, assignment does not generally create an independent copy.
+
+For example:
+
+```{python}
+a = np.array([1, 2, 3, 4])
+
+b = a
+```
+
+Both names refer to the same array object:
+
+```{python}
+b[0] = 100
+
+print(a)
+print(b)
+```
+
+Changing the array through `b` is therefore visible through `a`.
+
+NumPy introduces an additional concept: a new array object can sometimes share the same underlying data with another array.
+
+Such an object is called a **view**.
+
+## Views from Slicing
+
+Basic slicing generally produces a view rather than an independent copy.
+
+Consider:
+
+```{python}
+a = np.array([10, 20, 30, 40, 50])
+
+b = a[1:4]
+
+b
+```
+
+If the slice is modified:
+
+```{python}
+b[0] = 999
+
+print(b)
+print(a)
+```
+
+the original array also changes.
+
+The objects `a` and `b` are distinct array objects, but their data are not completely independent. The slice refers to part of the same underlying memory.
+
+This behaviour differs from ordinary Python list slicing, which creates a new list.
+
+Views allow NumPy to manipulate large arrays efficiently because many operations can avoid copying potentially large blocks of numerical data.
+
+However, they also mean that modifications can propagate in ways that may be unexpected if memory sharing is not understood.
+
+## Explicit Copies
+
+An independent copy can be created with `copy()`:
+
+```{python}
+a = np.array([10, 20, 30, 40, 50])
+
+b = a[1:4].copy()
+
+b[0] = 999
+
+print(b)
+print(a)
+```
+
+Now modifying `b` does not alter `a`.
+
+The distinction can be summarized as:
+
+- **assignment** may create another name for the same array object;
+- a **view** creates another array object that shares underlying data;
+- a **copy** creates an array with independent data.
+
+This distinction is particularly important with large datasets. Copies provide independence but require additional memory and computation, while views can be substantially more efficient.
+
+The appropriate choice depends on whether shared modification is intended.
+
+# Vectorized Operations
+
+One of the most important features of NumPy is the ability to perform operations on complete arrays without explicitly writing Python loops.
+
+Consider two arrays:
+
+```{python}
+a = np.array([1, 2, 3, 4])
+b = np.array([10, 20, 30, 40])
+```
+
+Addition can be performed directly:
+
+```{python}
+a + b
+```
+
+The operation is applied element by element:
+
+$$
+\mathbf{a} + \mathbf{b}
+=
+\begin{bmatrix}
+a_1 + b_1 \\
+a_2 + b_2 \\
+\vdots \\
+a_n + b_n
+\end{bmatrix}.
+$$
+
+Similarly:
+
+```{python}
+a - b
+```
+
+```{python}
+a * b
+```
+
+```{python}
+a / b
+```
+
+```{python}
+a ** 2
+```
+
+These are **element-wise operations**.
+
+It is important not to confuse element-wise multiplication with matrix multiplication.
+
+For two compatible matrices:
+
+```{python}
+A = np.array([
+    [1, 2],
+    [3, 4]
+])
+
+B = np.array([
+    [5, 6],
+    [7, 8]
+])
+```
+
+the expression
+
+```{python}
+A * B
+```
+
+multiplies corresponding elements.
+
+Matrix multiplication instead uses the `@` operator:
+
+```{python}
+A @ B
+```
+
+Mathematically, element-wise multiplication gives
+
+$$
+(A \odot B)_{ij} = A_{ij}B_{ij},
+$$ {#eq-elementwise-product}
+
+whereas matrix multiplication gives
+
+$$
+(AB)_{ij}
+=
+\sum_k A_{ik}B_{kj}.
+$$ {#eq-matrix-product}
+
+The distinction is fundamental in numerical computing and machine learning.
+
+## Vectorization
+
+Expressing computations directly as array operations is commonly called **vectorization**.
+
+Suppose we want to transform each value according to
+
+$$
+y_i = 2x_i + 3.
+$$
+
+Using an explicit Python loop:
+
+```{python}
+x = np.array([1, 2, 3, 4, 5])
+
+result = []
+
+for value in x:
+    result.append(2 * value + 3)
+
+result
+```
+
+The vectorized NumPy form is:
+
+```{python}
+2 * x + 3
+```
+
+The second expression describes the numerical transformation directly.
+
+Vectorized code is often:
+
+- more concise;
+- closer to the underlying mathematical notation;
+- easier to compose;
+- computationally more efficient than explicit Python-level loops.
+
+The performance advantage arises because NumPy can perform many numerical operations in optimized compiled code rather than repeatedly executing Python instructions for individual elements.
+
+Vectorization should not be understood merely as "writing shorter code." It represents a different level of abstraction: operations are expressed over arrays rather than individual scalar elements.
+
+This perspective is central to numerical computing and carries directly into machine learning frameworks.
+
+# Broadcasting
+
+Element-wise operations are straightforward when arrays have identical shapes:
+
+```{python}
+a = np.array([1, 2, 3])
+b = np.array([10, 20, 30])
+
+a + b
+```
+
+However, NumPy can also perform many operations between arrays with different shapes.
+
+This mechanism is called **broadcasting**.
+
+The simplest example is an operation between an array and a scalar:
+
+```{python}
+a = np.array([1, 2, 3, 4])
+
+a + 10
+```
+
+Conceptually, the scalar behaves as if it had been expanded to match the array:
+
+$$
+\begin{bmatrix}
+1 \\
+2 \\
+3 \\
+4
+\end{bmatrix}
++
+10
+\quad\longrightarrow\quad
+\begin{bmatrix}
+1+10 \\
+2+10 \\
+3+10 \\
+4+10
+\end{bmatrix}.
+$$
+
+NumPy does not generally need to create a physical array containing four copies of `10`. Broadcasting describes how the operation can be performed as though compatible expansion had occurred.
+
+## Broadcasting Across a Matrix
+
+Consider:
+
+```{python}
+X = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+offset = np.array([10, 20, 30])
+```
+
+Their shapes are:
+
+```{python}
+print(X.shape)
+print(offset.shape)
+```
+
+which are:
+
+```text
+(3, 3)
+(3,)
+```
+
+The operation
+
+```{python}
+X + offset
+```
+
+adds the vector to every row:
+
+$$
+\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{bmatrix}
++
+\begin{bmatrix}
+10 & 20 & 30
+\end{bmatrix}
+=
+\begin{bmatrix}
+11 & 22 & 33 \\
+14 & 25 & 36 \\
+17 & 28 & 39
+\end{bmatrix}.
+$$
+
+This is possible because the trailing dimension of both arrays has size 3.
+
+## Broadcasting Rules
+
+When NumPy compares two shapes for broadcasting, it compares their dimensions from **right to left**.
+
+Two dimensions are compatible when:
+
+1. they are equal; or
+2. one of them is `1`.
+
+If one array has fewer dimensions, its shape can be conceptually padded with dimensions of size `1` on the left.
+
+For example:
+
+```text
+X:       (4, 3)
+offset:     (3,)
+```
+
+can be viewed conceptually as:
+
+```text
+X:       (4, 3)
+offset:  (1, 3)
+```
+
+The dimensions are compatible:
+
+```text
+3 and 3  -> equal
+4 and 1  -> one is 1
+```
+
+The resulting shape is:
+
+```text
+(4, 3)
+```
+
+Consider another example:
+
+```text
+A:       (5, 4, 3)
+B:          (4, 1)
+```
+
+Conceptually:
+
+```text
+A:       (5, 4, 3)
+B:       (1, 4, 1)
+```
+
+Comparing from right to left:
+
+```text
+3 and 1  -> compatible
+4 and 4  -> compatible
+5 and 1  -> compatible
+```
+
+so the result has shape:
+
+```text
+(5, 4, 3)
+```
+
+By contrast:
+
+```text
+A:       (4, 3)
+B:          (4,)
+```
+
+is not compatible because the trailing dimensions are:
+
+```text
+3 and 4
+```
+
+and neither dimension is `1`.
+
+Understanding broadcasting is therefore largely a matter of **reasoning about shapes**.
+
+## Row and Column Broadcasting
+
+A subtle but important distinction arises between arrays with shapes `(n,)`, `(1, n)`, and `(n, 1)`.
+
+Consider:
+
+```{python}
+row = np.array([1, 2, 3])
+
+print(row.shape)
+```
+
+The shape is:
+
+```text
+(3,)
+```
+
+A two-dimensional row can instead be represented as:
+
+```{python}
+row_2d = np.array([[1, 2, 3]])
+
+print(row_2d.shape)
+```
+
+with shape:
+
+```text
+(1, 3)
+```
+
+A column can be represented as:
+
+```{python}
+column = np.array([
+    [10],
+    [20],
+    [30]
+])
+
+print(column.shape)
+```
+
+with shape:
+
+```text
+(3, 1)
+```
+
+Adding the row and column:
+
+```{python}
+column + row
+```
+
+uses broadcasting to produce a `(3, 3)` array:
+
+$$
+\begin{bmatrix}
+10 \\
+20 \\
+30
+\end{bmatrix}
++
+\begin{bmatrix}
+1 & 2 & 3
+\end{bmatrix}
+=
+\begin{bmatrix}
+11 & 12 & 13 \\
+21 & 22 & 23 \\
+31 & 32 & 33
+\end{bmatrix}.
+$$
+
+This example demonstrates why dimensionality and shape must be tracked carefully. Arrays containing the same number of values can participate in very different operations depending on how those values are arranged across axes.
+
+## Broadcasting in Data Preprocessing
+
+Broadcasting appears naturally in data science.
+
+Suppose:
+
+```{python}
+X = np.array([
+    [10.0, 100.0, 1000.0],
+    [12.0, 120.0, 1100.0],
+    [14.0, 140.0, 1200.0],
+    [16.0, 160.0, 1300.0]
+])
+```
+
+Each column represents a feature.
+
+The mean of each feature can be calculated as:
+
+```{python}
+feature_means = X.mean(axis=0)
+
+feature_means
+```
+
+The resulting shape is:
+
+```{python}
+feature_means.shape
+```
+
+Because `feature_means` has one value per column, NumPy can subtract it from every row:
+
+```{python}
+X_centered = X - feature_means
+
+X_centered
+```
+
+Conceptually, for a feature matrix
+
+$$
+X \in \mathbb{R}^{n \times p},
+$$
+
+and a vector of feature means
+
+$$
+\boldsymbol{\mu} \in \mathbb{R}^{p},
+$$
+
+centering is
+
+$$
+X_{\text{centered}}
+=
+X - \boldsymbol{\mu},
+$$ {#eq-feature-centering}
+
+where broadcasting applies the subtraction to every observation.
+
+For each element:
+
+$$
+(X_{\text{centered}})_{ij}
+=
+X_{ij} - \mu_j.
+$$ {#eq-feature-centering-element}
+
+This is an important example because it connects several NumPy concepts at once:
+
+- the feature matrix has shape `(n_samples, n_features)`;
+- aggregation along `axis=0` produces one statistic per feature;
+- broadcasting applies those statistics across all observations;
+- vectorization eliminates the need for explicit loops over observations or features.
+
+The same pattern underlies many preprocessing operations used in machine learning, including feature centering and standardization.
+
+Broadcasting is therefore not simply a convenient NumPy syntax. It is a fundamental mechanism for expressing numerical operations between arrays whose shapes have compatible mathematical roles.
+
+# Universal Functions
+
+NumPy provides a large collection of functions designed to operate efficiently on arrays element by element.
+
+These functions are called **universal functions**, or **ufuncs**.
+
+For example:
+
+```{python}
+x = np.array([1, 4, 9, 16])
+
+np.sqrt(x)
+```
+
+The square-root function is applied independently to each element:
+
+$$
+y_i = \sqrt{x_i}.
+$$
+
+Other common examples include:
+
+```{python}
+x = np.array([1.0, 2.0, 3.0, 4.0])
+
+np.exp(x)
+```
+
+```{python}
+np.log(x)
+```
+
+```{python}
+np.sin(x)
+```
+
+```{python}
+np.abs(np.array([-3, -1, 0, 2]))
+```
+
+A ufunc therefore represents an operation defined at the scalar level but efficiently extended over complete arrays.
+
+This is closely related to vectorization.
+
+For example, the expression
+
+```{python}
+np.sqrt(x)
+```
+
+is conceptually equivalent to applying the scalar transformation
+
+$$
+f(x) = \sqrt{x}
+$$
+
+to every element of the array.
+
+However, NumPy performs this operation internally without requiring an explicit Python loop.
+
+## Arithmetic Universal Functions
+
+Many familiar arithmetic operations correspond to ufuncs.
+
+Consider:
+
+```{python}
+a = np.array([1, 2, 3, 4])
+b = np.array([10, 20, 30, 40])
+```
+
+Addition can be written using the operator:
+
+```{python}
+a + b
+```
+
+or explicitly using:
+
+```{python}
+np.add(a, b)
+```
+
+Similarly:
+
+```{python}
+np.subtract(a, b)
+```
+
+```{python}
+np.multiply(a, b)
+```
+
+```{python}
+np.divide(a, b)
+```
+
+```{python}
+np.power(a, 2)
+```
+
+The operator syntax is generally more natural for ordinary arithmetic, while the explicit function form can be useful when working programmatically with function objects.
+
+For example:
+
+```{python}
+operation = np.multiply
+
+operation(a, b)
+```
+
+This connects NumPy operations with the concept of first-class functions considered previously.
+
+## Mathematical Universal Functions
+
+NumPy includes many commonly used mathematical transformations.
+
+Examples include:
+
+```{python}
+x = np.array([1.0, 2.0, 4.0, 8.0])
+
+np.log(x)
+```
+
+```{python}
+np.log2(x)
+```
+
+```{python}
+np.exp(x)
+```
+
+```{python}
+np.sqrt(x)
+```
+
+Trigonometric functions are also available:
+
+```{python}
+angles = np.array([0, np.pi / 2, np.pi])
+
+np.sin(angles)
+```
+
+```{python}
+np.cos(angles)
+```
+
+These functions preserve the shape of the original array when applied element-wise.
+
+If
+
+$$
+X \in \mathbb{R}^{m \times n},
+$$
+
+and \(f\) is an element-wise ufunc, then the resulting array has the same shape:
+
+$$
+f(X) \in \mathbb{R}^{m \times n}.
+$$
+
+This shape-preserving property makes ufuncs easy to compose into numerical transformations.
+
+## Comparison Universal Functions
+
+Comparisons are vectorized as well.
+
+For example:
+
+```{python}
+x = np.array([1, 5, 2, 8, 3])
+
+x > 3
+```
+
+The result is a boolean array.
+
+Equivalent NumPy functions include:
+
+```{python}
+np.greater(x, 3)
+```
+
+```{python}
+np.less(x, 3)
+```
+
+```{python}
+np.equal(x, 3)
+```
+
+These operations are frequently combined with boolean indexing.
+
+For example:
+
+```{python}
+x[np.greater(x, 3)]
+```
+
+Thus, filtering can be understood as the combination of:
+
+1. a vectorized comparison that creates a boolean mask;
+2. indexing using that mask.
+
+## Combining Universal Functions
+
+Because ufuncs generally operate element-wise and preserve compatible shapes, they can be composed naturally.
+
+For example:
+
+```{python}
+x = np.array([1.0, 2.0, 3.0, 4.0])
+
+np.sqrt(np.exp(x))
+```
+
+Conceptually:
+
+$$
+y_i = \sqrt{e^{x_i}}.
+$$
+
+Similarly:
+
+```{python}
+1 / (1 + np.exp(-x))
+```
+
+implements the logistic or sigmoid function:
+
+$$
+\sigma(x)
+=
+\frac{1}{1 + e^{-x}}.
+$$ {#eq-sigmoid-array}
+
+Applied to an array, the function becomes:
+
+$$
+\sigma(\mathbf{x})
+=
+\begin{bmatrix}
+\sigma(x_1) \\
+\sigma(x_2) \\
+\vdots \\
+\sigma(x_n)
+\end{bmatrix}.
+$$
+
+This is a simple example of how mathematical transformations used in machine learning can be expressed directly through vectorized NumPy operations.
+
+# Aggregations
+
+While ufuncs often transform every element independently, **aggregation functions** summarize multiple array elements into fewer values.
+
+Common aggregations include:
+
+- sum;
+- mean;
+- minimum;
+- maximum;
+- variance;
+- standard deviation.
+
+Consider:
+
+```{python}
+x = np.array([2, 4, 6, 8, 10])
+```
+
+The total is:
+
+```{python}
+x.sum()
+```
+
+or equivalently:
+
+```{python}
+np.sum(x)
+```
+
+The arithmetic mean is:
+
+```{python}
+x.mean()
+```
+
+Other common examples are:
+
+```{python}
+x.min()
+```
+
+```{python}
+x.max()
+```
+
+```{python}
+x.var()
+```
+
+```{python}
+x.std()
+```
+
+These operations reduce multiple values to one summary statistic.
+
+For a one-dimensional array
+
+$$
+\mathbf{x}
+=
+(x_1, x_2, \ldots, x_n),
+$$
+
+the mean is:
+
+$$
+\bar{x}
+=
+\frac{1}{n}
+\sum_{i=1}^{n} x_i.
+$$ {#eq-array-mean}
+
+The default NumPy variance is the population variance:
+
+$$
+\sigma^2
+=
+\frac{1}{n}
+\sum_{i=1}^{n}
+(x_i-\bar{x})^2.
+$$ {#eq-array-population-variance}
+
+If the sample variance is required, the divisor can be adjusted using `ddof=1`:
+
+```{python}
+x.var(ddof=1)
+```
+
+Similarly:
+
+```{python}
+x.std(ddof=1)
+```
+
+uses the sample standard deviation.
+
+This distinction is important in statistical work because NumPy's default convention is not necessarily the same convention required by a particular estimator.
+
+# Axis Semantics
+
+Aggregations become particularly important in multidimensional arrays because we must specify **which axis is being reduced**.
+
+Consider:
+
+```{python}
+X = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [10, 11, 12]
+])
+
+X.shape
+```
+
+The shape is:
+
+```text
+(4, 3)
+```
+
+Interpreted as a dataset, this could represent:
+
+- 4 observations;
+- 3 features.
+
+If no axis is specified:
+
+```{python}
+X.sum()
+```
+
+NumPy aggregates all elements and returns a scalar.
+
+## Aggregating Along `axis=0`
+
+Consider:
+
+```{python}
+X.sum(axis=0)
+```
+
+The result contains one value per column.
+
+Its shape is:
+
+```text
+(3,)
+```
+
+Mathematically:
+
+$$
+s_j
+=
+\sum_{i=1}^{n}
+X_{ij}.
+$$
+
+The row dimension is reduced, while the feature dimension remains.
+
+For a machine learning feature matrix:
+
+```{python}
+X.mean(axis=0)
+```
+
+therefore calculates one mean for each feature.
+
+This is why feature centering can be written as:
+
+```{python}
+feature_means = X.mean(axis=0)
+X_centered = X - feature_means
+```
+
+## Aggregating Along `axis=1`
+
+Now consider:
+
+```{python}
+X.sum(axis=1)
+```
+
+The result contains one value per row.
+
+Its shape is:
+
+```text
+(4,)
+```
+
+Mathematically:
+
+$$
+s_i
+=
+\sum_{j=1}^{p}
+X_{ij}.
+$$
+
+The feature dimension is reduced, while the observation dimension remains.
+
+Thus:
+
+```{python}
+X.mean(axis=1)
+```
+
+computes one average for each observation.
+
+## Thinking About Axes
+
+A useful way to reason about aggregation is:
+
+> The specified axis is the dimension that is collapsed by the operation.
+
+For an array with shape:
+
+```text
+(n_samples, n_features)
+```
+
+the operation:
+
+```python
+X.mean(axis=0)
+```
+
+collapses the sample axis and leaves:
+
+```text
+(n_features,)
+```
+
+whereas:
+
+```python
+X.mean(axis=1)
+```
+
+collapses the feature axis and leaves:
+
+```text
+(n_samples,)
+```
+
+This interpretation is often more reliable than memorizing statements such as "`axis=0` means columns" or "`axis=1` means rows."
+
+The axis parameter describes the dimension being **reduced**, not a particular visual direction.
+
+This distinction becomes even more important in arrays with three or more dimensions.
+
+## Preserving Reduced Dimensions
+
+By default, aggregation removes the reduced dimension.
+
+For example:
+
+```{python}
+feature_means = X.mean(axis=0)
+
+feature_means.shape
+```
+
+returns:
+
+```text
+(3,)
+```
+
+The dimension can instead be preserved using `keepdims=True`:
+
+```{python}
+feature_means = X.mean(axis=0, keepdims=True)
+
+feature_means.shape
+```
+
+The result now has shape:
+
+```text
+(1, 3)
+```
+
+Similarly:
+
+```{python}
+X.mean(axis=1, keepdims=True).shape
+```
+
+produces:
+
+```text
+(4, 1)
+```
+
+Preserving dimensions can be useful when subsequent broadcasting operations depend on explicit row or column structure.
+
+# Cumulative Operations
+
+Some aggregations preserve the number of elements while accumulating information sequentially.
+
+For example:
+
+```{python}
+x = np.array([1, 2, 3, 4, 5])
+
+np.cumsum(x)
+```
+
+produces:
+
+$$
+[1,\ 1+2,\ 1+2+3,\ \ldots].
+$$
+
+Similarly:
+
+```{python}
+np.cumprod(x)
+```
+
+calculates cumulative products.
+
+For the \(k\)-th cumulative sum:
+
+$$
+s_k
+=
+\sum_{i=1}^{k} x_i.
+$$
+
+These operations are useful in contexts such as time series, cumulative returns, running totals, and sequential numerical analyses.
+
+# Data Types and Numerical Behaviour
+
+The `dtype` of a NumPy array determines how its values are represented numerically.
+
+Unlike Python's built-in `int`, which can represent arbitrarily large integers subject to available memory, NumPy commonly uses fixed-width numerical types.
+
+Examples include:
+
+```python
+np.int8
+np.int16
+np.int32
+np.int64
+```
+
+and:
+
+```python
+np.float32
+np.float64
+```
+
+The number indicates the number of bits used to represent each value.
+
+For example:
+
+```{python}
+x = np.array([1, 2, 3], dtype=np.int32)
+
+x.dtype
+```
+
+Each element occupies 32 bits:
+
+$$
+32 \text{ bits} = 4 \text{ bytes}.
+$$
+
+For large arrays, dtype therefore directly affects memory consumption.
+
+## Memory Consumption
+
+Consider:
+
+```{python}
+a = np.zeros(1_000_000, dtype=np.float64)
+b = np.zeros(1_000_000, dtype=np.float32)
+
+print(a.nbytes)
+print(b.nbytes)
+```
+
+A `float64` uses 8 bytes per element, while a `float32` uses 4 bytes.
+
+Approximately:
+
+$$
+10^6 \times 8
+=
+8 \times 10^6
+\text{ bytes},
+$$
+
+whereas:
+
+$$
+10^6 \times 4
+=
+4 \times 10^6
+\text{ bytes}.
+$$
+
+Thus, reducing numerical precision can substantially reduce memory requirements.
+
+However, lower precision also reduces the range and accuracy with which numbers can be represented.
+
+## Integer Range
+
+Fixed-width integer types have bounded ranges.
+
+For example:
+
+```{python}
+np.iinfo(np.int8)
+```
+
+A signed 8-bit integer has range:
+
+$$
+-128
+\leq x
+\leq
+127.
+$$
+
+Values outside the representable range cannot be represented correctly using that dtype.
+
+Larger integer types provide wider ranges at the cost of additional memory.
+
+## Floating-Point Precision
+
+Floating-point arrays inherit the finite-precision behaviour discussed previously for Python floating-point numbers.
+
+For example:
+
+```{python}
+x = np.array([0.1, 0.2, 0.3])
+
+x[0] + x[1] == x[2]
+```
+
+may evaluate to `False` because these decimal values do not generally have exact binary floating-point representations.
+
+Comparisons involving numerical calculations should therefore often use tolerances:
+
+```{python}
+np.isclose(x[0] + x[1], x[2])
+```
+
+For complete arrays:
+
+```{python}
+a = np.array([0.1 + 0.2, 0.6])
+b = np.array([0.3, 0.6])
+
+np.allclose(a, b)
+```
+
+`np.isclose()` performs element-wise approximate comparisons, while `np.allclose()` determines whether all corresponding elements are sufficiently close.
+
+These functions are preferable to exact equality when comparing floating-point results produced by numerical computation.
+
+## Type Conversion
+
+An existing array can be converted to another dtype using `astype()`:
+
+```{python}
+x = np.array([1.2, 2.7, 3.9])
+
+x.astype(int)
+```
+
+The conversion does not perform conventional rounding. The fractional component is discarded when converting these positive values to integers.
+
+Converting in the opposite direction:
+
+```{python}
+x = np.array([1, 2, 3])
+
+x.astype(float)
+```
+
+produces floating-point representations.
+
+Type conversion should therefore be considered part of the numerical meaning of a computation rather than merely a formatting operation.
+
+# Random Number Generation
+
+Randomness is important in numerical computing and machine learning.
+
+Typical applications include:
+
+- initializing model parameters;
+- sampling observations;
+- generating synthetic data;
+- shuffling datasets;
+- creating train/test partitions;
+- simulation;
+- Monte Carlo methods.
+
+Computer-generated random numbers are generally **pseudo-random**.
+
+A pseudo-random number generator produces a deterministic sequence that behaves statistically like a random sequence.
+
+The sequence is determined by an internal state.
+
+## Random Number Generators
+
+Modern NumPy code can create an explicit random number generator using:
+
+```{python}
+rng = np.random.default_rng()
+```
+
+Random values can then be generated through this object.
+
+For example, random integers:
+
+```{python}
+rng.integers(0, 10, size=5)
+```
+
+generate five integers in the interval:
+
+$$
+[0,10).
+$$
+
+Random floating-point values from the interval \([0,1)\) can be generated with:
+
+```{python}
+rng.random(5)
+```
+
+A multidimensional shape can be specified:
+
+```{python}
+rng.random((2, 3))
+```
+
+## Reproducibility and Seeds
+
+Because pseudo-random number generation is deterministic, the generator can be initialized with a **seed**:
+
+```{python}
+rng = np.random.default_rng(42)
+
+rng.random(5)
+```
+
+Creating another generator with the same seed:
+
+```{python}
+rng = np.random.default_rng(42)
+
+rng.random(5)
+```
+
+produces the same sequence.
+
+This property is essential for reproducibility.
+
+A machine learning experiment may involve randomness in:
+
+- data splitting;
+- subsampling;
+- initialization;
+- stochastic optimization;
+- simulation.
+
+Controlling the seed allows the same pseudo-random decisions to be reproduced when debugging or comparing experiments.
+
+However, a seed does not make an experiment conceptually non-random. It simply fixes one particular pseudo-random sequence.
+
+## Sampling from a Distribution
+
+The generator can sample from common probability distributions.
+
+For example, the standard normal distribution:
+
+```{python}
+rng = np.random.default_rng(42)
+
+samples = rng.normal(
+    loc=0,
+    scale=1,
+    size=1000
+)
+
+samples[:5]
+```
+
+This corresponds to:
+
+$$
+X \sim \mathcal{N}(0,1).
+$$
+
+A normal distribution with mean \(\mu\) and standard deviation \(\sigma\) can be sampled using:
+
+```{python}
+rng.normal(
+    loc=10,
+    scale=2,
+    size=1000
+)
+```
+
+corresponding to:
+
+$$
+X \sim \mathcal{N}(10,2^2).
+$$
+
+Uniform samples can be generated with:
+
+```{python}
+rng.uniform(
+    low=-1,
+    high=1,
+    size=5
+)
+```
+
+Random sampling therefore provides a direct computational connection between probability distributions and numerical arrays.
+
+## Random Choice
+
+Elements can also be sampled from an existing array:
+
+```{python}
+values = np.array([10, 20, 30, 40, 50])
+
+rng.choice(values)
+```
+
+Several values can be sampled:
+
+```{python}
+rng.choice(values, size=3)
+```
+
+Sampling probabilities can be specified explicitly:
+
+```{python}
+values = np.array([0, 1])
+
+rng.choice(
+    values,
+    size=10,
+    p=[0.7, 0.3]
+)
+```
+
+Here:
+
+$$
+P(X=0)=0.7,
+\qquad
+P(X=1)=0.3.
+$$
+
+The probability vector must satisfy:
+
+$$
+p_i \geq 0
+$$
+
+and:
+
+$$
+\sum_i p_i = 1.
+$$
+
+## Sampling With and Without Replacement
+
+By default, `choice()` samples with replacement.
+
+This means that the same element can appear multiple times:
+
+```{python}
+rng.choice(
+    values,
+    size=5,
+    replace=True
+)
+```
+
+Sampling without replacement can be requested explicitly:
+
+```{python}
+values = np.array([10, 20, 30, 40, 50])
+
+rng.choice(
+    values,
+    size=3,
+    replace=False
+)
+```
+
+Without replacement, each selected element is removed from the available sampling pool.
+
+This distinction is important in statistical sampling and resampling procedures.
+
+## Permutations and Shuffling
+
+A permutation rearranges the order of elements.
+
+NumPy can generate a permuted copy:
+
+```{python}
+values = np.array([1, 2, 3, 4, 5])
+
+rng.permutation(values)
+```
+
+The original array remains unchanged.
+
+By contrast, shuffling modifies the array in place:
+
+```{python}
+values = np.array([1, 2, 3, 4, 5])
+
+rng.shuffle(values)
+
+values
+```
+
+The distinction is similar to the copy-versus-mutation concepts considered earlier.
+
+In machine learning, shuffling observations before training is common when the original data order contains structure that should not determine the learning sequence.
+
+# Arrays in Data Science and Machine Learning
+
+NumPy arrays form one of the conceptual foundations of the scientific Python ecosystem.
+
+Even when higher-level libraries provide specialized data structures, much of the underlying numerical reasoning remains array-based.
+
+A typical supervised learning dataset can be represented as:
+
+$$
+X
+\in
+\mathbb{R}^{n \times p},
+$$
+
+where:
+
+- \(n\) is the number of observations;
+- \(p\) is the number of features.
+
+The corresponding target vector may be represented as:
+
+$$
+\mathbf{y}
+\in
+\mathbb{R}^{n}.
+$$
+
+For example:
+
+```{python}
+X = np.array([
+    [1.2, 3.4, 5.6],
+    [2.1, 3.8, 5.2],
+    [0.8, 2.9, 4.7],
+    [1.7, 3.2, 5.0]
+])
+
+y = np.array([0, 1, 0, 1])
+
+print(X.shape)
+print(y.shape)
+```
+
+The structural relationship:
+
+```text
+X.shape == (4, 3)
+y.shape == (4,)
+```
+
+expresses the fact that four observations have three features each and one target value each.
+
+## Feature Transformation
+
+Suppose each feature must be standardized:
+
+$$
+z_{ij}
+=
+\frac{x_{ij}-\mu_j}{s_j}.
+$$ {#eq-array-standardization}
+
+The feature means can be computed as:
+
+```{python}
+feature_means = X.mean(axis=0)
+```
+
+and the feature standard deviations as:
+
+```{python}
+feature_stds = X.std(axis=0)
+```
+
+Then:
+
+```{python}
+X_standardized = (
+    X - feature_means
+) / feature_stds
+```
+
+combines:
+
+- aggregation along `axis=0`;
+- broadcasting;
+- vectorized subtraction;
+- vectorized division.
+
+No explicit loops over observations or features are required.
+
+This compact expression represents a complete numerical transformation:
+
+$$
+Z
+=
+(X-\boldsymbol{\mu})
+\oslash
+\mathbf{s},
+$$
+
+where the subtraction and division are applied feature-wise through broadcasting.
+
+## Linear Models
+
+Array operations also map naturally to linear algebra.
+
+For a linear model:
+
+$$
+\hat{\mathbf{y}}
+=
+X\boldsymbol{\beta},
+$$ {#eq-array-linear-model}
+
+where:
+
+$$
+X
+\in
+\mathbb{R}^{n\times p}
+$$
+
+and:
+
+$$
+\boldsymbol{\beta}
+\in
+\mathbb{R}^{p},
+$$
+
+the prediction can be expressed directly as:
+
+```{python}
+beta = np.array([0.5, -0.2, 0.8])
+
+predictions = X @ beta
+
+predictions
+```
+
+The shapes are:
+
+```text
+X:             (n, p)
+beta:          (p,)
+predictions:   (n,)
+```
+
+Understanding the shape relationship allows us to reason about whether the operation is mathematically valid before executing it.
+
+## Model Evaluation
+
+Suppose:
+
+```{python}
+predictions = np.array([2.8, 3.5, 4.1, 5.0])
+targets = np.array([3.0, 3.2, 4.4, 4.8])
+```
+
+The residual vector is:
+
+```{python}
+residuals = targets - predictions
+
+residuals
+```
+
+The mean squared error can then be written as:
+
+```{python}
+mse = np.mean(residuals ** 2)
+
+mse
+```
+
+Mathematically:
+
+$$
+\operatorname{MSE}
+=
+\frac{1}{n}
+\sum_{i=1}^{n}
+(y_i-\hat{y}_i)^2.
+$$ {#eq-array-mse}
+
+Again, the implementation closely resembles the mathematical definition.
+
+This correspondence between mathematical expressions and array operations is one of the principal reasons NumPy is so useful in numerical and statistical programming.
+
+## Shape as Part of the Interface
+
+In ordinary Python functions, we often reason primarily about types.
+
+In numerical computing, the **shape** of an array is frequently just as important as its dtype.
+
+For example, all of the following arrays contain three numbers:
+
+```{python}
+a = np.array([1, 2, 3])
+
+b = np.array([[1, 2, 3]])
+
+c = np.array([
+    [1],
+    [2],
+    [3]
+])
+
+print(a.shape)
+print(b.shape)
+print(c.shape)
+```
+
+Their shapes are:
+
+```text
+(3,)
+(1, 3)
+(3, 1)
+```
+
+They are therefore not interchangeable in every operation.
+
+The same numerical values can represent:
+
+- a one-dimensional vector;
+- one row containing three values;
+- three rows containing one value each.
+
+This distinction is particularly important when debugging machine learning pipelines.
+
+Many array-related errors are fundamentally **shape errors** rather than arithmetic errors.
+
+For this reason, when inspecting unfamiliar numerical code, it is useful to ask:
+
+1. What does each axis represent?
+2. What is the shape of each array?
+3. Which axis is being indexed or reduced?
+4. Is broadcasting occurring?
+5. Is an operation element-wise or algebraic?
+6. Are any arrays sharing memory?
+7. What dtype and numerical precision are being used?
+
+These questions provide a systematic framework for reasoning about array computations.
+
+# Key Takeaways
+
+NumPy's `ndarray` provides a homogeneous, multidimensional representation designed for numerical computation.
+
+An array is characterized not only by its values but also by structural properties including:
+
+- dimensionality;
+- shape;
+- size;
+- data type.
+
+Indexing and slicing allow individual elements and structured subsets to be selected. Integer indexing can reduce dimensionality, while slicing can preserve dimensions.
+
+Boolean indexing combines vectorized comparisons with selection and provides a natural mechanism for filtering data.
+
+Reshaping changes the structural interpretation of an array without changing its number of elements. Understanding shapes is central to numerical reasoning, particularly in machine learning.
+
+NumPy distinguishes between assignments, views, and copies. Views can share underlying memory with other arrays, allowing efficient computation but also introducing shared mutation.
+
+Vectorization expresses numerical operations over complete arrays rather than through explicit Python loops. It often produces code that is both more efficient and closer to mathematical notation.
+
+Broadcasting allows operations between arrays with compatible but different shapes. Its rules are based on comparing dimensions from right to left and determining whether dimensions are equal or one of them is `1`.
+
+Universal functions apply scalar-style numerical operations efficiently over arrays. They provide many of NumPy's element-wise mathematical, arithmetic, and comparison operations.
+
+Aggregation functions reduce arrays along specified axes. The `axis` argument identifies the dimension being collapsed, making axis semantics particularly important in multidimensional data.
+
+The dtype determines numerical representation, memory consumption, range, and precision. Fixed-width numerical representations introduce considerations such as integer range and floating-point approximation.
+
+Pseudo-random number generators provide reproducible randomness when initialized with a known seed. Random sampling, shuffling, and probability distributions are important tools in statistical and machine learning workflows.
+
+Ultimately, effective use of arrays depends less on memorizing NumPy methods than on developing the ability to reason about **shape, axes, broadcasting, memory, dtype, and the mathematical meaning of an operation**.
+
+# Problems
+
+The following problems review the main concepts introduced in this chapter. They progress from basic array construction and indexing to shape reasoning, broadcasting, numerical behaviour, and applications in data science and machine learning.
+
+## Problem 1 — Creating and Inspecting Arrays
+
+Create the following NumPy array:
+
+```python
+values = [2, 4, 6, 8, 10]
+```
+
+Convert it into an `ndarray` and inspect:
+
+- its type;
+- number of dimensions;
+- shape;
+- size;
+- dtype.
+
+Explain the difference between `ndim`, `shape`, and `size`.
+
+## Problem 2 — One-Dimensional and Two-Dimensional Arrays
+
+Create the following arrays:
+
+```python
+a = np.array([1, 2, 3, 4, 5, 6])
+
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+```
+
+For each array, determine:
+
+- `ndim`;
+- `shape`;
+- `size`.
+
+Then explain why both arrays contain six elements but represent different structures.
+
+## Problem 3 — Array Creation Functions
+
+Create:
+
+1. a one-dimensional array containing five zeros;
+2. a `3 × 4` array containing ones;
+3. a `2 × 3` array filled with the value `7`;
+4. an array containing the integers from `0` through `9`;
+5. an array containing the even integers from `2` through `20`;
+6. an array containing exactly six evenly spaced values between `0` and `1`;
+7. a `4 × 4` identity matrix.
+
+For each case, choose an appropriate NumPy array-creation function.
+
+Explain when `np.linspace()` may be preferable to `np.arange()` for floating-point intervals.
+
+## Problem 4 — Indexing
+
+Consider:
+
+```python
+A = np.array([
+    [10, 20, 30, 40],
+    [50, 60, 70, 80],
+    [90, 100, 110, 120]
+])
+```
+
+Without executing the code, determine the values returned by:
+
+```python
+A[0, 0]
+A[1, 2]
+A[-1, -1]
+A[2, 1]
+A[0]
+A[:, 2]
+```
+
+For each expression, determine whether the result is:
+
+- a scalar;
+- a one-dimensional array;
+- a two-dimensional array.
+
+## Problem 5 — Slicing
+
+Using the same array:
+
+```python
+A = np.array([
+    [10, 20, 30, 40],
+    [50, 60, 70, 80],
+    [90, 100, 110, 120]
+])
+```
+
+write expressions that select:
+
+1. the first two rows;
+2. the last two columns;
+3. the first two rows and the middle two columns;
+4. the second row only;
+5. the second row while preserving two dimensions;
+6. every second column.
+
+Explain the difference between:
+
+```python
+A[1]
+```
+
+and:
+
+```python
+A[1:2]
+```
+
+in terms of shape.
+
+## Problem 6 — Shape Preservation
+
+Consider:
+
+```python
+X = np.array([
+    [1.2, 2.3, 3.4],
+    [4.5, 5.6, 6.7],
+    [7.8, 8.9, 9.0]
+])
+```
+
+Determine the shape of each expression:
+
+```python
+X[0]
+X[0:1]
+X[:, 0]
+X[:, 0:1]
+X[1:, :2]
+```
+
+Explain why preserving or removing a dimension can matter when passing arrays to machine learning code.
+
+## Problem 7 — Boolean Masks
+
+Given:
+
+```python
+values = np.array([3, 8, 12, 5, 17, 21, 4, 15])
+```
+
+construct boolean masks that identify:
+
+1. values greater than `10`;
+2. values between `5` and `15`, inclusive;
+3. even values;
+4. values smaller than `5` or greater than `15`.
+
+Use each mask to extract the corresponding values.
+
+## Problem 8 — Filtering Observations
+
+Suppose:
+
+```python
+X = np.array([
+    [22, 42000],
+    [35, 58000],
+    [48, 76000],
+    [29, 51000],
+    [52, 91000]
+])
+```
+
+The first column represents age and the second represents annual income.
+
+Select all observations satisfying:
+
+$$
+\text{age} \geq 30
+$$
+
+and:
+
+$$
+\text{income} < 80000.
+$$
+
+Your result should contain complete rows, not only the columns used in the condition.
+
+Explain how a one-dimensional boolean mask can be used to filter a two-dimensional array by observations.
+
+## Problem 9 — Reshaping
+
+Create:
+
+```python
+a = np.arange(24)
+```
+
+Reshape it into arrays with the following shapes:
+
+```text
+(6, 4)
+(4, 6)
+(2, 3, 4)
+(3, 2, 4)
+```
+
+Then determine which of the following reshapes are valid:
+
+```text
+(8, 3)
+(5, 5)
+(2, 2, 6)
+(3, 3, 3)
+```
+
+Justify each answer using the total number of elements.
+
+## Problem 10 — Inferring Dimensions
+
+Given:
+
+```python
+a = np.arange(30)
+```
+
+predict the shape produced by:
+
+```python
+a.reshape(5, -1)
+a.reshape(-1, 3)
+a.reshape(2, -1, 5)
+```
+
+Explain how NumPy determines the dimension represented by `-1`.
+
+Why can only one dimension normally be specified as `-1`?
+
+## Problem 11 — Flattening
+
+Consider:
+
+```python
+A = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
+```
+
+Use each of the following approaches to produce a one-dimensional array:
+
+```python
+A.reshape(-1)
+A.ravel()
+A.flatten()
+```
+
+Determine the shape of each result.
+
+Then explain the important memory-related distinction between `ravel()` and `flatten()`.
+
+## Problem 12 — Assignment, View, or Copy?
+
+Consider:
+
+```python
+a = np.array([10, 20, 30, 40, 50])
+
+b = a
+c = a[1:4]
+d = a[1:4].copy()
+```
+
+Without executing the code, predict what happens to `a`, `b`, `c`, and `d` after:
+
+```python
+b[0] = 100
+c[0] = 200
+d[0] = 300
+```
+
+Explain the distinction between:
+
+- another name for the same array;
+- a view;
+- an independent copy.
+
+## Problem 13 — Why Views Matter
+
+Suppose a very large array contains several gigabytes of numerical data.
+
+Explain why NumPy might prefer to return views from slicing operations rather than automatically copying the selected values.
+
+Discuss the trade-off between:
+
+- memory efficiency;
+- computational efficiency;
+- independence of modifications.
+
+## Problem 14 — Element-Wise Operations
+
+Given:
+
+```python
+a = np.array([1, 2, 3, 4])
+b = np.array([10, 20, 30, 40])
+```
+
+determine the results of:
+
+```python
+a + b
+a - b
+a * b
+b / a
+a ** 2
+```
+
+Explain why these operations are described as element-wise.
+
+## Problem 15 — Element-Wise Versus Matrix Multiplication
+
+Consider:
+
+```python
+A = np.array([
+    [1, 2],
+    [3, 4]
+])
+
+B = np.array([
+    [5, 6],
+    [7, 8]
+])
+```
+
+Calculate:
+
+```python
+A * B
+```
+
+and:
+
+```python
+A @ B
+```
+
+by hand.
+
+Explain the mathematical difference between the two operations.
+
+## Problem 16 — Vectorization
+
+Suppose:
+
+```python
+x = np.array([1, 2, 3, 4, 5])
+```
+
+The desired transformation is:
+
+$$
+y_i = 3x_i^2 - 2x_i + 1.
+$$
+
+Implement the transformation:
+
+1. using an explicit Python loop;
+2. using a vectorized NumPy expression.
+
+Compare the two implementations in terms of:
+
+- readability;
+- mathematical correspondence;
+- computational abstraction.
+
+## Problem 17 — Broadcasting with a Scalar
+
+Given:
+
+```python
+x = np.array([2, 4, 6, 8])
+```
+
+predict the results of:
+
+```python
+x + 10
+x * 2
+x / 4
+```
+
+Explain broadcasting conceptually without describing NumPy as physically constructing a full array of repeated scalar values.
+
+## Problem 18 — Broadcasting Across Rows
+
+Consider:
+
+```python
+X = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [10, 11, 12]
+])
+
+offset = np.array([10, 20, 30])
+```
+
+Predict the result of:
+
+```python
+X + offset
+```
+
+Then explain why the shapes:
+
+```text
+(4, 3)
+(3,)
+```
+
+are compatible for broadcasting.
+
+## Problem 19 — Broadcasting Rules
+
+Determine whether each pair of shapes is broadcast-compatible.
+
+If they are compatible, determine the resulting shape.
+
+```text
+(4, 3)       and (3,)
+(4, 3)       and (1, 3)
+(4, 3)       and (4, 1)
+(5, 4, 3)    and (4, 1)
+(2, 3, 4)    and (3, 4)
+(2, 3, 4)    and (2, 4)
+(6, 1, 5)    and (1, 4, 1)
+```
+
+For each case, compare dimensions from right to left and justify the result.
+
+## Problem 20 — Row and Column Broadcasting
+
+Create:
+
+```python
+row = np.array([1, 2, 3])
+
+column = np.array([
+    [10],
+    [20],
+    [30],
+    [40]
+])
+```
+
+Determine:
+
+```python
+row.shape
+column.shape
+```
+
+Then predict the shape and values of:
+
+```python
+column + row
+```
+
+Explain why the result is a two-dimensional array even though neither input has that final shape.
+
+## Problem 21 — Universal Functions
+
+Given:
+
+```python
+x = np.array([1.0, 4.0, 9.0, 16.0])
+```
+
+calculate:
+
+```python
+np.sqrt(x)
+np.log(x)
+np.exp(np.array([0.0, 1.0, 2.0]))
+```
+
+Then implement the sigmoid function:
+
+$$
+\sigma(x)
+=
+\frac{1}{1+e^{-x}}
+$$
+
+as a vectorized NumPy expression and evaluate it on:
+
+```python
+x = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+```
+
+## Problem 22 — Aggregations
+
+Given:
+
+```python
+X = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [10, 11, 12]
+])
+```
+
+calculate:
+
+```python
+X.sum()
+X.mean()
+X.min()
+X.max()
+```
+
+Then determine the result and shape of:
+
+```python
+X.sum(axis=0)
+X.sum(axis=1)
+X.mean(axis=0)
+X.mean(axis=1)
+```
+
+Explain what is being reduced in each case.
+
+## Problem 23 — Reasoning About `axis`
+
+Suppose:
+
+```python
+X.shape == (1000, 20)
+```
+
+where `X` represents 1000 observations and 20 features.
+
+Without executing code, determine the shape and interpretation of:
+
+```python
+X.mean(axis=0)
+X.std(axis=0)
+X.mean(axis=1)
+X.max(axis=1)
+```
+
+Avoid explaining `axis=0` simply as "columns" or `axis=1` simply as "rows."
+
+Instead, describe each operation in terms of **which dimension is being collapsed**.
+
+## Problem 24 — `keepdims`
+
+Using:
+
+```python
+X = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+```
+
+compare the shapes produced by:
+
+```python
+X.mean(axis=0)
+X.mean(axis=0, keepdims=True)
+
+X.mean(axis=1)
+X.mean(axis=1, keepdims=True)
+```
+
+Explain why retaining a dimension can simplify subsequent broadcasting operations.
+
+## Problem 25 — Population and Sample Standard Deviation
+
+Given:
+
+```python
+x = np.array([4, 7, 8, 10, 11])
+```
+
+calculate:
+
+```python
+x.std()
+```
+
+and:
+
+```python
+x.std(ddof=1)
+```
+
+Explain why the results differ.
+
+Identify which corresponds to:
+
+$$
+\sqrt{
+\frac{1}{n}
+\sum_{i=1}^{n}(x_i-\bar{x})^2
+}
+$$
+
+and which corresponds to:
+
+$$
+\sqrt{
+\frac{1}{n-1}
+\sum_{i=1}^{n}(x_i-\bar{x})^2
+}.
+$$
+
+## Problem 26 — Data Types and Memory
+
+Create two arrays containing one million zeros:
+
+```python
+a
+b
+```
+
+where:
+
+- `a` uses `float64`;
+- `b` uses `float32`.
+
+Use `nbytes` to determine the memory consumed by each.
+
+Explain why the difference occurs and discuss the trade-off involved in using lower-precision floating-point types.
+
+## Problem 27 — Integer Representation
+
+Investigate:
+
+```python
+np.iinfo(np.int8)
+```
+
+and determine the minimum and maximum representable values.
+
+Then explain why fixed-width NumPy integers differ conceptually from Python's built-in arbitrary-precision integers.
+
+What kind of numerical problem can occur when a calculation exceeds the representable range of a fixed-width integer type?
+
+## Problem 28 — Floating-Point Comparison
+
+Consider:
+
+```python
+a = np.array([0.1 + 0.2, 0.6])
+b = np.array([0.3, 0.6])
+```
+
+Predict the result of:
+
+```python
+a == b
+```
+
+Then compare it with:
+
+```python
+np.isclose(a, b)
+```
+
+and:
+
+```python
+np.allclose(a, b)
+```
+
+Explain why exact equality is often inappropriate for comparing floating-point numerical results.
+
+## Problem 29 — Type Conversion
+
+Given:
+
+```python
+x = np.array([1.2, 2.7, 3.9, -4.8])
+```
+
+predict the result of:
+
+```python
+x.astype(int)
+```
+
+Does NumPy round each value to the nearest integer?
+
+Explain what information is lost during this conversion.
+
+## Problem 30 — Reproducible Random Numbers
+
+Create two separate random number generators:
+
+```python
+rng1 = np.random.default_rng(42)
+rng2 = np.random.default_rng(42)
+```
+
+Generate five random values from each.
+
+What relationship do you expect between the two sequences?
+
+Then create another generator using a different seed and compare the result.
+
+Explain the role of a seed in reproducible numerical experiments.
+
+## Problem 31 — Sampling from a Normal Distribution
+
+Generate 10,000 observations from:
+
+$$
+X \sim \mathcal{N}(5, 2^2).
+$$
+
+Calculate the sample mean and sample standard deviation.
+
+Compare them with the theoretical parameters:
+
+$$
+\mu = 5,
+\qquad
+\sigma = 2.
+$$
+
+Should the sample statistics be exactly equal to the theoretical values?
+
+Explain why or why not.
+
+## Problem 32 — Sampling with and without Replacement
+
+Given:
+
+```python
+values = np.array([10, 20, 30, 40, 50])
+```
+
+sample:
+
+1. five values with replacement;
+2. five values without replacement.
+
+Can repeated values occur in each case?
+
+Then determine whether the following request is valid:
+
+```python
+rng.choice(
+    values,
+    size=10,
+    replace=False
+)
+```
+
+Explain your answer.
+
+## Problem 33 — Feature Centering
+
+Suppose:
+
+```python
+X = np.array([
+    [10.0, 100.0, 1000.0],
+    [12.0, 120.0, 1100.0],
+    [14.0, 140.0, 1200.0],
+    [16.0, 160.0, 1300.0]
+])
+```
+
+Calculate the mean of each feature and create a centered feature matrix:
+
+$$
+X_{\text{centered}}
+=
+X-\boldsymbol{\mu}.
+$$
+
+Use vectorized NumPy operations and broadcasting.
+
+Then verify that:
+
+```python
+X_centered.mean(axis=0)
+```
+
+is numerically close to zero.
+
+Explain the shapes involved in the operation.
+
+## Problem 34 — Feature Standardization
+
+Using the same feature matrix, calculate:
+
+$$
+z_{ij}
+=
+\frac{x_{ij}-\mu_j}{s_j}.
+$$
+
+Create a standardized matrix using:
+
+```python
+feature_means = ...
+feature_stds = ...
+X_standardized = ...
+```
+
+Do not use explicit Python loops.
+
+Verify that each transformed feature has approximately:
+
+$$
+\text{mean} = 0
+$$
+
+and:
+
+$$
+\text{standard deviation} = 1.
+$$
+
+Explain how aggregation, broadcasting, and vectorization interact in this single computation.
+
+## Problem 35 — Linear Prediction with Arrays
+
+Suppose:
+
+```python
+X = np.array([
+    [1.0, 2.0, 3.0],
+    [2.0, 1.0, 4.0],
+    [3.0, 0.0, 2.0],
+    [4.0, 1.0, 1.0]
+])
+
+beta = np.array([0.5, -0.3, 0.8])
+```
+
+Calculate:
+
+```python
+X @ beta
+```
+
+Before executing the operation, reason about the shapes:
+
+```text
+X.shape
+beta.shape
+```
+
+and determine the expected shape of the result.
+
+Then interpret the operation as:
+
+$$
+\hat{\mathbf{y}}
+=
+X\boldsymbol{\beta}.
+$$
+
+## Problem 36 — Residuals and Mean Squared Error
+
+Given:
+
+```python
+targets = np.array([3.0, 4.5, 2.8, 5.2])
+predictions = np.array([2.7, 4.8, 3.1, 4.9])
+```
+
+calculate the residuals:
+
+$$
+e_i
+=
+y_i-\hat{y}_i,
+$$
+
+and then calculate:
+
+$$
+\operatorname{MSE}
+=
+\frac{1}{n}
+\sum_{i=1}^{n}e_i^2.
+$$
+
+Implement the calculation using vectorized NumPy operations.
+
+Do not use an explicit loop.
+
+## Problem 37 — Debugging a Shape Error
+
+Suppose:
+
+```python
+X = np.zeros((100, 5))
+beta = np.zeros((4,))
+```
+
+A program attempts:
+
+```python
+predictions = X @ beta
+```
+
+Explain why the operation fails.
+
+Identify the incompatible dimensions and determine what shape `beta` would need for the operation to produce one prediction per observation.
+
+## Problem 38 — Broadcasting Bug
+
+Consider:
+
+```python
+X = np.zeros((100, 5))
+offset = np.zeros((100,))
+```
+
+A programmer expects:
+
+```python
+X + offset
+```
+
+to add one offset value to every observation.
+
+Will this operation broadcast successfully?
+
+Explain your answer using the broadcasting rules.
+
+Then propose an appropriate shape for `offset` if the intention is to add one different scalar value to each row.
+
+## Problem 39 — Diagnosing Unexpected Mutation
+
+Consider:
+
+```python
+X = np.arange(12).reshape(3, 4)
+
+subset = X[:, :2]
+
+subset[:] = 0
+```
+
+Without executing the code, predict what happens to `X`.
+
+Explain why.
+
+Then modify the code so that changing `subset` does not alter the original array.
+
+## Problem 40 — Integrated Array Reasoning
+
+Consider:
+
+```python
+X = np.array([
+    [2.0, 10.0, 100.0],
+    [4.0, 20.0, 120.0],
+    [6.0, 30.0, 140.0],
+    [8.0, 40.0, 160.0]
+])
+
+means = X.mean(axis=0)
+stds = X.std(axis=0)
+
+Z = (X - means) / stds
+
+mask = Z[:, 0] > 0
+
+result = Z[mask]
+```
+
+Without executing the code:
+
+1. determine the shape of `X`;
+2. determine the shape of `means`;
+3. determine the shape of `stds`;
+4. explain how `X - means` is broadcast;
+5. determine the shape of `Z`;
+6. determine the shape of `mask`;
+7. determine how many rows are likely selected by `mask`;
+8. determine the shape of `result`.
+
+Then describe, in conceptual terms, what the complete computation is doing.
+
+Your explanation should explicitly use the concepts of:
+
+- aggregation;
+- axis reduction;
+- broadcasting;
+- vectorization;
+- boolean indexing;
+- shape.
+
+## Problem 41 — Designing an Array-Based Preprocessing Function
+
+Write a function with the interface:
+
+```python
+def standardize_features(
+    X: np.ndarray
+) -> np.ndarray:
+    ...
+```
+
+The function should:
+
+- calculate one mean per feature;
+- calculate one standard deviation per feature;
+- return a standardized copy of the data;
+- avoid modifying the original array;
+- avoid explicit Python loops;
+- raise an appropriate error if any feature has zero standard deviation.
+
+Add a concise docstring.
+
+Then explain why the function can be understood primarily through the shapes:
+
+```text
+X              (n_samples, n_features)
+feature_means  (n_features,)
+feature_stds   (n_features,)
+result         (n_samples, n_features)
+```
+
+## Problem 42 — Reasoning About an Unfamiliar Numerical Pipeline
+
+Consider:
+
+```python
+def transform(X):
+    selected = X[X[:, 0] > 0]
+
+    means = selected.mean(
+        axis=0,
+        keepdims=True
+    )
+
+    centered = selected - means
+
+    scale = np.sqrt(
+        np.mean(centered ** 2, axis=0)
+    )
+
+    return centered / scale
+```
+
+Without executing the function, explain each stage.
+
+In particular:
+
+1. What does `X[:, 0] > 0` produce?
+2. What does `X[X[:, 0] > 0]` select?
+3. Why does `means` have shape `(1, n_features)`?
+4. How is `selected - means` broadcast?
+5. What does `centered ** 2` do?
+6. Which dimension is reduced by `axis=0`?
+7. What is the shape of `scale`?
+8. How does the final division broadcast?
+9. Does the function modify the original `X`?
+10. What potential numerical problem occurs if one feature has zero scale?
+
+Finally, summarize the transformation in mathematical terms.
