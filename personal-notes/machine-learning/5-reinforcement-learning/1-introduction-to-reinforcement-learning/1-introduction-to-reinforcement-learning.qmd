@@ -1,0 +1,60 @@
+---
+title: "Introduction to Reinforcement Learning"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-overflow: wrap
+    code-block-font-size: \scriptsize
+
+editor: visual
+---
+
+# Introduction to Reinforcement Learning
+
+## What Is Reinforcement Learning?
+
+## Agent–Environment Interaction
+
+## Rewards, Returns, and the Objective of RL
+
+## Examples Across Domains (games, robotics, recommendation systems)
+
+## The Reinforcement Learning Framework
+
+### Components of an RL Problem
+
+#### Agent, Environment, Policy, Reward Signal
+
+#### Value Function, Model of the Environment
+
+# Problems

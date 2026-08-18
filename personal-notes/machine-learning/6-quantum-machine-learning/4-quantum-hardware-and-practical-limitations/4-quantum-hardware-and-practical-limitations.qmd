@@ -1,0 +1,95 @@
+---
+title: "Quantum Hardware and Practical Limitations"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+format:
+  html:
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+
+    code-line-numbers: true
+    code-overflow: wrap
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-overflow: wrap
+    code-block-font-size: \scriptsize
+
+editor: visual
+---
+
+# Noise and Near-Term Quantum Computing
+
+## Noisy Intermediate-Scale Quantum Devices
+
+## Sources of Quantum Noise
+
+### Gate Errors
+
+### Measurement Errors
+
+### Decoherence
+
+## Noise in Quantum Machine Learning
+
+## Error Mitigation
+
+## Noise-Aware Training
+
+## Simulation versus Quantum Hardware
+
+# Practical Quantum Machine Learning
+
+## Software Ecosystem
+
+### PennyLane
+
+### Qiskit
+
+## Quantum Circuit Simulation
+
+## Building a Variational Quantum Classifier
+
+## Building a Quantum Kernel Model
+
+## Hybrid Classical-Quantum Models
+
+## Running Models on Quantum Hardware
+
+## Reproducibility and Benchmarking
+
+# Problems

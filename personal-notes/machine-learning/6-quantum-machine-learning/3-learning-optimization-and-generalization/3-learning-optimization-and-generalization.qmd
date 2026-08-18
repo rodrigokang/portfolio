@@ -1,0 +1,109 @@
+---
+title: "Learning, Optimization, and Generalization"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+format:
+  html:
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+
+    code-line-numbers: true
+    code-overflow: wrap
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-overflow: wrap
+    code-block-font-size: \scriptsize
+
+editor: visual
+---
+
+# Quantum Optimization and Machine Learning
+
+## Variational Quantum Algorithms
+
+## Variational Quantum Eigensolver
+
+## Quantum Approximate Optimization Algorithm
+
+## Optimization Problems in Machine Learning
+
+## Quantum Annealing
+
+## Connections to Machine Learning
+
+# Training Quantum Machine Learning Models
+
+## Optimization Landscapes
+
+## Gradient-Based Optimization
+
+## Gradient-Free Optimization
+
+## Barren Plateaus
+
+### Origins of Barren Plateaus
+
+### Gradient Concentration
+
+### Mitigation Strategies
+
+## Local Minima and Optimization Challenges
+
+## Initialization
+
+## Circuit Depth
+
+# Generalization and Expressivity
+
+## Model Capacity
+
+## Expressivity of Quantum Models
+
+## Fourier Representation of Quantum Models
+
+## Generalization
+
+## Overfitting
+
+## Inductive Bias
+
+## Effective Dimension
+
+## Comparison with Classical Models
+
+# Problems

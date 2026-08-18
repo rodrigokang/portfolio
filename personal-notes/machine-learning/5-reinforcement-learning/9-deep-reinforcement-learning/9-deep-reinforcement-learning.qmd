@@ -1,0 +1,74 @@
+---
+title: "Deep Reinforcement Learning"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-overflow: wrap
+    code-block-font-size: \scriptsize
+
+editor: visual
+---
+
+# Deep Reinforcement Learning
+
+## Function Approximation in RL
+
+## Deep Q-Networks (DQN)
+
+### Experience Replay
+
+### Target Networks
+
+### Stability Issues
+
+## DQN Improvements
+
+### Double DQN
+
+### Dueling Networks
+
+### Prioritized Experience Replay
+
+## Deep Policy Gradient Methods
+
+### Deep Actor–Critic
+
+### PPO (Proximal Policy Optimisation)
+
+### TRPO (Trust Region Policy Optimisation)
+
+## Deep Deterministic Policy Gradient (DDPG)
+
+## Soft Actor–Critic (SAC)
+
+# Problems

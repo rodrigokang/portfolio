@@ -1,0 +1,129 @@
+---
+title: "Algorithms, Applications, and Quantum Advantage"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+format:
+  html:
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+
+    code-line-numbers: true
+    code-overflow: wrap
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-overflow: wrap
+    code-block-font-size: \scriptsize
+
+editor: visual
+---
+
+# Quantum Machine Learning Algorithms
+
+## Variational Quantum Classifiers
+
+## Quantum Kernel Methods
+
+## Quantum Neural Networks
+
+## Quantum Generative Models
+
+### Quantum Generative Adversarial Networks
+
+### Quantum Boltzmann Machines
+
+### Born Machines
+
+## Quantum Reinforcement Learning
+
+# Quantum Advantage in Machine Learning
+
+## What Is Quantum Advantage?
+
+## Computational Advantage
+
+## Sample Complexity Advantage
+
+## Learning Advantage
+
+## Theoretical Quantum Speedups
+
+## Practical Quantum Advantage
+
+## Dequantization
+
+## Classical Simulation of Quantum Models
+
+## Fair Classical Baselines
+
+## Current Evidence
+
+# Applications
+
+## Classification
+
+## Regression
+
+## Generative Modelling
+
+## Optimization
+
+## High-Dimensional Data
+
+## Scientific Machine Learning
+
+# Quantum Machine Learning in Finance
+
+## Why Finance?
+
+## Portfolio Optimization
+
+## Asset Pricing and Prediction
+
+## Risk Modelling
+
+## Credit Risk
+
+## Fraud Detection
+
+## Option Pricing
+
+## Generative Models for Financial Data
+
+## Limitations of Quantum Approaches in Finance
+
+# Problems

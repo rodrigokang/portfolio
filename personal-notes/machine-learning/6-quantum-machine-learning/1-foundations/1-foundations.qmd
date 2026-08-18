@@ -1,0 +1,125 @@
+---
+title: "Foundations"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+format:
+  html:
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+
+    code-line-numbers: true
+    code-overflow: wrap
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-overflow: wrap
+    code-block-font-size: \scriptsize
+
+editor: visual
+---
+
+# Introduction
+
+## What Is Quantum Machine Learning?
+
+## Why Quantum Machine Learning?
+
+## Classical and Quantum Machine Learning
+
+## Scope of These Notes
+
+# Quantum Computing Foundations
+
+## Qubits
+
+### State Vectors
+
+### The Bloch Sphere
+
+### Measurement
+
+## Multiple Qubits
+
+### Tensor Products
+
+### Computational Basis
+
+### Entanglement
+
+## Quantum Gates
+
+### Single-Qubit Gates
+
+### Multi-Qubit Gates
+
+## Quantum Circuits
+
+## Quantum Measurement
+
+### Expectation Values
+
+### Sampling and Shot Noise
+
+# Mathematical Framework
+
+## Hilbert Spaces
+
+## Bra-Ket Notation
+
+## Inner and Outer Products
+
+## Operators
+
+### Hermitian Operators
+
+### Unitary Operators
+
+### Observables
+
+## Tensor Products
+
+## Density Matrices
+
+### Pure and Mixed States
+
+### Reduced Density Matrices
+
+## Quantum Dynamics
+
+### Unitary Evolution
+
+# Problems
