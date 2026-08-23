@@ -39,7 +39,7 @@ format:
 editor: visual
 ---
 
-**Linear regression** is a statistical method used to model the relationship between a response variable and one or more predictors, or covariates. When there is a single predictor, the model is called **Simple Linear Regression**; when there are two or more predictors, it is called **Multiple Linear Regression**.
+**Linear regression** is a statistical method used to model the relationship between a response variable and one or more predictors, or covariates. When there is a single predictor, the model is called **Simple Linear Regression**; when there is more than one predictor, it is called **Multiple Linear Regression**.
 
 Linear regression is a fundamental statistical model and is also widely used as a supervised machine learning method for regression problems. It provides a natural starting point for studying regression, introducing many of the concepts that also appear in more sophisticated models.
 
@@ -60,7 +60,7 @@ where $x_i$ is the predictor and $y_i$ is the corresponding response for observa
 | $\vdots$ | $\vdots$ |
 |   $y_i$  |   $x_i$  |
 | $\vdots$ | $\vdots$ |
-|   $y_n$  |   $x_N$  |
+|   $y_N$  |   $x_N$  |
 
 : Training dataset for simple linear regression. {#tbl-training-dataset}
 
@@ -72,51 +72,726 @@ $$ {#eq-simple-linear-regression}
 
 where $\theta_0$ is the **intercept**, $\theta_1$ is the **slope**, and $\varepsilon_i$ is an error term representing the part of $y_i$ that is not explained by the linear relationship.
 
-The systematic component of the model is therefore
+The conditional mean of the response is therefore
 
 $$
 \mathbb{E}[Y \mid X=x] = \theta_0 + \theta_1 x.
 $$ {#eq-conditional-mean}
 
-The goal is to estimate the unknown parameters $\theta_0$ and $\theta_1$ from the observed data. Once estimates $\hat{\theta}_0$ and $\hat{\theta}_1$ have been obtained, the fitted regression line is
+The goal is to estimate the unknown parameters $\theta_0$ and $\theta_1$ from the observed data. Once estimates $\hat{\theta}_0$ and $\hat{\theta}_1$ have been obtained, the fitted regression function is
 
 $$
-\hat{y}_i = \hat{\theta}_0 + \hat{\theta}_1 x_i.
-$$ {#eq-fitted-regression-line}
+\hat{y}(x) = \hat{\theta}_0 + \hat{\theta}_1 x.
+$$ {#eq-fitted-regression-function}
+
+For observation $i$, the corresponding fitted value is
+
+$$
+\hat{y}_i = \hat{y}(x_i)
+= \hat{\theta}_0 + \hat{\theta}_1 x_i.
+$$ {#eq-fitted-value}
 
 For each observation, the difference between the observed response and its fitted value is called the **residual**:
 
 $$
-e_i = y_i - \hat{y}_i.
+e_i = y_i - \hat{y}_i
+= y_i - \hat{\theta}_0 - \hat{\theta}_1 x_i.
 $$ {#eq-residual}
 
-The question is then how to choose $\hat{\theta}_0$ and $\hat{\theta}_1$ so that the fitted line represents the observed data as well as possible. The standard approach is **Ordinary Least Squares**.
+It is important to distinguish the residual $e_i$ from the error term $\varepsilon_i$. The error term is defined with respect to the unknown population regression function,
+
+$$
+\varepsilon_i = y_i - \theta_0 - \theta_1 x_i,
+$$
+
+and is therefore unobserved because the true parameters $\theta_0$ and $\theta_1$ are unknown. In contrast, the residual $e_i$ is computed after fitting the model and measures the discrepancy between the observed response $y_i$ and its fitted value $\hat{y}_i$.
+
+The question is then how to choose $\hat{\theta}_0$ and $\hat{\theta}_1$ so that the fitted regression line represents the observed data as well as possible. The standard approach is **Ordinary Least Squares**.
 
 ## Ordinary Least Squares
 
 ![Residuals between the observed responses and the fitted regression line used to compute the Residual Sum of Squares (RSS).](figures/rss.png){#fig-rss width=90%}
 
+### Residual Sum of Squares
+
+**Ordinary Least Squares (OLS)** estimates the model parameters by choosing the values of $\theta_0$ and $\theta_1$ that minimize the sum of the squared differences between the observed responses and the values predicted by the regression line.
+
+For arbitrary parameter values $\theta_0$ and $\theta_1$, the **Residual Sum of Squares (RSS)** is defined as
+
+$$
+\begin{split}
+\operatorname{RSS}(\theta_0,\theta_1)
+&= (y_1-\theta_0-\theta_1x_1)^2
+ + (y_2-\theta_0-\theta_1x_2)^2
+ + \cdots
+ + (y_N-\theta_0-\theta_1x_N)^2 \\
+&= \sum_{i=1}^{N}
+\left(y_i-\theta_0-\theta_1x_i\right)^2.
+\end{split}
+$$ {#eq-rss}
+
+The OLS estimates $\hat{\theta}_0$ and $\hat{\theta}_1$ are therefore defined as the parameter values that minimize the RSS:
+
+$$
+(\hat{\theta}_0,\hat{\theta}_1)
+=
+\underset{\theta_0,\theta_1}{\operatorname{argmin}}
+\operatorname{RSS}(\theta_0,\theta_1).
+$$ {#eq-ols-optimization}
+
+Once the model has been fitted, the RSS evaluated at the estimated parameters can equivalently be written in terms of the residuals:
+
+$$
+\operatorname{RSS}(\hat{\theta}_0,\hat{\theta}_1)
+=
+\sum_{i=1}^{N}e_i^2.
+$$ {#eq-rss-residuals}
+
+### Parameter Estimation
+
+To obtain the OLS estimates analytically, we minimize $\operatorname{RSS}(\theta_0,\theta_1)$ with respect to both parameters. The critical points of the RSS satisfy
+
+$$
+\nabla \operatorname{RSS}(\theta_0,\theta_1)
+=
+\left(
+\frac{\partial \operatorname{RSS}}{\partial \theta_0},
+\frac{\partial \operatorname{RSS}}{\partial \theta_1}
+\right)
+=
+(0,0).
+$$ {#eq-rss-gradient}
+
+#### Estimation of the Intercept
+
+Differentiating the RSS with respect to $\theta_0$ gives
+
+$$
+\begin{split}
+\frac{\partial \operatorname{RSS}}{\partial \theta_0}
+&=
+\frac{\partial}{\partial\theta_0}
+\sum_{i=1}^{N}
+(y_i-\theta_0-\theta_1x_i)^2 \\
+&=
+-2\sum_{i=1}^{N}
+(y_i-\theta_0-\theta_1x_i).
+\end{split}
+$$
+
+Setting this derivative equal to zero,
+
+$$
+-2\sum_{i=1}^{N}
+(y_i-\hat{\theta}_0-\hat{\theta}_1x_i)
+=
+0.
+$$
+
+Therefore,
+
+$$
+\begin{split}
+\sum_{i=1}^{N}
+(y_i-\hat{\theta}_0-\hat{\theta}_1x_i)
+&=0 \\
+\sum_{i=1}^{N}y_i
+-
+\sum_{i=1}^{N}\hat{\theta}_0
+-
+\hat{\theta}_1\sum_{i=1}^{N}x_i
+&=0 \\
+\sum_{i=1}^{N}y_i
+-
+N\hat{\theta}_0
+-
+\hat{\theta}_1\sum_{i=1}^{N}x_i
+&=0.
+\end{split}
+$$
+
+Hence,
+
+$$
+\begin{split}
+\sum_{i=1}^{N}y_i
+&=
+N\hat{\theta}_0
++
+\hat{\theta}_1\sum_{i=1}^{N}x_i \\
+N\hat{\theta}_0
+&=
+\sum_{i=1}^{N}y_i
+-
+\hat{\theta}_1\sum_{i=1}^{N}x_i \\
+\hat{\theta}_0
+&=
+\frac{1}{N}\sum_{i=1}^{N}y_i
+-
+\hat{\theta}_1
+\frac{1}{N}\sum_{i=1}^{N}x_i.
+\end{split}
+$$
+
+Using
+
+$$
+\bar{x}
+=
+\frac{1}{N}\sum_{i=1}^{N}x_i,
+\qquad
+\bar{y}
+=
+\frac{1}{N}\sum_{i=1}^{N}y_i,
+$$
+
+we obtain
+
+$$
+\hat{\theta}_0
+=
+\bar{y}
+-
+\hat{\theta}_1\bar{x}.
+$$ {#eq-ols-intercept}
+
+Thus, the fitted regression line passes through the point $(\bar{x},\bar{y})$.
+
+#### Estimation of the Slope
+
+Differentiating the RSS with respect to $\theta_1$ gives
+
+$$
+\begin{split}
+\frac{\partial \operatorname{RSS}}{\partial \theta_1}
+&=
+\frac{\partial}{\partial\theta_1}
+\sum_{i=1}^{N}
+(y_i-\theta_0-\theta_1x_i)^2 \\
+&=
+-2\sum_{i=1}^{N}
+(y_i-\theta_0-\theta_1x_i)x_i.
+\end{split}
+$$
+
+Setting this derivative equal to zero,
+
+$$
+-2\sum_{i=1}^{N}
+(y_i-\hat{\theta}_0-\hat{\theta}_1x_i)x_i
+=
+0.
+$$
+
+Therefore,
+
+$$
+\begin{split}
+\sum_{i=1}^{N}
+(y_i-\hat{\theta}_0-\hat{\theta}_1x_i)x_i
+&=0 \\
+\sum_{i=1}^{N}y_ix_i
+-
+\hat{\theta}_0\sum_{i=1}^{N}x_i
+-
+\hat{\theta}_1\sum_{i=1}^{N}x_i^2
+&=0.
+\end{split}
+$$
+
+Hence,
+
+$$
+\sum_{i=1}^{N}y_ix_i
+=
+\hat{\theta}_0\sum_{i=1}^{N}x_i
++
+\hat{\theta}_1\sum_{i=1}^{N}x_i^2.
+$$
+
+Substituting the expression for the intercept from @eq-ols-intercept,
+
+$$
+\begin{split}
+\sum_{i=1}^{N}y_ix_i
+&=
+\left(
+\bar{y}
+-
+\hat{\theta}_1\bar{x}
+\right)
+\sum_{i=1}^{N}x_i
++
+\hat{\theta}_1\sum_{i=1}^{N}x_i^2 \\
+&=
+\bar{y}\sum_{i=1}^{N}x_i
+-
+\hat{\theta}_1\bar{x}\sum_{i=1}^{N}x_i
++
+\hat{\theta}_1\sum_{i=1}^{N}x_i^2.
+\end{split}
+$$
+
+Since
+
+$$
+\bar{x}
+=
+\frac{1}{N}\sum_{i=1}^{N}x_i,
+$$
+
+we have
+
+$$
+\bar{x}\sum_{i=1}^{N}x_i
+=
+\frac{\left(\sum_{i=1}^{N}x_i\right)^2}{N}.
+$$
+
+Therefore,
+
+$$
+\sum_{i=1}^{N}y_ix_i
+-
+\bar{y}\sum_{i=1}^{N}x_i
+=
+\hat{\theta}_1
+\left[
+\sum_{i=1}^{N}x_i^2
+-
+\frac{\left(\sum_{i=1}^{N}x_i\right)^2}{N}
+\right].
+$$
+
+Equivalently, using
+
+$$
+\bar{y}
+=
+\frac{1}{N}\sum_{i=1}^{N}y_i,
+$$
+
+the left-hand side can be written as
+
+$$
+\begin{split}
+\sum_{i=1}^{N}y_ix_i
+-
+\bar{y}\sum_{i=1}^{N}x_i
+&=
+\sum_{i=1}^{N}y_ix_i
+-
+\frac{\sum_{i=1}^{N}y_i}{N}
+\sum_{i=1}^{N}x_i.
+\end{split}
+$$
+
+To express this quantity in centered form, consider
+
+$$
+\begin{split}
+\sum_{i=1}^{N}
+(x_i-\bar{x})(y_i-\bar{y})
+&=
+\sum_{i=1}^{N}
+\left(
+x_iy_i
+-
+x_i\bar{y}
+-
+\bar{x}y_i
++
+\bar{x}\bar{y}
+\right) \\
+&=
+\sum_{i=1}^{N}x_iy_i
+-
+\bar{y}\sum_{i=1}^{N}x_i
+-
+\bar{x}\sum_{i=1}^{N}y_i
++
+N\bar{x}\bar{y}.
+\end{split}
+$$
+
+Since
+
+$$
+\sum_{i=1}^{N}x_i=N\bar{x},
+\qquad
+\sum_{i=1}^{N}y_i=N\bar{y},
+$$
+
+it follows that
+
+$$
+\begin{split}
+\sum_{i=1}^{N}
+(x_i-\bar{x})(y_i-\bar{y})
+&=
+\sum_{i=1}^{N}x_iy_i
+-
+N\bar{x}\bar{y}
+-
+N\bar{x}\bar{y}
++
+N\bar{x}\bar{y} \\
+&=
+\sum_{i=1}^{N}x_iy_i
+-
+N\bar{x}\bar{y}.
+\end{split}
+$$
+
+Since
+
+$$
+N\bar{x}\bar{y}
+=
+\bar{y}\sum_{i=1}^{N}x_i,
+$$
+
+we obtain
+
+$$
+\sum_{i=1}^{N}y_ix_i
+-
+\bar{y}\sum_{i=1}^{N}x_i
+=
+\sum_{i=1}^{N}
+(x_i-\bar{x})(y_i-\bar{y}).
+$$
+
+Similarly, for the right-hand side,
+
+$$
+\begin{split}
+\sum_{i=1}^{N}(x_i-\bar{x})^2
+&=
+\sum_{i=1}^{N}
+(x_i^2-2x_i\bar{x}+\bar{x}^2) \\
+&=
+\sum_{i=1}^{N}x_i^2
+-
+2\bar{x}\sum_{i=1}^{N}x_i
++
+N\bar{x}^2 \\
+&=
+\sum_{i=1}^{N}x_i^2
+-
+2N\bar{x}^2
++
+N\bar{x}^2 \\
+&=
+\sum_{i=1}^{N}x_i^2
+-
+N\bar{x}^2.
+\end{split}
+$$
+
+Because
+
+$$
+N\bar{x}^2
+=
+\frac{\left(\sum_{i=1}^{N}x_i\right)^2}{N},
+$$
+
+we have
+
+$$
+\sum_{i=1}^{N}(x_i-\bar{x})^2
+=
+\sum_{i=1}^{N}x_i^2
+-
+\frac{\left(\sum_{i=1}^{N}x_i\right)^2}{N}.
+$$
+
+The slope equation can therefore be written as
+
+$$
+\sum_{i=1}^{N}
+(x_i-\bar{x})(y_i-\bar{y})
+=
+\hat{\theta}_1
+\sum_{i=1}^{N}
+(x_i-\bar{x})^2.
+$$
+
+Provided that the predictor is not constant, so that
+
+$$
+\sum_{i=1}^{N}(x_i-\bar{x})^2>0,
+$$
+
+the OLS estimate of the slope is
+
+$$
+\hat{\theta}_1
+=
+\frac{
+\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y})
+}{
+\sum_{i=1}^{N}(x_i-\bar{x})^2
+}.
+$$ {#eq-ols-slope}
+
+If covariance and variance are defined using the same normalization, this can equivalently be expressed as
+
+$$
+\hat{\theta}_1
+=
+\frac{\operatorname{Cov}(X,Y)}
+{\operatorname{Var}(X)}.
+$$ {#eq-ols-slope-covariance}
+
+Together, @eq-ols-intercept and @eq-ols-slope give the OLS parameter estimates for simple linear regression:
+
+$$
+\begin{aligned}
+\hat{\theta}_0
+&=
+\bar{y}-\hat{\theta}_1\bar{x}, \\
+\hat{\theta}_1
+&=
+\frac{
+\sum_{i=1}^{N}(x_i-\bar{x})(y_i-\bar{y})
+}{
+\sum_{i=1}^{N}(x_i-\bar{x})^2
+}.
+\end{aligned}
+$$ {#eq-ols-estimates}
+
+### Hessian and the Minimum of the RSS
+
+The first-order conditions identify a critical point of the RSS. To determine the nature of this critical point, we examine the second derivatives of the objective function.
+
+The second derivative with respect to $\theta_0$ is
+
+$$
+\begin{split}
+\frac{\partial^2\operatorname{RSS}}{\partial\theta_0^2}
+&=
+-2\sum_{i=1}^{N}(-1) \\
+&=
+2N.
+\end{split}
+$$
+
+The second derivative with respect to $\theta_1$ is
+
+$$
+\begin{split}
+\frac{\partial^2\operatorname{RSS}}{\partial\theta_1^2}
+&=
+-2\sum_{i=1}^{N}(-x_i)x_i \\
+&=
+2\sum_{i=1}^{N}x_i^2.
+\end{split}
+$$
+
+The mixed second derivative is
+
+$$
+\begin{split}
+\frac{\partial^2\operatorname{RSS}}
+{\partial\theta_0\partial\theta_1}
+&=
+-2\sum_{i=1}^{N}(-x_i) \\
+&=
+2\sum_{i=1}^{N}x_i.
+\end{split}
+$$
+
+Therefore, the Hessian matrix of the RSS is
+
+$$
+H
+=
+\frac{\partial^2\operatorname{RSS}}{\partial\boldsymbol{\theta}^2}
+=
+\begin{bmatrix}
+2N & 2\sum_{i=1}^{N}x_i \\
+2\sum_{i=1}^{N}x_i &
+2\sum_{i=1}^{N}x_i^2
+\end{bmatrix}.
+$$ {#eq-rss-hessian}
+
+The first leading principal minor is
+
+$$
+2N>0.
+$$
+
+The determinant of the Hessian is
+
+$$
+\begin{split}
+\det(H)
+&=
+(2N)
+\left(
+2\sum_{i=1}^{N}x_i^2
+\right)
+-
+\left(
+2\sum_{i=1}^{N}x_i
+\right)^2 \\
+&=
+4N\sum_{i=1}^{N}x_i^2
+-
+4\left(
+\sum_{i=1}^{N}x_i
+\right)^2 \\
+&=
+4N
+\left[
+\sum_{i=1}^{N}x_i^2
+-
+\frac{
+\left(\sum_{i=1}^{N}x_i\right)^2
+}{N}
+\right] \\
+&=
+4N
+\sum_{i=1}^{N}
+(x_i-\bar{x})^2.
+\end{split}
+$$ {#eq-hessian-determinant}
+
+If the predictor has non-zero variation,
+
+$$
+\sum_{i=1}^{N}(x_i-\bar{x})^2>0,
+$$
+
+then
+
+$$
+\det(H)>0.
+$$
+
+Since the first leading principal minor is also positive, the Hessian is positive definite:
+
+$$
+H \succ 0.
+$$
+
+Consequently, $\operatorname{RSS}(\theta_0,\theta_1)$ is a strictly convex function of the parameters. The critical point $(\hat{\theta}_0,\hat{\theta}_1)$ is therefore the unique global minimum of the RSS:
+
+$$
+\operatorname{RSS}(\hat{\theta}_0,\hat{\theta}_1)
+=
+\min_{\theta_0,\theta_1}
+\operatorname{RSS}(\theta_0,\theta_1).
+$$ {#eq-rss-global-minimum}
+
+Thus, provided that the predictor has non-zero variance, the OLS estimates are uniquely determined and define the regression line that minimizes the sum of the squared residuals over the training data.
+
+### Python Implementation
+
+The OLS estimates derived in @eq-ols-estimates can be implemented directly in Python. The following implementation computes these estimates from first principles, without relying on a regression library. A synthetic dataset is then generated from a known linear model so that the estimated regression line can be compared with the underlying data-generating process.
+
 ```{python}
-# Linear regression parameters
+# Import libraries
+import numpy as np
+import matplotlib.pyplot as plt
 
-def min_sq(x,y):
+
+def min_sqr(x, y):
     """
-    Short Description
+    Estimate the parameters of a simple linear regression model using
+    ordinary least squares.
 
-    Inputs:
+    Parameters
+    ----------
+    x : array-like
+        Predictor values.
+    y : array-like
+        Observed response values.
+
+    Returns
     -------
-    x, y
-
-    Outputs:
-    --------
-    theta_1, theta_0
-
-    Author:
-    -------
-    Rodrigo Kang
+    theta_0 : float
+        Estimated intercept of the regression line.
+    theta_1 : float
+        Estimated slope of the regression line.
     """
-    x_bar, y_bar = np.mean(x), np.mean(y)
-    theta_1 = np.dot(x - x_bar, y - y_bar) / np.linalg.norm(x - x_bar)**2
+    x_bar = np.mean(x)
+    y_bar = np.mean(y)
+
+    theta_1 = (
+        np.sum((x - x_bar) * (y - y_bar))
+        / np.sum((x - x_bar) ** 2)
+    )
     theta_0 = y_bar - theta_1 * x_bar
-    return [theta_1, theta_0]
+
+    return theta_0, theta_1
+
+
+# Random number generator
+rng = np.random.default_rng(42)
+
+# Number of observations
+N = 1000
+
+# True model parameters
+theta_0_true = 1.0
+theta_1_true = 2.0
+
+# Generate predictor values
+x = rng.normal(size=N)
+
+# Generate random errors
+epsilon = rng.normal(size=N)
+
+# Generate responses from the linear model
+y = theta_0_true + theta_1_true * x + epsilon
+
+# Estimate regression coefficients
+theta_0, theta_1 = min_sqr(x, y)
+
+theta_0, theta_1
+```
+
+The estimated parameters should be close to the true values used to generate the data, with differences arising from the random error term and finite-sample variation. The estimated and true parameter values can be compared directly:
+
+```{python}
+print(f"True intercept:      {theta_0_true:.4f}")
+print(f"Estimated intercept: {theta_0:.4f}")
+print(f"True slope:          {theta_1_true:.4f}")
+print(f"Estimated slope:     {theta_1:.4f}")
+```
+
+The fitted regression function is
+
+$$
+\hat{y}(x)
+=
+\hat{\theta}_0+\hat{\theta}_1x.
+$$
+
+Using the estimated parameters, the fitted regression line can be evaluated over a sequence of predictor values and compared visually with the observed data.
+
+```{python}
+# Predictor values used to draw the fitted regression line
+x_seq = np.linspace(x.min(), x.max(), 200)
+
+# Predicted response values
+y_pred = theta_0 + theta_1 * x_seq
+
+# Plot
+plt.figure(figsize=(8, 6))
+
+plt.scatter(x, y, alpha=0.5, label="Observed data")
+plt.plot(x_seq, y_pred, label="OLS fitted line")
+
+plt.title("Simple Linear Regression")
+plt.xlabel("x")
+plt.ylabel("y")
+
+plt.grid(True)
+plt.legend()
+
+plt.show()
 ```
