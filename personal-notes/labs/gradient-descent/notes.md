@@ -2,11 +2,8 @@
 
 **Author: Rodrigo Kang**
 
-$$
-\theta_{t+1}
-=
-\theta_t - \eta \nabla \Phi(\theta_t)
-$$
+$$\theta_{t+1} =
+\theta_t - \eta \nabla \Phi(\theta_t)$$
 
 ```cpp
 #include <iostream>
