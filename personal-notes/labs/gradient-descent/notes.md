@@ -1,5 +1,7 @@
 # Gradient Descent
 
+## Technical Notes
+
 **Author:** Rodrigo Kang
 
 $$\theta_{t+1} =
