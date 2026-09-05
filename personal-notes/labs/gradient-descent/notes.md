@@ -5,6 +5,14 @@
 $$\theta_{t+1} =
 \theta_t - \eta \nabla \Phi(\theta_t)$$
 
+```python
+print("Hello world from Python!")
+```
+
+```r
+print("Hello world from Python!")
+```
+
 ```cpp
 #include <iostream>
 
