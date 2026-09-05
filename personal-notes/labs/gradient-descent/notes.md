@@ -1,8 +1,8 @@
-# Gradient Descent
-
-## Technical Notes
-
+# Gradient Descent  
+***Technical Notes***  
 **Author:** Rodrigo Kang
+
+---
 
 $$\theta_{t+1} =
 \theta_t - \eta \nabla \Phi(\theta_t)$$
