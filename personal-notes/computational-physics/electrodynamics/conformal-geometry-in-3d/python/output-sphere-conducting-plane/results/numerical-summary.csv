@@ -1,0 +1,19 @@
+quantity,value
+Maximum absolute residual,5.547917680814862e-11
+Mean absolute residual,4.747374511489184e-13
+Lower boundary error,0.0
+Upper boundary error,0.0
+Outer boundary error,0.0
+Minimum sphere charge density,-36.13248061566863
+Maximum sphere charge density,-2.1891063694532638
+Truncated total sphere charge,-13.611814088785312
+Grid difference 41x21 to 81x41,0.031155351540782108
+Maximum grid difference 41x21 to 81x41,0.09956763894594345
+Grid difference 81x41 to 161x81,0.018920643751284105
+Maximum grid difference 81x41 to 161x81,0.08863639571059956
+Grid difference 161x81 to 321x161,0.0102852315392201
+Maximum grid difference 161x81 to 321x161,0.06219708139563451
+Solve time 41x21 (s),0.009711300022900105
+Solve time 81x41 (s),0.03685200004838407
+Solve time 161x81 (s),0.14850350003689528
+Solve time 321x161 (s),0.6546837000641972

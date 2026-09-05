@@ -398,6 +398,6 @@ For readers interested in a more detailed mathematical treatment, including deri
 
 ::: {.content-visible when-format="pdf"}
 
-For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf}{\faFilePdf}.
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/quant-finance/derivatives/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf}{\faFilePdf}.
 
 :::

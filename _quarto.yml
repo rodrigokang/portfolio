@@ -58,7 +58,9 @@ crossref:
 
 format:
   html:
-    theme: cosmo
+    theme:
+      light: cosmo
+      dark: darkly
     code-copy: true
     code-line-numbers: true
     mermaid:
