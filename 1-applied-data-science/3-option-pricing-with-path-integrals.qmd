@@ -392,12 +392,12 @@ The objective of this chapter was not to build a complete path integral pricing 
 
 ::: {.content-visible when-format="html"}
 
-For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available [<i class="bi bi-file-earmark-pdf"></i>](../personal-notes/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf).
- 
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available <a href="../personal-notes/quant-finance/derivatives/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf" download><i class="bi bi-file-earmark-pdf"></i></a>.
+
 :::
 
 ::: {.content-visible when-format="pdf"}
 
-For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://github.com/rodrigokang/portfolio/blob/main/personal-notes/quant-finance/derivatives/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf}{\faFilePdf}.
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/quant-finance/derivatives/option-pricing-with-path-integrals/option-pricing-with-path-integrals.pdf}{\faFilePdf}.
 
 :::
