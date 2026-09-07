@@ -1,0 +1,1673 @@
+---
+title: "Option Pricing with Path Integrals"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+bibliography: references.bib
+csl: ieee.csl
+
+nocite: |
+  @black1973pricing
+  @merton1973theory
+  @linetsky1997path
+  @feynman2010quantum
+  @wiener1921average
+  @dash1989path
+  @ziemann2021physics
+  @capuozzo2021path
+  @devreese2010path
+  @montagna2002path
+  @baaquie2007quantum
+  @cowan1998statistical
+  @sakurai1995modern
+  @burden2011numerical
+  @press2007numerical
+  @rubinstein2016simulation
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-overflow: wrap
+    code-block-font-size: \scriptsize
+
+editor: visual
+---
+
+# Introduction
+
+These notes present the path integral formulation of option pricing, with a particular focus on European call options under the Black–Scholes framework. Their purpose is to document the mathematical ideas and derivations that connect stochastic processes, partial differential equations, and functional integrals into a unified pricing framework.
+
+Rather than providing a comprehensive review of the subject, these notes focus on the concepts and derivations that I found most useful for understanding the path integral approach. Whenever possible, mathematical developments are accompanied by intuition, with the goal of making each step of the derivation easier to follow.
+
+The exposition begins with a brief introduction to path integrals in quantum mechanics and their connection to Green's functions. This framework is then translated into quantitative finance, where the Black–Scholes propagator is derived analytically using functional integration. Finally, the multidimensional integrals arising from the path integral formulation are evaluated numerically using the Metropolis–Hastings algorithm, and the numerical results are compared with the analytical solution.
+
+# Path Integrals in Quantum Mechanics
+
+Before introducing path integrals in option pricing, it is useful to briefly review how they arise in quantum mechanics. Although the financial application will eventually lead to a diffusion equation rather than the Schrödinger equation, the mathematical structure of the two problems is remarkably similar. For this reason, the path integral formulation is most naturally introduced in its original quantum mechanical setting.
+
+Throughout these notes, we consider a non-relativistic quantum system with a single degree of freedom. The state of the system is described by a wave function belonging to a Hilbert space $\mathcal{H}$, whose time evolution is governed by the Schrödinger equation
+
+$$
+i\hbar\frac{\partial\psi}{\partial t}
+=
+\hat{H}\psi,
+$$ {#eq-schrodinger-equation}
+
+where $\hat{H}$ denotes the Hamiltonian operator.
+
+Suppose that the wave function $\psi(x_i,t_i)$ is known at an initial time $t_i$. Solving @eq-schrodinger-equation amounts to determining the wave function at a later time $t_f$. Instead of solving the partial differential equation directly, we introduce a function that propagates the initial state forward in time.
+
+If $K(x_f,t_f;x_i,t_i)$ denotes the probability amplitude for a particle initially located at $(x_i,t_i)$ to be found at $(x_f,t_f)$, the wave function at the final time can be written as
+
+$$
+\psi(x_f,t_f)
+=
+\int_{-\infty}^{\infty}
+K(x_f,t_f;x_i,t_i)\,
+\psi(x_i,t_i)\,
+dx_i.
+$$ {#eq-propagator-integral}
+
+The function $K(x_f,t_f;x_i,t_i)$ is known as the **propagator** or **Green's function** of the Schrödinger equation. Once the propagator is known, the time evolution of the quantum system follows directly from @eq-propagator-integral. Consequently, the central problem becomes finding an explicit expression for $K$.
+
+## The Time-Evolution Operator
+
+The path integral formulation developed by Feynman begins by expressing the propagator in terms of the quantum mechanical time-evolution operator. In the Schrödinger picture, the wave function in the coordinate representation is given by
+
+$$
+\psi(x_f,t_f)
+=
+\langle x_f|\psi;t_f\rangle,
+$$ {#eq-wave-function-coordinate}
+
+where $|x_f\rangle$ denotes an eigenstate of the position operator.
+
+The quantum state at time $t_f$ is related to the state at time $t_i$ through the time-evolution operator,
+
+$$
+|\psi;t_f\rangle
+=
+\hat{U}(t_f,t_i)\,
+|\psi;t_i\rangle,
+$$ {#eq-time-evolution-operator}
+
+which immediately gives
+
+$$
+\begin{aligned}
+\psi(x_f,t_f)
+&=
+\langle x_f|\hat{U}(t_f,t_i)|\psi;t_i\rangle \\
+&=
+\int_{-\infty}^{\infty}
+dx_i\,
+\langle x_f|
+\hat{U}(t_f,t_i)
+|x_i\rangle
+\,
+\psi(x_i,t_i).
+\end{aligned}
+$$ {#eq-wave-function-evolution}
+
+Comparing @eq-wave-function-evolution with @eq-propagator-integral, we identify the propagator as the matrix element of the time-evolution operator,
+
+$$
+K(x_f,t_f;x_i,t_i)
+=
+\langle x_f|
+\hat{U}(t_f,t_i)
+|x_i\rangle.
+$$ {#eq-propagator-definition}
+
+Therefore, the propagator has a clear physical interpretation: it is the probability amplitude for a quantum system to evolve from the initial state $(x_i,t_i)$ to the final state $(x_f,t_f)$.
+
+For a time-independent Hamiltonian, the time-evolution operator takes the simple exponential form
+
+$$
+\hat{U}(t_f,t_i)
+=
+\exp\!\left(
+-\frac{i}{\hbar}
+\hat{H}(t_f-t_i)
+\right),
+$$ {#eq-time-evolution-exponential}
+
+and consequently,
+
+$$
+K(x_f,t_f;x_i,t_i)
+=
+\left\langle
+x_f
+\left|
+\exp\!\left(
+-\frac{i}{\hbar}
+\hat{H}(t_f-t_i)
+\right)
+\right|
+x_i
+\right\rangle.
+$$ {#eq-propagator-exponential}
+
+The remainder of this section is devoted to evaluating @eq-propagator-exponential using Feynman's path integral formulation.
+
+## Constructing the Path Integral
+
+The next step is to evaluate the propagator given in @eq-propagator-exponential. Following Feynman's original construction, the idea is to decompose the time evolution into a large number of infinitesimal steps and then take the continuum limit.
+
+Assume that the time interval between $t_i$ and $t_f$ is divided into $N$ equal subintervals,
+
+$$
+\Delta t=\frac{t_f-t_i}{N},
+$$
+
+so that the time-evolution operator can be written as
+
+$$
+\exp\!\left(
+-\frac{i}{\hbar}\hat{H}(t_f-t_i)
+\right)
+=
+\prod_{k=1}^{N}
+\exp\!\left(
+-\frac{i}{\hbar}\hat{H}\Delta t
+\right).
+$$ {#eq-time-slicing}
+
+Consequently,
+
+$$
+\langle x_f|
+e^{-\frac{i}{\hbar}\hat{H}(t_f-t_i)}
+|x_i\rangle
+=
+\left\langle
+x_f
+\left|
+\prod_{k=1}^{N}
+e^{-\frac{i}{\hbar}\hat{H}\Delta t}
+\right|
+x_i
+\right\rangle.
+$$ {#eq-propagator-time-slicing}
+
+The advantage of this representation is that each infinitesimal evolution operator acts over a very short time interval. To separate these elementary propagators, we repeatedly insert the completeness relation associated with the position eigenstates,
+
+$$
+\hat{I}
+=
+\int_{-\infty}^{\infty}
+dx\,
+|x\rangle
+\langle x|.
+$$ {#eq-position-completeness}
+
+After inserting this identity between every pair of consecutive operators, the propagator becomes
+
+$$
+\begin{aligned}
+&
+\langle x_f|
+e^{-\frac{i}{\hbar}\hat{H}(t_f-t_i)}
+|x_i\rangle
+\\
+&=
+\int
+dx_1\cdots dx_{N-1}
+\prod_{j=0}^{N-1}
+\left\langle
+x_{j+1}
+\left|
+e^{-\frac{i}{\hbar}\hat{H}\Delta t}
+\right|
+x_j
+\right\rangle,
+\end{aligned}
+$$ {#eq-discrete-propagator}
+
+where we identify
+
+$$
+x_0=x_i,
+\qquad
+x_N=x_f.
+$$
+
+@eq-discrete-propagator expresses the full propagator as the product of infinitesimal transition amplitudes. The remaining task is therefore to determine the matrix element associated with a single time step.
+
+To proceed, we assume that the Hamiltonian has the standard form
+
+$$
+\hat{H}(\hat{p},\hat{x})
+=
+\frac{\hat{p}^{\,2}}{2m}
++
+V(\hat{x}),
+$$ {#eq-standard-hamiltonian}
+
+and approximate the exponential operator using the Baker–Campbell–Hausdorff formula. Keeping terms up to first order in $\Delta t$ gives
+
+$$
+e^{-\frac{i}{\hbar}\hat{H}\Delta t}
+=
+e^{-\frac{i}{\hbar}\frac{\hat{p}^{\,2}}{2m}\Delta t}
+\,
+e^{-\frac{i}{\hbar}V(\hat{x})\Delta t}
+\left[
+1+\mathcal{O}(\Delta t^2)
+\right].
+$$ {#eq-bch-approximation}
+
+The kinetic term is naturally expressed in the momentum basis, while the potential term is diagonal in the position basis. This suggests introducing the momentum completeness relation,
+
+$$
+\hat{I}
+=
+\int_{-\infty}^{\infty}
+dp\,
+|p\rangle
+\langle p|,
+$$ {#eq-momentum-completeness}
+
+together with the position-momentum overlap,
+
+$$
+\langle x|p\rangle
+=
+\frac{1}{\sqrt{2\pi\hbar}}
+e^{\frac{i}{\hbar}px}.
+$$ {#eq-position-momentum-overlap}
+
+Substituting these relations into the infinitesimal propagator leads to
+
+$$
+\begin{aligned}
+&
+\left\langle
+x_{j+1}
+\left|
+e^{-\frac{i}{\hbar}\hat{H}\Delta t}
+\right|
+x_j
+\right\rangle
+\\
+&=
+\int_{-\infty}^{\infty}
+\frac{dp_j}{2\pi\hbar}
+\exp\left[
+\frac{i}{\hbar}
+\left(
+p_j
+\frac{x_{j+1}-x_j}{\Delta t}
+-
+H(p_j,x_j)
+\right)
+\Delta t
+\right]
+\left[
+1+\mathcal{O}(N^{-2})
+\right],
+\end{aligned}
+$$ {#eq-infinitesimal-propagator}
+
+where
+
+$$
+H(p,x)
+=
+\frac{p^2}{2m}
++
+V(x)
+$$ {#eq-classical-hamiltonian}
+
+is the classical Hamiltonian corresponding to the quantum operator in @eq-standard-hamiltonian.
+
+@eq-infinitesimal-propagator is the key result of the discretization procedure. It expresses each elementary transition amplitude as an integral over momentum and provides the building block from which the path integral formulation naturally emerges.
+
+## The Phase-Space Path Integral
+
+Substituting the infinitesimal propagator given in @eq-infinitesimal-propagator into the discrete representation of the propagator (@eq-discrete-propagator) yields
+
+$$
+\begin{aligned}
+K(x_f,t_f;x_i,t_i)
+=
+&
+\int
+dx_1\cdots dx_{N-1}
+\int
+\frac{dp_0}{2\pi\hbar}
+\cdots
+\frac{dp_{N-1}}{2\pi\hbar}
+\\[0.3cm]
+&
+\exp\left[
+\frac{i}{\hbar}
+\sum_{j=0}^{N-1}
+\Delta t
+\left(
+p_j
+\frac{x_{j+1}-x_j}{\Delta t}
+-
+H(p_j,x_j)
+\right)
+\right]
+\left[
+1+\mathcal O(N^{-1})
+\right].
+\end{aligned}
+$$ {#eq-discrete-phase-space}
+
+At this stage, the exponent already has the structure of a Riemann sum. As the number of time slices increases indefinitely,
+
+$$
+N\rightarrow\infty,
+\qquad
+\Delta t\rightarrow0,
+$$
+
+the discrete variables become continuous trajectories,
+
+$$
+x_j
+\rightarrow
+x(t),
+\qquad
+p_j
+\rightarrow
+p(t),
+$$
+
+while the finite difference
+
+$$
+\frac{x_{j+1}-x_j}{\Delta t}
+$$
+
+converges to the time derivative,
+
+$$
+\dot{x}(t)
+=
+\frac{dx}{dt}.
+$$
+
+Consequently,
+
+$$
+\sum_{j=0}^{N-1}
+\Delta t
+\left(
+p_j
+\frac{x_{j+1}-x_j}{\Delta t}
+-
+H(p_j,x_j)
+\right)
+\longrightarrow
+\int_{t_i}^{t_f}
+dt
+\left[
+p(t)\dot{x}(t)
+-
+H(p(t),x(t))
+\right].
+$$ {#eq-riemann-limit}
+
+This naturally motivates the definition of the classical action in Hamiltonian form,
+
+$$
+S[p,x]
+=
+\int_{t_i}^{t_f}
+dt\,
+\left[
+p(t)\dot{x}(t)
+-
+H(p(t),x(t))
+\right].
+$$ {#eq-hamiltonian-action}
+
+Likewise, the multiple integrals over the intermediate positions and momenta become the functional integration measure
+
+$$
+\mathcal D x\,\mathcal D p
+=
+\lim_{N\rightarrow\infty}
+\left(
+\prod_{k=1}^{N-1}
+dx_k\,
+\frac{dp_k}{2\pi\hbar}
+\right)
+\frac{dp_0}{2\pi\hbar}.
+$$ {#eq-phase-space-measure}
+
+Taking the continuum limit therefore leads to Feynman's path integral representation of the propagator,
+
+$$
+K(x_f,t_f;x_i,t_i)
+=
+\int
+\mathcal D x\,
+\mathcal D p\;
+\exp\left(
+\frac{i}{\hbar}
+S[p,x]
+\right).
+$$ {#eq-phase-space-path-integral}
+
+@eq-phase-space-path-integral is one of the central results of the path integral formulation. Instead of describing the evolution of the system through differential equations, the propagator is obtained by summing the contribution of every possible trajectory in phase space connecting the initial and final states. Each trajectory is weighted by a complex phase determined by its classical action.
+
+## From Phase Space to Configuration Space
+
+The phase-space formulation derived in @eq-phase-space-path-integral is completely general. However, for Hamiltonians that are quadratic in the momentum, the momentum variables can be integrated out analytically, leaving an equivalent path integral that depends only on the particle trajectory.
+
+To simplify the notation, define
+
+$$
+\Delta x=x_{j+1}-x_j,
+$$
+
+and consider the momentum integral associated with a single time slice,
+
+$$
+I(\Delta x)
+=
+\int_{-\infty}^{\infty}
+\frac{dp_j}{2\pi\hbar}
+\exp\left[
+\frac{i}{\hbar}
+\left(
+p_j\Delta x
+-
+\Delta t\frac{p_j^2}{2m}
+-
+\Delta tV(x_j)
+\right)
+\right].
+$$ {#eq-momentum-integral}
+
+The exponent is quadratic in $p_j$, making the integral Gaussian. Completing the square,
+
+$$
+\begin{aligned}
+-\frac{\Delta t}{2m}p_j^2
++\Delta x\,p_j
+-\Delta tV(x_j)
+=
+-\frac{\Delta t}{2m}
+\left(
+p_j-\frac{m\Delta x}{\Delta t}
+\right)^2
++
+\frac{m(\Delta x)^2}{2\Delta t}
+-
+\Delta tV(x_j),
+\end{aligned}
+$$ {#eq-completing-the-square}
+
+which allows the integral to be evaluated analytically,
+
+$$
+I(\Delta x)
+=
+\sqrt{\frac{m}{2\pi i\hbar\Delta t}}
+\exp\left[
+\frac{i\Delta t}{\hbar}
+\left(
+\frac{m}{2}
+\left(
+\frac{\Delta x}{\Delta t}
+\right)^2
+-
+V(x_j)
+\right)
+\right].
+$$ {#eq-gaussian-integral}
+
+Substituting @eq-gaussian-integral into the discretized propagator removes all momentum integrations,
+
+$$
+\begin{aligned}
+K(x_f,t_f;x_i,t_i)
+=
+&
+\lim_{N\rightarrow\infty}
+\int
+dx_1\cdots dx_{N-1}
+\left(
+\frac{m}
+{2\pi i\hbar\Delta t}
+\right)^{N/2}
+\\[0.3cm]
+&
+\exp\left[
+\frac{i\Delta t}{\hbar}
+\sum_{j=0}^{N-1}
+\left(
+\frac{m}{2}
+\left(
+\frac{\Delta x}{\Delta t}
+\right)^2
+-
+V(x_j)
+\right)
+\right].
+\end{aligned}
+$$ {#eq-discrete-configuration-path-integral}
+
+As before, the summation converges to a time integral in the continuum limit,
+
+$$
+\sum_{j=0}^{N-1}
+\Delta t
+\left(
+\frac{m}{2}
+\left(
+\frac{\Delta x}{\Delta t}
+\right)^2
+-
+V(x_j)
+\right)
+\longrightarrow
+\int_{t_i}^{t_f}
+L\,dt,
+$$ {#eq-lagrangian-limit}
+
+where
+
+$$
+L(x,\dot{x})
+=
+\frac{m}{2}\dot{x}^{\,2}
+-
+V(x)
+$$ {#eq-lagrangian}
+
+is the classical Lagrangian.
+
+This naturally leads to the Lagrangian action,
+
+$$
+S[x]
+=
+\int_{t_i}^{t_f}
+L(x,\dot{x})\,dt,
+$$ {#eq-lagrangian-action}
+
+and to the configuration-space integration measure,
+
+$$
+\mathcal D x
+=
+\lim_{N\rightarrow\infty}
+\prod_{k=1}^{N-1}
+dx_k
+\left(
+\frac{m}
+{2\pi i\hbar\Delta t}
+\right)^{N/2}.
+$$ {#eq-configuration-measure}
+
+The propagator can therefore be written entirely in terms of trajectories in configuration space,
+
+$$
+K(x_f,t_f;x_i,t_i)
+=
+\int
+\mathcal D x\;
+\exp\left(
+\frac{i}{\hbar}S[x]
+\right).
+$$ {#eq-configuration-path-integral}
+
+@eq-configuration-path-integral is the configuration-space version of Feynman's path integral. Rather than following a single classical trajectory, the propagator is obtained by summing the contribution of every continuous path connecting the initial and final positions. Each path is weighted by a phase determined by its classical action, while the integration measure accounts for all admissible trajectories.
+
+# Path Integrals in Option Pricing
+
+The mathematical machinery developed in the previous section can now be transferred to quantitative finance. The connection is based on the observation that, after a suitable change of variables, the Black–Scholes equation has the same mathematical structure as the Schrödinger equation in imaginary time. This correspondence makes it possible to reinterpret option pricing as a propagation problem and to apply the path integral formalism almost unchanged.
+
+Throughout these notes we consider a European call option written on an underlying asset with price $S$. If $C(S,t)$ denotes the option price, the Black–Scholes equation is
+
+$$
+\frac{\partial C}{\partial t}
++
+\frac12\sigma^2S^2
+\frac{\partial^2C}{\partial S^2}
++
+rS
+\frac{\partial C}{\partial S}
+-
+rC
+=
+0,
+$$ {#eq-black-scholes-pde}
+
+where $r$ denotes the continuously compounded risk-free interest rate and $\sigma$ is the volatility of the underlying asset.
+
+Introducing the logarithmic variable
+
+$$
+x=\ln S,
+$$ {#eq-log-price}
+
+the derivatives with respect to $S$ become
+
+$$
+\frac{\partial C}{\partial S}
+=
+\frac1S
+\frac{\partial C}{\partial x},
+$$
+
+and
+
+$$
+\frac{\partial^2C}{\partial S^2}
+=
+-\frac1{S^2}
+\frac{\partial C}{\partial x}
++
+\frac1{S^2}
+\frac{\partial^2C}{\partial x^2}.
+$$ {#eq-log-price-derivatives}
+
+Substituting these expressions into @eq-black-scholes-pde gives
+
+$$
+\frac{\partial C}{\partial t}
++
+\frac12\sigma^2
+\frac{\partial^2C}{\partial x^2}
+-
+\left(
+\frac{\sigma^2}{2}-r
+\right)
+\frac{\partial C}{\partial x}
+-
+rC
+=
+0.
+$$ {#eq-black-scholes-log}
+
+Rearranging terms,
+
+$$
+\frac{\partial C}{\partial t}
+=
+\hat H_{\mathrm{BS}}\,C,
+$$ {#eq-black-scholes-hamiltonian-form}
+
+where
+
+$$
+\hat H_{\mathrm{BS}}
+=
+-
+\frac12\sigma^2
+\frac{\partial^2}{\partial x^2}
++
+\left(
+\frac{\sigma^2}{2}-r
+\right)
+\frac{\partial}{\partial x}
++
+r
+$$ {#eq-black-scholes-hamiltonian}
+
+is known as the **Black–Scholes Hamiltonian**.
+
+Expressing the pricing equation in this form is the key step that connects option pricing with quantum mechanics. Although the physical interpretation is entirely different, the mathematical structure is now sufficiently similar to apply the same operator methods developed in the previous section.
+
+## A Quantum Mechanical Interpretation
+
+Writing the pricing equation in the form of @eq-black-scholes-hamiltonian-form reveals a remarkable analogy with quantum mechanics. Although the underlying phenomena are completely different, both equations describe the evolution of a state under the action of a Hamiltonian operator.
+
+The connection becomes clearer by comparing the Black–Scholes equation,
+
+$$
+\frac{\partial C}{\partial t}
+=
+\hat H_{\mathrm{BS}}\,C,
+$$
+
+with the time-dependent Schrödinger equation,
+
+$$
+i\hbar
+\frac{\partial\psi}{\partial t}
+=
+\hat H\,\psi.
+$$
+
+The two equations differ only by the replacement of real time with imaginary time. In quantum mechanics, this transformation is known as a **Wick rotation**,
+
+$$
+t
+\longrightarrow
+-\frac{i}{\hbar}t,
+$$ {#eq-wick-rotation}
+
+which converts the oscillatory Schrödinger equation into a diffusion equation. Under this transformation, the mathematical machinery developed for quantum systems can be transferred almost unchanged to option pricing.
+
+Following the discussion of the previous section, we may therefore introduce a propagator for the Black–Scholes equation in complete analogy with the quantum mechanical propagator. If
+
+$$
+\tau=T-t
+$$ {#eq-time-to-maturity}
+
+denotes the time remaining until maturity and $F(X_T)$ is the payoff at expiration, the option price can be expressed as
+
+$$
+C(x,t)
+=
+\int_{-\infty}^{\infty}
+K_{\mathrm{BS}}(x_T,T;x,t)\,
+F(x_T)\,
+dx_T,
+$$ {#eq-black-scholes-propagator}
+
+where
+
+$$
+K_{\mathrm{BS}}(x_T,T;x,t)
+=
+\left\langle
+x
+\left|
+e^{-\tau\hat H_{\mathrm{BS}}}
+\right|
+x_T
+\right\rangle.
+$$ {#eq-black-scholes-propagator-definition}
+
+The interpretation is identical to that of the quantum mechanical propagator. Instead of propagating a wave function between two quantum states, the Black–Scholes propagator transfers the payoff at maturity back to the present, producing the option value at time $t$.
+
+Our next goal is to derive an explicit analytical expression for @eq-black-scholes-propagator-definition. We begin with a direct operator-based calculation before rederiving exactly the same result using the path integral formalism.
+
+## Deriving the Black–Scholes Propagator
+
+Having introduced the Black–Scholes propagator, the next step is to obtain an explicit analytical expression. The strategy closely parallels the derivation presented in quantum mechanics: rather than evaluating the operator exponential directly, we first express it in a basis where the Hamiltonian acts diagonally.
+
+We therefore insert the completeness relation for momentum eigenstates,
+
+$$
+\hat I
+=
+\int_{-\infty}^{\infty}
+\frac{dp}{\sqrt{2\pi}}
+|p\rangle
+\langle p|,
+$$ {#eq-momentum-completeness-bs}
+
+which gives
+
+$$
+K_{\mathrm{BS}}(x_T,T;x,t)
+=
+\int_{-\infty}^{\infty}
+\frac{dp}{\sqrt{2\pi}}
+\,
+\langle x_T|
+e^{-\tau\hat H_{\mathrm{BS}}}
+|p\rangle
+\langle p|x\rangle.
+$$ {#eq-black-scholes-propagator-momentum}
+
+The plane waves are eigenfunctions of the differential operators appearing in the Black–Scholes Hamiltonian. Consequently,
+
+$$
+\langle x_T|
+e^{-\tau\hat H_{\mathrm{BS}}}
+|p\rangle
+=
+e^{-\tau\hat H_{\mathrm{BS}}}
+\frac{e^{ipx_T}}{\sqrt{2\pi}},
+$$
+
+and the action of the Hamiltonian on the exponential is particularly simple,
+
+$$
+\hat H_{\mathrm{BS}}
+e^{ipx}
+=
+\left[
+\frac{\sigma^2p^2}{2}
++
+i\left(
+\frac{\sigma^2}{2}-r
+\right)p
++
+r
+\right]
+e^{ipx}.
+$$ {#eq-black-scholes-plane-wave}
+
+Since the plane waves are eigenfunctions of the Hamiltonian, the exponential operator acts multiplicatively,
+
+$$
+e^{-\tau\hat H_{\mathrm{BS}}}
+e^{ipx}
+=
+\exp\left[
+-\tau
+\left(
+\frac{\sigma^2p^2}{2}
++
+i\left(
+\frac{\sigma^2}{2}-r
+\right)p
++
+r
+\right)
+\right]
+e^{ipx}.
+$$ {#eq-black-scholes-operator-action}
+
+Substituting this result into @eq-black-scholes-propagator-momentum leads to
+
+$$
+K_{\mathrm{BS}}(x_T,T;x,t)
+=
+\int_{-\infty}^{\infty}
+\frac{dp}{2\pi}
+\exp\left[
+-\tau
+\left(
+\frac{\sigma^2p^2}{2}
++
+i\left(
+\frac{\sigma^2}{2}-r
+\right)p
++
+r
+\right)
++
+ip(x_T-x)
+\right].
+$$ {#eq-black-scholes-gaussian}
+
+The remaining integral is Gaussian. Completing the square,
+
+$$
+\begin{aligned}
+&
+-\tau
+\left(
+\frac{\sigma^2p^2}{2}
++
+i\left(
+\frac{\sigma^2}{2}-r
+\right)p
++
+r
+\right)
++
+ip(x_T-x)
+\\
+&=
+-\frac{\tau\sigma^2}{2}
+\left(
+p
+-
+\frac{i}{\tau\sigma^2}
+\left[
+x_T-x+
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau
+\right]
+\right)^2
+\\
+&
+\qquad
+-
+\frac{
+\left[
+x_T-x+
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau
+\right]^2
+}
+{2\tau\sigma^2}
+-r\tau,
+\end{aligned}
+$$ {#eq-black-scholes-completing-square}
+
+which can be integrated analytically, yielding
+
+$$
+K_{\mathrm{BS}}(x_T,T;x,t)
+=
+\frac{e^{-r\tau}}
+{\sqrt{2\pi\tau\sigma^2}}
+\exp\left[
+-
+\frac{
+\left[
+x_T-x+
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau
+\right]^2
+}
+{2\tau\sigma^2}
+\right].
+$$ {#eq-black-scholes-propagator-analytic}
+
+@eq-black-scholes-propagator-analytic is the Green's function of the Black–Scholes equation expressed in logarithmic coordinates. In the next section we will derive exactly the same propagator using the path integral formalism developed in the previous chapter. Although the final expression is identical, the path integral approach provides a much more flexible framework for extending the analysis to models where closed-form solutions are no longer available.
+
+## Deriving the Propagator Using Path Integrals
+
+The propagator obtained in @eq-black-scholes-propagator-analytic can also be derived directly from the path integral formalism developed in the previous section. Although the final result is identical, this alternative derivation is particularly valuable because it extends naturally to models for which no closed-form solution is available.
+
+Our starting point is the Black–Scholes Hamiltonian,
+
+$$
+\hat H_{\mathrm{BS}}
+=
+-
+\frac12\sigma^2
+\frac{\partial^2}{\partial x^2}
++
+\left(
+\frac{\sigma^2}{2}-r
+\right)
+\frac{\partial}{\partial x}
++
+r,
+$$
+
+whose corresponding classical Hamiltonian is obtained by replacing the differential operator with the momentum variable,
+
+$$
+H_{\mathrm{BS}}(p)
+=
+-
+\frac12\sigma^2p^2
++
+\left(
+\frac{\sigma^2}{2}-r
+\right)p
++
+r.
+$$ {#eq-black-scholes-classical-hamiltonian}
+
+To obtain the configuration-space path integral, we first perform a Legendre transformation. Hamilton's equations give
+
+$$
+\dot x
+=
+\frac{\partial H_{\mathrm{BS}}}{\partial p}
+=
+-\sigma^2p-r+\frac{\sigma^2}{2},
+$$
+
+and
+
+$$
+\dot p
+=
+0.
+$$ {#eq-black-scholes-hamilton-equations}
+
+The corresponding Lagrangian is therefore
+
+$$
+\begin{aligned}
+L_{\mathrm{BS}}
+&=
+\dot xp-H_{\mathrm{BS}}
+\\
+&=
+-\frac{\sigma^2}{2}p^2-r,
+\end{aligned}
+$$
+
+which, after eliminating the momentum variable using Hamilton's equations, becomes
+
+$$
+L_{\mathrm{BS}}(x,\dot x)
+=
+-
+\frac1{2\sigma^2}
+\left(
+\dot x
++
+r
+-
+\frac{\sigma^2}{2}
+\right)^2
+-r.
+$$ {#eq-black-scholes-lagrangian}
+
+This expression is the financial analogue of the classical Lagrangian introduced in the previous section. It completely determines the weight assigned to each trajectory in the path integral formulation.
+
+For an infinitesimal time interval $\Delta t$, the transition amplitude can now be written as
+
+$$
+\begin{aligned}
+&
+\langle x_j|
+e^{-\Delta t\hat H_{\mathrm{BS}}}
+|x_{j-1}\rangle
+\\
+&=
+\frac1{\sqrt{2\pi\Delta t\sigma^2}}
+\exp\left[
+\Delta t\,
+L_{\mathrm{BS}}
+(x_j,x_{j-1};\Delta t)
+\right].
+\end{aligned}
+$$ {#eq-black-scholes-short-time-propagator}
+
+@eq-black-scholes-short-time-propagator plays exactly the same role as the infinitesimal propagator derived earlier for quantum mechanics. By combining these elementary transition amplitudes over many short time intervals, the complete Black–Scholes propagator can be reconstructed in the continuum limit.
+
+### From the Discrete Action to a Constrained Gaussian Integral
+
+Following the same construction used in quantum mechanics, the propagator is obtained by composing the infinitesimal transition amplitudes over a large number of short time intervals. Dividing the time to maturity into $N$ equal slices, with
+
+$$
+\tau=N\Delta t,
+$$
+
+the propagator becomes
+
+$$
+\begin{aligned}
+K_{\mathrm{BS}}(x_N,t_N;x_0,t_0)
+=
+&
+\lim_{N\rightarrow\infty}
+\left(
+\frac{1}{\sqrt{2\pi\Delta t\sigma^2}}
+\right)^N
+\\
+&
+\left(
+\prod_{j=1}^{N-1}
+\int_{-\infty}^{\infty}
+dx_j
+\right)
+\exp\left[
+\Delta t
+\sum_{j=1}^{N}
+L_{\mathrm{BS}}
+(x_j,x_{j-1};\Delta t)
+\right].
+\end{aligned}
+$$ {#eq-black-scholes-discrete-path-integral}
+
+Taking the continuum limit recovers the configuration-space path integral,
+
+$$
+K_{\mathrm{BS}}(x_T,T;x,t)
+=
+\int
+\mathcal D x\;
+e^{-S_{\mathrm{BS}}},
+$$ {#eq-black-scholes-path-integral}
+
+where the functional measure is
+
+$$
+\mathcal D x
+=
+\lim_{N\rightarrow\infty}
+\prod_{j=1}^{N-1}
+dx_j
+\left(
+\frac{1}{\sqrt{2\pi\Delta t\sigma^2}}
+\right)^N.
+$$ {#eq-black-scholes-measure}
+
+To evaluate the path integral analytically, we first write the discretized action,
+
+$$
+S_{\mathrm{BS}}
+=
+\frac{1}{2\Delta t\sigma^2}
+\sum_{j=1}^{N}
+\left[
+x_j-x_{j-1}
++
+\Delta t
+\left(
+r-\frac{\sigma^2}{2}
+\right)
+\right]^2
++
+r\tau.
+$$ {#eq-black-scholes-discrete-action}
+
+The quadratic form appearing in the exponent suggests introducing the variables
+
+$$
+z_j
+=
+x_j-x_{j-1}
++
+\Delta t
+\left(
+r-\frac{\sigma^2}{2}
+\right),
+$$ {#eq-black-scholes-z-variable}
+
+whose Jacobian is equal to one. Expressed in terms of these variables, the path integral becomes
+
+$$
+\int
+\mathcal D x\;
+e^{-S_{\mathrm{BS}}}
+=
+\lim_{N\rightarrow\infty}
+e^{-r\tau}
+\left(
+\frac{1}{\sqrt{2\pi\Delta t\sigma^2}}
+\right)^N
+\int
+dz_1\cdots dz_{N-1}
+\exp\left[
+-
+\frac{1}{2\sigma^2\Delta t}
+\sum_{j=1}^{N}
+z_j^2
+\right].
+$$ {#eq-black-scholes-z-integral}
+
+At first sight this appears to be a product of independent Gaussian integrals. However, the variables $z_j$ are not independent. The endpoint of every trajectory is fixed by the boundary condition
+
+$$
+x_N=x_T,
+$$ {#eq-black-scholes-boundary-condition}
+
+which introduces a constraint relating all increments.
+
+Indeed,
+
+$$
+\sum_{j=1}^{N}
+z_j
+=
+x_T-x
++
+\tau
+\left(
+r-\frac{\sigma^2}{2}
+\right)
+\equiv
+\lambda.
+$$ {#eq-black-scholes-lambda}
+
+Rather than treating this constraint explicitly, it is more convenient to enforce it through a Dirac delta,
+
+$$
+\delta
+\left(
+\lambda-
+\sum_{j=1}^{N}
+z_j
+\right),
+$$
+
+which allows the multidimensional Gaussian integral to be evaluated in a systematic way. This representation will be the starting point of the final analytical calculation.
+
+### Recovering the Black–Scholes Propagator
+
+The Dirac delta can be expressed through its Fourier representation,
+
+$$
+\delta\left(
+\lambda-\sum_{j=1}^{N}z_j
+\right)
+=
+\int_{-\infty}^{\infty}
+\frac{dp}{2\pi}
+\exp\left[
+ip
+\left(
+\lambda-\sum_{j=1}^{N}z_j
+\right)
+\right],
+$$ {#eq-dirac-delta-fourier}
+
+which transforms the constrained Gaussian integral into
+
+$$
+\begin{aligned}
+\int
+\mathcal D x\;
+e^{-S_{\mathrm{BS}}}
+=
+&
+\lim_{N\rightarrow\infty}
+e^{-r\tau}
+\int_{-\infty}^{\infty}
+\frac{dp}{2\pi}
+e^{-ip\lambda}
+\\[0.3cm]
+&
+\left[
+\frac{1}{\sqrt{2\pi\Delta t\sigma^2}}
+\int_{-\infty}^{\infty}
+dz\,
+\exp\left(
+-\frac{z^2}{2\sigma^2\Delta t}
++
+ipz
+\right)
+\right]^N.
+\end{aligned}
+$$ {#eq-constrained-gaussian}
+
+The integral over $z$ is Gaussian. Completing the square,
+
+$$
+-\frac{z^2}{2\sigma^2\Delta t}
++
+ipz
+=
+-
+\frac{\left(
+z-i\sigma^2\Delta tp
+\right)^2}
+{2\sigma^2\Delta t}
+-
+\frac{\sigma^2\Delta t}{2}p^2,
+$$ {#eq-gaussian-completing-square}
+
+which immediately gives
+
+$$
+\frac{1}{\sqrt{2\pi\Delta t\sigma^2}}
+\int_{-\infty}^{\infty}
+dz\,
+\exp\left(
+-\frac{z^2}{2\sigma^2\Delta t}
++
+ipz
+\right)
+=
+\exp\left(
+-\frac{\sigma^2\Delta t}{2}p^2
+\right).
+$$ {#eq-elementary-gaussian}
+
+Substituting this result into @eq-constrained-gaussian yields
+
+$$
+\int
+\mathcal D x\;
+e^{-S_{\mathrm{BS}}}
+=
+e^{-r\tau}
+\int_{-\infty}^{\infty}
+\frac{dp}{2\pi}
+\exp\left(
+-ip\lambda
+-
+\frac{\tau\sigma^2}{2}p^2
+\right).
+$$ {#eq-final-gaussian}
+
+The remaining integral is again Gaussian. Completing the square once more,
+
+$$
+-\frac{\tau\sigma^2}{2}p^2
+-ip\lambda
+=
+-
+\frac{\tau\sigma^2}{2}
+\left(
+p+
+\frac{i\lambda}{\tau\sigma^2}
+\right)^2
+-
+\frac{\lambda^2}
+{2\tau\sigma^2},
+$$ {#eq-final-completing-square}
+
+allows the momentum integration to be performed analytically, giving
+
+$$
+\int
+\mathcal D x\;
+e^{-S_{\mathrm{BS}}}
+=
+\frac{e^{-r\tau}}
+{\sqrt{2\pi\tau\sigma^2}}
+\exp\left(
+-
+\frac{\lambda^2}
+{2\tau\sigma^2}
+\right).
+$$ {#eq-black-scholes-propagator-lambda}
+
+Finally, recalling the definition
+
+$$
+\lambda
+=
+x_T-x
++
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau,
+$$
+
+we recover
+
+$$
+K_{\mathrm{BS}}(x_T,T;x,t)
+=
+\frac{e^{-r\tau}}
+{\sqrt{2\pi\tau\sigma^2}}
+\exp\left[
+-
+\frac{
+\left[
+x_T-x+
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau
+\right]^2
+}
+{2\tau\sigma^2}
+\right],
+$$ {#eq-black-scholes-propagator-path-integral}
+
+which is exactly the same propagator previously obtained through the operator formalism (see @eq-black-scholes-propagator-analytic).
+
+This agreement is more than a consistency check. It demonstrates that the path integral formulation provides an alternative representation of the Black–Scholes model while preserving the same pricing kernel. Although both approaches are equivalent for the classical Black–Scholes framework, the path integral formulation offers considerably greater flexibility when analytical solutions are no longer available, making it particularly attractive for more sophisticated derivative pricing models.
+
+## Recovering the Risk-Neutral Valuation Formula
+
+The path integral derivation has led to the same propagator obtained previously through the operator formalism,
+
+$$
+K_{\mathrm{BS}}(x_T,T;x,t)
+=
+\frac{e^{-r\tau}}
+{\sqrt{2\pi\tau\sigma^2}}
+\exp\left[
+-
+\frac{
+\left[
+x_T-x+
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau
+\right]^2
+}
+{2\tau\sigma^2}
+\right].
+$$ {#eq-black-scholes-propagator-final}
+
+The option price is obtained by propagating the payoff at maturity back to the present. Substituting @eq-black-scholes-propagator-final into the propagation formula gives
+
+$$
+C(x,t)
+=
+e^{-r\tau}
+\int_{-\infty}^{\infty}
+\frac{1}
+{\sqrt{2\pi\tau\sigma^2}}
+\exp\left[
+-
+\frac{
+\left[
+x_T-x+
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau
+\right]^2
+}
+{2\tau\sigma^2}
+\right]
+F(x_T)\,
+dx_T.
+$$ {#eq-option-price-convolution}
+
+The Gaussian kernel appearing in @eq-option-price-convolution is precisely the conditional probability density of the log-price at maturity,
+
+$$
+f_{(x,t)}(x_T)
+=
+\frac{1}
+{\sqrt{2\pi\tau\sigma^2}}
+\exp\left[
+-
+\frac{
+\left[
+x_T-x+
+\left(
+r-\frac{\sigma^2}{2}
+\right)\tau
+\right]^2
+}
+{2\tau\sigma^2}
+\right].
+$$ {#eq-log-price-density}
+
+Using this notation, the pricing equation can be written in the compact form
+
+$$
+C(x,t)
+=
+e^{-r\tau}
+\,
+\mathbb E_{(x,t)}
+\!\left[
+F(X_T)
+\right],
+$$ {#eq-risk-neutral-pricing}
+
+where the expectation is taken with respect to the conditional distribution of the underlying asset at maturity.
+
+@eq-risk-neutral-pricing is the familiar **risk-neutral valuation formula**. From the perspective developed in these notes, it arises naturally as the convolution of the Black–Scholes propagator with the payoff function. In other words, the path integral formulation not only reproduces the pricing kernel itself, but also leads directly to the standard valuation principle that underlies the Black–Scholes framework.
+
+# Numerical Evaluation of Path Integrals
+
+The previous sections focused on models for which the propagator can be derived analytically. While these analytical results provide valuable insight, they are not the main reason why the path integral formulation is useful in quantitative finance.
+
+The true strength of the method emerges when analytical solutions are no longer available. For many path-dependent or early-exercise derivatives, the corresponding path integrals cannot be evaluated in closed form and must instead be approximated numerically. In these situations, the choice of the numerical integration method becomes a central part of the modelling strategy.
+
+Recall that the discretized Black–Scholes propagator derived in @eq-black-scholes-discrete-path-integral can be interpreted as a high-dimensional integral over the intermediate positions of the underlying asset. As the number of time slices increases, the dimension of this integral grows accordingly, making conventional deterministic quadrature methods increasingly inefficient.
+
+## Why Monte Carlo?
+
+High-dimensional integration is one of the settings where Monte Carlo methods become particularly attractive. Unlike deterministic quadrature rules, whose computational cost grows rapidly with the dimension of the problem, the statistical error of standard Monte Carlo integration decreases as
+
+$$
+\mathcal O\!\left(\frac{1}{\sqrt{M}}\right),
+$$ {#eq-monte-carlo-convergence}
+
+where $M$ denotes the number of samples.
+
+Although this convergence rate is relatively slow in one dimension, it is remarkably insensitive to the dimensionality of the integral. By contrast, deterministic methods such as the trapezoidal rule deteriorate rapidly as the number of dimensions increases, making them impractical for many path integral applications.
+
+The basic Monte Carlo estimator approximates
+
+$$
+\int_a^b f(x)\,dx
+$$
+
+by drawing independent random samples,
+
+$$
+\int_a^b
+f(x)\,dx
+\approx
+\frac{b-a}{M}
+\sum_{j=1}^{M}
+f(x_j),
+$$ {#eq-basic-monte-carlo}
+
+where the samples $x_j$ are uniformly distributed over the integration interval.
+
+This estimator is straightforward to implement and performs well for many problems. However, its efficiency deteriorates when the integrand is concentrated in a relatively small region of the integration domain, as is often the case for Gaussian kernels arising in path integral formulations.
+
+## Importance Sampling
+
+The limitation of the estimator in @eq-basic-monte-carlo is that every sample contributes equally, regardless of whether it falls in a region where the integrand is large or nearly zero. For integrals whose contribution is concentrated in a relatively small portion of the domain, this strategy can be highly inefficient, since many samples provide little useful information.
+
+A more effective approach is to generate samples preferentially in the regions that contribute most to the integral. This idea is known as **importance sampling** and forms the basis of many modern Monte Carlo algorithms.
+
+Suppose that we wish to evaluate
+
+$$
+I
+=
+\int
+f(x)\,dx.
+$$
+
+Introducing a probability density $q(x)$ that is strictly positive wherever $f(x)$ is nonzero, the integral can be rewritten as
+
+$$
+I
+=
+\int
+\frac{f(x)}{q(x)}
+q(x)\,
+dx
+=
+\mathbb E_q
+\left[
+\frac{f(x)}{q(x)}
+\right],
+$$ {#eq-importance-sampling}
+
+where the expectation is taken with respect to the sampling distribution $q(x)$.
+
+Rather than drawing samples uniformly, the objective is therefore to construct a proposal distribution that resembles the integrand as closely as possible. When this is achieved, the variance of the estimator is substantially reduced and the same level of accuracy can often be obtained with considerably fewer samples.
+
+Designing such a distribution is the central challenge of importance sampling. In practice, the target density is usually too complicated to sample from directly, making it necessary to rely on algorithms capable of generating samples from complex probability distributions without requiring their normalization constants.
+
+## The Metropolis–Hastings Algorithm
+
+One of the most widely used importance sampling techniques is the **Metropolis–Hastings algorithm**. Rather than generating independent samples, the algorithm constructs a Markov chain whose stationary distribution coincides with the target probability density.
+
+Starting from an initial state $x_0$, each iteration proposes a new candidate according to
+
+$$
+y=x_j+\beta\varepsilon,
+$$ {#eq-metropolis-proposal}
+
+where $\varepsilon$ is drawn from a symmetric proposal distribution centred at zero and $\beta$ controls the typical step size.
+
+The proposal is accepted with probability
+
+$$
+A(x_j,y)
+=
+\min\left(
+1,
+\frac{f(y)}{f(x_j)}
+\right),
+$$ {#eq-metropolis-acceptance}
+
+where $f(x)$ denotes the target density. If the proposal is accepted, the chain moves to the new state; otherwise, it remains at the current one.
+
+The parameter $\beta$ controls the balance between exploration and acceptance. Small values produce highly correlated samples because the chain moves slowly through the state space, whereas excessively large values lead to frequent rejections. In practice, $\beta$ is chosen to achieve an efficient compromise between these two effects.
+
+Algorithm @alg-metropolis-hastings summarizes the complete procedure.
+
+::: {#alg-metropolis-hastings}
+
+**Metropolis–Hastings sampling**
+
+**Input**
+
+- Target probability density $f(x)$
+- Number of iterations $N$
+- Step size parameter $\beta$
+
+**Output**
+
+- Markov chain $\{x_0,x_1,\ldots,x_N\}$ approximately distributed according to $f(x)$
+
+1. Choose an initial state $x_0$.
+
+2. For each iteration $j=0,\ldots,N-1$:
+
+   a. Draw a random perturbation $\varepsilon$ from a symmetric proposal distribution.
+
+   b. Generate a candidate state
+
+   $$
+   y=x_j+\beta\varepsilon.
+   $$
+
+   c. Compute
+
+   $$
+   \alpha=
+   \min\left(
+   1,
+   \frac{f(y)}{f(x_j)}
+   \right).
+   $$
+
+   d. Draw a uniform random number
+
+   $$
+   u\sim U(0,1).
+   $$
+
+   e. If $u<\alpha$, accept the proposal and set
+
+   $$
+   x_{j+1}=y.
+   $$
+
+   Otherwise, reject the proposal and set
+
+   $$
+   x_{j+1}=x_j.
+   $$
+
+**Practical note**
+
+The initial iterations are commonly discarded as a *burn-in* period to reduce the influence of the starting point. The remaining samples are then used to estimate expectations with respect to the target distribution.
+
+:::
+
+# Final Remarks
+
+The Black–Scholes model provides a useful setting for introducing path integrals because its propagator can be derived analytically and compared with the classical solution. More importantly, the same formulation extends naturally to problems where closed-form expressions are no longer available.
+
+In those settings, numerical methods such as Monte Carlo and Metropolis–Hastings provide a practical way of approximating the high-dimensional integrals that arise from the discretized path integral. The value of the framework therefore lies not only in reproducing the standard Black–Scholes result, but also in offering a flexible route toward more complex derivative pricing problems.
+
+# References
+
+::: {#refs}
+:::
