@@ -555,12 +555,12 @@ This chapter also led to the Medium article *Before Improving the Algorithm, Imp
 
 ::: {.content-visible when-format="html"}
 
-For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available <a href="../personal-notes/computational-physics/electrodynamics/conformal-geometry-in-3d/conformal-geometry-in-3d.pdf" download><i class="bi bi-file-earmark-pdf"></i></a>.
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available <a href="../personal-notes/computational-physics/conformal-geometry-in-3d/conformal-geometry-in-3d.pdf" download><i class="bi bi-file-earmark-pdf"></i></a>.
 
 :::
 
 ::: {.content-visible when-format="pdf"}
 
-For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/computational-physics/electrodynamics/conformal-geometry-in-3d/conformal-geometry-in-3d.pdf}{\faFilePdf}.
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/computational-physics/conformal-geometry-in-3d/conformal-geometry-in-3d.pdf}{\faFilePdf}.
 
 :::

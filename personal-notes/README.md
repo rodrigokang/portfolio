@@ -8,13 +8,7 @@ The notes are intended to build a coherent understanding of each subject, with a
 
 ## Topics
 
-* [`Probability and Statistics`](probability-and-statistics/) — Probability theory, statistical inference, stochastic modelling, and related mathematical foundations.
-
-* [`Numerical Optimisation`](numerical-optimisation/) — Theory and computational methods for continuous optimisation, including unconstrained and constrained problems, numerical algorithms, and their practical implementation.
-
 * [`Computer Science`](computer-science/) — Core concepts in computer science, algorithms, data structures, computational methods, and selected topics relevant to scientific and data-intensive computing.
-
-* [`Machine Learning`](machine-learning/) — Mathematical and computational foundations of machine learning, covering both **classical machine learning** and **quantum machine learning**, from fundamental methods to practical modelling problems.
 
 * [`Computational Physics`](computational-physics/) — Numerical and computational approaches to problems in physics, with emphasis on mathematical modelling, simulation, and scientific computing.
 
