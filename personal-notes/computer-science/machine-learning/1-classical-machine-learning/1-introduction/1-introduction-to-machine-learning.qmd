@@ -162,25 +162,17 @@ where $f$ represents the unknown relationship between time and position.
 
 This notation should not be interpreted as implying that modelling problems generally reduce to finding an explicit algebraic relationship directly between predictors and responses. In many scientific problems, relationships are expressed through differential equations involving the variables, their derivatives, and other quantities. In more complex data-science problems, there may be no useful explicit analytical expression at all.
 
-The relevant question is therefore:
-
-> **How do we determine the model $f$?**
-
-There are several ways to approach this problem. Two useful perspectives are **theory-informed modelling** and **data-driven modelling**.
+The central modelling question is therefore how to determine the model $f$ from what we know about the problem. There is no single way to do this. Depending on the information available, we may rely on prior knowledge about the system, infer its structure primarily from observed data, or combine both sources of information. This leads naturally to two useful perspectives on the modelling process: **theory-informed modelling** and **data-driven modelling**.
 
 ## Theory-Informed Modelling
 
-Suppose first that we have an established theory describing the system.
-
-For the harmonic oscillator, classical mechanics provides such a theory. According to [Newton's second law of motion](https://en.wikipedia.org/wiki/Newton%27s_laws_of_motion), the net force acting on an object is related to its acceleration by
+Suppose first that we have an established theory that provides useful information about the system. For the harmonic oscillator, classical mechanics gives us such a starting point. According to [Newton's second law of motion](https://en.wikipedia.org/wiki/Newton%27s_laws_of_motion), the net force acting on an object is related to its acceleration by
 
 $$
 \mathbf{F}=m\mathbf{a}.
 $$ {#eq-newton-second-law}
 
-Newton's second law does not, by itself, specify the particular force acting on the mass. For that we need an additional description of the spring.
-
-Within its elastic regime, [Hooke's law](https://en.wikipedia.org/wiki/Hooke%27s_law) states that the restoring force exerted by a spring is proportional to its displacement from equilibrium and acts in the opposite direction:
+Newton's second law does not, by itself, specify the particular force acting on the mass, so we also need a description of the spring. Within its elastic regime, [Hooke's law](https://en.wikipedia.org/wiki/Hooke%27s_law) states that the restoring force exerted by a spring is proportional to its displacement from equilibrium and acts in the opposite direction:
 
 $$
 F=-kx.
@@ -216,9 +208,7 @@ $$
 x(t)=A\cos(\omega t)+B\sin(\omega t),
 $$ {#eq-simple-harmonic-general-solution}
 
-where $A$ and $B$ are constants determined by the initial conditions.
-
-Suppose that the object is initially displaced to its maximum position and released from rest:
+where $A$ and $B$ are constants determined by the initial conditions. Suppose that the object is initially displaced to its maximum position and released from rest:
 
 $$
 x(0)=x_{\max},
@@ -276,25 +266,21 @@ $$
 x(t)=x_{\max}\cos(\omega t).
 $$ {#eq-simple-harmonic-solution}
 
-We have obtained the functional relationship introduced in @eq-oscillator-functional-relation:
+We have thus obtained the functional relationship introduced in @eq-oscillator-functional-relation:
 
 $$
 f(t)=x_{\max}\cos(\omega t).
 $$ {#eq-oscillator-derived-function}
 
-The important point here is not the harmonic oscillator itself, but **how the model was obtained**.
+The important point is not the harmonic oscillator itself, but **how the model was obtained**. We began with general theoretical principles — Newton's second law and Hooke's law — and proceeded deductively. These principles constrained the possible behaviour of the system, led to a differential equation, and ultimately provided a functional form for the relationship between position and time. In other words, the structure of the model came primarily from prior knowledge of the physical system rather than from searching for a pattern in the observed data alone.
 
-We began with general theoretical principles — Newton's laws and Hooke's law — and proceeded deductively. The theory constrained the possible behaviour of the system, led to a differential equation, and ultimately determined a functional form for the relationship between position and time.
-
-The resulting model can then be compared with experimental observations. For example, rather than assuming that the initial conditions are known exactly, we could fit the more general model
+This does not mean that the data have no role in constructing the final model. Theory may specify its mathematical structure while leaving quantities that must still be estimated from observations. For example, rather than assuming that the initial conditions and other parameters are known exactly, we could fit the more general model
 
 $$
 x(t)=A\cos(\omega t+\phi)
 $$ {#eq-oscillator-parametric-model}
 
-to the observations in @tbl-oscillator-data using a suitable estimation procedure, such as least squares. This would provide estimates $\hat{A}$, $\hat{\omega}$, and $\hat{\phi}$.
-
-The estimated angular frequency could then be compared with the theoretical value
+to the observations in @tbl-oscillator-data using a suitable estimation procedure, such as least squares. This would provide estimates $\hat{A}$, $\hat{\omega}$, and $\hat{\phi}$. The estimated angular frequency could then be compared with the theoretical value
 
 $$
 \omega=\sqrt{\frac{k}{m}},
@@ -302,33 +288,11 @@ $$ {#eq-oscillator-theoretical-frequency}
 
 where $k$ and $m$ are obtained from independent measurements.
 
-This illustrates an important distinction:
+This illustrates an important distinction: **model specification and model fitting are not the same thing**. In this example, physical theory largely determines the structure of the model, while experimental data allow us to estimate its unknown parameters and evaluate whether its predictions are consistent with the observed behaviour of the system.
 
-> **Model specification and model fitting are not the same thing.**
+The same equation of motion could also be obtained through a different theoretical framework, such as [Lagrangian mechanics](https://en.wikipedia.org/wiki/Lagrangian_mechanics). The derivation would be different, but the underlying modelling strategy would remain the same: prior theoretical knowledge constrains the class of models that we consider plausible, while observations allow us to estimate, test, and refine the resulting model.
 
-In this example, physical theory largely determines the **structure of the model**. The experimental data then allow us to **estimate its unknown parameters** and assess whether its predictions are consistent with the observed behaviour of the system.
-
-The same equation of motion could also be obtained through a different theoretical framework, such as [Lagrangian mechanics](https://en.wikipedia.org/wiki/Lagrangian_mechanics). The derivation would be different, but the basic modelling strategy would remain the same: prior theoretical knowledge places strong constraints on the class of models that we consider plausible.
-
-At a high level, this approach can be summarised as
-
-$$
-\begin{gathered}
-\text{Theory}
-\longrightarrow
-\text{General principles}
-\longrightarrow
-\text{Mathematical model}
-\\[6pt]
-\Downarrow
-\\[-2pt]
-\text{Functional relationship}
-\longrightarrow
-\text{Fit to data}
-\longrightarrow
-\text{Empirical evaluation}
-\end{gathered}
-$$
+At a high level, the process can therefore be thought of as **theory $\longrightarrow$ mathematical structure $\longrightarrow$ parameter estimation $\longrightarrow$ empirical evaluation**. The relative importance of theory and data will vary from one problem to another, but the defining feature of theory-informed modelling is that prior knowledge about the system plays an explicit role in determining the models we consider.
 
 ## Data-Driven Modelling
 
