@@ -296,27 +296,17 @@ At a high level, the process can therefore be thought of as **theory $\longright
 
 ## Data-Driven Modelling
 
-Now consider the same experiment from a different perspective.
-
-Suppose that we know nothing about Newtonian mechanics, Hooke's law, or the differential equation governing the system. We are given only the observations in @tbl-oscillator-data.
-
-What can we learn from the data alone?
+Now consider the same experiment from a different perspective. Suppose that we know nothing about Newtonian mechanics, Hooke's law, or the differential equation governing the system, and are given only the observations in @tbl-oscillator-data. The question is then what we can learn about the relationship between position and time from the data themselves.
 
 A natural first step is to visualise the observations by plotting position against time. In a real experiment, measurements would contain some degree of noise, so we might obtain a pattern similar to that shown in @fig-oscillator-observations.
 
 ![Observed position of the oscillator as a function of time, including measurement noise.](figures/oscillator-observations.png){#fig-oscillator-observations width=80%}
 
-Examining the plot reveals several patterns. The position oscillates between approximately constant upper and lower values, the period appears approximately constant, and the object is close to its maximum displacement at $t=0$.
-
-There is clearly structure in the data even though we do not know the physical mechanism responsible for it.
-
-At this point, we can follow different data-driven modelling strategies.
+Examining the plot reveals several patterns: the position oscillates between approximately constant upper and lower values, the period appears approximately constant, and the object is close to its maximum displacement at $t=0$. There is clearly structure in the data even though we do not know the physical mechanism responsible for it. From here, there are different ways in which we can use these observed patterns to construct a model.
 
 ### Prespecifying a Functional Form
 
-One possibility is to use the observed patterns, together with our mathematical knowledge, to propose a plausible functional relationship.
-
-The periodic behaviour might suggest a trigonometric function such as
+One possibility is to use the observed patterns, together with our mathematical knowledge, to propose a plausible functional relationship. The periodic behaviour, for example, might suggest a trigonometric function such as
 
 $$
 f(t;A,\omega,\phi)
@@ -324,11 +314,9 @@ f(t;A,\omega,\phi)
 A\cos(\omega t+\phi).
 $$ {#eq-oscillator-ad-hoc-model}
 
-This looks very similar to the model obtained previously, but there is an important difference.
+This looks very similar to the model obtained previously, but the reasoning behind it is different. In the theory-informed approach, the trigonometric form emerged **deductively** from the differential equation governing the physical system. Here, we have proposed it **inductively** from patterns observed in the data.
 
-In the theory-informed approach, the trigonometric form emerged **deductively** from the differential equation governing the physical system. Here, we have proposed it **inductively** from patterns observed in the data.
-
-Once the functional form has been specified, we can estimate its unknown parameters from the observations:
+Once the functional form has been specified, its unknown parameters can be estimated from the observations:
 
 $$
 \hat{\boldsymbol{\theta}}
@@ -348,31 +336,27 @@ x_i-f(t_i;\boldsymbol{\theta})
 \right]^2.
 $$ {#eq-oscillator-least-squares}
 
-We can then evaluate how well the fitted model describes observations that were not used to estimate its parameters.
+The fitted model can then be evaluated on observations that were not used to estimate its parameters, allowing us to assess how well the relationship generalises beyond the data used for fitting.
 
-Although this is a data-driven approach, it still incorporates substantial prior knowledge. We have explicitly chosen the mathematical form of the relationship. The data determine the parameter estimates, but the analyst has determined the basic structure of the model.
+Although this approach is data-driven, it still incorporates substantial prior knowledge. The data determine the parameter estimates, but the analyst has already chosen the mathematical structure of the model. In this case, recognising periodicity and choosing a cosine function considerably restrict the set of relationships that the data are allowed to support.
 
 ### Learning a Flexible Relationship from Data
 
-A different strategy is to avoid specifying an explicit functional relationship such as a cosine in advance.
-
-Instead, we select a sufficiently flexible **model class** and use the observed data to learn a particular function within that class.
-
-We can represent this abstractly as
+A different strategy is to avoid specifying a simple explicit functional relationship, such as a cosine, in advance. Instead, we choose a sufficiently flexible **model class** and use the observed data to determine a particular function within that class. We can write the resulting model as
 
 $$
 \hat{x}=f_{\boldsymbol{\theta}}(t),
 $$ {#eq-flexible-model}
 
-where $\boldsymbol{\theta}$ represents the quantities learned during training.
+where $\boldsymbol{\theta}$ represents the parameters learned from the data.
 
-A neural network is one example. Neural networks are **parametric models** — often with very large numbers of parameters — but we do not generally need to prescribe an explicit analytical relationship between predictor and response such as
+A neural network provides one example. Neural networks are **parametric models**, often with very large numbers of parameters, but using one does not require us to prescribe a relationship between predictor and response of the form
 
 $$
 x(t)=A\cos(\omega t+\phi).
 $$
 
-Instead, we specify an architecture and a learning procedure, and the parameters are estimated from the observations. With a squared-error objective, the training problem could be written abstractly as
+Instead, we specify an architecture and a learning procedure, and estimate the parameters from the observations. With a squared-error objective, for example, the training problem can be written as
 
 $$
 \hat{\boldsymbol{\theta}}
@@ -384,117 +368,27 @@ x_i-f_{\boldsymbol{\theta}}(t_i)
 \right]^2.
 $$ {#eq-flexible-model-training}
 
-Decision trees, random forests, boosting methods, neural networks, splines, and many other statistical and machine-learning methods provide different ways of learning flexible relationships from data without requiring the analyst to specify a simple explicit equation relating predictors to responses.
+Decision trees, random forests, boosting methods, neural networks, splines, and many other statistical and machine-learning methods provide different ways of learning flexible relationships from data without requiring the analyst to specify a simple explicit equation relating predictors to responses. This flexibility, however, does not mean that these methods learn without assumptions.
 
-This does not mean that these methods learn without assumptions.
+Every modelling method restricts, in some way, the relationships that can be learned. A linear model imposes a linear structure; a decision tree represents relationships through recursive partitions of the predictor space; and a neural network is constrained by choices such as its architecture, connectivity, activation functions, and optimisation procedure. These choices introduce what is commonly called **inductive bias**: the assumptions or structural preferences that make some solutions more likely or accessible to a learning algorithm than others.
 
-Every modelling method restricts, in some way, the relationships that can be learned. A linear model assumes a particular linear structure. A decision tree represents relationships through recursive partitions of the predictor space. A neural network is constrained by its architecture, connectivity, activation functions, optimisation procedure, and other design choices.
+Machine learning therefore does not remove assumptions from modelling. Rather, many machine-learning methods replace a strongly prespecified functional relationship with a more flexible class of possible relationships, allowing the data to play a larger role in determining the particular function that is learned.
 
-These choices introduce what is commonly called **inductive bias**: the assumptions that make some solutions more likely or accessible to a learning algorithm than others.
-
-Machine learning therefore does not remove assumptions from modelling. Instead, many machine-learning methods allow us to replace a strongly prespecified functional relationship with a more flexible class of possible relationships and let the data play a larger role in determining the particular function that is learned.
-
-This data-driven approach can be summarised broadly as
-
-$$
-\begin{gathered}
-\text{Data}
-\longrightarrow
-\text{Observed patterns}
-\longrightarrow
-\text{Model class}
-\\[6pt]
-\Downarrow
-\\[-2pt]
-\text{Learning from data}
-\longrightarrow
-\text{Empirical evaluation}
-\end{gathered}
-$$
+At a high level, this process can be thought of as **data $\longrightarrow$ observed patterns $\longrightarrow$ model class $\longrightarrow$ learning from data $\longrightarrow$ empirical evaluation**. Unlike the theory-informed example, where prior physical knowledge largely determined the mathematical structure of the model, here the observations play a greater role in determining the relationship that ultimately emerges. The distinction is one of degree rather than a strict separation: both approaches combine assumptions and empirical evidence, but they differ in where the main constraints on the model come from.
 
 ## Theory-Informed and Data-Driven Modelling
 
-We can now summarise the two perspectives.
+Theory-informed and data-driven modelling are not mutually exclusive approaches. They are better understood as different ways of incorporating available information into the modelling process. In theory-informed modelling, established knowledge about the underlying mechanism places strong constraints on the mathematical structure of the model. In data-driven modelling, observations play a greater role in determining the relationship that is ultimately learned.
 
-In **theory-informed modelling**, established knowledge about the underlying mechanism strongly constrains the mathematical structure of the model:
+In practice, many modelling problems lie somewhere between these two perspectives. Domain knowledge may guide feature selection or feature engineering, constrain parameter values, inform the choice of model class, or rule out relationships that are scientifically or operationally implausible. The key distinction is therefore not whether assumptions are present — **all models make assumptions** — but how much structure is specified before learning from the data and where that structure comes from.
 
-$$
-\begin{gathered}
-\text{Theory}
-\longrightarrow
-\text{General principles}
-\longrightarrow
-\text{Mathematical model}
-\\[6pt]
-\Downarrow
-\\[-2pt]
-\text{Functional relationship}
-\longrightarrow
-\text{Parameter estimation}
-\longrightarrow
-\text{Empirical evaluation}
-\end{gathered}
-$$
+This distinction becomes particularly relevant when we move from physical systems to many real-world data-science problems. In the harmonic oscillator, well-established physical laws provide a strong theoretical description of the underlying mechanism. In many applied problems, however, no comparable theory exists. Consider **credit-card fraud detection**: there is no equivalent of Newton's laws from which we can derive an equation determining whether a transaction will be fraudulent. Similarly, in **customer churn prediction**, there is no fundamental theory from which the behaviour of an individual customer can be deduced.
 
-In **data-driven modelling**, the relationship is inferred primarily from observations:
+What we do have is data: transaction histories, customer characteristics, behavioural variables, temporal information, previous outcomes, and many other potentially useful observations. The modelling problem is therefore to use the information contained in those observations to learn relationships that remain useful when applied to cases that were not part of the original dataset.
 
-$$
-\begin{gathered}
-\text{Data}
-\longrightarrow
-\text{Observed patterns}
-\\[6pt]
-\Downarrow
-\\[-2pt]
-\begin{cases}
-\text{Prespecified functional form}
-\longrightarrow
-\text{Parameter estimation}
-\\[6pt]
-\text{Flexible model class}
-\longrightarrow
-\text{Learning from data}
-\end{cases}
-\\[6pt]
-\Downarrow
-\\[-2pt]
-\text{Empirical evaluation}
-\end{gathered}
-$$
+**Machine learning** provides a systematic framework for approaching this kind of problem. Its methods allow relationships to be learned from data when the underlying mechanism is unknown, too complex to derive analytically, or not conveniently represented by a prespecified functional form. This flexibility, however, introduces an important difficulty: a sufficiently flexible model may learn not only meaningful structure but also noise, accidental regularities, or peculiarities of the particular dataset used to train it.
 
-These approaches are not mutually exclusive. They are better understood as different ways of incorporating available information into the modelling process.
-
-In practice, many models lie somewhere between the two. Domain knowledge may guide feature selection or feature engineering, constrain parameter values, inform the choice of model class, or rule out relationships that are scientifically or operationally implausible.
-
-The key distinction is therefore not whether assumptions are present — **all models make assumptions** — but how much structure is specified before learning from the data and where that structure comes from.
-
-This distinction becomes particularly relevant when we move from physical systems to many real-world data-science problems.
-
-In the harmonic oscillator, we have well-established physical laws that provide a strong theoretical description of the underlying mechanism. In many business problems, no comparable theory exists.
-
-Consider **credit-card fraud detection**. There is no equivalent of Newton's laws from which we can derive an equation governing whether a transaction will be fraudulent. Similarly, in **customer churn prediction**, there is no fundamental theory from which individual customer behaviour can be deduced.
-
-Instead, we have data: transaction histories, customer characteristics, behavioural variables, temporal information, previous outcomes, and many other potentially useful observations.
-
-The modelling problem is therefore different. We want to use the information contained in those observations to learn relationships that remain useful when applied to cases that were not part of the original dataset.
-
-This is where **machine learning** becomes particularly useful.
-
-Machine-learning methods provide systematic ways of learning relationships from data when the underlying mechanism is unknown, too complex to derive analytically, or not conveniently represented by a prespecified functional form.
-
-However, this flexibility introduces an important difficulty. A sufficiently flexible model may learn not only meaningful structure but also noise, accidental regularities, or peculiarities of the particular dataset used to train it.
-
-The central question is therefore not simply
-
-> **Can the model fit the observed data?**
-
-but rather
-
-> **Can the model learn a relationship from observed data that remains useful on data it has never seen?**
-
-This ability is known as **generalisation**, and it is one of the central problems in machine learning.
-
-It provides the starting point for understanding how machine-learning models are trained, evaluated, selected, and ultimately used in practice.
+For this reason, fitting the observed data is not enough. What matters is whether the model has learned a relationship that remains useful when applied to data it has never seen. This ability is known as **generalisation**, and it is one of the central problems in machine learning. Understanding generalisation provides the starting point for studying how machine-learning models are trained, evaluated, selected, and ultimately used in practice.
 
 # Machine Learning Modelling
 
