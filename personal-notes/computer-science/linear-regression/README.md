@@ -1,65 +1,43 @@
-# Gradient Descent  
+# Linear Regression  
 ***Technical Notes***  
 **Author:** Rodrigo Kang
 
 ---
 
-$$\theta_{t+1} =
-\theta_t - \eta \nabla \phi(\theta_t)$$
+## Machine Learning Modelling
 
-```python
-print("Hello world from Python!")
-```
+A central part of data science is finding patterns in data. To do that, we try to identify the underlying structure or relationships in the data and represent them through models. This process is called modelling. A model is an abstract and simplified representation of some aspect of reality.
 
-```r
-print("Hello world from Python!")
-```
+Broadly speaking, there are two ways we can approach this: from first principles or from data:
 
-```cpp
-#include <iostream>
+$$\text{Modelling}
+\longrightarrow
+\begin{cases}
+\text{First-Principles Modelling — Deductively} \\
+\text{Data-Driven Modelling — Inductively}
+\end{cases}$$
 
-int main()
-{
-    std::cout << "Hello world from C++!\n";
-    return 0;
-}
-```
+Machine learning belongs broadly to the data-driven approach. Depending on the information available and the learning problem, we can distinguish between supervised, unsupervised and reinforcement learning.
 
----
+In supervised learning, we have labelled data, meaning that each observation includes a response or target variable. If the response is quantitative, we typically have a regression problem; if it is categorical, we have a classification problem.
 
-**Algorithm:** *Gradient Descent*
+In unsupervised learning, there is no response variable. Instead, we're interested in discovering structure in the data itself, for example through clustering or dimensionality reduction.
 
-Gradient descent is an iterative first-order optimization method that updates
-the parameters in the direction of steepest decrease of the objective function.
+Reinforcement learning is different from both. An agent learns by interacting with an environment, taking actions and receiving rewards, with the goal of learning a policy that maximises cumulative reward over time.
 
-**INPUT**
+$$\text{ML}
+\longrightarrow
+\begin{cases}
+\text{SL}
+&
+\begin{cases}
+\text{Regression}     & Y \text{ quantitative} \\
+\text{Classification} & Y \text{ categorical}
+\end{cases}
+\\
+\text{UL} & \text{no response } Y
+\\
+\text{RL} & (s_t,a_t,r_t)
+\end{cases}$$
 
-- initial approximation $\boldsymbol{\theta}_0$;
-- learning rate $\eta$;
-- tolerance $TOL$;
-- maximum number of iterations $N$.
-
-**OUTPUT**
-
-- approximate minimizer $\boldsymbol{\theta}$ or a message of failure.
-
-**Step 1** Set $k = 0$.
-
-**Step 2** While $k < N$ do Steps 3–6.
-
-**Step 3** Compute $\mathbf{g}_k = \nabla\phi(\boldsymbol{\theta}_k)$.
-
-**Step 4** If $\lVert\mathbf{g}_k\rVert < TOL$, then  
-&nbsp;&nbsp;&nbsp;&nbsp;**OUTPUT** $(\boldsymbol{\theta}_k)$;  
-&nbsp;&nbsp;&nbsp;&nbsp;**STOP**.
-
-**Step 5** Set
-$\boldsymbol{\theta}_{k+1}
-= \boldsymbol{\theta}_k - \eta\mathbf{g}_k$.
-
-**Step 6** Set $k = k + 1$.
-
-**Step 7** **OUTPUT** ("Maximum number of iterations exceeded.");  
-&nbsp;&nbsp;&nbsp;&nbsp;**STOP**.
-
----
+In practice, these approaches don't have to be mutually exclusive. In one of the projects I've worked on, for example, we were interested in predicting microbiologically influenced corrosion, or MIC. We combined mechanistic models, such as Lotka–Volterra and Monod models, with data-driven regression and classification approaches. The same general idea appears in areas such as weather forecasting, where physical models of atmospheric dynamics can be combined with machine-learning methods.
