@@ -1,0 +1,244 @@
+---
+title: "Image Formation"
+subtitle: "Technical Notes"
+
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
+---
+
+# Computer Vision as an Inverse Problem
+
+Many problems in computer vision can be understood as **inverse problems**. An image is the result of a physical process in which a three-dimensional scene is projected onto a two-dimensional image plane and converted into digital measurements. Computer vision attempts to reason in the opposite direction: given these measurements, we want to recover properties of the scene that produced them.
+
+Schematically, the image formation process can be represented as
+
+$$
+S
+\xrightarrow{F}
+I,
+$$
+
+where $S$ represents the properties of the scene, $F$ represents the image formation process, and $I$ is the resulting image. The scene properties may include quantities such as geometry, depth, object shape, surface orientation, reflectance, illumination, and motion.
+
+The corresponding inverse problem is
+
+$$
+I
+\xrightarrow{\text{inference}}
+S.
+$$
+
+The difficulty is that information is generally lost or mixed during image formation. As a consequence, different physical scenes may be consistent with the same image measurements. The inverse problem is therefore often **ill-posed**.
+
+A problem is said to be well-posed, in the classical sense of Hadamard, when:
+
+1. a solution exists;
+2. the solution is unique; and
+3. the solution depends continuously on the observed data.
+
+If one or more of these conditions fails, the problem is said to be **ill-posed**.
+
+In computer vision, this ambiguity can arise in several ways. Geometrically, projecting a three-dimensional scene onto a two-dimensional image can discard information about the spatial structure of the scene, such as depth. Photometrically, the measured intensity at a pixel can depend simultaneously on illumination, surface reflectance, camera optics, and sensor characteristics. Different configurations of these quantities may therefore produce the same, or very similar, image measurements.
+
+# Geometric Image Formation
+
+The first question is how the geometry of a three-dimensional scene is represented in a two-dimensional image. Consider two objects of the same size placed at different distances from a camera. Although their physical dimensions are identical, the more distant object appears smaller in the image.
+
+This effect can be explained using the **pinhole camera model**, a simple geometric model of image formation in which light rays from the scene pass through a single point, called the **camera centre**, before reaching the image plane.
+
+## Pinhole Camera Model
+
+Consider a point in three-dimensional space,
+
+$$
+P = (X,Y,Z),
+$$
+
+expressed relative to the camera centre. The $Z$-axis points in the viewing direction of the camera, while $X$ and $Y$ describe the horizontal and vertical position of the point.
+
+In a physical pinhole camera, the image plane lies behind the camera centre, producing an inverted image. In computer vision, it is convenient to use an equivalent **virtual image plane** located in front of the camera centre. This convention avoids the sign reversal while preserving the geometry of perspective projection.
+
+Let the virtual image plane be located at a distance $f$ from the camera centre, where $f$ is the **focal length**, and let
+
+$$
+p = (x,y)
+$$
+
+denote the projection of $P$ onto this plane.
+
+The relationship between the 3D point and its projection follows directly from similar triangles. In the horizontal direction,
+
+$$
+\frac{x}{f}
+=
+\frac{X}{Z},
+$$
+
+which gives
+
+$$
+x
+=
+f\frac{X}{Z}.
+$$ {#eq-perspective-x}
+
+The same argument in the vertical direction gives
+
+$$
+y
+=
+f\frac{Y}{Z}.
+$$ {#eq-perspective-y}
+
+Therefore, the projection of $P=(X,Y,Z)$ onto the image plane is
+
+$$
+(x,y)
+=
+\left(
+f\frac{X}{Z},
+f\frac{Y}{Z}
+\right).
+$$ {#eq-perspective-projection}
+
+This mapping is known as **perspective projection**.
+
+To see its effect, consider the point
+
+$$
+P = (2,1,10)
+$$
+
+and a camera with focal length $f=5$. From @eq-perspective-projection,
+
+$$
+x
+=
+5\frac{2}{10}
+=
+1,
+\qquad
+y
+=
+5\frac{1}{10}
+=
+0.5.
+$$
+
+Therefore,
+
+$$
+(2,1,10)
+\longrightarrow
+(1,0.5).
+$$
+
+Now consider a point with the same $X$ and $Y$ coordinates but twice the depth,
+
+$$
+P' = (2,1,20).
+$$
+
+Its projection is
+
+$$
+x'
+=
+5\frac{2}{20}
+=
+0.5,
+\qquad
+y'
+=
+5\frac{1}{20}
+=
+0.25,
+$$
+
+and therefore
+
+$$
+(2,1,20)
+\longrightarrow
+(0.5,0.25).
+$$
+
+Doubling the depth halves both image coordinates relative to the optical axis. More generally, for fixed $X$, $Y$, and $f$,
+
+$$
+x,y
+\propto
+\frac{1}{Z}.
+$$
+
+This is the geometric reason why objects appear smaller as their distance from the camera increases.
+
+The effect can also be seen by projecting the same object at different depths. @fig-perspective-depth shows the projection of a square whose physical dimensions remain unchanged while its distance from the camera increases.
+
+![Perspective projection of the same square at different depths.](figures/perspective-depth.png){#fig-perspective-depth width=70%}
+
+As the depth $Z$ increases, the projected square contracts towards the optical axis. The change in apparent size follows directly from the $1/Z$ dependence in @eq-perspective-projection.
+
+The focal length has a different effect. For a fixed 3D point,
+
+$$
+x,y
+\propto
+f.
+$$
+
+Increasing $f$ therefore increases the size of the projection on the image plane, while decreasing $f$ reduces it.
