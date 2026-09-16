@@ -401,7 +401,7 @@ $$
 =
 \underset{\varphi}{\arg\min}
 \;
-J\left[Y, \varphi(X)\right].
+J\left[Y,\varphi(X)\right].
 $$ {#eq-model-fitting}
 
 When the model is parameterised by a vector of parameters $\boldsymbol{\theta}$, this can instead be written as
@@ -414,4 +414,267 @@ $$
 J(\boldsymbol{\theta}).
 $$ {#eq-parameter-estimation}
 
-The particular form of $J$ depends on the model and the problem. For example, squared error is commonly used for regression, while cross-entropy is commonly used for classification.
+The particular form of $J$ depends on the problem and determines what constitutes an optimal prediction. Consider first the $L_2$ loss, where prediction errors are measured by their squared magnitude. The expected cost associated with a function $\varphi$ is
+
+$$
+J(\varphi)
+=
+\mathbb{E}
+\left[
+\left(
+Y-\varphi(X)
+\right)^2
+\right].
+$$ {#eq-expected-squared-error}
+
+Using the definition of expectation with respect to the joint distribution of $X$ and $Y$, this can also be written as
+
+$$
+J(\varphi)
+=
+\int
+\left[
+y-\varphi(x)
+\right]^2
+P(dx,dy),
+$$ {#eq-expected-squared-error-integral}
+
+where $P(dx,dy)$ denotes integration with respect to the joint probability distribution of $(X,Y)$. If $X$ and $Y$ have a joint probability density $p_{X,Y}(x,y)$, the same expression becomes
+
+$$
+J(\varphi)
+=
+\int_{\mathbb{R}^M}
+\int_{\mathbb{R}}
+\left[
+y-\varphi(x)
+\right]^2
+p_{X,Y}(x,y)
+\,dy\,dx.
+$$ {#eq-expected-squared-error-density}
+
+By conditioning on $X$ and using the law of iterated expectation, @eq-expected-squared-error can be written as
+
+$$
+J(\varphi)
+=
+\mathbb{E}_X
+\left[
+\mathbb{E}_{Y\mid X}
+\left[
+\left(
+Y-\varphi(X)
+\right)^2
+\mid X
+\right]
+\right].
+$$ {#eq-conditional-expected-squared-error}
+
+The expected squared error can therefore be minimised pointwise. For a fixed value $X=x$, the quantity $\varphi(x)$ is simply a scalar. Let $\alpha\in\mathbb{R}$ represent a candidate value for this prediction. We then seek
+
+$$
+\varphi(x)
+=
+\underset{\alpha\in\mathbb{R}}{\arg\min}
+\;
+\mathbb{E}
+\left[
+(Y-\alpha)^2
+\mid X=x
+\right].
+$$ {#eq-l2-pointwise-minimisation}
+
+To solve this minimisation explicitly, define
+
+$$
+J(\alpha)
+=
+\mathbb{E}
+\left[
+(Y-\alpha)^2
+\mid X=x
+\right].
+$$ {#eq-l2-conditional-cost}
+
+Expanding the squared term and using the linearity of expectation gives
+
+$$
+J(\alpha)
+=
+\mathbb{E}
+\left[
+Y^2\mid X=x
+\right]
+-
+2\alpha
+\mathbb{E}
+\left[
+Y\mid X=x
+\right]
++
+\alpha^2.
+$$ {#eq-l2-cost-expanded}
+
+Differentiating with respect to $\alpha$,
+
+$$
+\frac{dJ}{d\alpha}
+=
+-2
+\mathbb{E}
+\left[
+Y\mid X=x
+\right]
++
+2\alpha.
+$$ {#eq-l2-cost-derivative}
+
+Setting the derivative equal to zero gives
+
+$$
+\alpha
+=
+\mathbb{E}
+\left[
+Y\mid X=x
+\right].
+$$ {#eq-l2-optimal-alpha}
+
+Since
+
+$$
+\frac{d^2J}{d\alpha^2}
+=
+2
+>
+0,
+$$
+
+this stationary point is a minimum. Therefore,
+
+$$
+\varphi(x)
+=
+\mathbb{E}
+\left[
+Y\mid X=x
+\right].
+$$ {#eq-regression-function}
+
+Under $L_2$ loss, the optimal prediction is therefore the **conditional mean** of $Y$ given $X=x`. This conditional expectation is commonly referred to as the **regression function**. Importantly, this is a general result: no linear relationship between $X$ and $Y$ has been assumed.
+
+The choice of loss function changes what constitutes an optimal prediction. To see this, consider instead the $L_1$ loss, where prediction errors are measured by their absolute magnitude:
+
+$$
+J(\varphi)
+=
+\mathbb{E}
+\left[
+\left|
+Y-\varphi(X)
+\right|
+\right].
+$$ {#eq-expected-absolute-error}
+
+As before, conditioning on $X$ allows the problem to be minimised pointwise:
+
+$$
+\varphi(x)
+=
+\underset{\alpha\in\mathbb{R}}{\arg\min}
+\;
+\mathbb{E}
+\left[
+|Y-\alpha|
+\mid X=x
+\right].
+$$ {#eq-l1-pointwise-minimisation}
+
+For a fixed $X=x$, define
+
+$$
+J(\alpha)
+=
+\mathbb{E}
+\left[
+|Y-\alpha|
+\mid X=x
+\right].
+$$ {#eq-l1-conditional-cost}
+
+Assuming that the conditional distribution of $Y$ given $X=x$ has a density $p(y\mid x)$, the expectation can be split at $\alpha$:
+
+$$
+J(\alpha)
+=
+\int_{-\infty}^{\alpha}
+(\alpha-y)p(y\mid x)\,dy
++
+\int_{\alpha}^{\infty}
+(y-\alpha)p(y\mid x)\,dy.
+$$ {#eq-l1-cost-integral}
+
+Differentiating with respect to $\alpha$ gives
+
+$$
+\frac{dJ}{d\alpha}
+=
+\int_{-\infty}^{\alpha}
+p(y\mid x)\,dy
+-
+\int_{\alpha}^{\infty}
+p(y\mid x)\,dy.
+$$ {#eq-l1-cost-derivative}
+
+Introducing the conditional cumulative distribution function
+
+$$
+F_{Y\mid X}(\alpha\mid x)
+=
+P(Y\leq\alpha\mid X=x),
+$$ {#eq-conditional-cdf}
+
+we obtain
+
+$$
+\frac{dJ}{d\alpha}
+=
+2F_{Y\mid X}(\alpha\mid x)-1.
+$$ {#eq-l1-cost-cdf}
+
+At the minimum,
+
+$$
+F_{Y\mid X}(\alpha\mid x)
+=
+\frac{1}{2},
+$$ {#eq-l1-median-condition}
+
+which means that the optimal value of $\alpha$ is the median of the conditional distribution. Therefore,
+
+$$
+\varphi(x)
+=
+\operatorname{median}
+\left(
+Y\mid X=x
+\right).
+$$ {#eq-l1-optimal-prediction}
+
+Under $L_1$ loss, the optimal prediction is therefore the **conditional median** rather than the conditional mean.
+
+The two results can be summarised as
+
+$$
+\begin{aligned}
+L_2
+&\quad\longrightarrow\quad
+\mathbb{E}[Y\mid X=x],
+\\
+L_1
+&\quad\longrightarrow\quad
+\operatorname{median}(Y\mid X=x).
+\end{aligned}
+$$ {#eq-l1-l2-summary}
+
+Thus, the choice of cost function does more than determine how prediction errors are penalised: it determines which property of the conditional distribution is optimal to predict.
