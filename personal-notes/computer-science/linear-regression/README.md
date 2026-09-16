@@ -52,7 +52,8 @@ $$X = \left(X_1,X_2,\dots,X_M\right)$$
 
 For the $i$-th observation, the predictor values are collected in the vector
 
-$$\mathbf{x}_i
+$$
+\mathbf{x}_i
 =
 \begin{pmatrix}
 x_{i1} \\
@@ -67,7 +68,8 @@ x_{i2},
 \dots,
 x_{iM}
 \right)^T
-\in\mathbb{R}^M,$$
+\in\mathbb{R}^M,
+$$
 
 where $x_{ij}$ denotes the observed value of predictor $j$ for observation $i$.
 
