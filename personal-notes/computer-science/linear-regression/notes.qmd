@@ -1,23 +1,85 @@
-# Linear Regression  
-***Technical Notes***  
-**Author:** Rodrigo Kang
+---
+title: "Linear Regression"
+subtitle: "Technical Notes"
 
+author: "Rodrigo Kang"
+
+lang: en
+
+execute:
+  echo: true
+  output: true
+
+format:
+  pdf:
+    pdf-engine: xelatex
+
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Pagella"
+    monofont: "TeX Gyre Pagella"
+
+    fontsize: 11pt
+    linestretch: 1.15
+
+    geometry:
+      - margin=2.8cm
+
+    toc: true
+    toc-depth: 6
+
+    number-sections: true
+    number-depth: 3
+    number-equations: true
+
+    colorlinks: true
+
+    fig-cap-location: bottom
+    tbl-cap-location: bottom
+
+    code-line-numbers: true
+    code-block-font-size: \scriptsize
+
+    syntax-highlighting: idiomatic
+
+    include-in-header:
+      text: |
+        \usepackage{listings}
+        \usepackage{etoolbox}
+
+        \lstset{
+          breaklines=true,
+          breakatwhitespace=false,
+          columns=fullflexible,
+          keepspaces=true,
+          showstringspaces=false,
+          postbreak=\mbox{\(\hookrightarrow\)\space}
+        }
+
+        \AtBeginEnvironment{verbatim}{\ttfamily\footnotesize}
+
+editor: visual
 ---
 
-## Machine Learning Modelling
+# Machine Learning Modelling
 
 A central part of data science is finding patterns in data. To do that, we try to identify the underlying structure or relationships in the data and represent them through models. This process is called modelling. A model is an abstract and simplified representation of some aspect of reality.
 
 Broadly speaking, there are two ways we can approach this: from first principles or from data:
 
-$$\text{Modelling}
+$$
+\text{Modelling}
 \longrightarrow
 \begin{cases}
-\text{First-Principles Modelling — Deductively} \\
-\text{Data-Driven Modelling — Inductively}
-\end{cases}$$
+\text{First-Principles Modelling — Deductive} \\
+\text{Data-Driven Modelling — Inductive}
+\end{cases}
+$$ {#eq-modelling-approaches}
 
-Machine learning belongs broadly to the data-driven approach. Depending on the information available and the learning problem, we can distinguish between supervised, unsupervised and reinforcement learning.
+Machine learning belongs broadly to the data-driven approach.
+
+## Learning Paradigms
+
+Depending on the information available and the learning problem, we can distinguish between supervised, unsupervised and reinforcement learning.
 
 In supervised learning, we have labelled data, meaning that each observation includes a response or target variable. If the response is quantitative, we typically have a regression problem; if it is categorical, we have a classification problem.
 
@@ -25,7 +87,8 @@ In unsupervised learning, there is no response variable. Instead, we're interest
 
 Reinforcement learning is different from both. An agent learns by interacting with an environment, taking actions and receiving rewards, with the goal of learning a policy that maximises cumulative reward over time.
 
-$$\text{ML}
+$$
+\text{ML}
 \longrightarrow
 \begin{cases}
 \text{SL}
@@ -38,17 +101,28 @@ $$\text{ML}
 \text{UL} & \text{no response } Y
 \\
 \text{RL} & (s_t,a_t,r_t)
-\end{cases}$$
+\end{cases}
+$$ {#eq-learning-paradigms}
 
-In practice, these approaches don't have to be mutually exclusive. In one of the projects I've worked on, for example, we were interested in predicting microbiologically influenced corrosion, or MIC. We combined mechanistic models, such as Lotka–Volterra and Monod models, with data-driven regression and classification approaches. The same general idea appears in areas such as weather forecasting, where physical models of atmospheric dynamics can be combined with machine-learning methods.
+## Combining Modelling Approaches
 
-## Notation
+In practice, these approaches don't have to be mutually exclusive. In one of the projects I've worked on, for example, we were interested in predicting microbiologically influenced corrosion, or MIC. We combined mechanistic models, such as Lotka–Volterra and Monod models, with data-driven regression and classification approaches.
+
+The same general idea appears in areas such as weather forecasting, where physical models of atmospheric dynamics can be combined with machine-learning methods.
+
+# Notation
 
 Throughout these notes, $N$ denotes the number of observations and $M$ the number of predictors.
 
+## Predictors
+
 The predictor variables are denoted by
 
-$$X = \left(X_1,X_2,\dots,X_M\right)$$
+$$
+X
+=
+\left(X_1,X_2,\dots,X_M\right).
+$$ {#eq-predictor-variables}
 
 For the $i$-th observation, the predictor values are collected in the vector
 
@@ -69,13 +143,14 @@ x_{i2},
 x_{iM}
 \right)^T
 \in\mathbb{R}^M,
-$$
+$$ {#eq-predictor-vector}
 
 where $x_{ij}$ denotes the observed value of predictor $j$ for observation $i$.
 
 The complete set of predictors can then be arranged into the $N\times M$ matrix
 
-$$\mathbf{X}
+$$
+\mathbf{X}
 =
 \begin{pmatrix}
 \mathbf{x}_1^T \\
@@ -90,17 +165,23 @@ x_{21} & x_{22} & \cdots & x_{2M} \\
 \vdots & \vdots & \ddots & \vdots \\
 x_{N1} & x_{N2} & \cdots & x_{NM}
 \end{pmatrix}
-\in\mathbb{R}^{N\times M}.$$
+\in\mathbb{R}^{N\times M}.
+$$ {#eq-predictor-matrix}
 
 Each row of $\mathbf{X}$ represents one observation, while each column represents one predictor. In particular, $\mathbf{x}_i^T$ is the $i$-th row of the predictor matrix.
 
+## Response and Prediction
+
 For a quantitative response, the response variable is denoted by
 
-$$Y\in\mathbb{R}.$$
+$$
+Y\in\mathbb{R}.
+$$ {#eq-quantitative-response}
 
 The observed response for observation $i$ is denoted by $y_i$, and the complete set of responses is collected in the vector
 
-$$\mathbf{y}
+$$
+\mathbf{y}
 =
 \begin{pmatrix}
 y_1 \\
@@ -108,21 +189,27 @@ y_2 \\
 \vdots \\
 y_N
 \end{pmatrix}
-\in\mathbb{R}^N.$$
+\in\mathbb{R}^N.
+$$ {#eq-response-vector}
 
 For a categorical response, the response variable is denoted by
 
-$$C\in\mathcal{C},$$
+$$
+C\in\mathcal{C},
+$$ {#eq-categorical-response}
 
 where $\mathcal{C}$ is the set of possible classes. For example, for a problem with $K$ classes,
 
-$$\mathcal{C}
+$$
+\mathcal{C}
 =
-\{1,2,\dots,K\}.$$
+\{1,2,\dots,K\}.
+$$ {#eq-class-space}
 
 The observed class for observation $i$ is denoted by $c_i\in\mathcal{C}$, and the complete set of observed class labels is collected in
 
-$$\mathbf{c}
+$$
+\mathbf{c}
 =
 \begin{pmatrix}
 c_1 \\
@@ -130,143 +217,170 @@ c_2 \\
 \vdots \\
 c_N
 \end{pmatrix}
-\in\mathcal{C}^N.$$
+\in\mathcal{C}^N.
+$$ {#eq-class-vector}
 
 Given a new predictor vector
 
-$$\mathbf{x}\in\mathbb{R}^M,$$
+$$
+\mathbf{x}\in\mathbb{R}^M,
+$$ {#eq-new-predictor-vector}
 
 a regression model produces an estimate of the quantitative response,
 
-$$\hat{Y}
+$$
+\hat{Y}
 =
-\hat{\varphi}(\mathbf{x}),$$
+\hat{\varphi}(\mathbf{x}),
+$$ {#eq-regression-prediction}
 
 where
 
-$$\hat{\varphi}:\mathbb{R}^M\rightarrow\mathbb{R}.$$
+$$
+\hat{\varphi}:\mathbb{R}^M\rightarrow\mathbb{R}.
+$$ {#eq-regression-mapping}
 
 Similarly, a classification model produces an estimate of the categorical response,
 
-$$\hat{C}
+$$
+\hat{C}
 =
-\hat{\varphi}(\mathbf{x}),$$
+\hat{\varphi}(\mathbf{x}),
+$$ {#eq-classification-prediction}
 
 where
 
-$$\hat{\varphi}:\mathbb{R}^M\rightarrow\mathcal{C}.$$
+$$
+\hat{\varphi}:\mathbb{R}^M\rightarrow\mathcal{C}.
+$$ {#eq-classification-mapping}
 
-## Goal of Supervised Learning
+# Supervised Learning
+
+## Dataset
 
 In supervised learning, each observation is paired with its corresponding response. For a regression problem, the dataset is denoted by
 
-$$\mathcal{D}
+$$
+\mathcal{D}
 =
 \left\{
 (\mathbf{x}_i,y_i)
-\right\}_{i=1}^{N},$$
+\right\}_{i=1}^{N},
+$$ {#eq-regression-dataset}
 
 where $\mathbf{x}_i\in\mathbb{R}^M$ is the predictor vector for observation $i$ and $y_i\in\mathbb{R}$ is its corresponding quantitative response.
 
 For a classification problem, the dataset is denoted by
 
-$$\mathcal{D}
+$$
+\mathcal{D}
 =
 \left\{
 (\mathbf{x}_i,c_i)
-\right\}_{i=1}^{N},$$
+\right\}_{i=1}^{N},
+$$ {#eq-classification-dataset}
 
 where $c_i\in\mathcal{C}$ is the class label associated with observation $i$.
 
 When the dataset is partitioned for model development and evaluation, the corresponding subsets are denoted by
 
-$$\mathcal{D}_{\mathrm{train}},
+$$
+\mathcal{D}_{\mathrm{train}},
 \qquad
 \mathcal{D}_{\mathrm{val}},
 \qquad
-\mathcal{D}_{\mathrm{test}},$$
+\mathcal{D}_{\mathrm{test}},
+$$ {#eq-dataset-partitions}
 
 for the training, validation, and test sets, respectively.
 
-The dataset can also be represented in tabular form:
+The structure of a regression dataset is illustrated in @tbl-regression-dataset.
 
-<div align="center">
+| Observation | $X_1$ | $X_2$ | $\cdots$ | $X_M$ | $Y$ |
+|:-----------:|:-----:|:-----:|:--------:|:-----:|:---:|
+| $1$ | $x_{11}$ | $x_{12}$ | $\cdots$ | $x_{1M}$ | $y_1$ |
+| $2$ | $x_{21}$ | $x_{22}$ | $\cdots$ | $x_{2M}$ | $y_2$ |
+| $\vdots$ | $\vdots$ | $\vdots$ | $\ddots$ | $\vdots$ | $\vdots$ |
+| $N$ | $x_{N1}$ | $x_{N2}$ | $\cdots$ | $x_{NM}$ | $y_N$ |
 
-| Observation | $X_1$       | $X_2$    | $\cdots$ | $X_M$     | $Y$      |
-|:-----------:|:-----------:|:--------:|:--------:|:---------:|:--------:|
-| $1$         | $x_{11}$    | $x_{12}$ | $\cdots$ | $x_{1M}$  | $y_1$    |
-| $2$         | $x_{21}$    | $x_{22}$ | $\cdots$ | $x_{2M}$  | $y_2$    |
-| $\vdots$    | $\vdots$    | $\vdots$ | $\vdots$ | $\vdots$  | $\vdots$ |
-| $N$         | $x_{N1}$    | $x_{N2}$ | $\cdots$ | $x_{NM}$  | $y_N$    |
-
-</div>
+: Tabular representation of a supervised regression dataset. {#tbl-regression-dataset}
 
 The columns $X_1,X_2,\dots,X_M$ correspond to the predictors, while $Y$ corresponds to the response variable. Each row represents one observation, so that row $i$ corresponds to the pair
 
-$$(\mathbf{x}_i,y_i),$$
+$$
+(\mathbf{x}_i,y_i),
+$$ {#eq-observation-pair}
 
-where
-
-$$\mathbf{x}_i
-=
-(x_{i1},x_{i2},\dots,x_{iM})^T.$$
+where $\mathbf{x}_i$ is defined in @eq-predictor-vector.
 
 For a classification problem, the same structure applies, replacing the quantitative response $Y$ and its observed values $y_i$ with the categorical response $C$ and class labels $c_i$, respectively.
 
+## Underlying Relationship
+
 For a regression problem, we can represent the relationship between the response and the predictors as
 
-$$Y
+$$
+Y
 =
 \varphi(X)
 +
-\varepsilon,$$
+\varepsilon,
+$$ {#eq-underlying-relationship}
 
 where $\varphi$ represents the systematic relationship between the predictors and the response, and $\varepsilon$ represents the random component that cannot be explained by the predictors.
 
 For the $i$-th observation,
 
-$$y_i
+$$
+y_i
 =
 \varphi(\mathbf{x}_i)
 +
-\varepsilon_i.$$
+\varepsilon_i.
+$$ {#eq-observed-relationship}
 
-The goal is to use the available data to estimate the unknown relationship $\varphi$. The resulting estimate is denoted by
-
-$$\hat{\varphi}.$$
+The goal is to use the available data to estimate the unknown relationship $\varphi$. The resulting estimate is denoted by $\hat{\varphi}$.
 
 Given a new predictor vector $\mathbf{x}$, the corresponding prediction is then
 
-$$\hat{Y}
+$$
+\hat{Y}
 =
-\hat{\varphi}(\mathbf{x}).$$
+\hat{\varphi}(\mathbf{x}).
+$$ {#eq-predicted-response}
 
-For classification, the same general goal applies: we want to learn the relationship between the predictors and the categorical response, although the relationship is not generally expressed through the additive form above.
+For classification, the same general goal applies: we want to learn the relationship between the predictors and the categorical response, although the relationship is not generally expressed through the additive form in @eq-underlying-relationship.
 
-### Estimating the Relationship
+## Estimating the Relationship
 
 There are different ways of approaching the estimation of $\varphi$. At a high level, we can distinguish between prespecifying a functional form and allowing a more flexible relationship to be learned from the data:
 
-$$\text{Estimating } \varphi
+$$
+\text{Estimating } \varphi
 \longrightarrow
 \begin{cases}
 \text{Prespecifying a Functional Form} \\
 \text{Learning a Flexible Relationship from Data}.
-\end{cases}$$
+\end{cases}
+$$ {#eq-estimating-relationship}
 
 In the first approach, the general structure of the relationship is specified before fitting the model. For example, we may assume a linear relationship,
 
-$$\varphi_{\boldsymbol{\theta}}(\mathbf{x})
+$$
+\varphi_{\boldsymbol{\theta}}(\mathbf{x})
 =
 \theta_0
 +
-\sum_{j=1}^{M}\theta_jx_j.$$
+\sum_{j=1}^{M}\theta_jx_j.
+$$ {#eq-linear-functional-form}
 
 The learning problem then reduces to estimating the parameters
 
-$$\boldsymbol{\theta}
+$$
+\boldsymbol{\theta}
 =
-(\theta_0,\theta_1,\dots,\theta_M)^T.$$
+(\theta_0,\theta_1,\dots,\theta_M)^T.
+$$ {#eq-parameter-vector}
 
 Linear regression is a canonical example of this approach. Polynomial regression and other explicitly parameterised functional forms follow the same general idea.
 
@@ -276,22 +390,28 @@ These two approaches should not be interpreted as assumptions versus no assumpti
 
 For example, linear regression restricts the model to linear relationships, k-nearest neighbours relies on the idea that nearby observations in predictor space should tend to have similar responses, decision trees represent relationships through recursive partitions of the predictor space, and neural networks restrict the learned relationship through their architecture and composition of transformations.
 
+## Model Fitting
+
 Once a model has been specified, we need a criterion for determining how well it fits the observed data. This is usually expressed through a cost function, also commonly referred to as a loss function or objective function, which we denote by $J$.
 
 The general strategy is to find the model that minimises this function:
 
-$$\hat{\varphi}
+$$
+\hat{\varphi}
 =
 \underset{\varphi}{\arg\min}
 \;
-J(Y, \varphi(X)).$$
+J\left[Y, \varphi(X)\right].
+$$ {#eq-model-fitting}
 
 When the model is parameterised by a vector of parameters $\boldsymbol{\theta}$, this can instead be written as
 
-$$\hat{\boldsymbol{\theta}}
+$$
+\hat{\boldsymbol{\theta}}
 =
 \underset{\boldsymbol{\theta}}{\arg\min}
 \;
-J(\boldsymbol{\theta}).$$
+J(\boldsymbol{\theta}).
+$$ {#eq-parameter-estimation}
 
 The particular form of $J$ depends on the model and the problem. For example, squared error is commonly used for regression, while cross-entropy is commonly used for classification.
