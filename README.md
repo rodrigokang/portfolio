@@ -60,3 +60,7 @@ Across different application domains, the same underlying philosophy remains con
 
 **Rodrigo Kang**  
 *Physicist* | *Data Scientist*
+
+## Copyright
+
+Copyright © 2026 Rodrigo Kang. All rights reserved.
