@@ -1,5 +1,5 @@
 # Computer Science
-**Technical Notes**
+**Technical Notes**  
 **Author:** Rodrigo Kang
 
 This directory contains systematic notes on computer science, with an emphasis on the theoretical foundations, computational principles, and methods underlying the design and analysis of algorithms and computational systems.
