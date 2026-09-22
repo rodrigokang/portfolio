@@ -104,11 +104,7 @@ $$
 \end{cases}
 $$ {#eq-learning-paradigms}
 
-## Combining Modelling Approaches
-
-In practice, these approaches don't have to be mutually exclusive. In one of the projects I've worked on, for example, we were interested in predicting microbiologically influenced corrosion, or MIC. We combined mechanistic models, such as Lotka–Volterra and Monod models, with data-driven regression and classification approaches.
-
-The same general idea appears in areas such as weather forecasting, where physical models of atmospheric dynamics can be combined with machine-learning methods.
+In practice, these approaches are not mutually exclusive. For example, in predicting microbiologically influenced corrosion (MIC), mechanistic models based on Lotka–Volterra dynamics and Monod kinetics can be combined with data-driven regression and classification methods. The same principle applies to weather forecasting, where physical models of atmospheric dynamics can be complemented by machine-learning techniques.
 
 # Notation
 
