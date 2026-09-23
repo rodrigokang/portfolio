@@ -6,6 +6,15 @@ author: "Rodrigo Kang"
 
 lang: en
 
+bibliography: references.bib
+csl: ieee.csl
+
+nocite: |
+  @jackson1962classical
+  @griffiths2023introduction
+  @burden2015numerical
+  @press2007numerical
+
 format:
   pdf:
     pdf-engine: xelatex
@@ -2429,3 +2438,9 @@ Table @tbl-intersecting-spheres-validation summarizes the principal validation m
 : Numerical validation metrics for the finite difference solution and the reconstructed electrostatic potential. {#tbl-intersecting-spheres-validation}
 
 Overall, this example illustrates how conformal transformations can substantially simplify the numerical treatment of electrostatic boundary-value problems while preserving the essential physical characteristics of the original configuration.
+
+# References
+
+::: {#refs}
+:::
+
