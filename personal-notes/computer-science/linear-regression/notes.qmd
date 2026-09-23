@@ -6,6 +6,17 @@ author: "Rodrigo Kang"
 
 lang: en
 
+bibliography: references.bib
+csl: ieee.csl
+
+nocite: |
+  @hastie2009elements
+  @bishop2006pattern
+  @suzuki2020statistical
+  @ugarte2016probability
+  @cowan1998statistical
+  @james2023statistical
+
 execute:
   echo: true
   output: true
@@ -15790,4 +15801,9 @@ Elastic Net combines the two penalty structures.
 The bias–variance trade-off explains why a penalised estimator can outperform an unbiased estimator in expected squared prediction error.
 
 The appropriate method depends on whether the primary objective is coefficient estimation, predictive accuracy, numerical stability, or a sparse representation of the regression relationship.
+
+# References
+
+::: {#refs}
+:::
 
