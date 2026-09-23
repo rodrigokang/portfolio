@@ -788,12 +788,12 @@ Despite these limitations, linear regression models remain fundamental tools in 
 
 ::: {.content-visible when-format="html"}
 
-For readers interested in a more detailed mathematical treatment of linear regression, including derivations, statistical inference, and regularisation, see the accompanying [technical notes](../personal-notes/computer-science/linear-regression/notes.pdf).
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available <a href="../personal-notes/computer-science/linear-regression/notes.pdf" download><i class="bi bi-file-earmark-pdf"></i></a>.
 
 :::
 
 ::: {.content-visible when-format="pdf"}
 
-For readers interested in a more detailed mathematical treatment of linear regression, including derivations, statistical inference, and regularisation, see the accompanying \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/computer-science/linear-regression/notes.pdf}{technical notes}.
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/computer-science/linear-regression/notes.pdf}{\faFilePdf}.
 
 :::
