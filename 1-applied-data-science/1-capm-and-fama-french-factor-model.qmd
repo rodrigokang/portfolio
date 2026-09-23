@@ -783,3 +783,17 @@ Multiple linear regression models may also be affected by omitted variable bias 
 Another practical limitation is that linear regression assumes a linear relationship between predictors and the response variable. While this assumption often provides a useful approximation, real financial data may exhibit nonlinear effects, structural changes, heteroscedasticity, or temporal dependence that are not fully captured by the model.
 
 Despite these limitations, linear regression models remain fundamental tools in empirical finance due to their interpretability, computational efficiency, and strong connection with statistical inference and risk factor modeling.
+
+## Further Reading
+
+::: {.content-visible when-format="html"}
+
+For readers interested in a more detailed mathematical treatment of linear regression, including derivations, statistical inference, and regularisation, see the accompanying [technical notes](../personal-notes/computer-science/linear-regression/notes.pdf).
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+For readers interested in a more detailed mathematical treatment of linear regression, including derivations, statistical inference, and regularisation, see the accompanying \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/computer-science/linear-regression/notes.pdf}{technical notes}.
+
+:::
