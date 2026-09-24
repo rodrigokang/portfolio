@@ -13,9 +13,16 @@ nocite: |
   @hastie2009elements
   @bishop2006pattern
   @suzuki2020statistical
-  @ugarte2016probability
-  @cowan1998statistical
   @james2023statistical
+  @abdi2010principal
+  @greenacre2022principal
+  @joliffe1992principal
+  @jolliffe2016principal
+  @kherif2020principal
+  @mackiewicz1993principal
+  @ringner2008principal
+  @shlens2014tutorial
+  @wold1987principal
 
 execute:
   echo: true
@@ -74,6 +81,22 @@ editor: visual
 # Principal Component Analysis — PCA
 
 _Section_
+
+- Presentar el problema de la alta dimensionalidad en la mayoría de los problemas reales:
+  - Muchos predictores y pocos datos (Ringnér)
+  - Coste computacional alto para análisis (James): $C(M, 2) = \frac{M(M-1)}{2}$
+- PCA no solamente permite reducir la dimensionalidad: también puede utilizarse para estimar valores faltantes aprovechando las relaciones entre las variables.
+- Pueden existir correlaciones entre algunas variables por lo que podríamos eliminarlas (ejemplo del tiburón y correlación no es causalidad) o pensar en una rotación (ejemplo de rotación plana y luego generalizar). Presentar con un problema sencillo como Shlens, al desconocer el fenómeno que estamos intentando explicar podemos pensar que el problema se describe con más variables que las que verdaderamente lo hacen. Esta es la situación que PCA intenta resolver: encontrar una representación más sencilla de un fenómeno a partir de mediciones potencialmente redundantes y contaminadas por ruido.
+- A More General Solution Using SVD
+- ¿Cuándo puede fallar PCA?
+  - Ejemplo A. Movimiento circular
+  - Ejemplo B. Direcciones no ortogonales
+- Extensiones: Correspondence Analysis y Multiple Factor Analysis
+- Functional PCA
+- Sparse PCA y componentes simplificados
+- Robust PCA
+- Symbolic Data PCA
+
 
 # References
 
