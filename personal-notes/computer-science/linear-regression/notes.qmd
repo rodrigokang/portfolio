@@ -15275,27 +15275,20 @@ Different training samples, or different optimal coefficient vectors in a nonuni
 
 An exact zero should consequently be interpreted as a property of the penalised fit, not as proof that the corresponding predictor has no relationship with the response.
 
+
 **Feature Scaling and Selection of the Penalty**
 
-As with Ridge, the Lasso penalty depends on the numerical scale of the predictors.
+As with Ridge, the Lasso penalty depends on the numerical scale of the predictors. A common procedure is to standardise the predictors before fitting the model, while leaving the intercept unpenalised.
 
-A common procedure is to standardise the predictors before fitting the model, while leaving the intercept unpenalised.
-
-The regularisation parameter controls the strength of shrinkage and variable selection.
-
-At
+The regularisation parameter controls the strength of shrinkage and variable selection. At
 
 $$
 \lambda=0,
 $$
 
-Lasso reduces to OLS.
+Lasso reduces to OLS. As $\lambda$ increases, stronger penalisation generally produces smaller coefficient magnitudes and may increase the number of coefficients equal to zero.
 
-As $\lambda$ increases, stronger penalisation generally produces smaller coefficient magnitudes and may increase the number of coefficients equal to zero.
-
-For sufficiently large $\lambda$, all slope coefficients are zero and the fitted model reduces to the sample response mean.
-
-Under the objective convention used here, the all-zero slope vector satisfies the optimality conditions when
+For sufficiently large $\lambda$, all slope coefficients are zero and the fitted model reduces to the sample response mean. Under the objective convention used here, the all-zero slope vector satisfies the optimality conditions when
 
 $$
 \lambda
@@ -15319,11 +15312,7 @@ $$
 |.
 $$
 
-The regularisation parameter is commonly selected through cross-validation or another validation procedure designed to estimate performance on unseen observations.
-
-Predictor standardisation and any other preprocessing steps must be estimated using the training portion of each validation split to avoid data leakage.
-
-The selected model should then be evaluated on data not used to choose the regularisation parameter.
+The mathematical formulation describes how the fitted coefficients depend on the penalty strength, but does not determine which value should be used for a particular dataset. Selecting the regularisation parameter requires an additional procedure that takes the intended modelling objective into account. For predictive modelling, this decision is commonly based on estimated performance on observations not used to fit the candidate models.
 
 ## Regularisation and Multicollinearity
 
@@ -15760,47 +15749,308 @@ $$
 \end{aligned}
 $$
 
-Increasing the regularisation strength generally changes both the bias and variance of the fitted prediction.
-
-A smaller coefficient variance does not, by itself, guarantee smaller prediction error.
+Increasing the regularisation strength generally changes both the bias and variance of the fitted prediction. A smaller coefficient variance does not, by itself, guarantee smaller prediction error.
 
 Regularisation improves expected squared prediction error only when the reduction in variance compensates for the additional squared bias.
 
 The appropriate penalty and regularisation strength therefore depend on the modelling objective and the data-generating process.
 
-**Selection and Evaluation**
-
-A regularisation parameter should be selected using data that are separate from those used to fit the corresponding candidate model.
-
-Cross-validation is a common approach.
-
-For each candidate penalty value, the model is fitted on the training portion of a split and evaluated on the corresponding validation portion.
-
-The selected penalty is then used to fit the final model on the designated training data.
-
-An independent test dataset can subsequently be used to estimate predictive performance without reusing the observations that determined the regularisation strength.
-
-Feature standardisation must be fitted within each training split and then applied to its validation split. Otherwise, information from the validation observations can enter the fitting procedure.
-
-The same principle applies to any preprocessing operation whose parameters are estimated from the data.
-
-When the observations have temporal, grouped, or dependent structure, the validation procedure must also respect that structure.
-
 **Concluding Perspective**
 
 Ordinary least squares, Ridge, and Lasso solve related but distinct estimation problems.
 
-OLS minimises the residual sum of squares without penalising coefficient magnitudes.
-
-Ridge introduces a quadratic penalty that stabilises coefficient estimation and reduces variance in directions where the design contains limited information.
-
-Lasso introduces an absolute-value penalty that combines coefficient shrinkage with the possibility of exact zeros.
-
-Elastic Net combines the two penalty structures.
+OLS minimises the residual sum of squares without penalising coefficient magnitudes. Ridge introduces a quadratic penalty that stabilises coefficient estimation and reduces variance in directions where the design contains limited information. Lasso introduces an absolute-value penalty that combines coefficient shrinkage with the possibility of exact zeros. Elastic Net combines the two penalty structures.
 
 The bias–variance trade-off explains why a penalised estimator can outperform an unbiased estimator in expected squared prediction error.
 
-The appropriate method depends on whether the primary objective is coefficient estimation, predictive accuracy, numerical stability, or a sparse representation of the regression relationship.
+The appropriate method depends on whether the primary objective is coefficient estimation, predictive accuracy, numerical stability, or a sparse representation of the regression relationship. When predictive performance is the principal objective, the choice of penalty and regularisation strength must also be supported by an appropriate model selection and evaluation procedure.
+
+
+## Hyperparameter Selection and Model Evaluation
+
+Regularisation introduces an additional modelling decision: the strength of the penalty applied to the regression coefficients. In ordinary least squares, the coefficient estimates are determined by minimising the residual sum of squares. In Ridge and Lasso, the estimates also depend on the regularisation parameter $\lambda$, which controls the relative importance of fitting the observed responses and constraining the coefficient vector.
+
+The mathematical properties of these estimators explain how regularisation changes the fitted model. They do not, however, determine which penalty strength should be used for a particular dataset.
+
+A small value of $\lambda$ produces a model close to ordinary least squares, while a larger value imposes stronger restrictions on the coefficients. The appropriate choice depends on the relationship between the predictors and the response, the amount of noise in the observations, the number and correlation structure of the predictors, and the intended use of the model.
+
+When predictive performance is the primary objective, the regularisation parameter is commonly selected by estimating how well candidate models perform on observations that were not used to fit them.
+
+### Training, Validation and Test Data
+
+Suppose the available dataset is
+
+$$
+\mathcal D
+=
+\{(\mathbf x_i,y_i)\}_{i=1}^{N}.
+$$
+
+It is useful to distinguish between three roles that observations may play in the modelling process: estimating model parameters, selecting modelling decisions, and evaluating the resulting model.
+
+The **training dataset** is used to estimate the regression coefficients for a specified regularisation parameter. The **validation dataset** is used to compare candidate parameter values and select the modelling configuration. The **test dataset** is reserved for evaluating the selected model after these decisions have been made.
+
+For a simple holdout procedure, the dataset can be partitioned into three disjoint subsets:
+
+$$
+\mathcal D
+=
+\mathcal D_{\mathrm{train}}
+\cup
+\mathcal D_{\mathrm{val}}
+\cup
+\mathcal D_{\mathrm{test}}.
+$$ {#eq-regularisation-data-partition}
+
+For a fixed value of $\lambda$, the regression coefficients are estimated by minimising the corresponding penalised objective over the training observations. The fitted model is then evaluated on the validation observations using a predictive error measure.
+
+For regression, a common choice is the mean squared error:
+
+$$
+\operatorname{MSE}_{\mathrm{val}}(\lambda)
+=
+\frac{1}{N_{\mathrm{val}}}
+\sum_{i\in\mathcal I_{\mathrm{val}}}
+\left[
+y_i-
+\hat\varphi_{\lambda,\mathrm{train}}(\mathbf x_i)
+\right]^2,
+$$ {#eq-regularisation-validation-mse}
+
+where $\mathcal I_{\mathrm{val}}$ denotes the validation indices and $\hat\varphi_{\lambda,\mathrm{train}}$ is the regression function fitted using only the training observations.
+
+The distinction between training and validation error is important. Training error measures how well the model fits observations used to estimate its coefficients. Validation error provides information about predictive performance on observations that did not participate in that estimation.
+
+A single training–validation split is straightforward, but its result may depend substantially on which observations happen to be assigned to each subset. Cross-validation reduces this dependence by evaluating each candidate model across several training–validation partitions.
+
+### K-Fold Cross-Validation
+
+In **K-Fold Cross-Validation**, the data available for model development are partitioned into $K$ disjoint subsets, commonly called *folds*:
+
+$$
+\mathcal D_{\mathrm{dev}}
+=
+\mathcal D_1
+\cup
+\mathcal D_2
+\cup
+\cdots
+\cup
+\mathcal D_K.
+$$ {#eq-regularisation-kfold-partition}
+
+The development dataset excludes any observations reserved for independent test evaluation.
+
+Each fold serves as the validation dataset once, while the remaining folds are used for training.
+
+For fold $k$, define
+
+$$
+\mathcal D_{\mathrm{val}}^{(k)}
+=
+\mathcal D_k
+$$
+
+and
+
+$$
+\mathcal D_{\mathrm{train}}^{(k)}
+=
+\bigcup_{\substack{j=1\\j\neq k}}^{K}
+\mathcal D_j.
+$$ {#eq-regularisation-kfold-training}
+
+For a fixed regularisation parameter $\lambda$, the procedure consists of fitting the model on $\mathcal D_{\mathrm{train}}^{(k)}$ and evaluating its predictions on $\mathcal D_{\mathrm{val}}^{(k)}$.
+
+This process is repeated for every fold. Consequently, each observation contributes to validation exactly once and to training in the remaining $K-1$ iterations. Figure @fig-regularisation-kfold illustrates the procedure for $K=5$.
+
+![Five-fold cross-validation. Each row represents one iteration, with one fold reserved for validation and the remaining four used for training. Every observation is used for validation exactly once.](figures/kfold-cross-validation.png){#fig-regularisation-kfold width=85%}
+
+Let
+
+$$
+\hat\varphi_{\lambda}^{(-k)}
+$$
+
+denote the regression function estimated without the observations in fold $k$. The validation error for that fold is
+
+$$
+\operatorname{MSE}_k(\lambda)
+=
+\frac{1}{N_k}
+\sum_{i\in\mathcal I_k}
+\left[
+y_i-
+\hat\varphi_{\lambda}^{(-k)}(\mathbf x_i)
+\right]^2,
+$$ {#eq-regularisation-fold-mse}
+
+where $\mathcal I_k$ contains the indices assigned to fold $k$ and $N_k$ is the number of observations in that fold.
+
+The cross-validation estimate is obtained by averaging the validation errors:
+
+$$
+\operatorname{CV}_K(\lambda)
+=
+\frac{1}{K}
+\sum_{k=1}^{K}
+\operatorname{MSE}_k(\lambda).
+$$ {#eq-regularisation-kfold-cv}
+
+This expression gives equal weight to each fold. When fold sizes differ, an alternative is to average the squared prediction errors across all validation observations, weighting each fold according to its size.
+
+The resulting quantity estimates the predictive error of the fitting procedure when trained on approximately $(K-1)/K$ of the development observations. It is not an exact estimate of the error of the final model fitted on the complete development dataset, since the training sample sizes differ.
+
+Cross-validation does not eliminate sampling uncertainty. Different datasets, and sometimes different fold assignments, can produce different validation curves and selected regularisation parameters. Nevertheless, it provides a more systematic basis for model selection than relying on training error or a single arbitrary partition.
+
+The choice of $K$ involves a practical trade-off. A larger number of folds uses a greater proportion of the development data for fitting each model, but requires more model fits. Five-fold and ten-fold cross-validation are common choices for regression problems with approximately independent observations.
+
+### Selection of the Regularisation Parameter
+
+Cross-validation is applied over a predefined collection of candidate regularisation parameters,
+
+$$
+\Lambda
+=
+\{\lambda_1,\lambda_2,\ldots,\lambda_L\}.
+$$
+
+For each $\lambda_\ell\in\Lambda$, the model is fitted and evaluated across the same $K$ folds. This produces a cross-validation error curve relating predictive performance to regularisation strength.
+
+The selected parameter is
+
+$$
+\hat\lambda
+=
+\underset{\lambda\in\Lambda}{\arg\min}
+\operatorname{CV}_K(\lambda).
+$$ {#eq-regularisation-selected-lambda}
+
+The selected value minimises the estimated validation error among the candidates considered. It is not necessarily the value that minimises the true expected prediction error, which remains unknown.
+
+Figure @fig-regularisation-cv-error illustrates this selection procedure using the mean validation error obtained across the folds. The selected regularisation parameter corresponds to the minimum of the estimated cross-validation error curve.
+
+![Cross-validation error as a function of the regularisation parameter for Ridge, Lasso and Elastic Net. Each curve represents the mean validation MSE across the folds, and the selected value of $\lambda$ is identified for each method.](figures/regularisation-cv-error.png){#fig-regularisation-cv-error width=85%}
+
+Using the same folds for all candidate values makes their validation errors more directly comparable, since each candidate is evaluated on the same observations.
+
+A logarithmically spaced grid is often appropriate because useful regularisation strengths may span several orders of magnitude. The grid should be broad enough to include weak and strong penalisation, rather than concentrating exclusively around an arbitrary initial value.
+
+For Ridge, increasing $\lambda$ generally produces progressively stronger coefficient shrinkage. For Lasso, it can also change which coefficients are exactly zero. The cross-validation curve therefore reflects the predictive consequences of changing both coefficient magnitudes and, potentially, model sparsity.
+
+The value of $\lambda$ that minimises validation error need not produce the sparsest Lasso model. Predictive accuracy and variable selection are related but distinct objectives. If a sparse representation is itself an important modelling requirement, that requirement should be considered explicitly rather than inferred from the minimum validation error alone.
+
+Elastic Net introduces a second hyperparameter controlling the relative contributions of the absolute-value and quadratic penalties. When this mixing parameter is also to be selected, cross-validation can be applied over combinations of the two hyperparameters. The same separation between fitting and validation must be maintained for every candidate combination.
+
+**Scale of the Regularisation Parameter**
+
+The numerical value of $\lambda$ depends on the convention used to define the objective function.
+
+For example, the Lasso formulation developed earlier in these notes is
+
+$$
+J_\lambda(\boldsymbol{\beta})
+=
+\|\mathbf y-\mathbf Z\boldsymbol{\beta}\|_2^2
++
+\lambda\|\boldsymbol{\beta}\|_1.
+$$
+
+An implementation may instead minimise
+
+$$
+\widetilde J_{\widetilde\lambda}
+(\boldsymbol{\beta})
+=
+\frac{1}{2N}
+\|\mathbf y-\mathbf Z\boldsymbol{\beta}\|_2^2
++
+\widetilde\lambda
+\|\boldsymbol{\beta}\|_1.
+$$
+
+These objectives have the same minimisers when their penalty parameters satisfy
+
+$$
+\lambda
+=
+2N\widetilde\lambda.
+$$ {#eq-regularisation-penalty-scaling}
+
+Consequently, penalty values should not be compared across formulations without accounting for their normalisation. Cross-validation selects the parameter within the convention used by the fitting procedure.
+
+### Preprocessing and Data Leakage
+
+Regularised regression is sensitive to predictor scale because the penalty is applied to coefficient magnitudes. Predictor standardisation is therefore commonly performed before fitting Ridge, Lasso or Elastic Net.
+
+For predictor $j$, standardisation takes the form
+
+$$
+z_{ij}
+=
+\frac{x_{ij}-\bar x_j}{s_j},
+$$
+
+where $\bar x_j$ and $s_j$ are the sample mean and standard deviation used for the transformation.
+
+During cross-validation, these quantities must be estimated separately within each training fold.
+
+For fold $k$, let
+
+$$
+\bar x_j^{(-k)}
+\qquad\text{and}\qquad
+s_j^{(-k)}
+$$
+
+denote the mean and standard deviation calculated from the corresponding training observations. The validation observations are transformed using these same quantities:
+
+$$
+z_{ij}^{(k)}
+=
+\frac{x_{ij}-\bar x_j^{(-k)}}{s_j^{(-k)}},
+\qquad
+i\in\mathcal I_k.
+$$ {#eq-regularisation-fold-standardisation}
+
+Computing the means and standard deviations from the entire development dataset before constructing the folds would allow information from the validation observations to influence the fitting procedure. This is a form of **data leakage**.
+
+The same principle applies to other data-dependent preprocessing operations, including imputation, feature selection and dimensionality reduction. Any transformation whose parameters are learned from the data must be fitted using the training portion of the relevant split.
+
+Cross-validation also requires an appropriate partitioning strategy. Random K-Fold Cross-Validation is generally suited to observations that can reasonably be treated as independent or exchangeable for the intended prediction problem. Time-ordered observations, repeated measurements from the same subject, and grouped observations may require different validation schemes.
+
+For time series, for example, a random partition can allow observations from later periods to influence a model evaluated on earlier periods. A chronological validation procedure is more appropriate when the intended task is forecasting future observations.
+
+The validation design should reproduce, as closely as practical, the conditions under which the fitted model will be used.
+
+### Final Model Evaluation
+
+After selecting the regularisation parameter, the final model is fitted using all observations designated for model development.
+
+At this stage, preprocessing parameters are estimated again from the complete development dataset, and the regression coefficients are obtained using the selected penalty strength.
+
+The independent test dataset is then transformed using the preprocessing parameters estimated from the development data and passed through the final fitted model.
+
+For a test dataset containing $N_{\mathrm{test}}$ observations, the test mean squared error is
+
+$$
+\operatorname{MSE}_{\mathrm{test}}
+=
+\frac{1}{N_{\mathrm{test}}}
+\sum_{i\in\mathcal I_{\mathrm{test}}}
+\left[
+y_i-
+\hat\varphi_{\hat\lambda}(\mathbf x_i)
+\right]^2.
+$$ {#eq-regularisation-test-mse}
+
+The test error provides an assessment of the predictive performance of the selected model on observations not used for coefficient estimation or hyperparameter selection.
+
+It should not be used to revise $\lambda$, change the predictor set, or choose between alternative models while continuing to treat the same test result as an independent assessment. Once test performance influences modelling decisions, the test observations have effectively become part of the selection process.
+
+Cross-validation and test evaluation therefore serve different purposes. Cross-validation supports the selection of modelling decisions, while the test dataset is reserved for assessing the model produced by those decisions.
+
+For regularised linear regression, this distinction completes the connection between the mathematical estimator and its practical use: the penalty defines how the coefficients are estimated, cross-validation provides a procedure for selecting its strength, and independent test evaluation assesses the resulting predictive model.
 
 # References
 
