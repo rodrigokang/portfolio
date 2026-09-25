@@ -78,24 +78,59 @@ format:
 editor: visual
 ---
 
-# Principal Component Analysis — PCA
 
-_Section_
+# Introduction
 
-- Presentar el problema de la alta dimensionalidad en la mayoría de los problemas reales:
-  - Muchos predictores y pocos datos (Ringnér)
-  - Coste computacional alto para análisis (James): $C(M, 2) = \frac{M(M-1)}{2}$
-- PCA no solamente permite reducir la dimensionalidad: también puede utilizarse para estimar valores faltantes aprovechando las relaciones entre las variables.
-- Pueden existir correlaciones entre algunas variables por lo que podríamos eliminarlas (ejemplo del tiburón y correlación no es causalidad) o pensar en una rotación (ejemplo de rotación plana y luego generalizar). Presentar con un problema sencillo como Shlens, al desconocer el fenómeno que estamos intentando explicar podemos pensar que el problema se describe con más variables que las que verdaderamente lo hacen. Esta es la situación que PCA intenta resolver: encontrar una representación más sencilla de un fenómeno a partir de mediciones potencialmente redundantes y contaminadas por ruido.
-- A More General Solution Using SVD
-- ¿Cuándo puede fallar PCA?
-  - Ejemplo A. Movimiento circular
-  - Ejemplo B. Direcciones no ortogonales
-- Extensiones: Correspondence Analysis y Multiple Factor Analysis
-- Functional PCA
-- Sparse PCA y componentes simplificados
-- Robust PCA
-- Symbolic Data PCA
+In many data analysis problems, each observation is described by a large number of variables. A medical study may record hundreds of clinical measurements, an experiment may collect signals from multiple sensors, and a financial dataset may contain the returns of numerous assets. Although these measurements provide different views of the system under investigation, working with all of them simultaneously can make the analysis difficult.
+
+Consider a dataset containing $N$ observations and $M$ variables, $X_1, X_2, \ldots, X_M$. One way to explore the relationships between the variables is to examine their pairwise scatterplots. However, the number of possible pairs increases rapidly with $M$:
+
+$$
+\binom{M}{2}
+=
+\frac{M!}{2!(M-2)!}
+=
+\frac{M(M-1)}{2}.
+$$
+
+With only ten variables, there are already 45 possible scatterplots. With one hundred variables, there are 4,950. Even if we could examine all these plots, each would reveal only a two-dimensional view of the dataset. Relationships involving several variables simultaneously could remain difficult to identify.
+
+The problem is not limited to visualisation. A large number of variables can increase computational costs, complicate the interpretation of statistical models, and become particularly challenging when the number of observations is small relative to the number of variables. In such circumstances, a useful question is whether all the recorded variables are necessary to describe the main structure of the data.
+
+## Redundancy and Dimensionality
+
+The number of variables used to describe a system does not necessarily correspond to the number of independent dimensions needed to represent it.
+
+Suppose we record the height of several individuals in both centimetres and inches. Although the dataset contains two variables, one is an exact linear transformation of the other. Both measurements describe the same characteristic, and the observations can therefore be represented along a single direction without losing information.
+
+A similar situation arises when the relationship is not exact. For example, measurements of different parts of the human body may be correlated because they are influenced by common characteristics such as overall body size. These variables are not interchangeable, but some of their variability may be summarised by a smaller number of dimensions.
+
+This idea becomes particularly useful when we consider a physical system observed through multiple measurements. A simple harmonic oscillator, for instance, may be monitored by several sensors recording different projections of its motion. Although the resulting dataset contains multiple variables, the underlying motion may be described by substantially fewer degrees of freedom. Measurement noise can further obscure this simpler structure.
+
+The objective is therefore not necessarily to identify which original variables should be discarded. Instead, we may seek a new representation that combines the available measurements into a smaller number of variables while preserving the dominant patterns of variation.
+
+![Observations in a three-dimensional space concentrated around a dominant direction, illustrating how multiple measurements may admit a lower-dimensional representation.](figures/intrinsic-dimensionality.png){#fig-intrinsic-dimensionality}
+
+## Principal Component Analysis
+
+Principal Component Analysis (PCA) is an unsupervised statistical method that constructs a new set of variables, called *principal components*, from linear combinations of the original variables. These components define directions along which the observations exhibit progressively smaller amounts of variance.
+
+The first principal component identifies the direction of greatest variance in the data. The second identifies the direction of greatest remaining variance while being orthogonal to the first. Subsequent components follow the same principle, each subject to orthogonality with the preceding directions.
+
+![A two-dimensional dataset with its first and second principal directions. The first direction captures the greatest variance, while the second is orthogonal to it.](figures/principal-component-directions.png){#fig-principal-component-directions}
+
+If most of the variability is concentrated along the first few components, the observations can be projected onto the subspace defined by those directions. In this way, a dataset originally described by $M$ variables may be approximated using only $q$ components, where $q < M$.
+
+The resulting representation can make it easier to visualise observations, investigate relationships between variables, and identify patterns that are difficult to recognise in the original feature space. Principal components can also be used as inputs to subsequent statistical or machine learning models, reducing the number of predictors and eliminating linear correlations between the retained components.
+
+PCA is not limited to dimensionality reduction. Its low-dimensional representation can also be used to reconstruct approximate observations, investigate unusual patterns, and, under suitable assumptions, estimate missing values by exploiting relationships between variables.
+
+These applications follow from a common mathematical principle: PCA seeks an orthogonal coordinate system in which the variance of the data is concentrated as much as possible in the first few directions.
+
+The method does not, however, establish that the directions of greatest variance correspond to the most important physical, biological, or economic mechanisms. Nor does it imply that components with small variance contain only noise. The usefulness of a principal component ultimately depends on the question being investigated.
+
+In the following sections, we develop PCA from its mathematical formulation, derive the principal components as solutions to a constrained optimisation problem, and examine how they can be computed and interpreted.
+
 
 
 # References
