@@ -506,3 +506,17 @@ PCA captures linear relationships among asset returns and may not fully represen
 Similarly, the clustering structure obtained depends on both the distance metric and the linkage criterion employed. Alternative specifications may produce different cluster configurations and lead to different interpretations of the investment universe.
 
 Despite these limitations, PCA and hierarchical clustering remain useful exploratory tools for understanding the structure of asset returns and supporting diversification analysis.
+
+## Further Reading
+
+::: {.content-visible when-format="html"}
+
+For readers interested in a more detailed treatment of the methods used in this project, including mathematical derivations and computational implementations, the accompanying technical notes on Principal Component Analysis are available <a href="../personal-notes/computer-science/pca/notes.pdf" download><i class="bi bi-file-earmark-pdf"></i></a>, together with the technical notes on Hierarchical Clustering <a href="../personal-notes/computer-science/hierarchical-clustering/notes.pdf" download><i class="bi bi-file-earmark-pdf"></i></a>.
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+For readers interested in a more detailed treatment of the methods used in this project, including mathematical derivations and computational implementations, the accompanying technical notes on Principal Component Analysis are available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/computer-science/pca/notes.pdf}{\faFilePdf}, together with the technical notes on Hierarchical Clustering \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/personal-notes/computer-science/hierarchical-clustering/notes.pdf}{\faFilePdf}.
+
+:::
