@@ -15,7 +15,7 @@ The database schema and sample data are provided in `northwind-setup.sql`, based
 From the project directory, populate the database using `psql`:
 
 ```bash
-psql -U postgres -d northwind -f scripts/northwind-setup.sql
+psql -U postgres -d northwind -f scripts/northwind_setup.sql
 ```
 
 Alternatively, connect to the `northwind` database using a PostgreSQL client and execute `northwind-setup.sql` directly.
