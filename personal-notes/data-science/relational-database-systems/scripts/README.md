@@ -10,7 +10,7 @@ Create a local PostgreSQL database named `northwind`:
 CREATE DATABASE northwind;
 ```
 
-The database schema and sample data are provided in `northwind-setup.sql`, based on the [PostgreSQL version of the Northwind sample database](https://en.wikiversity.org/wiki/Database_Examples/Northwind/PostgreSQL) available from Wikiversity.
+The database schema and sample data are provided in `northwind_setup.sql`, based on the [PostgreSQL version of the Northwind sample database](https://en.wikiversity.org/wiki/Database_Examples/Northwind/PostgreSQL) available from Wikiversity.
 
 From the project directory, populate the database using `psql`:
 
@@ -18,7 +18,7 @@ From the project directory, populate the database using `psql`:
 psql -U postgres -d northwind -f scripts/northwind_setup.sql
 ```
 
-Alternatively, connect to the `northwind` database using a PostgreSQL client and execute `northwind-setup.sql` directly.
+Alternatively, connect to the `northwind` database using a PostgreSQL client and execute `northwind_setup.sql` directly.
 
 ## Verify the Database
 
