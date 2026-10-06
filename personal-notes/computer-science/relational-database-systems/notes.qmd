@@ -18468,7 +18468,804 @@ $$
 
 This leads to **data streams and continuous query processing**, one of the boundary areas between traditional relational database systems and modern data-processing architectures.
 
+# Streams and Information Retrieval
 
+Relational database systems are primarily designed around persistent collections of structured data. A relation represents a finite database state, and a query is evaluated against that state to produce a result.
+
+Not every data-processing problem has this form.
+
+Some applications receive data continuously:
+
+```text
+Transaction Events
+Sensor Measurements
+Application Logs
+Clickstreams
+Market Events
+Telemetry
+```
+
+Other applications operate primarily over large collections of unstructured or weakly structured documents and ask which documents are most relevant to an information need.
+
+These problems motivate two important extensions beyond conventional relational processing:
+
+$$
+\text{Data Stream Processing}
+$$
+
+and
+
+$$
+\text{Information Retrieval}.
+$$
+
+Neither replaces the relational model. They address workloads whose computational requirements differ from those of traditional stored relational data [@ullman2009database].
+
+## Stored Relations and Data Streams
+
+A stored relation can be treated conceptually as a finite collection of tuples available when a query executes.
+
+A **data stream** instead represents a potentially unbounded sequence of arriving items:
+
+$$
+S=
+\langle
+s_1,s_2,s_3,\ldots
+\rangle.
+$$
+
+The system does not generally know when the stream will end.
+
+Examples include
+
+```text
+payment events,
+website requests,
+sensor readings,
+GPS observations,
+machine telemetry,
+```
+
+where new records continue to arrive while processing is taking place.
+
+This changes a fundamental assumption:
+
+$$
+\text{Stored Relation}
+\rightarrow
+\text{Finite Available State},
+$$
+
+whereas
+
+$$
+\text{Stream}
+\rightarrow
+\text{Potentially Unbounded Input}.
+$$
+
+A stream can be persisted into a relational database, but processing the stream while it arrives is a different computational problem from repeatedly querying a completed stored relation.
+
+## Queries over Streams
+
+Traditional database interaction commonly follows the pattern
+
+$$
+\text{Query}
+\rightarrow
+\text{Stored Data}
+\rightarrow
+\text{Result}.
+$$
+
+The query is submitted, evaluated against the current database state, and returns a result.
+
+Stream processing can reverse this temporal relationship.
+
+A query may remain active while data continuously arrives:
+
+$$
+\text{Standing Query}
++
+\text{Incoming Stream}
+\rightarrow
+\text{Continuously Updated Results}.
+$$
+
+Such a query is often called a **continuous query**.
+
+For example, rather than repeatedly asking
+
+```sql
+SELECT COUNT(*)
+FROM transactions
+WHERE event_time >= ...;
+```
+
+an application may conceptually maintain a continuously updated count as new transaction events arrive.
+
+Thus,
+
+$$
+\text{One-Time Query}
+\neq
+\text{Continuous Query}.
+$$
+
+The difference concerns the lifetime of the query relative to the arriving data.
+
+## Why Unbounded Data Changes the Problem
+
+Suppose a stream produces one million records per hour and continues indefinitely.
+
+An algorithm that requires storing every record seen so far would require memory that grows without bound:
+
+$$
+M(t)\propto N(t),
+$$
+
+where $N(t)$ is the number of observations received by time $t$.
+
+If
+
+$$
+N(t)\rightarrow\infty,
+$$
+
+then
+
+$$
+M(t)\rightarrow\infty.
+$$
+
+This is generally not a sustainable processing strategy.
+
+Stream-processing systems therefore frequently operate using bounded state.
+
+This leads to an important constraint:
+
+$$
+\text{Unbounded Input}
++
+\text{Bounded Resources}
+\rightarrow
+\text{Restricted State}.
+$$
+
+Windows, summaries, and approximate algorithms are natural responses to this constraint.
+
+## Windows
+
+A **window** selects a bounded portion of a stream for computation.
+
+Instead of asking
+
+$$
+\text{What has happened over the entire stream?}
+$$
+
+a system might ask
+
+$$
+\text{What has happened during the last 10 minutes?}
+$$
+
+or
+
+$$
+\text{What happened in the most recent 1,000 events?}
+$$
+
+A time-based sliding window can be represented conceptually as
+
+$$
+W_t
+=
+\{
+s_i
+\mid
+t-\Delta < time(s_i)\leq t
+\},
+$$
+
+where $\Delta$ is the window duration.
+
+As time advances, old events leave the window and new events enter.
+
+For example,
+
+```text
+time ---------------------------------------------------->
+
+events:  e1 e2 e3 e4 e5 e6 e7 e8 e9 ...
+
+                    |---------|
+                    current window
+
+                         |---------|
+                         next window
+```
+
+The computation remains bounded relative to the window rather than the complete historical stream.
+
+## Sliding and Tumbling Windows
+
+A **sliding window** moves continuously or at regular increments and can overlap previous windows.
+
+For example,
+
+```text
+10-minute window updated every minute
+```
+
+produces overlapping windows.
+
+A **tumbling window** divides the stream into consecutive non-overlapping intervals:
+
+```text
+09:00–09:10
+09:10–09:20
+09:20–09:30
+```
+
+Conceptually,
+
+$$
+W_i\cap W_j=\varnothing
+\qquad
+\text{for }i\neq j
+$$
+
+for non-overlapping tumbling windows.
+
+The appropriate window semantics depend on the question being asked.
+
+A fraud-monitoring system may care about activity during a recent moving interval, while periodic reporting may naturally use fixed non-overlapping windows.
+
+## Windowed Aggregation
+
+Suppose transaction stream $S$ contains amounts
+
+$$
+a_1,a_2,\ldots
+$$
+
+with associated timestamps.
+
+A rolling transaction volume can be expressed conceptually as
+
+$$
+V(t)
+=
+\sum_{s_i\in W_t}
+amount(s_i).
+$$
+
+As new events arrive, the system updates the aggregate.
+
+Events leaving the window must no longer contribute.
+
+The computation is therefore dynamic:
+
+$$
+V(t+\delta)
+=
+V(t)
++
+\text{New Contributions}
+-
+\text{Expired Contributions}.
+$$
+
+This illustrates an important difference from ordinary batch aggregation.
+
+The result is not calculated once over a fixed relation; it evolves as the relevant data window changes.
+
+## Event Time and Processing Time
+
+Streaming systems must distinguish between when an event occurred and when the processing system received or processed it.
+
+**Event time** describes the time associated with the event itself.
+
+**Processing time** describes when the system processes that event.
+
+These values need not be equal.
+
+For example,
+
+```text
+event occurred:  10:00:02
+event received:  10:00:07
+event processed: 10:00:08
+```
+
+Network delays, buffering, retries, and disconnected devices can cause events to arrive late or out of order.
+
+Therefore,
+
+$$
+\text{Event Order}
+\neq
+\text{Arrival Order}.
+$$
+
+This complicates windowed computation because the system must decide how long to wait for delayed events and what to do when events arrive after a result has already been produced.
+
+The detailed mechanisms used by modern stream-processing systems are outside the scope of these notes, but the distinction is fundamental to understanding why streaming is more than querying an append-only table.
+
+## Stream State
+
+A continuous query often maintains state between arriving events.
+
+For example, computing
+
+```text
+number of transactions per customer during the last hour
+```
+
+requires maintaining information about recent transactions for each customer.
+
+Conceptually,
+
+$$
+State_{t+1}
+=
+f(State_t,Event_{t+1}).
+$$
+
+The system does not recompute the complete history from the beginning after every event.
+
+Instead, it incrementally updates the state needed by the query.
+
+The design of that state determines memory requirements, recovery requirements, and processing efficiency.
+
+## Exact and Approximate Results
+
+Some stream computations can be maintained exactly with bounded state.
+
+Others cannot.
+
+Suppose the goal is to determine the exact number of distinct values ever observed in an unbounded stream.
+
+In the general case, remembering every distinct value can require state that grows with the stream.
+
+An approximate method can instead maintain a compact summary:
+
+$$
+\widehat{D}
+\approx
+D,
+$$
+
+where $D$ is the true number of distinct values and $\widehat{D}$ is an estimate.
+
+This creates a trade-off:
+
+$$
+\text{Less State}
+\leftrightarrow
+\text{Approximation Error}.
+$$
+
+Streaming algorithms often make this trade-off explicit.
+
+The objective is not approximation for its own sake, but useful computation under constraints imposed by unbounded data and finite resources.
+
+## Stream Summaries
+
+A **stream summary** stores compact information about the observations seen so far rather than retaining the complete stream.
+
+Depending on the problem, summaries can support approximate answers about
+
+```text
+frequencies,
+distinct values,
+quantiles,
+heavy hitters,
+```
+
+or other aggregate properties.
+
+Conceptually,
+
+$$
+S_1,S_2,\ldots,S_n
+\rightarrow
+\text{Compact State}
+\rightarrow
+\text{Approximate Query Answer}.
+$$
+
+The summary sacrifices some information about individual observations in exchange for bounded memory and efficient updates.
+
+This represents a fundamentally different design objective from persistent relational storage, where retaining complete records is often the purpose of the system.
+
+## Streaming and Relational Processing
+
+Stream processing and relational processing are not mutually exclusive.
+
+A stream can be interpreted as a sequence of relational tuples.
+
+Window contents can be treated as temporary finite relations.
+
+Relational operators can then be adapted to continuously changing input.
+
+For example,
+
+$$
+\sigma_P(W_t)
+$$
+
+selects tuples satisfying predicate $P$ within the current window.
+
+Similarly,
+
+$$
+\gamma_{customer,\ COUNT(*)}(W_t)
+$$
+
+can represent a grouped count over the current window.
+
+The relational model therefore remains useful, but execution semantics change because
+
+$$
+W_t
+$$
+
+changes continuously.
+
+Thus,
+
+$$
+\text{Relational Operators}
++
+\text{Streaming Semantics}
+\rightarrow
+\text{Continuous Relational Processing}.
+$$
+
+![Stream processing operates over potentially unbounded sequences of events using continuous queries, windows, and bounded state. As new events arrive and old events leave a window, results are updated incrementally; approximate summaries can be used when exact computation would require unbounded memory.](figures/stream-processing.png){#fig-stream-processing}
+
+## Information Retrieval
+
+A different boundary problem arises when the database consists primarily of documents rather than structured relational tuples.
+
+Suppose a user searches a document collection for
+
+```text
+database transaction recovery
+```
+
+The desired output is usually not merely the set of documents satisfying an exact Boolean predicate.
+
+The system is expected to identify documents related to the query and rank them according to estimated relevance.
+
+This is the domain of **information retrieval**.
+
+## Relational Retrieval and Information Retrieval
+
+A relational query typically asks whether tuples satisfy explicitly defined conditions.
+
+For example,
+
+```sql
+SELECT *
+FROM products
+WHERE unit_price > 50;
+```
+
+For each tuple, the predicate is conceptually
+
+$$
+unit\_price>50.
+$$
+
+The tuple either satisfies the condition or it does not.
+
+Information retrieval often asks a different question:
+
+$$
+\text{How Relevant Is Document }d\text{ to Query }q?
+$$
+
+The system may compute a relevance score
+
+$$
+score(d,q)
+$$
+
+and order documents accordingly:
+
+$$
+d_1,d_2,\ldots,d_n
+$$
+
+such that
+
+$$
+score(d_1,q)
+\geq
+score(d_2,q)
+\geq
+\cdots.
+$$
+
+Therefore,
+
+$$
+\text{Relational Retrieval}
+\neq
+\text{Information Retrieval}.
+$$
+
+The distinction is not simply SQL versus text.
+
+It is largely a distinction between exact structured predicates and relevance-oriented retrieval over document content.
+
+## Inverted Indexes
+
+A fundamental information-retrieval structure is the **inverted index**.
+
+Instead of storing only
+
+$$
+\text{Document}
+\rightarrow
+\text{Terms},
+$$
+
+the system constructs mappings of the form
+
+$$
+\text{Term}
+\rightarrow
+\text{Documents Containing the Term}.
+$$
+
+For example,
+
+```text
+database    → {D1, D3, D8, D11}
+recovery    → {D2, D3, D8}
+transaction → {D1, D3, D5, D8}
+```
+
+A query containing
+
+```text
+transaction recovery
+```
+
+can use these posting lists to identify candidate documents efficiently.
+
+The structural idea resembles an index because it creates an access path from a search value to matching records.
+
+However, an inverted index is designed around term occurrence and document retrieval rather than ordinary relational search keys.
+
+## Ranking
+
+Identifying documents containing query terms is only part of information retrieval.
+
+A search system commonly needs to rank those documents.
+
+A relevance function may consider properties such as term frequency, rarity of terms across the collection, document length, proximity, field importance, or other signals.
+
+Conceptually,
+
+$$
+q
+\rightarrow
+\text{Candidate Documents}
+\rightarrow
+\text{Relevance Scores}
+\rightarrow
+\text{Ranked Results}.
+$$
+
+The exact ranking algorithms are outside the scope of these notes.
+
+The important database-systems distinction is that retrieval output can be ordered by estimated relevance rather than defined solely by relational predicate satisfaction.
+
+## Structured and Unstructured Retrieval Can Coexist
+
+Modern database applications often combine structured filtering with text retrieval.
+
+For example, a product search might require
+
+```text
+category = 'Books'
+price < 50
+```
+
+while also ranking results according to textual relevance for
+
+```text
+database systems
+```
+
+Conceptually,
+
+$$
+\text{Structured Predicates}
++
+\text{Textual Relevance}
+\rightarrow
+\text{Combined Retrieval}.
+$$
+
+Relational databases can provide text-search capabilities, and specialized retrieval systems can store structured metadata.
+
+The conceptual boundary therefore concerns the retrieval model rather than a rigid division between software products.
+
+## Database Systems Beyond Stored Relations
+
+Streams and information retrieval illustrate how database ideas extend beyond conventional finite relational queries.
+
+Streams change the temporal model:
+
+$$
+\text{Finite Stored State}
+\rightarrow
+\text{Continuously Arriving Data}.
+$$
+
+Information retrieval changes the query objective:
+
+$$
+\text{Predicate Satisfaction}
+\rightarrow
+\text{Relevance Ranking}.
+$$
+
+In both cases, familiar database concepts remain visible.
+
+Indexes still provide access paths.
+
+Query processing still transforms requests into executable operations.
+
+Physical representation still affects performance.
+
+Memory and storage remain constrained resources.
+
+Correctness still depends on precisely defining the semantics of the requested result.
+
+The implementation techniques change because the workload changes.
+
+# Closing Perspective
+
+Relational database systems are built from several layers that are easy to encounter separately in practice but are most useful when understood as one system.
+
+At the logical level, the relational model provides a representation based on relations, tuples, attributes, keys, constraints, and operations.
+
+Conceptual modeling determines which entities and relationships should be represented.
+
+Functional dependencies and normalization provide tools for reasoning about whether relational schemas preserve intended semantics without unnecessary redundancy.
+
+Relational algebra provides a formal language for expressing transformations over relations, while SQL provides the principal declarative interface through which applications describe the results they require.
+
+These logical abstractions do not determine how the database physically executes a request.
+
+Relations are represented through records and pages.
+
+Pages move through a buffer pool.
+
+Indexes provide alternative access paths.
+
+Physical operators implement scans, sorts, aggregations, and joins.
+
+The query optimizer chooses among alternative plans using statistics, cardinality estimates, physical properties, and cost models.
+
+The resulting distinction is fundamental:
+
+$$
+\text{What the Query Means}
+\neq
+\text{How the Query Is Executed}.
+$$
+
+Transactions add another dimension.
+
+Concurrent execution requires mechanisms that preserve acceptable interactions among transactions.
+
+Serializability provides a correctness model.
+
+Locking, multiversioning, timestamp-based protocols, and optimistic techniques provide different mechanisms for controlling concurrent execution.
+
+Recovery then addresses the consequences of transaction aborts and system failures.
+
+Write-Ahead Logging coordinates the durable log with dirty data pages, while UNDO and REDO allow the database to reconstruct an appropriate state after failure.
+
+Thus,
+
+$$
+\text{Concurrency Control}
+\neq
+\text{Recovery},
+$$
+
+but the two mechanisms form a coordinated transaction-management system.
+
+Parallel and distributed databases extend execution across multiple processing resources and machines.
+
+Partitioning enables local parallel work.
+
+Shuffle and communication introduce new costs.
+
+Replication introduces coordination among physical copies.
+
+Distributed transactions require agreement across participants.
+
+Information integration introduces a different problem: independently designed sources may disagree in schema, identifiers, representation, and meaning.
+
+Schema mappings, entity resolution, cleaning, and provenance are therefore not peripheral data-processing concerns. They determine what an integrated dataset actually represents.
+
+Finally, streams and information retrieval show that not every database workload consists of evaluating a finite relational query over stored tuples.
+
+Continuous data introduces windows, state, and bounded-memory processing.
+
+Document retrieval introduces relevance and ranking.
+
+These extensions change the computational problem while retaining many of the systems principles developed throughout these notes.
+
+The complete path can therefore be summarized as
+
+$$
+\begin{aligned}
+\text{Real-World Domain}
+&\rightarrow
+\text{Conceptual Model}\\
+&\rightarrow
+\text{Relational Schema}\\
+&\rightarrow
+\text{Relational Operations}\\
+&\rightarrow
+\text{SQL}\\
+&\rightarrow
+\text{Logical Query Plan}\\
+&\rightarrow
+\text{Physical Query Plan}\\
+&\rightarrow
+\text{Storage and Execution}.
+\end{aligned}
+$$
+
+Around this path operate
+
+$$
+\begin{aligned}
+\text{Integrity}
+&\rightarrow
+\text{Valid Database States},\\
+\text{Authorization}
+&\rightarrow
+\text{Controlled Access},\\
+\text{Transactions}
+&\rightarrow
+\text{Correct Concurrent State Changes},\\
+\text{Recovery}
+&\rightarrow
+\text{Correct Behaviour under Failure},\\
+\text{Optimization}
+&\rightarrow
+\text{Efficient Execution}.
+\end{aligned}
+$$
+
+The relational abstraction is powerful precisely because users and applications need not manually coordinate all of these mechanisms for every query.
+
+At the same time, abstraction does not make the underlying system irrelevant.
+
+Understanding schemas, constraints, indexes, query plans, transactions, storage, and statistics makes it possible to reason about why a database behaves as it does rather than treating the DBMS as a black box.
+
+This distinction is the central practical principle of these notes:
+
+$$
+\text{Logical Abstraction}
+\neq
+\text{Physical Irrelevance}.
+$$
+
+A relational database system succeeds by separating these levels while coordinating them.
 
 # References
 
