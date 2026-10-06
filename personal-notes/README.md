@@ -1,19 +1,20 @@
 # Overview
+
 ***Technical Notes***  
 **Author:** Rodrigo Kang
 
-This repository contains a collection of systematic technical notes developed across several areas of mathematics, computer science, physics, machine learning, and quantitative finance.
+This repository contains a collection of technical notes developed primarily in Data Science and related computational topics.
 
-The notes are intended to build a coherent understanding of each subject, with an emphasis on mathematical foundations, derivations, computational methods, and practical implementation. Individual topics may range from foundational concepts to more specialised material as the collection develops.
+The notes serve as a structured record of technical work, with an emphasis on mathematical foundations, statistical and computational methods, derivations, and practical implementation. They complement the applied projects in the broader portfolio while remaining available as reference material for further development.
 
 ## Topics
 
-* [`Computer Science`](computer-science/) — Core concepts in computer science, algorithms, data structures, computational methods, and selected topics relevant to scientific and data-intensive computing.
+* [`Data Science`](data-science/) — Mathematical, statistical, and computational foundations of Data Science, with particular emphasis on Machine Learning methods and their implementation.
 
 * [`Computational Physics`](computational-physics/) — Numerical and computational approaches to problems in physics, with emphasis on mathematical modelling, simulation, and scientific computing.
 
 ## About These Notes
 
-These notes are written primarily as a structured record of study and technical work. They aim to develop subjects from first principles where appropriate, while maintaining a connection between theory and computation.
+These notes are intended primarily as technical reference material. Topics are developed from first principles where useful, with attention to the connection between mathematical formulation, computational methods, and implementation.
 
-The repository is expected to evolve over time. Topics may be extended, reorganised, or refined as the material develops, without requiring a fixed hierarchy or predetermined scope.
+The collection will evolve over time as new topics become relevant. Existing material may also be extended, reorganised, or refined as the repository develops.
