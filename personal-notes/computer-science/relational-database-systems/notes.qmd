@@ -17539,6 +17539,935 @@ $$
 
 The next section examines how heterogeneous and autonomous data sources can be mapped, reconciled, queried, and traced within an integrated view.
 
+# Information Integration
+
+A distributed database can place data across several machines while preserving a coordinated database architecture. **Information integration** addresses a different problem: combining data from sources that may have been designed, populated, and managed independently [@ullman2009database].
+
+Consider two systems containing customer information:
+
+```text
+Source A
+customer_id | first_name | last_name | country
+------------------------------------------------
+1042        | Alice      | Brown     | NZ
+
+Source B
+client_code | full_name   | country_name
+------------------------------------------------
+C-731       | Alice Brown | New Zealand
+```
+
+The problem is not simply that the records are stored in different locations.
+
+The systems use different identifiers, attribute names, structures, and representations.
+
+Before the data can be used together, the integration system must determine how these differences relate semantically.
+
+Thus,
+
+$$
+\text{Information Integration}
+\neq
+\text{Data Movement}.
+$$
+
+The central problem is the reconciliation of independently represented information.
+
+## Heterogeneous Data Sources
+
+Data sources can differ at several levels.
+
+**Syntactic heterogeneity** concerns representation.
+
+For example,
+
+```text
+2026-10-06
+```
+
+and
+
+```text
+06/10/2026
+```
+
+may represent the same date using different formats.
+
+**Structural heterogeneity** concerns how information is organized.
+
+One source may represent an address as
+
+```text
+address
+```
+
+while another uses
+
+```text
+street
+city
+region
+postal_code
+country
+```
+
+**Semantic heterogeneity** concerns meaning.
+
+Two attributes with the same name may represent different concepts, while two differently named attributes may represent the same concept.
+
+For example,
+
+```text
+customer_id
+```
+
+in one system and
+
+```text
+client_code
+```
+
+in another may both identify customers, but their values may come from unrelated identifier spaces.
+
+Conversely, an attribute called `revenue` may represent gross revenue in one system and net revenue in another.
+
+Therefore,
+
+$$
+\text{Same Name}
+\not\Rightarrow
+\text{Same Meaning},
+$$
+
+and
+
+$$
+\text{Different Name}
+\not\Rightarrow
+\text{Different Meaning}.
+$$
+
+Information integration is therefore fundamentally concerned with semantics, not merely column alignment.
+
+## Autonomous Sources
+
+Integrated sources are often **autonomous**.
+
+An autonomous source may control its own schema, update schedule, identifiers, constraints, access methods, and operational policies.
+
+The integration layer may therefore consume data without controlling how the source itself evolves.
+
+This creates an important distinction from ordinary database design.
+
+When designing one relational database, the designer can choose a coherent schema and enforce its constraints.
+
+When integrating independent sources, many structural decisions have already been made elsewhere.
+
+Thus,
+
+$$
+\text{Database Design}
+\rightarrow
+\text{Choose a Representation},
+$$
+
+whereas
+
+$$
+\text{Information Integration}
+\rightarrow
+\text{Reconcile Existing Representations}.
+$$
+
+## Virtual and Materialized Integration
+
+Integrated information can be provided through different architectural approaches.
+
+In **virtual integration**, data remains primarily in the source systems and queries are translated into operations over those sources.
+
+Conceptually,
+
+$$
+\text{User Query}
+\rightarrow
+\text{Integration Layer}
+\rightarrow
+\text{Source Queries}
+\rightarrow
+\text{Combined Result}.
+$$
+
+In **materialized integration**, data from the sources is copied and transformed into an integrated repository.
+
+Conceptually,
+
+$$
+\text{Sources}
+\rightarrow
+\text{Extract and Transform}
+\rightarrow
+\text{Integrated Stored Data}.
+$$
+
+The two approaches introduce different trade-offs.
+
+Virtual integration can provide access to relatively current source data without maintaining a complete duplicate repository, but query execution depends on source availability, capabilities, and communication.
+
+Materialization can support controlled schemas and efficient analytical processing, but the stored integrated data can become stale relative to its sources.
+
+Therefore,
+
+$$
+\text{Virtual Integration}
+\neq
+\text{Materialized Integration}.
+$$
+
+Many practical architectures combine elements of both.
+
+## Mediators and Wrappers
+
+A classical architecture for virtual integration separates the global representation from source-specific access.
+
+A **mediator** presents an integrated conceptual view and coordinates queries across sources.
+
+A **wrapper** provides an interface between the integration system and a particular source.
+
+Conceptually,
+
+```text
+                User Query
+                    |
+                    v
+               Mediator
+              /    |    \
+             /     |     \
+            v      v      v
+        Wrapper  Wrapper  Wrapper
+           |        |        |
+           v        v        v
+        Source A Source B Source C
+```
+
+The mediator reasons about the integrated representation.
+
+Wrappers translate between that representation and source-specific interfaces or data formats.
+
+This separation is useful because heterogeneity is localized rather than exposed directly to every user of the integrated system.
+
+## Global and Source Schemas
+
+Let
+
+$$
+G
+$$
+
+represent an integrated or global schema, and let
+
+$$
+S_1,S_2,\ldots,S_n
+$$
+
+represent source schemas.
+
+Integration requires mappings describing relationships between
+
+$$
+G
+$$
+
+and
+
+$$
+S_i.
+$$
+
+For example, a global relation might be
+
+```text
+Customer(customer_key, name, country)
+```
+
+while two sources expose
+
+```text
+SourceA(customer_id, first_name, last_name, country_code)
+```
+
+and
+
+```text
+SourceB(client_code, full_name, country_name)
+```
+
+A mapping must express how source attributes contribute to the global concepts.
+
+The mapping problem is therefore more than renaming columns.
+
+It can require transformations, combinations of attributes, value conversions, joins, filters, or other semantic rules.
+
+## Schema Matching and Schema Mapping
+
+Two related tasks should be distinguished.
+
+**Schema matching** identifies possible semantic correspondences between schema elements.
+
+For example,
+
+$$
+SourceA.customer\_id
+\leftrightarrow
+SourceB.client\_code
+$$
+
+may be proposed as a correspondence between customer identifiers.
+
+**Schema mapping** specifies how data represented under one schema is transformed or related to data represented under another.
+
+Thus,
+
+$$
+\text{Schema Matching}
+\neq
+\text{Schema Mapping}.
+$$
+
+Matching asks approximately
+
+$$
+\text{Which Elements Correspond?}
+$$
+
+while mapping asks
+
+$$
+\text{How Is Data Transformed Between Representations?}
+$$
+
+A match can contribute to a mapping, but it does not by itself define the transformation.
+
+## Global-as-View
+
+One classical mapping approach is **Global-as-View (GAV)**.
+
+Under GAV, relations in the global schema are defined as views over source relations.
+
+Conceptually,
+
+$$
+G_i
+=
+Q_i(S_1,S_2,\ldots,S_n),
+$$
+
+where $Q_i$ is a query over the sources.
+
+For example,
+
+```text
+GlobalCustomer =
+    transform(SourceA)
+    UNION
+    transform(SourceB)
+```
+
+The global representation is therefore explicitly described in terms of available source data.
+
+This can make query rewriting relatively direct because the definitions of global relations already identify the source expressions that implement them.
+
+However, changes in available sources may require modifications to global definitions.
+
+## Local-as-View
+
+A second classical approach is **Local-as-View (LAV)**.
+
+Under LAV, source relations are described as views over the global schema.
+
+Conceptually,
+
+$$
+S_i
+=
+Q_i(G).
+$$
+
+Rather than defining the global schema from the sources, each source is described according to what portion of the global concepts it provides.
+
+This can make the integration architecture more flexible when sources are added or removed.
+
+However, answering a global query can become more difficult because the system must determine how available source views can be combined to answer the requested global query.
+
+Thus, at a high level,
+
+$$
+\begin{aligned}
+\text{GAV}
+&:
+\text{Global Relations Defined from Sources},\\
+\text{LAV}
+&:
+\text{Sources Defined as Views of Global Relations}.
+\end{aligned}
+$$
+
+The distinction is primarily about the direction in which mappings are expressed.
+
+## Query Rewriting
+
+Suppose a user submits a query against global schema $G$:
+
+$$
+Q(G).
+$$
+
+The integration system cannot necessarily execute that query directly because the actual data resides in
+
+$$
+S_1,S_2,\ldots,S_n.
+$$
+
+It must derive a source-level expression
+
+$$
+Q'(S_1,S_2,\ldots,S_n)
+$$
+
+that provides the appropriate answer.
+
+Conceptually,
+
+$$
+Q(G)
+\rightarrow
+\text{Mapping Rules}
+\rightarrow
+Q'(S_1,\ldots,S_n).
+$$
+
+This process is **query rewriting**.
+
+It connects information integration to ideas encountered earlier in relational algebra, views, and query optimization.
+
+However, the problem is more difficult because sources may expose only partial information and may support different operations.
+
+## Source Capabilities
+
+Not every data source can execute arbitrary relational operations.
+
+A relational DBMS may support complex joins, aggregation, filtering, and subqueries.
+
+A remote service may permit only restricted requests such as
+
+```text
+lookup customer by identifier
+```
+
+or
+
+```text
+return orders within a date range
+```
+
+An integration system must therefore distinguish between
+
+$$
+\text{What the Global Query Expresses}
+$$
+
+and
+
+$$
+\text{What Each Source Can Execute}.
+$$
+
+Thus,
+
+$$
+\text{Logical Query Expressiveness}
+\neq
+\text{Source Execution Capability}.
+$$
+
+Some operations may need to be performed by the integration layer after retrieving source data.
+
+## Open-World and Closed-World Assumptions
+
+Integration systems must reason carefully about missing information.
+
+Under a **closed-world assumption**, information not represented in the database is treated as false or absent.
+
+Conceptually,
+
+$$
+\text{Not Known True}
+\rightarrow
+\text{Assumed False}.
+$$
+
+Under an **open-world assumption**, the absence of information does not imply that the corresponding fact is false.
+
+Conceptually,
+
+$$
+\text{Not Known True}
+\not\Rightarrow
+\text{False}.
+$$
+
+This distinction matters when sources are incomplete.
+
+Suppose one source contains no order for customer $C$.
+
+That may mean
+
+```text
+Customer C has no order
+```
+
+or merely
+
+```text
+This source contains no known order for customer C.
+```
+
+Therefore,
+
+$$
+\text{Absence of Evidence}
+\neq
+\text{Evidence of Absence}.
+$$
+
+The semantics of missing information depend on what the sources and mappings claim to represent.
+
+## Correctness and Completeness of Answers
+
+A query answer can be **correct** without necessarily being **complete**.
+
+Suppose an integration system knows that all returned records satisfy a query, but some relevant source information is unavailable or not covered by the mappings.
+
+The result may contain no incorrect tuples while still omitting valid tuples.
+
+Thus,
+
+$$
+\text{Correct Answer}
+\neq
+\text{Complete Answer}.
+$$
+
+This distinction is particularly important in information integration because the system may not control or completely describe its sources.
+
+The meaning of an integrated query result therefore depends not only on relational operations but also on source coverage and mapping assumptions.
+
+## Entity Resolution
+
+Even after schemas have been reconciled, records from different sources may refer to the same real-world entity without sharing a common identifier.
+
+Consider:
+
+```text
+Source A
+customer_id: 1042
+name:        Alice Brown
+country:     NZ
+
+Source B
+client_code: C-731
+name:        Alice Brown
+country:     New Zealand
+```
+
+The identifiers differ:
+
+$$
+1042\neq C\text{-}731.
+$$
+
+Yet the records may represent the same customer.
+
+Determining whether records refer to the same underlying entity is the problem of **entity resolution**.
+
+This problem is distinct from schema integration.
+
+Schema integration may establish that
+
+```text
+customer_id
+```
+
+and
+
+```text
+client_code
+```
+
+are both customer identifiers.
+
+It does not establish that particular values from the two identifier systems refer to the same customer.
+
+Therefore,
+
+$$
+\text{Schema Integration}
+\neq
+\text{Entity Resolution}.
+$$
+
+## Keys and Real-World Identity
+
+A primary key identifies a tuple within the key's database context.
+
+It does not necessarily provide a globally meaningful identity.
+
+If two independently designed databases contain
+
+```text
+customer_id = 42
+```
+
+the records need not represent the same person.
+
+Conversely, the same person can have
+
+```text
+customer_id = 42
+```
+
+in one system and
+
+```text
+client_id = 9187
+```
+
+in another.
+
+Therefore,
+
+$$
+\text{Primary Key}
+\neq
+\text{Global Entity Identity}.
+$$
+
+This distinction becomes essential whenever data is combined across operational boundaries.
+
+## Exact and Approximate Matching
+
+Some entity-resolution problems can be solved through exact identifiers.
+
+For example, two records containing the same trusted external identifier may be linked directly.
+
+Other cases require approximate evidence.
+
+Names may contain spelling differences.
+
+Addresses may use different abbreviations.
+
+Phone numbers may use different formatting.
+
+Organizations may appear under legal names and trading names.
+
+The integration system may therefore evaluate multiple attributes to estimate whether two records represent the same entity.
+
+Conceptually,
+
+$$
+match(r_i,r_j)
+=
+f(
+\text{name similarity},
+\text{address similarity},
+\text{identifier evidence},
+\ldots
+).
+$$
+
+The precise matching method belongs to the particular application and can range from deterministic rules to statistical or machine-learning models.
+
+The conceptual point is that identity reconciliation is an inference problem when no common authoritative identifier exists.
+
+## False Matches and Missed Matches
+
+Entity resolution introduces two broad classes of error.
+
+A **false match** occurs when records representing different entities are incorrectly merged.
+
+A **missed match** occurs when records representing the same entity remain separate.
+
+These errors have different consequences.
+
+A false match can combine transactions belonging to different customers.
+
+A missed match can fragment one customer's history across multiple records.
+
+Thus, entity resolution should not be treated as a purely technical deduplication operation.
+
+Its errors alter the meaning of downstream analysis.
+
+For example,
+
+$$
+\text{Customer Lifetime Value}
+$$
+
+can be substantially distorted if purchases from one customer are split across several unresolved identities or if purchases from different customers are incorrectly merged.
+
+## Data Cleaning
+
+Integrated sources can also disagree in their values.
+
+Examples include
+
+```text
+NZ
+New Zealand
+New Zealand Ltd.
+```
+
+for conceptually different or potentially related representations.
+
+Dates may use different formats.
+
+Monetary values may use different currencies.
+
+Categories may use different coding systems.
+
+Addresses may contain incomplete components.
+
+Data cleaning transforms such representations into forms suitable for integrated use.
+
+Conceptually,
+
+$$
+\text{Source Representation}
+\rightarrow
+\text{Cleaning and Standardization}
+\rightarrow
+\text{Canonical Representation}.
+$$
+
+However, cleaning should preserve the distinction between correcting representation and inventing information.
+
+A missing value should not automatically be replaced merely because another value seems plausible.
+
+## Conflicting Values
+
+Two sources may provide different values for the same resolved entity.
+
+For example,
+
+```text
+Source A: country = NZ
+Source B: country = AU
+```
+
+Once the records are believed to represent the same customer, the integration system must decide how the conflict should be interpreted.
+
+Possible policies include trusting one authoritative source, preferring the most recent value, applying domain-specific rules, or retaining both values with provenance.
+
+There is no universal relational rule that determines which value is correct.
+
+Therefore,
+
+$$
+\text{Integration}
+\neq
+\text{Automatic Consistency}.
+$$
+
+Semantic conflicts require explicit resolution policies.
+
+## Provenance
+
+When information is derived from multiple sources and transformations, an important question is
+
+$$
+\text{Where Did This Result Come From?}
+$$
+
+**Data provenance** records information about the origin and derivation of data.
+
+Suppose an integrated customer record was constructed from
+
+```text
+CRM.customer 1042
+Billing.client C-731
+Country normalization rule
+Entity-resolution match
+```
+
+Provenance allows the system or analyst to trace the integrated result back to these contributing sources and transformations.
+
+Conceptually,
+
+$$
+\text{Integrated Result}
+\rightarrow
+\text{Sources + Transformations}.
+$$
+
+Provenance is important for auditing, debugging, reproducibility, quality assessment, and explaining unexpected analytical results.
+
+## Data Lineage
+
+The term **data lineage** is often used to describe how data moves and transforms through a processing pipeline.
+
+For example,
+
+```text
+Operational Sources
+        ↓
+Extraction
+        ↓
+Cleaning
+        ↓
+Entity Resolution
+        ↓
+Integrated Customer Table
+        ↓
+Analytical Dataset
+        ↓
+Model or Report
+```
+
+Provenance and lineage are closely related concepts.
+
+At a practical level, both answer questions about the origin and transformation history of data.
+
+The important principle is that a derived value should not be viewed only as a final number.
+
+Its interpretation can depend on the chain of sources and transformations that produced it.
+
+![Information integration reconciles heterogeneous and autonomous data sources through schema mappings, query rewriting, entity resolution, cleaning, and provenance. Schema integration determines how representations correspond, while entity resolution determines when records refer to the same underlying real-world entity.](figures/information-integration-pipeline.png){#fig-information-integration-pipeline}
+
+## Information Integration and ETL
+
+A common practical form of materialized integration is **Extract, Transform, Load (ETL)**.
+
+Conceptually,
+
+$$
+\text{Extract}
+\rightarrow
+\text{Transform}
+\rightarrow
+\text{Load}.
+$$
+
+Extraction obtains data from source systems.
+
+Transformation reconciles formats, schemas, identifiers, values, and business rules.
+
+Loading stores the resulting data in a target system.
+
+The conceptual issues developed in this section remain relevant:
+
+$$
+\begin{aligned}
+\text{Schema Heterogeneity}
+&\rightarrow
+\text{Mapping},\\
+\text{Identifier Heterogeneity}
+&\rightarrow
+\text{Entity Resolution},\\
+\text{Value Heterogeneity}
+&\rightarrow
+\text{Cleaning and Conflict Resolution},\\
+\text{Derived Data}
+&\rightarrow
+\text{Provenance and Lineage}.
+\end{aligned}
+$$
+
+ETL is therefore not merely a file-transfer process.
+
+It is one implementation context for information integration.
+
+## Integration and Data Science
+
+Data Science frequently begins after an integrated dataset has already been produced.
+
+This can obscure the fact that analytical rows may represent the output of substantial semantic decisions.
+
+A customer-level dataset may depend on
+
+- which source records were considered equivalent,
+- which identifiers were trusted,
+- how conflicting values were resolved,
+- which transactions were excluded,
+- how currencies and dates were normalized,
+- and which source was treated as authoritative.
+
+These decisions affect the statistical population represented by the dataset.
+
+Consequently,
+
+$$
+\text{Data Preparation}
+\not\equiv
+\text{Neutral Preprocessing}.
+$$
+
+Integration decisions can change the entities, measurements, and relationships on which subsequent analysis is based.
+
+For this reason, understanding data integration is part of understanding the data-generating process itself.
+
+## Distributed Databases and Information Integration
+
+The distinction between the previous section and the present one can now be stated precisely.
+
+A distributed database primarily asks:
+
+$$
+\text{How Can One Logical Database Operate Across Multiple Locations?}
+$$
+
+Information integration primarily asks:
+
+$$
+\text{How Can Independently Designed Sources Be Interpreted Together?}
+$$
+
+Distribution emphasizes physical placement, communication, coordination, and failure.
+
+Integration emphasizes heterogeneity, mappings, identity, meaning, and provenance.
+
+The problems can coexist, but they are not the same:
+
+$$
+\text{Distributed Database}
+\neq
+\text{Information Integration}.
+$$
+
+## From Stored Data to Continuous Data
+
+The database systems considered so far have largely assumed that queries operate over stored relations or stored integrated datasets.
+
+Some applications instead process data that arrives continuously.
+
+Examples include sensor measurements, transaction events, application logs, clickstreams, and telemetry.
+
+In such settings, the complete input may not exist as a finite stored relation when the query begins.
+
+This changes the computational problem.
+
+Rather than asking only
+
+$$
+\text{What is the result over the stored relation?}
+$$
+
+the system may ask
+
+$$
+\text{How should the result evolve as new data continuously arrives?}
+$$
+
+This leads to **data streams and continuous query processing**, one of the boundary areas between traditional relational database systems and modern data-processing architectures.
+
 
 
 # References
