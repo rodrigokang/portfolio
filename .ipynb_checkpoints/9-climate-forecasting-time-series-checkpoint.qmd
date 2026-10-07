@@ -1,5 +1,0 @@
-# Climate Forecasting with Time Series
-
-_Work in progress._
-
-## Introduction

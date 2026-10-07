@@ -1,5 +1,0 @@
-# Scientific Literature Mining with NLP and LLMs
-
-_Work in progress._
-
-## Introduction

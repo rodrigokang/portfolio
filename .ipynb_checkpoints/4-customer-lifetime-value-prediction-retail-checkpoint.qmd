@@ -1,5 +1,0 @@
-# Customer Lifetime Value Prediction
-
-_Work in progress._
-
-## Introduction

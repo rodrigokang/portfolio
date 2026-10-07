@@ -1,5 +1,0 @@
-# Customer Sentiment and Topic Analysis
-
-_Work in progress._
-
-## Introduction

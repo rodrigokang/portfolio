@@ -1,5 +1,0 @@
-# Geochemical Fingerprint Deconvolution
-
-_Work in progress._
-
-## Introduction
