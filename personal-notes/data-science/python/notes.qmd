@@ -6970,6 +6970,998 @@ This principle is more general than the comparison between arrays and linked lis
 
 The next step is to separate this implementation question from the **abstract behaviour** expected by a data structure. Stacks, queues, and deques provide a clear example: each specifies how elements may enter and leave a collection, while several different internal representations can be used to implement that behaviour.
 
+# Stacks, Queues, and Deques
+
+A data structure can be described at different levels of abstraction.
+
+At the implementation level, we may ask whether elements are stored in a dynamic array, a linked structure, or some other representation.
+
+At the interface level, however, the important question is often different:
+
+> Which operations are permitted, and what behaviour must those operations provide?
+
+An **abstract data type** (ADT) defines a collection through its operations and their semantics without prescribing a particular internal representation.
+
+This distinction can be expressed as:
+
+$$
+\boxed{
+\text{ADT}
+=
+\text{behaviour and interface}
+\neq
+\text{implementation}.
+}
+$$
+
+Stacks, queues, and deques illustrate this principle particularly clearly. All three maintain collections of elements, but they impose different rules on where elements may be inserted, accessed, and removed.
+
+## Stacks
+
+A **stack** stores elements according to the **last-in, first-out** principle:
+
+$$
+\text{LIFO}
+=
+\text{Last In, First Out}.
+$$
+
+The most recently inserted element is the first one that can be removed.
+
+Conceptually:
+
+```text
+        top
+         ↓
+       ┌───┐
+       │ D │  <- most recently inserted
+       ├───┤
+       │ C │
+       ├───┤
+       │ B │
+       ├───┤
+       │ A │  <- first inserted
+       └───┘
+```
+
+If the insertion order is:
+
+$$
+A,B,C,D,
+$$
+
+the removal order is:
+
+$$
+D,C,B,A.
+$$
+
+The structure therefore exposes only one distinguished end: the **top**.
+
+### The Stack ADT
+
+The fundamental stack operations are:
+
+```text
+push(e)
+pop()
+top()
+```
+
+with supporting operations:
+
+```text
+is_empty()
+len()
+```
+
+Their semantics are:
+
+| Operation | Behaviour |
+|:---:|:---:|
+| `push(e)` | Add `e` to the top |
+| `pop()` | Remove and return the top element |
+| `top()` | Return the top element without removing it |
+| `is_empty()` | Determine whether the stack contains no elements |
+| `len()` | Return the number of elements |
+
+Calling `pop()` or `top()` on an empty stack is an invalid operation and should be handled explicitly by the implementation.
+
+Goodrich defines the stack ADT in precisely these LIFO terms, separating its permitted operations from the representation used to implement them. 
+
+![A stack follows the last-in, first-out principle: elements are pushed onto and popped from the same end, called the top.](figures/stack-lifo.png){#fig-stack-lifo}
+
+### Array-Based Stack
+
+A Python list provides a natural representation for a stack if the end of the list is treated as the top.
+
+The correspondence is:
+
+$$
+\begin{aligned}
+\texttt{push(e)}
+&\rightarrow
+\texttt{append(e)},
+\\
+\texttt{pop()}
+&\rightarrow
+\texttt{pop()},
+\\
+\texttt{top()}
+&\rightarrow
+\texttt{data[-1]}.
+\end{aligned}
+$$
+
+For example:
+
+```python
+stack = []
+
+stack.append("A")
+stack.append("B")
+stack.append("C")
+
+value = stack.pop()
+```
+
+After the three insertions:
+
+```text
+[A, B, C]
+       ↑
+      top
+```
+
+and:
+
+```python
+stack.pop()
+```
+
+returns:
+
+```text
+C
+```
+
+without requiring any remaining element to be shifted.
+
+Because the right end of a Python list corresponds to the end of its dynamic array, both insertion and removal there have amortized constant cost:
+
+$$
+\texttt{push}=O(1)
+\quad\text{amortized},
+$$
+
+$$
+\texttt{pop}=O(1)
+\quad\text{amortized}.
+$$
+
+Accessing the top element is:
+
+$$
+O(1).
+$$
+
+A formal stack class can therefore be implemented as an **adapter** around a list: the list provides the storage mechanism while the stack interface exposes only the operations appropriate to the ADT.
+
+This restriction is meaningful. A Python list also permits:
+
+```python
+data.insert(3, value)
+data.pop(2)
+data[5] = value
+```
+
+but those operations do not belong to the stack abstraction.
+
+Thus:
+
+$$
+\boxed{
+\text{using a list as storage}
+\neq
+\text{exposing the complete list interface}.
+}
+$$
+
+Goodrich uses this array-based implementation to illustrate exactly this separation: Python's list already provides the necessary end operations, but it also exposes behaviours that a stack should not permit. 
+
+### Linked Stack
+
+The same ADT can instead be implemented with a singly linked list.
+
+If the head represents the top:
+
+$$
+\texttt{top}
+\longrightarrow
+A
+\longrightarrow
+B
+\longrightarrow
+C,
+$$
+
+then `push` is insertion at the head and `pop` is deletion at the head.
+
+From the previous section:
+
+$$
+T_{\text{insert-head}}(n)=O(1)
+$$
+
+and:
+
+$$
+T_{\text{delete-head}}(n)=O(1).
+$$
+
+Therefore:
+
+$$
+\begin{aligned}
+\texttt{push}
+&=O(1),
+\\
+\texttt{pop}
+&=O(1),
+\\
+\texttt{top}
+&=O(1).
+\end{aligned}
+$$
+
+Unlike the dynamic-array implementation, these update bounds are worst-case rather than amortized.
+
+The observable stack behaviour is unchanged.
+
+This demonstrates why ADT and implementation must be kept conceptually separate:
+
+$$
+\boxed{
+\text{same abstraction}
+\rightarrow
+\text{different representations}.
+}
+$$
+
+### Stacks and Reversal
+
+The LIFO rule naturally reverses order.
+
+Suppose elements are pushed in the sequence:
+
+$$
+x_0,x_1,x_2,\ldots,x_{n-1}.
+$$
+
+The first element removed is:
+
+$$
+x_{n-1},
+$$
+
+followed by:
+
+$$
+x_{n-2},
+$$
+
+and eventually:
+
+$$
+x_0.
+$$
+
+Thus:
+
+$$
+\boxed{
+\text{push in forward order}
++
+\text{pop all elements}
+=
+\text{reverse order}.
+}
+$$
+
+This simple property makes stacks useful whenever a computation must later revisit information in the opposite order from which it was encountered.
+
+The recursion call stack studied earlier is an important example. Function calls accumulate in one order and complete in the reverse order.
+
+### Matching Delimiters
+
+Stacks also arise naturally when processing **nested structures**.
+
+Consider:
+
+```text
+{[(a + b) * c] - d}
+```
+
+Each opening delimiter must eventually be matched by a corresponding closing delimiter, and nested delimiters must close in reverse order.
+
+When an opening delimiter is encountered:
+
+```text
+(
+[
+{
+```
+
+it is pushed onto a stack.
+
+When a closing delimiter is encountered:
+
+```text
+)
+]
+}
+```
+
+the top opening delimiter is popped and checked.
+
+For:
+
+```text
+{ [ ( ) ] }
+```
+
+the opening delimiters arrive as:
+
+$$
+\{,\ [,\ (
+$$
+
+and must close as:
+
+$$
+),\ ],\ \}.
+$$
+
+That is exactly LIFO behaviour.
+
+The algorithm can be expressed conceptually as:
+
+```python
+for token in expression:
+    if token is opening:
+        stack.push(token)
+
+    elif token is closing:
+        if stack.is_empty():
+            return False
+
+        if not matches(stack.pop(), token):
+            return False
+
+return stack.is_empty()
+```
+
+Each token is processed at most once and each stack operation is constant time, so for $n$ tokens:
+
+$$
+\boxed{
+T(n)=O(n).
+}
+$$
+
+The same structural principle can be used for nested markup such as paired HTML tags. Goodrich uses both delimiter matching and HTML tag matching as applications of the stack ADT. 
+
+The important point is not the particular syntax of parentheses or tags. A stack is appropriate because **nested structures close in the reverse order in which they open**.
+
+## Queues
+
+A **queue** follows the **first-in, first-out** principle:
+
+$$
+\text{FIFO}
+=
+\text{First In, First Out}.
+$$
+
+Elements enter at the **back** and leave from the **front**.
+
+If the insertion order is:
+
+$$
+A,B,C,D,
+$$
+
+the removal order is:
+
+$$
+A,B,C,D.
+$$
+
+Conceptually:
+
+```text
+front                         back
+  ↓                             ↓
+[A] -> [B] -> [C] -> [D]
+```
+
+The element that has waited longest is processed first.
+
+### The Queue ADT
+
+The fundamental operations are:
+
+```text
+enqueue(e)
+dequeue()
+first()
+```
+
+together with:
+
+```text
+is_empty()
+len()
+```
+
+Their semantics are:
+
+| Operation | Behaviour |
+|:---:|:---:|
+| `enqueue(e)` | Add `e` to the back |
+| `dequeue()` | Remove and return the front element |
+| `first()` | Return the front element without removing it |
+| `is_empty()` | Determine whether the queue is empty |
+| `len()` | Return the number of elements |
+
+Goodrich defines the queue ADT through this FIFO discipline: insertion occurs at the back while access and deletion occur at the front. :chatgpt-content-reference{index="3"}
+
+![A queue follows the first-in, first-out principle: elements enter at the back and leave from the front in their arrival order.](figures/queue-fifo.png){#fig-queue-fifo}
+
+Queues appear whenever arrival order matters: task scheduling, request processing, buffering, breadth-first traversal, simulations, and producer-consumer systems all contain queue-like behaviour.
+
+## Why `list.pop(0)` Is a Poor Queue
+
+A direct implementation might use:
+
+```python
+queue = []
+
+queue.append(value)
+queue.pop(0)
+```
+
+The semantics appear correct:
+
+- `append` inserts at the back;
+- `pop(0)` removes from the front.
+
+The representation, however, makes dequeue inefficient.
+
+Suppose:
+
+```text
+[A, B, C, D]
+```
+
+is stored in a contiguous array and `A` is removed.
+
+The remaining references must shift:
+
+```text
+before:
+[A, B, C, D]
+
+after removing A:
+[_, B, C, D]
+
+after shifting:
+[B, C, D, _]
+```
+
+Approximately $n-1$ references may need to move.
+
+Therefore:
+
+$$
+\boxed{
+\texttt{list.pop(0)}=\Theta(n).
+}
+$$
+
+Goodrich identifies precisely this problem with the naïve array-based queue: although `append` is efficient, removing index zero forces all subsequent elements to shift. :chatgpt-content-reference{index="4"}
+
+This is an important example of why selecting a data structure based only on convenient syntax can be misleading.
+
+The question should instead be:
+
+$$
+\boxed{
+\text{does the representation support the required operations efficiently?}
+}
+$$
+
+## Circular Arrays
+
+An efficient array-based queue avoids shifting elements.
+
+Instead of requiring the front element to remain at index zero, the queue maintains the index of its current front.
+
+Suppose an underlying array has capacity:
+
+$$
+N.
+$$
+
+If the front is at index:
+
+$$
+f,
+$$
+
+and the queue contains:
+
+$$
+s
+$$
+
+elements, the next free position at the back can be calculated as:
+
+$$
+\boxed{
+(f+s)\bmod N.
+}
+$$ {#eq-circular-queue-back}
+
+The modulo operation allows the logical queue to wrap around the end of the physical array.
+
+For example, with capacity:
+
+$$
+N=8,
+$$
+
+a queue might occupy:
+
+```text
+index:    0   1   2   3   4   5   6   7
+        +---+---+---+---+---+---+---+---+
+data:   | G | H |   |   |   | D | E | F |
+        +---+---+---+---+---+---+---+---+
+                              ↑
+                            front
+```
+
+The logical order is:
+
+$$
+D,E,F,G,H,
+$$
+
+even though the physical representation crosses the array boundary.
+
+![A circular array decouples the logical order of a queue from physical array indices. Modular arithmetic allows the back of the queue to wrap from the final array position to index zero.](figures/circular-array-queue.png){#fig-circular-array-queue}
+
+If the front element is removed, the new front index is:
+
+$$
+f_{\text{new}}
+=
+(f+1)\bmod N.
+$$ {#eq-circular-queue-front}
+
+No elements need to move.
+
+Similarly, the next enqueue position is determined by modular arithmetic rather than by shifting the existing queue.
+
+Goodrich develops the circular-array representation specifically to prevent the front from forcing repeated shifts or allowing unused space to accumulate indefinitely before the logical queue. 
+
+### Queue Complexity
+
+With a circular dynamic array:
+
+$$
+\begin{aligned}
+\texttt{first}
+&=O(1),
+\\
+\texttt{is\_empty}
+&=O(1),
+\\
+\texttt{len}
+&=O(1).
+\end{aligned}
+$$
+
+Insertion and deletion are also constant time except when resizing is required.
+
+Therefore:
+
+$$
+\boxed{
+\texttt{enqueue}=O(1)
+\text{ amortized},
+}
+$$
+
+and:
+
+$$
+\boxed{
+\texttt{dequeue}=O(1)
+\text{ amortized}.
+}
+$$
+
+The storage requirement for $n$ elements is:
+
+$$
+O(n).
+$$
+
+These are the bounds established by Goodrich for the array-based queue implementation. 
+
+The analysis combines two ideas developed earlier:
+
+$$
+\text{circular indexing}
++
+\text{dynamic-array resizing}.
+$$
+
+Modular arithmetic prevents shifting, while geometric resizing provides amortized constant-time growth.
+
+## Linked Queues
+
+A queue can also be implemented using a singly linked list.
+
+Maintain:
+
+```text
+head -> front
+tail -> back
+```
+
+For:
+
+$$
+A,B,C,
+$$
+
+the structure is:
+
+```text
+front                         back
+  ↓                             ↓
+[A] -> [B] -> [C] -> None
+ ↑                 ↑
+head              tail
+```
+
+To enqueue a new element $D$:
+
+$$
+\texttt{tail.next}
+=
+D,
+$$
+
+then:
+
+$$
+\texttt{tail}
+=
+D.
+$$
+
+To dequeue:
+
+$$
+\texttt{head}
+=
+\texttt{head.next}.
+$$
+
+Both require only a constant number of reference updates.
+
+Thus:
+
+$$
+\begin{aligned}
+\texttt{enqueue}
+&=O(1),
+\\
+\texttt{dequeue}
+&=O(1),
+\\
+\texttt{first}
+&=O(1).
+\end{aligned}
+$$
+
+These are worst-case bounds.
+
+Again, the FIFO semantics are independent of the representation:
+
+$$
+\boxed{
+\text{Queue ADT}
+\rightarrow
+\begin{cases}
+\text{circular dynamic array},\\
+\text{singly linked list}.
+\end{cases}
+}
+$$
+
+## Double-Ended Queues
+
+A **double-ended queue**, or **deque**, generalises both stacks and queues by allowing insertion and deletion at either end.
+
+Its fundamental update operations are:
+
+```text
+add_first(e)
+add_last(e)
+delete_first()
+delete_last()
+```
+
+and its accessors include:
+
+```text
+first()
+last()
+is_empty()
+len()
+```
+
+Goodrich defines the deque ADT symmetrically in exactly this way. 
+
+Conceptually:
+
+```text
+       front                    back
+         ↓                        ↓
+     [ A ] <-> [ B ] <-> [ C ] <-> [ D ]
+       ↑                           ↑
+ insert/delete                 insert/delete
+```
+
+![A deque supports insertion and deletion at both ends, generalising the restricted access patterns of stacks and queues.](figures/deque-operations.png){#fig-deque-operations}
+
+A deque can reproduce stack behaviour by using only one end:
+
+$$
+\text{push}
+\rightarrow
+\texttt{add\_last},
+$$
+
+$$
+\text{pop}
+\rightarrow
+\texttt{delete\_last}.
+$$
+
+It can reproduce queue behaviour by inserting at one end and removing from the other:
+
+$$
+\text{enqueue}
+\rightarrow
+\texttt{add\_last},
+$$
+
+$$
+\text{dequeue}
+\rightarrow
+\texttt{delete\_first}.
+$$
+
+Thus, in terms of permitted operations:
+
+$$
+\boxed{
+\text{deque}
+\supset
+\text{stack and queue access patterns}.
+}
+$$
+
+This does not mean that every application should use the most general possible interface. Restricting operations can express important invariants about how a collection is intended to be used.
+
+## Implementing a Deque
+
+A deque can be implemented with a circular dynamic array.
+
+If the current front index is:
+
+$$
+f,
+$$
+
+moving one position backward can be calculated as:
+
+$$
+f_{\text{new}}
+=
+(f-1)\bmod N.
+$$
+
+The index of the current last element can be calculated from the front and current size:
+
+$$
+\boxed{
+\text{back}
+=
+(f+s-1)\bmod N.
+}
+$$ {#eq-deque-back-index}
+
+This allows both ends of the logical sequence to move through the physical array without shifting the existing elements. Goodrich describes the array-based deque as a direct extension of the circular-array queue, using the same front, size, and modular-indexing principles. 
+
+A doubly linked list is another natural representation.
+
+Because each node has both:
+
+```text
+prev
+next
+```
+
+and the structure can maintain direct access to both boundaries, insertion and deletion at either end require only a constant number of link updates.
+
+The two implementations therefore provide similar asymptotic interfaces:
+
+| Operation | Circular dynamic array | Doubly linked list |
+|:---:|:---:|:---:|
+| Add first | $O(1)$ amortized | $O(1)$ |
+| Add last | $O(1)$ amortized | $O(1)$ |
+| Delete first | $O(1)$ amortized | $O(1)$ |
+| Delete last | $O(1)$ amortized | $O(1)$ |
+| First | $O(1)$ | $O(1)$ |
+| Last | $O(1)$ | $O(1)$ |
+| Space | $O(n)$ | $O(n)$ |
+
+Again, equal asymptotic bounds do not imply identical practical behaviour. Array-based implementations and linked implementations differ in memory layout, allocation patterns, resizing behaviour, and constant factors.
+
+## Python and `collections.deque`
+
+Python provides a general-purpose deque in the `collections` module:
+
+```python
+from collections import deque
+```
+
+Its interface naturally supports operations at both ends:
+
+```python
+data = deque()
+
+data.append("A")
+data.append("B")
+data.appendleft("C")
+
+data.pop()
+data.popleft()
+```
+
+Conceptually:
+
+```text
+appendleft(e)  -> add at front
+append(e)      -> add at back
+popleft()      -> remove from front
+pop()          -> remove from back
+```
+
+For queue-like code, this interface expresses the required behaviour more directly than repeatedly removing index zero from a Python list.
+
+For example:
+
+```python
+from collections import deque
+
+queue = deque()
+
+queue.append("A")
+queue.append("B")
+queue.append("C")
+
+first = queue.popleft()
+```
+
+The intent is immediately visible:
+
+$$
+\text{insert at back}
++
+\text{remove from front}
+\rightarrow
+\text{FIFO queue}.
+$$
+
+Similarly, using:
+
+```python
+append()
+pop()
+```
+
+on one end produces LIFO behaviour.
+
+The broader lesson is not simply to prefer one Python class over another. It is to choose a structure whose supported operations correspond to the semantics and performance requirements of the problem.
+
+## Choosing the Appropriate ADT
+
+Stacks, queues, and deques differ primarily in the order in which elements become available.
+
+A stack answers:
+
+> Which element was inserted most recently?
+
+A queue answers:
+
+> Which element has been waiting longest?
+
+A deque permits:
+
+> Which element should be processed from either boundary?
+
+Their access disciplines can be summarised as:
+
+$$
+\begin{aligned}
+\text{Stack}
+&\rightarrow
+\text{LIFO},
+\\
+\text{Queue}
+&\rightarrow
+\text{FIFO},
+\\
+\text{Deque}
+&\rightarrow
+\text{both ends}.
+\end{aligned}
+$$
+
+The choice of ADT should therefore precede the choice of representation.
+
+First determine the required behaviour:
+
+$$
+\text{problem}
+\rightarrow
+\text{ADT}.
+$$
+
+Then determine how that abstraction should be implemented:
+
+$$
+\text{ADT}
+\rightarrow
+\text{representation}.
+$$
+
+Together:
+
+$$
+\boxed{
+\text{problem}
+\rightarrow
+\text{abstraction}
+\rightarrow
+\text{representation}
+\rightarrow
+\text{complexity}.
+}
+$$
+
+This sequence of decisions is one of the central ideas of data-structure design.
+
+The same distinction becomes even more important for hierarchical data. A tree defines relationships between parents, children, ancestors, and descendants independently of whether those relationships are represented through linked nodes or an array. Trees therefore provide the next major step from linear collections to structured, non-linear data.
+
 
 
 # References
