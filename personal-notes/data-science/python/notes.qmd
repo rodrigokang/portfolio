@@ -1157,6 +1157,2019 @@ This behaviour can initially appear unusual, but it avoids maintaining a separat
 
 Control structures provide the machinery for expressing algorithmic processes, but larger programs also require a way to isolate computations behind well-defined interfaces. This is the role of **functions**, which allow behaviour to be named, parameterised, reused, and composed.
 
+# Functions
+
+As programs grow, repeatedly expressing the same computation becomes difficult to maintain and reason about. More importantly, many computations represent meaningful operations that should be understood independently of the details required to perform them.
+
+A **function** provides a named abstraction for such a computation. It defines an interface through which information is supplied, performs a particular operation, and may return a result.
+
+Consider the task of computing the mean of a collection of measurements. Without a function, the calculation could be written directly wherever it is needed:
+
+```python
+mean = sum(measurements) / len(measurements)
+```
+
+If the same operation is required in several parts of a program, however, repeating the expression also repeats knowledge about how the computation is performed. A function gives that operation a name:
+
+```python
+def mean(values):
+    return sum(values) / len(values)
+```
+
+The caller can then use:
+
+```python
+average = mean(measurements)
+```
+
+without depending on the internal steps of the calculation.
+
+This separation establishes a simple interface:
+
+$$
+\text{arguments}
+\longrightarrow
+\text{function}
+\longrightarrow
+\text{return value}.
+$$
+
+A useful function therefore does more than avoid duplicated code. It isolates a coherent operation behind a defined contract: what information the function expects, what it computes, what it returns, and whether it changes any externally visible state.
+
+## Parameters and Arguments
+
+The names declared in a function definition are its **parameters**:
+
+```python
+def scale(value, factor):
+    return value * factor
+```
+
+When the function is called:
+
+```python
+result = scale(12, 0.5)
+```
+
+the objects supplied by the caller are its **arguments**. In this call, `12` is associated with the parameter `value`, and `0.5` with `factor`.
+
+This distinction is useful, but the more important question is how information is passed into a function.
+
+Python's parameter passing follows the same object-and-binding model introduced earlier. A function call creates local parameter names and binds them to the objects supplied by the caller.
+
+Suppose:
+
+```python
+measurements = [4.2, 5.7, 3.8]
+```
+
+and a function is called as:
+
+```python
+process(measurements)
+```
+
+for a definition:
+
+```python
+def process(data):
+    ...
+```
+
+During the call, the local parameter `data` refers to the same list object as `measurements`:
+
+$$
+\begin{aligned}
+\texttt{measurements} &\searrow\\
+                       &\text{list object}\\
+\texttt{data}         &\nearrow
+\end{aligned}
+$$
+
+The list is not copied merely because it was passed to a function.
+
+![When an object is passed to a Python function, the local parameter name is bound to the same object supplied by the caller.](figures/function-parameter-binding.png){#fig-function-parameter-binding}
+
+This model is more precise than describing Python simply as either "pass by value" or "pass by reference". The essential mechanism is **object binding**: the function receives references to objects, and its parameter names are local bindings to those objects.
+
+The consequences follow directly from the distinction between mutation and rebinding.
+
+Consider:
+
+```python
+def add_measurement(data, value):
+    data.append(value)
+```
+
+Calling:
+
+```python
+measurements = [4.2, 5.7]
+add_measurement(measurements, 3.8)
+```
+
+modifies the original list:
+
+```text
+[4.2, 5.7, 3.8]
+```
+
+because `data` and `measurements` refer to the same mutable object.
+
+By contrast:
+
+```python
+def replace_data(data):
+    data = [0.0, 0.0]
+```
+
+followed by:
+
+```python
+measurements = [4.2, 5.7]
+replace_data(measurements)
+```
+
+does not replace the caller's list. The assignment changes only the local binding `data`.
+
+The distinction is therefore the same one encountered earlier:
+
+$$
+\boxed{
+\text{mutation can affect a shared object, whereas rebinding a parameter is local to the function}.
+}
+$$
+
+This behaviour is not a special rule for function arguments. It follows directly from Python's general assignment semantics.
+
+## Positional and Keyword Arguments
+
+Arguments can be associated with parameters by position:
+
+```python
+def convert_temperature(value, scale):
+    ...
+```
+
+```python
+convert_temperature(20, "C")
+```
+
+Here the first argument is bound to `value` and the second to `scale`.
+
+Python also allows arguments to be supplied by parameter name:
+
+```python
+convert_temperature(value=20, scale="C")
+```
+
+These are **keyword arguments**. They can make a call clearer when the meaning of a value would otherwise be ambiguous.
+
+For example:
+
+```python
+compute_interval(10, 0.95, True)
+```
+
+reveals little about the meaning of the final two arguments, while:
+
+```python
+compute_interval(
+    sample_size=10,
+    confidence=0.95,
+    corrected=True,
+)
+```
+
+makes the interface considerably clearer.
+
+Keyword arguments also allow optional parameters to be specified selectively when defaults are available.
+
+Functions may accept a variable number of positional or keyword arguments through `*args` and `**kwargs`. Conceptually, these collect additional arguments into a tuple and a dictionary, respectively:
+
+```python
+def function(*args, **kwargs):
+    ...
+```
+
+This mechanism is useful for interfaces whose number of inputs is genuinely variable or for forwarding arguments to another function. It should not be used merely to avoid defining a clear interface when the expected parameters are known.
+
+## Default Arguments
+
+A parameter can provide a default value:
+
+```python
+def power(base, exponent=2):
+    return base ** exponent
+```
+
+The function can then be called as:
+
+```python
+power(4)
+```
+
+which uses the default value `2`, or as:
+
+```python
+power(4, 3)
+```
+
+which explicitly supplies the exponent.
+
+Defaults are useful when one behaviour is common but alternative behaviour should remain available.
+
+There is, however, an important consequence of Python's object model: **default argument objects are created when the function definition is evaluated, not each time the function is called**.
+
+Consider:
+
+```python
+def collect(value, items=[]):
+    items.append(value)
+    return items
+```
+
+A first call:
+
+```python
+collect(1)
+```
+
+returns:
+
+```text
+[1]
+```
+
+but a subsequent call:
+
+```python
+collect(2)
+```
+
+returns:
+
+```text
+[1, 2]
+```
+
+rather than a new list containing only `2`.
+
+The reason is that the default list is a single mutable object associated with the function definition. Calls that omit `items` repeatedly use that same object:
+
+$$
+\text{function definition}
+\longrightarrow
+\text{one default list object}.
+$$
+
+The usual pattern for an independently created mutable value is therefore:
+
+```python
+def collect(value, items=None):
+    if items is None:
+        items = []
+
+    items.append(value)
+    return items
+```
+
+Now a new list is created during each call in which no collection is supplied.
+
+This example brings together several earlier concepts:
+
+$$
+\boxed{
+\text{object lifetime}
++
+\text{mutability}
++
+\text{aliasing}
++
+\text{function definition semantics}.
+}
+$$
+
+The issue is not that lists are unsuitable as function arguments. The issue is the unintended persistence of a mutable default object between calls.
+
+## Return Values
+
+A function communicates a result to its caller with `return`:
+
+```python
+def square(value):
+    return value * value
+```
+
+Executing `return` immediately terminates the current function call and provides the referenced object to the caller.
+
+The returned object can then be bound to a name:
+
+```python
+result = square(5)
+```
+
+Conceptually, the result of the function call participates in assignment like any other expression:
+
+$$
+\texttt{result}
+\longrightarrow
+\text{object returned by }\texttt{square(5)}.
+$$
+
+A function does not need an explicit `return` statement. If execution reaches the end of the function without one, Python returns `None`.
+
+For example:
+
+```python
+def display(value):
+    print(value)
+```
+
+Calling:
+
+```python
+result = display(10)
+```
+
+prints `10`, but `result` is bound to `None`.
+
+This distinction separates two different effects:
+
+```python
+print(value)
+```
+
+produces output, whereas:
+
+```python
+return value
+```
+
+provides an object to the caller.
+
+Confusing these operations often leads to functions that are unnecessarily difficult to reuse. A function that computes a value can usually be composed more easily when it returns that value and leaves presentation to another part of the program.
+
+Python functions can appear to return several values:
+
+```python
+def bounds(values):
+    return min(values), max(values)
+```
+
+However, this does not return two independent objects through two separate channels. The comma constructs a tuple, so the function returns one tuple object:
+
+```python
+limits = bounds(data)
+```
+
+The common form:
+
+```python
+lower, upper = bounds(data)
+```
+
+works because the returned tuple is subsequently unpacked into two names.
+
+## Scope and Namespaces
+
+Functions introduce local names, which raises another question: when a name appears in an expression, how does Python determine which object it refers to?
+
+A **namespace** associates names with objects. A **scope** determines the region of a program in which a particular namespace is directly relevant for name resolution.
+
+Consider:
+
+```python
+threshold = 10
+
+def classify(value):
+    limit = threshold
+
+    if value > limit:
+        return "high"
+
+    return "normal"
+```
+
+During a call to `classify`, the names `value` and `limit` belong to the function's local scope. The name `threshold`, however, is not defined locally, so Python searches an enclosing namespace and finds the global binding.
+
+Name resolution follows nested scopes. A useful description is the **LEGB** order:
+
+$$
+\boxed{
+\text{Local}
+\rightarrow
+\text{Enclosing}
+\rightarrow
+\text{Global}
+\rightarrow
+\text{Built-in}.
+}
+$$
+
+The local scope belongs to the current function call. Enclosing scopes arise from lexically enclosing functions. Global scope corresponds to the module, while the built-in namespace contains names provided by Python such as `len`, `sum`, and `print`.
+
+If no binding can be found through the relevant scopes, name resolution fails with a `NameError`.
+
+Local bindings are independent of bindings with the same name in another scope:
+
+```python
+value = 100
+
+def transform():
+    value = 10
+    return value
+```
+
+The assignment inside `transform` creates a local binding. It does not change the global binding:
+
+```python
+transform()  # 10
+value        # 100
+```
+
+This separation is important for modular reasoning. A function should normally be understandable from its parameters, local state, and clearly identified external dependencies rather than relying on uncontrolled global state.
+
+Python provides `global` and `nonlocal` when rebinding a name from another scope is genuinely required. Their existence is important for understanding the language, but routine function design should not depend on them unnecessarily. Explicit inputs and outputs generally make data flow easier to understand.
+
+## Functions as Objects
+
+Functions themselves are objects in Python. A function definition creates a function object and binds a name to it.
+
+For example:
+
+```python
+def square(value):
+    return value * value
+```
+
+establishes a relationship conceptually similar to:
+
+$$
+\texttt{square}
+\longrightarrow
+\text{function object}.
+$$
+
+Because functions are **first-class objects**, they can be assigned to other names:
+
+```python
+operation = square
+
+operation(5)
+```
+
+They can also be stored in data structures, passed as arguments, and returned by other functions.
+
+This allows behaviour itself to become part of a program's data flow.
+
+A simple example is sorting records according to a particular component:
+
+```python
+records = [
+    ("A", 3.2),
+    ("B", 2.7),
+    ("C", 4.1),
+]
+
+def measurement(record):
+    return record[1]
+
+ordered = sorted(records, key=measurement)
+```
+
+The `sorted` function receives another function through its `key` parameter. For each record, that function determines the value used for ordering.
+
+The important abstraction is:
+
+$$
+\text{data}
++
+\text{behaviour supplied as an argument}.
+$$
+
+A function that receives another function or returns one is commonly called a **higher-order function**.
+
+This mechanism is widely useful because an algorithm can remain fixed while part of its behaviour is supplied by the caller. Sorting, for example, does not need a separate implementation for every possible interpretation of ordering.
+
+### Anonymous Functions
+
+For short operations that do not need a reusable name, Python provides `lambda` expressions.
+
+The previous key function could be written as:
+
+```python
+ordered = sorted(records, key=lambda record: record[1])
+```
+
+A lambda creates a function object, but its body is restricted to a single expression.
+
+This makes it useful for small, local transformations. It is not inherently preferable to a named function. When behaviour has a meaningful role, requires documentation, or becomes difficult to read as a single expression, a regular function definition is clearer.
+
+## Closures
+
+First-class functions become particularly useful when combined with lexical scope.
+
+Consider a function that constructs another function:
+
+```python
+def make_multiplier(factor):
+    def multiply(value):
+        return value * factor
+
+    return multiply
+```
+
+Calling:
+
+```python
+double = make_multiplier(2)
+```
+
+returns the inner function. The call to `make_multiplier` has already finished, but:
+
+```python
+double(5)
+```
+
+still produces:
+
+```text
+10
+```
+
+The returned function retains access to the binding of `factor` from the enclosing scope in which it was defined.
+
+This combination of a function and its retained lexical environment is known as a **closure**.
+
+Conceptually:
+
+$$
+\boxed{
+\text{closure}
+=
+\text{function}
++
+\text{captured environment}.
+}
+$$
+
+![A closure retains access to bindings from the enclosing lexical scope even after the enclosing function has returned.](figures/python-closure.png){#fig-python-closure}
+
+Closures allow behaviour to be configured without introducing global state. In the previous example, `make_multiplier(2)` and `make_multiplier(3)` can create independent functions whose behaviour depends on different captured values.
+
+If an inner function must rebind a variable in an enclosing function rather than merely read it, Python provides the `nonlocal` statement. This is useful in some stateful closures, although explicit objects may become clearer when the amount of retained state or behaviour grows substantially.
+
+## Side Effects and Function Design
+
+A function may return a value, modify an existing object, perform input or output, or combine several of these behaviours. Operations that affect state outside the function's local computation are commonly called **side effects**.
+
+For example:
+
+```python
+def square(value):
+    return value * value
+```
+
+computes a result without modifying its argument or producing external output.
+
+By contrast:
+
+```python
+def normalise_in_place(values):
+    ...
+```
+
+may deliberately modify the supplied collection, while:
+
+```python
+def write_report(data, path):
+    ...
+```
+
+necessarily interacts with an external resource.
+
+Side effects are not inherently undesirable. Mutation, file operations, database access, logging, and user interaction are necessary in real programs. What matters is that the behaviour of a function is deliberate and visible through its interface and documentation.
+
+A useful function generally has a coherent responsibility. Its inputs should be explicit, its return value should have a clear meaning, and mutations or other side effects should not be surprising.
+
+For example, a function named:
+
+```python
+compute_mean(values)
+```
+
+would be unexpected if it also modified `values` or wrote a file. Those operations are unrelated to the abstraction suggested by the function's name.
+
+Separating computation from presentation or external interaction often improves composability:
+
+```python
+result = compute_statistics(data)
+display_statistics(result)
+```
+
+The first function can then be reused independently of how the result is displayed.
+
+## Documentation and Type Annotations
+
+A function's implementation describes how it performs a computation, but callers primarily need to understand its **contract**.
+
+A docstring can document that contract:
+
+```python
+def mean(values):
+    """
+    Compute the arithmetic mean of a non-empty collection.
+
+    Inputs
+    ------
+    values : iterable of numbers
+        Values used in the calculation.
+
+    Outputs
+    -------
+    float
+        Arithmetic mean of the supplied values.
+    """
+    return sum(values) / len(values)
+```
+
+Useful documentation explains assumptions, inputs, outputs, side effects, and exceptional conditions when they are not already evident. It should not simply translate each line of implementation into prose.
+
+Python also supports **type annotations**:
+
+```python
+def scale(value: float, factor: float) -> float:
+    return value * factor
+```
+
+Annotations communicate intended types to readers and to external tools. They do not, by themselves, impose runtime type checking.
+
+For collections, annotations can describe more structured interfaces:
+
+```python
+def normalise(values: list[float]) -> list[float]:
+    ...
+```
+
+and unions can express alternatives:
+
+```python
+def find_value(...) -> int | None:
+    ...
+```
+
+Type annotations therefore complement Python's dynamic typing rather than replacing it. Objects still carry their types at runtime, while annotations provide additional information about the intended interface.
+
+A function is most useful when its interface captures a meaningful unit of behaviour while hiding details that the caller does not need to know. This principle of **abstraction** will recur throughout the notes. Data structures expose operations without requiring callers to know their internal representation, and classes extend the same idea by combining persistent state with related behaviour.
+
+# Numeric Types
+
+Numerical computation requires more than a generic notion of "number". Integers, real-valued approximations, and complex numbers have different mathematical properties and different computational representations. Python reflects these distinctions through several built-in numeric types.
+
+The principal numeric types are:
+
+| Type | Mathematical role | Representation |
+|:---:|:---:|:---:|
+| `int` | Integers | Arbitrary-precision integer |
+| `float` | Approximation to real numbers | Fixed-precision floating point |
+| `complex` | Complex numbers | Pair of floating-point components |
+
+These types support many of the same arithmetic operators, but their internal representations and numerical behaviour differ substantially.
+
+## Integers
+
+Python's `int` type represents integers:
+
+```python
+count = 42
+offset = -7
+```
+
+Unlike fixed-width integer types commonly found in lower-level languages, Python integers are not restricted to a predetermined range such as $[-2^{31},2^{31}-1]$. Their representation can grow as required by the magnitude of the value, subject to available memory.
+
+For example:
+
+```python
+value = 2 ** 200
+```
+
+produces an exact integer rather than an overflow caused by exceeding a fixed machine-word size.
+
+This does not mean that arbitrarily large integers have constant computational cost. Larger values require more memory and, eventually, more work for arithmetic operations. The distinction between the mathematical operation and its computational cost will become important when algorithm analysis is introduced.
+
+### Positional Representation
+
+An integer can be represented in any positional numeral system. For a base $b$, a sequence of digits
+
+$$
+d_kd_{k-1}\ldots d_1d_0
+$$
+
+represents the value
+
+$$
+N
+=
+\sum_{i=0}^{k} d_i b^i,
+$$
+
+where:
+
+$$
+0 \leq d_i < b.
+$$
+
+Decimal notation uses $b=10$. For example:
+
+$$
+472
+=
+4(10^2)+7(10^1)+2(10^0)
+=
+400+70+2.
+$$
+
+Computers commonly use binary representation, where $b=2$ and each digit is either $0$ or $1$. Thus:
+
+$$
+101101_2
+=
+1(2^5)
++
+0(2^4)
++
+1(2^3)
++
+1(2^2)
++
+0(2^1)
++
+1(2^0),
+$$
+
+so:
+
+$$
+101101_2
+=
+32+8+4+1
+=
+45_{10}.
+$$
+
+Python allows integer literals to be written explicitly in several bases:
+
+```python
+binary = 0b101101
+octal = 0o55
+decimal = 45
+hexadecimal = 0x2D
+```
+
+All four names refer to integer objects representing the same mathematical value. The notation used in the source code does not create a different numeric type.
+
+This distinction is useful:
+
+$$
+\boxed{
+\text{numeral representation}
+\neq
+\text{numeric value}.
+}
+$$
+
+Binary, octal, decimal, and hexadecimal are different textual representations of integers, not different kinds of integer objects.
+
+### Integer Division and Remainders
+
+Division requires particular care because several different operations can be meant by "divide".
+
+The `/` operator performs **true division**:
+
+```python
+27 / 4
+```
+
+and produces:
+
+```text
+6.75
+```
+
+The `//` operator performs floor division:
+
+```python
+27 // 4
+```
+
+which produces:
+
+```text
+6
+```
+
+while `%` computes the corresponding remainder:
+
+```python
+27 % 4
+```
+
+which produces:
+
+```text
+3
+```
+
+These operations are related mathematically. For integers $n$ and $m$, with $m\neq0$, define:
+
+$$
+q
+=
+\left\lfloor\frac{n}{m}\right\rfloor
+$$
+
+and:
+
+$$
+r
+=
+n-qm.
+$$
+
+Then:
+
+$$
+\boxed{
+n=qm+r.
+}
+$$ {#eq-division-algorithm}
+
+For:
+
+$$
+n=27,
+\qquad
+m=4,
+$$
+
+we obtain:
+
+$$
+q
+=
+\left\lfloor\frac{27}{4}\right\rfloor
+=
+6,
+$$
+
+and therefore:
+
+$$
+r
+=
+27-(6)(4)
+=
+3.
+$$
+
+Hence:
+
+$$
+27=(6)(4)+3.
+$$
+
+This identity explains the relationship between Python's operators:
+
+```python
+q = n // m
+r = n % m
+```
+
+so that:
+
+```python
+n == q * m + r
+```
+
+holds.
+
+The use of the floor is particularly important for negative values. Consider:
+
+$$
+n=-27,
+\qquad
+m=4.
+$$
+
+Since:
+
+$$
+-\frac{27}{4}=-6.75,
+$$
+
+flooring gives:
+
+$$
+q=\lfloor-6.75\rfloor=-7,
+$$
+
+not $-6$. The remainder is then:
+
+$$
+r
+=
+-27-(-7)(4)
+=
+1.
+$$
+
+Thus:
+
+$$
+-27=(-7)(4)+1.
+$$
+
+Correspondingly:
+
+```python
+-27 // 4
+```
+
+produces `-7`, while:
+
+```python
+-27 % 4
+```
+
+produces `1`.
+
+Floor division should therefore not be understood simply as "discarding the decimal part". Truncation toward zero and flooring toward negative infinity are different operations for negative values.
+
+The quotient-remainder relationship appears naturally in many algorithms, including cyclic indexing, divisibility tests, conversion between numeral systems, and hashing.
+
+## Floating-Point Numbers
+
+Integers can be represented exactly, provided sufficient memory is available. Representing arbitrary real numbers is fundamentally different.
+
+Between any two distinct real numbers there are infinitely many other real numbers. A computer with finite memory cannot represent all of them exactly. Numerical computation therefore uses finite approximations.
+
+Python's `float` type provides such a representation.
+
+Typical floating-point literals include:
+
+```python
+temperature = 21.5
+probability = 0.125
+avogadro = 6.022e23
+```
+
+The important point is that a floating-point value should not generally be interpreted as an exact real number. It is a representable machine number used to approximate one.
+
+### Binary Fractions
+
+The source of many apparently surprising floating-point results becomes clearer by considering positional representation again.
+
+A decimal fraction can be written as:
+
+$$
+0.d_1d_2d_3\ldots
+=
+\sum_{i=1}^{\infty} d_i10^{-i}.
+$$
+
+For example:
+
+$$
+0.125
+=
+1(10^{-1})
++
+2(10^{-2})
++
+5(10^{-3}).
+$$
+
+Binary fractions use powers of $2$ instead:
+
+$$
+0.b_1b_2b_3\ldots_2
+=
+\sum_{i=1}^{\infty} b_i2^{-i}.
+$$
+
+The decimal value $0.125$ has a finite binary representation:
+
+$$
+0.125
+=
+\frac{1}{8}
+=
+2^{-3}
+=
+0.001_2.
+$$
+
+However, many decimal fractions do not have finite binary representations. The familiar decimal value:
+
+$$
+0.1=\frac{1}{10}
+$$
+
+is one of them.
+
+Since:
+
+$$
+10=2\cdot5,
+$$
+
+the denominator contains a factor other than $2$. Consequently, its binary fractional expansion does not terminate. A finite binary floating-point representation must therefore store an approximation to $0.1$, not the exact rational number $1/10$.
+
+This is analogous to representing:
+
+$$
+\frac{1}{3}
+$$
+
+in decimal notation:
+
+$$
+0.333333\ldots
+$$
+
+A finite decimal representation must eventually be rounded.
+
+### Floating-Point Representation
+
+A floating-point number separates significant digits from scale. Conceptually, a nonzero value can be represented in the form:
+
+$$
+x
+=
+(-1)^s
+\times
+m
+\times
+2^e,
+$$
+
+where:
+
+- $s$ determines the sign;
+- $m$ is the significand;
+- $e$ is the exponent.
+
+The exponent determines the scale of the number, while the significand determines its precision.
+
+![A floating-point representation separates a number into sign, significand, and exponent, allowing a wide range of magnitudes with finite precision.](figures/floating-point-representation.png){#fig-floating-point-representation}
+
+Python floating-point arithmetic on ordinary implementations uses finite binary precision. Consequently, only a finite subset of the real numbers can be represented directly.
+
+If the exact real value $x$ is not representable, it must be mapped to a nearby machine number:
+
+$$
+x
+\longrightarrow
+\operatorname{fl}(x),
+$$
+
+where $\operatorname{fl}(x)$ denotes its floating-point representation.
+
+This approximation occurs before subsequent arithmetic is considered.
+
+### Representation Error
+
+The effect is visible in a familiar example:
+
+```python
+0.1 + 0.2 == 0.3
+```
+
+which evaluates to:
+
+```text
+False
+```
+
+This does not indicate an error in addition. The decimal literals themselves are converted to nearby representable binary floating-point values. Arithmetic is then performed on those approximations and rounded to another representable value.
+
+Conceptually:
+
+$$
+\operatorname{fl}(0.1)
++
+\operatorname{fl}(0.2)
+$$
+
+need not equal:
+
+$$
+\operatorname{fl}(0.3)
+$$
+
+exactly.
+
+Inspecting the result with sufficient decimal precision reveals the difference:
+
+```python
+format(0.1 + 0.2, ".17f")
+```
+
+gives approximately:
+
+```text
+0.30000000000000004
+```
+
+The error is very small, but exact equality is a strict condition.
+
+This is why floating-point results should generally not be compared for exact equality when rounding error may be present.
+
+### Comparing Floating-Point Values
+
+Suppose a computation produces $a$ and another produces $b$. Instead of requiring:
+
+$$
+a=b,
+$$
+
+we can ask whether the difference is sufficiently small:
+
+$$
+|a-b|\leq \varepsilon,
+$$
+
+where $\varepsilon$ is a tolerance appropriate to the problem.
+
+An absolute tolerance alone can be inadequate when values vary greatly in magnitude. A difference of $10^{-6}$ may be negligible when comparing values near $10^6$ but substantial when comparing values near $10^{-7}$.
+
+A more useful comparison combines relative and absolute tolerances. Conceptually, two values may be considered sufficiently close when:
+
+$$
+|a-b|
+\leq
+\max
+\left(
+\varepsilon_{\mathrm{rel}}
+\max(|a|,|b|),
+\varepsilon_{\mathrm{abs}}
+\right).
+$$ {#eq-floating-point-closeness}
+
+Python's `math.isclose` provides this form of comparison:
+
+```python
+import math
+
+math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-12)
+```
+
+The tolerances should reflect the numerical problem rather than being chosen merely to force a desired result.
+
+### Machine Precision
+
+Because floating-point numbers are discrete, representable values have gaps between them. Near $1$, there is a smallest representable value greater than $1$.
+
+Machine epsilon is commonly used to describe this scale. Informally, it characterises the separation between $1$ and the next larger representable floating-point number.
+
+Python exposes information about its floating-point representation through:
+
+```python
+import sys
+
+sys.float_info
+```
+
+including the value:
+
+```python
+sys.float_info.epsilon
+```
+
+For the usual binary64 representation, this is approximately:
+
+$$
+\varepsilon_{\text{machine}}
+\approx
+2.22\times10^{-16}.
+$$
+
+This value should not be interpreted as a universal tolerance for numerical comparisons. It characterises floating-point precision near $1$; an appropriate tolerance still depends on the scale and purpose of a computation.
+
+Another important consequence is that floating-point spacing is not constant over the entire number line. As magnitude increases, the distance between adjacent representable values also increases.
+
+Thus floating point provides a trade-off:
+
+$$
+\boxed{
+\text{large dynamic range}
+\quad\text{with}\quad
+\text{finite relative precision}.
+}
+$$
+
+### Accumulation of Rounding Error
+
+A small representation error may become relevant when an operation is repeated many times.
+
+Consider:
+
+```python
+total = 0.0
+
+for _ in range(10):
+    total += 0.1
+```
+
+Mathematically, the expected result is:
+
+$$
+10(0.1)=1.
+$$
+
+The computed floating-point value, however, need not be exactly $1$ because each addition operates on finite approximations.
+
+This does not imply that floating-point arithmetic is unreliable. It means that numerical algorithms must be designed with finite precision in mind.
+
+Python provides `math.fsum` for more accurate summation of floating-point values:
+
+```python
+import math
+
+total = math.fsum(values)
+```
+
+The existence of such algorithms illustrates an important principle: mathematically equivalent formulations need not have equivalent numerical behaviour on a finite computer.
+
+## Numerical Stability
+
+Representation error is unavoidable in finite-precision arithmetic, but algorithms differ in how strongly they amplify that error.
+
+A classic example is subtraction between nearly equal numbers. Suppose:
+
+$$
+x=1.234567
+$$
+
+and:
+
+$$
+y=1.234566.
+$$
+
+The difference is:
+
+$$
+x-y=0.000001.
+$$
+
+Most leading significant digits cancel. If $x$ and $y$ are themselves approximations, the relative error in the small difference can be much larger than the relative errors in the original values. This phenomenon is known as **catastrophic cancellation**.
+
+A more instructive example appears in the quadratic formula. For:
+
+$$
+ax^2+bx+c=0,
+$$
+
+the roots are:
+
+$$
+x_{1,2}
+=
+\frac{-b\pm\sqrt{b^2-4ac}}{2a}.
+$$ {#eq-quadratic-formula}
+
+Mathematically, this formula is exact. Numerically, if:
+
+$$
+b^2\gg4ac
+$$
+
+and the sign causes two nearly equal quantities to be subtracted, one root may suffer substantial cancellation.
+
+This distinction motivates the concept of **numerical stability**. A numerically stable method is designed so that small errors introduced by finite representation do not grow unnecessarily during the computation.
+
+The general lesson is important:
+
+$$
+\boxed{
+\text{mathematical equivalence does not guarantee computational equivalence}.
+}
+$$
+
+This principle will recur in numerical algorithms, optimisation, statistics, and machine learning.
+
+## Complex Numbers
+
+Some computations naturally require numbers beyond the real line. Python provides the built-in `complex` type for values of the form:
+
+$$
+z=a+bi,
+$$
+
+where:
+
+$$
+i^2=-1.
+$$
+
+Python writes the imaginary unit as `j`:
+
+```python
+z = 3 + 4j
+```
+
+The real and imaginary components are available as:
+
+```python
+z.real
+z.imag
+```
+
+For:
+
+$$
+z=3+4i,
+$$
+
+the complex conjugate is:
+
+$$
+\bar{z}=3-4i,
+$$
+
+and can be obtained with:
+
+```python
+z.conjugate()
+```
+
+The magnitude, or modulus, is:
+
+$$
+|z|
+=
+\sqrt{a^2+b^2}.
+$$
+
+For $z=3+4i$:
+
+$$
+|z|
+=
+\sqrt{3^2+4^2}
+=
+5.
+$$
+
+Python therefore gives:
+
+```python
+abs(3 + 4j)
+```
+
+as `5.0`.
+
+A complex number can also be represented in polar form. If:
+
+$$
+r=|z|
+$$
+
+and $\theta$ is its argument, then:
+
+$$
+z
+=
+r(\cos\theta+i\sin\theta).
+$$
+
+Using Euler's identity:
+
+$$
+e^{i\theta}
+=
+\cos\theta+i\sin\theta,
+$$
+
+this becomes:
+
+$$
+\boxed{
+z=re^{i\theta}.
+}
+$$ {#eq-complex-polar-form}
+
+The rectangular and polar forms emphasise different aspects of the same number:
+
+$$
+a+bi
+\quad\longleftrightarrow\quad
+re^{i\theta}.
+$$
+
+Python's `cmath` module provides functions designed for complex-valued computation.
+
+Complex numbers arise naturally in applications involving oscillations, Fourier analysis, signal processing, control systems, electrical engineering, computational physics, and quantum mechanics. Their inclusion as a built-in numeric type allows Python to represent these computations directly without constructing a separate numerical abstraction.
+
+The numeric types considered here illustrate a broader principle that will recur throughout the notes: an abstract mathematical object and its computational representation are related, but they are not identical. Understanding both levels is necessary for reasoning about the correctness, limitations, and computational behaviour of a program.
+
+# Strings
+
+Programs frequently manipulate information that is textual rather than numerical: names, messages, file contents, identifiers, documents, and data received from external systems. Python represents text through the `str` type.
+
+A string is an **immutable sequence of Unicode characters**. This description combines three important properties:
+
+- it is a sequence, so order and position matter;
+- its elements represent Unicode text;
+- it is immutable, so an existing string cannot be modified after creation.
+
+These properties determine most of the behaviour of strings in Python.
+
+## String Literals
+
+String literals can be delimited by either single or double quotation marks:
+
+```python
+language = "Python"
+message = 'Data processing complete'
+```
+
+The choice does not create different types of strings. It can simply make a literal easier to express when one kind of quotation mark occurs in the text:
+
+```python
+message = "Python's object model"
+```
+
+Special characters can be represented with **escape sequences**. For example:
+
+```python
+message = "first line\nsecond line"
+```
+
+uses `\n` to represent a newline, while:
+
+```python
+columns = "name\tvalue"
+```
+
+uses `\t` to represent a tab.
+
+A backslash itself must normally be escaped:
+
+```python
+path = "C:\\data\\results"
+```
+
+When backslashes should be interpreted literally, Python also provides **raw string literals**:
+
+```python
+pattern = r"\d+\.\d+"
+```
+
+The prefix `r` changes how backslashes in the literal are interpreted when the string is created. It does not create a different string type.
+
+Triple-quoted strings allow text to span several lines directly:
+
+```python
+message = """Processing complete.
+The results are ready for inspection."""
+```
+
+They are also used for docstrings, as introduced in the discussion of functions.
+
+## Strings as Sequences
+
+Because a string is a sequence, each character has a position. Python uses zero-based indexing.
+
+For:
+
+```python
+text = "Python"
+```
+
+the positions are:
+
+$$
+\begin{array}{c|cccccc}
+\text{index} & 0 & 1 & 2 & 3 & 4 & 5\\
+\hline
+\text{character} & P & y & t & h & o & n
+\end{array}
+$$
+
+Therefore:
+
+```python
+text[0]
+```
+
+produces:
+
+```text
+'P'
+```
+
+and:
+
+```python
+text[5]
+```
+
+produces:
+
+```text
+'n'
+```
+
+Python has no separate built-in character type. Indexing a string returns another string whose length is one.
+
+Negative indices describe positions relative to the end:
+
+```python
+text[-1]
+```
+
+returns the final character, while:
+
+```python
+text[-2]
+```
+
+returns the second-to-last character.
+
+For a sequence of length $n$, the correspondence is:
+
+$$
+\text{index }-k
+\longleftrightarrow
+n-k,
+$$
+
+whenever the resulting position lies within the sequence.
+
+### Slicing
+
+A contiguous part of a string can be selected using slicing:
+
+```python
+text[start:stop]
+```
+
+As with `range`, Python follows the half-open convention:
+
+$$
+[\text{start},\text{stop}).
+$$
+
+The starting position is included and the stopping position is excluded.
+
+For example:
+
+```python
+text = "Python"
+
+text[1:4]
+```
+
+returns:
+
+```text
+'yth'
+```
+
+because the selected indices are:
+
+$$
+1,2,3.
+$$
+
+The number of selected elements is therefore simply:
+
+$$
+\text{stop}-\text{start}.
+$$
+
+This is one reason the half-open convention is convenient.
+
+Either boundary can be omitted:
+
+```python
+text[:3]
+text[3:]
+```
+
+and a third component specifies a step:
+
+```python
+text[start:stop:step]
+```
+
+For example:
+
+```python
+text[::2]
+```
+
+selects every second character, while:
+
+```python
+text[::-1]
+```
+
+traverses the string in reverse order.
+
+The same indexing and slicing conventions will later apply to other sequence types, particularly lists and tuples.
+
+## String Immutability
+
+Although characters can be accessed by position, they cannot be replaced in an existing string.
+
+For example:
+
+```python
+text = "Python"
+text[0] = "J"
+```
+
+raises an exception.
+
+The reason is not a special restriction on indexing. It follows from the fact that `str` objects are immutable.
+
+To obtain different text, a new string must be constructed:
+
+```python
+text = "J" + text[1:]
+```
+
+The name `text` is then rebound to the newly created string.
+
+Conceptually:
+
+$$
+\text{old string}
+\longrightarrow
+\text{new string}
+$$
+
+rather than:
+
+$$
+\text{modify existing string}.
+$$
+
+This is the same distinction between mutation and rebinding introduced earlier.
+
+String methods follow this principle. For example:
+
+```python
+text = "Python"
+
+lowercase = text.lower()
+```
+
+does not modify `text`. The method produces another string:
+
+```text
+text       -> 'Python'
+lowercase  -> 'python'
+```
+
+Immutability makes string values stable once created, but it also has computational consequences when many transformations are performed.
+
+## Concatenation and Repetition
+
+Strings support concatenation with `+`:
+
+```python
+first = "data"
+second = "science"
+
+title = first + " " + second
+```
+
+which produces:
+
+```text
+'data science'
+```
+
+Repetition is expressed with `*`:
+
+```python
+separator = "-" * 40
+```
+
+These operations produce new strings because existing strings cannot be modified.
+
+This becomes relevant when constructing a large string incrementally. Consider:
+
+```python
+result = ""
+
+for word in words:
+    result += word
+```
+
+Conceptually, each concatenation may require constructing a new string containing the accumulated text. Repeated concatenation can therefore perform substantially more copying than the final string alone would suggest.
+
+When many pieces must be combined, a more appropriate operation is usually:
+
+```python
+result = "".join(words)
+```
+
+Here the intended operation is explicit: combine a collection of strings using a separator.
+
+For example:
+
+```python
+fields = ["sensor-01", "21.5", "active"]
+
+line = ",".join(fields)
+```
+
+produces:
+
+```text
+'sensor-01,21.5,active'
+```
+
+The difference illustrates a principle that will recur throughout the study of data structures:
+
+$$
+\boxed{
+\text{an operation's syntax does not by itself reveal its computational cost}.
+}
+$$
+
+Understanding representation is necessary to reason about efficiency.
+
+## Membership and Comparison
+
+The membership operators `in` and `not in` can be used with strings:
+
+```python
+"data" in "data science"
+```
+
+evaluates to `True`.
+
+The searched value may contain more than one character, so string membership can express substring search as well as single-character membership.
+
+Strings also support lexicographic comparison:
+
+```python
+"algorithm" < "array"
+```
+
+Comparison proceeds according to the ordering of the underlying characters, examining corresponding positions until a difference determines the result.
+
+Conceptually, for two strings:
+
+$$
+S=s_0s_1\ldots s_{n-1}
+$$
+
+and:
+
+$$
+T=t_0t_1\ldots t_{m-1},
+$$
+
+the first position $k$ for which:
+
+$$
+s_k\neq t_k
+$$
+
+determines their order. If no such position exists within the shorter string, the shorter sequence precedes the longer one.
+
+This same notion of lexicographic ordering applies more generally to ordered sequences.
+
+## String Transformations
+
+Python provides many string methods, but they are easier to understand when grouped by purpose rather than memorised individually.
+
+Case transformations include:
+
+```python
+text.lower()
+text.upper()
+text.title()
+```
+
+Whitespace can be removed from the boundaries of a string with:
+
+```python
+text.strip()
+text.lstrip()
+text.rstrip()
+```
+
+Search and replacement operations include:
+
+```python
+text.find(substring)
+text.startswith(prefix)
+text.endswith(suffix)
+text.replace(old, new)
+```
+
+Strings can also be classified according to their contents:
+
+```python
+text.isalpha()
+text.isdigit()
+text.isalnum()
+text.isspace()
+```
+
+These methods answer questions about a string or construct a transformed string; they do not modify the original object.
+
+Two particularly important operations are **splitting** and **joining**.
+
+A string can be decomposed into pieces:
+
+```python
+record = "sensor-01,21.5,active"
+
+fields = record.split(",")
+```
+
+producing:
+
+```python
+["sensor-01", "21.5", "active"]
+```
+
+Conversely:
+
+```python
+record = ",".join(fields)
+```
+
+constructs a string from those pieces.
+
+The two operations therefore move between two useful representations:
+
+$$
+\text{structured sequence of strings}
+\longleftrightarrow
+\text{single textual representation}.
+$$
+
+This pattern appears frequently when processing files, delimited records, logs, and other textual data.
+
+## String Formatting
+
+Programs often need to construct text from values of different types. Python's formatted string literals, or **f-strings**, provide a direct mechanism:
+
+```python
+sensor = "A17"
+temperature = 21.537
+
+message = f"Sensor {sensor}: {temperature:.2f} C"
+```
+
+which produces:
+
+```text
+'Sensor A17: 21.54 C'
+```
+
+The expression inside `{}` is evaluated and its value is incorporated into the resulting string.
+
+Formatting specifications can control details such as precision, alignment, width, and numeric representation:
+
+```python
+value = 0.87342
+
+message = f"Accuracy: {value:.2%}"
+```
+
+producing:
+
+```text
+'Accuracy: 87.34%'
+```
+
+Formatting should be distinguished from the underlying value. The floating-point object has not changed because it is displayed with two decimal places. Formatting constructs a textual representation of that value.
+
+Thus:
+
+$$
+\boxed{
+\text{value}
+\neq
+\text{textual representation of the value}.
+}
+$$
+
+This distinction is important when reading and writing data: text may represent a number, but it remains text until it is parsed into a numeric object.
+
+For example:
+
+```python
+value = float("21.5")
+```
+
+converts textual data into a floating-point object, while:
+
+```python
+text = f"{value:.1f}"
+```
+
+constructs text from that numeric object.
+
+## Unicode Text
+
+Text processing becomes more subtle when programs must represent languages and symbols beyond a small character set. Python strings use **Unicode**, which provides a common system for identifying textual characters.
+
+A Unicode **code point** is an integer associated with a character. Python provides `ord` to obtain the code point of a character:
+
+```python
+ord("A")
+```
+
+and `chr` for the inverse operation:
+
+```python
+chr(65)
+```
+
+Thus:
+
+$$
+\text{character}
+\longleftrightarrow
+\text{Unicode code point}.
+$$
+
+A Python string should therefore be understood as text expressed through Unicode characters, rather than as a sequence of raw bytes.
+
+This distinction becomes important when text crosses the boundary between a Python program and an external representation such as a file or network message.
+
+## Text and Bytes
+
+Computers ultimately store and transmit information as bytes. Unicode text therefore needs an **encoding** when it is converted into a byte representation.
+
+Python distinguishes these concepts explicitly:
+
+```text
+str    -> Unicode text
+bytes  -> binary data
+```
+
+An encoding defines how Unicode characters are represented as bytes. UTF-8 is a widely used encoding.
+
+A string can be encoded:
+
+```python
+text = "café"
+
+data = text.encode("utf-8")
+```
+
+The result is a `bytes` object rather than another string.
+
+The inverse operation is decoding:
+
+```python
+text = data.decode("utf-8")
+```
+
+The relationship is:
+
+$$
+\boxed{
+\texttt{str}
+\xrightarrow{\text{encode}}
+\texttt{bytes}
+\xrightarrow{\text{decode}}
+\texttt{str}.
+}
+$$
+
+![Encoding converts Unicode text into a byte representation, while decoding interprets bytes according to an encoding to reconstruct text.](figures/text-encoding-decoding.png){#fig-text-encoding-decoding}
+
+The encoding must be known because the same byte sequence can have different interpretations under different encoding schemes, and not every byte sequence is valid under every encoding.
+
+This distinction is especially important for file and network I/O. A program may reason about characters and strings internally, while external systems store or transmit encoded bytes.
+
+Confusing text with its encoded representation is a common source of errors. The two abstractions should therefore remain separate:
+
+$$
+\boxed{
+\text{text is a sequence of characters;}
+\qquad
+\text{encoded data is a sequence of bytes}.
+}
+$$
+
+Strings provide the first major example of a **sequence abstraction** in Python. Their indexing, slicing, iteration, membership, and ordering behaviour will reappear in other sequence types. The next step is to examine Python's built-in containers, where mutability, references, ordering, uniqueness, and key-based access lead to different ways of organising collections of objects.
+
 
 
 # References
