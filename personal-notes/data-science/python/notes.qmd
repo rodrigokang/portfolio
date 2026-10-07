@@ -3170,6 +3170,3806 @@ $$
 
 Strings provide the first major example of a **sequence abstraction** in Python. Their indexing, slicing, iteration, membership, and ordering behaviour will reappear in other sequence types. The next step is to examine Python's built-in containers, where mutability, references, ordering, uniqueness, and key-based access lead to different ways of organising collections of objects.
 
+# Built-in Collections
+
+A single object is sufficient when a computation concerns one value. Most programs, however, operate on collections: observations in a dataset, words in a document, records indexed by identifiers, or distinct elements accumulated during a search.
+
+Different problems require different ways of organising those objects. Sometimes order matters; sometimes values must be associated with keys; sometimes uniqueness and membership are more important than position.
+
+Python provides several fundamental collection types:
+
+| Type | Organisation | Mutable | Typical access |
+|:---:|:---:|:---:|:---:|
+| `list` | Ordered sequence | Yes | Position |
+| `tuple` | Ordered sequence | No | Position |
+| `dict` | Key-value mapping | Yes | Key |
+| `set` | Collection of distinct elements | Yes | Membership |
+| `frozenset` | Collection of distinct elements | No | Membership |
+
+These types should not be viewed simply as alternative containers. Each represents a different abstraction and therefore supports different operations naturally.
+
+A useful first question when choosing a collection is not:
+
+> Which Python type should be used?
+
+but rather:
+
+> How is the information organised, and which operations must the program perform?
+
+The appropriate representation follows from that requirement.
+
+## Lists
+
+A `list` represents an ordered, mutable sequence of object references.
+
+Lists can contain objects of different types:
+
+```python
+record = ["sensor-01", 21.5, True]
+```
+
+and their length can change during execution:
+
+```python
+measurements = [21.5, 21.8]
+
+measurements.append(22.1)
+```
+
+producing:
+
+```text
+[21.5, 21.8, 22.1]
+```
+
+Because lists are sequences, they support the indexing and slicing conventions already introduced for strings:
+
+```python
+measurements[0]
+measurements[-1]
+measurements[1:3]
+```
+
+The crucial difference is mutability. A list element can be replaced:
+
+```python
+measurements[0] = 21.6
+```
+
+without constructing an entirely new list.
+
+This makes lists suitable when a program needs an ordered collection whose contents may evolve.
+
+### Lists Store References
+
+A Python list should not be understood as a row of independent copies of its elements. Conceptually, the list contains **references to objects**.
+
+Consider:
+
+```python
+first = [1, 2]
+second = [3, 4]
+
+matrix = [first, second]
+```
+
+The structure can be represented as:
+
+$$
+\texttt{matrix}
+\longrightarrow
+[
+\text{reference to }\texttt{first},
+\text{reference to }\texttt{second}
+].
+$$
+
+The nested lists remain independent objects.
+
+Therefore:
+
+```python
+first.append(5)
+```
+
+also changes what is observed through:
+
+```python
+matrix[0]
+```
+
+because both paths reach the same object.
+
+![A Python list is a referential container: its elements are references to objects, which may themselves be mutable and shared elsewhere in the program.](figures/list-reference-structure.png){#fig-list-reference-structure}
+
+This referential model explains an important construction pitfall:
+
+```python
+matrix = [[0] * 3] * 3
+```
+
+At first sight, this appears to create three independent rows:
+
+```text
+[
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+]
+```
+
+but the repetition duplicates the reference to the inner list rather than constructing three independent inner lists.
+
+Consequently:
+
+```python
+matrix[0][0] = 1
+```
+
+produces a structure equivalent to:
+
+```text
+[
+    [1, 0, 0],
+    [1, 0, 0],
+    [1, 0, 0],
+]
+```
+
+All three positions in the outer list refer to the same inner object.
+
+When independent rows are intended, each row must be created separately:
+
+```python
+matrix = [[0] * 3 for _ in range(3)]
+```
+
+This example is another consequence of the same object model introduced earlier. The behaviour is not a special property of matrices; it follows from references, aliasing, and mutability.
+
+### List Operations
+
+Lists support operations that reflect their sequence abstraction.
+
+An element can be added to the end:
+
+```python
+values.append(10)
+```
+
+several elements can be appended:
+
+```python
+values.extend(other_values)
+```
+
+and an element can be inserted at a particular position:
+
+```python
+values.insert(index, value)
+```
+
+Elements can be removed by position:
+
+```python
+value = values.pop()
+```
+
+or by matching a value:
+
+```python
+values.remove(target)
+```
+
+These operations may appear similar from the perspective of the public interface, but they do not necessarily have the same computational cost. Adding an element at the end and inserting one at the beginning impose different requirements on the underlying representation.
+
+We will analyse these differences after examining how Python sequences are represented internally.
+
+### List Comprehensions
+
+Many lists are constructed by applying a transformation or condition to values from another iterable.
+
+For example:
+
+```python
+squares = []
+
+for value in range(10):
+    squares.append(value ** 2)
+```
+
+can be expressed as a list comprehension:
+
+```python
+squares = [value ** 2 for value in range(10)]
+```
+
+A condition can also be included:
+
+```python
+positive_squares = [
+    value ** 2
+    for value in data
+    if value > 0
+]
+```
+
+A comprehension should be understood as a compact expression for constructing a collection, not merely as shorter syntax for a loop.
+
+Conceptually:
+
+$$
+\text{iterable}
+\longrightarrow
+\text{optional selection}
+\longrightarrow
+\text{transformation}
+\longrightarrow
+\text{new list}.
+$$
+
+When the transformation or filtering logic becomes complicated, an explicit loop may communicate the computation more clearly. Concision is useful only while the structure of the operation remains evident.
+
+## Tuples
+
+A `tuple` is an ordered sequence like a list, but the tuple itself is immutable.
+
+A tuple can be created as:
+
+```python
+point = (3.0, 4.0)
+```
+
+and supports indexing, slicing, iteration, and other non-mutating sequence operations:
+
+```python
+point[0]
+point[-1]
+```
+
+However:
+
+```python
+point[0] = 5.0
+```
+
+is invalid because the tuple does not allow its stored references to be replaced.
+
+Tuples are particularly useful when several related values form a fixed structure. A coordinate:
+
+```python
+point = (3.0, 4.0)
+```
+
+or a record:
+
+```python
+observation = ("sensor-01", 21.5, True)
+```
+
+may naturally represent a collection whose structure is not intended to change.
+
+### Tuple Construction and Unpacking
+
+The comma, rather than the parentheses themselves, is what fundamentally defines a tuple.
+
+For example:
+
+```python
+point = 3.0, 4.0
+```
+
+creates the same two-element tuple as:
+
+```python
+point = (3.0, 4.0)
+```
+
+This becomes especially visible for a one-element tuple:
+
+```python
+single = (42,)
+```
+
+Without the comma:
+
+```python
+single = (42)
+```
+
+the parentheses merely group the expression and the result is an integer.
+
+Tuples interact naturally with unpacking:
+
+```python
+x, y = point
+```
+
+The elements of the tuple are bound to the corresponding names.
+
+The same mechanism explains multiple assignment:
+
+```python
+a, b = b, a
+```
+
+The right-hand side creates a tuple-like collection of values before those values are assigned to the names on the left.
+
+Unpacking can also capture a variable number of elements:
+
+```python
+first, *middle, last = values
+```
+
+where `middle` receives the elements not assigned to the fixed positions.
+
+### Immutability Is Not Recursive
+
+As with strings, tuple immutability applies to the tuple object itself. It does not imply that every referenced object is immutable.
+
+Consider:
+
+```python
+record = ("sensor-01", [21.5, 21.8])
+```
+
+The tuple cannot be changed to refer to a different list at its second position:
+
+```python
+record[1] = other_values
+```
+
+but the existing list can still be modified:
+
+```python
+record[1].append(22.1)
+```
+
+The tuple continues to contain the same reference; the referenced object has changed.
+
+This distinction can be expressed as:
+
+$$
+\boxed{
+\text{immutable container}
+\not\Rightarrow
+\text{immutable object graph}.
+}
+$$
+
+It also explains why immutability and hashability are related but not identical concepts. Whether an object can be used as a hash key depends on the stability of its equality and hash behaviour, not merely on the absence of assignment syntax at the outermost level. This will become clearer when dictionaries and hash tables are considered.
+
+## Dictionaries
+
+Sequences organise elements by position. Many problems require a different relationship: a value should be retrieved according to a meaningful **key**.
+
+For example, suppose measurements are associated with sensor identifiers:
+
+```python
+temperatures = {
+    "sensor-01": 21.5,
+    "sensor-02": 19.8,
+    "sensor-03": 22.1,
+}
+```
+
+Retrieving:
+
+```python
+temperatures["sensor-02"]
+```
+
+asks for the value associated with the key `"sensor-02"`, not for the object occupying a particular numerical position.
+
+A `dict` therefore represents a **mapping**:
+
+$$
+\text{key}
+\longrightarrow
+\text{value}.
+$$
+
+More formally, if $K$ is a set of keys and $V$ a collection of possible values, a mapping associates each stored key with one value:
+
+$$
+f:K\rightarrow V.
+$$
+
+The keys are unique within a dictionary, while different keys may map to equal values.
+
+This abstraction is appropriate whenever the natural question is:
+
+> What value is associated with this key?
+
+rather than:
+
+> What object occupies this position?
+
+### Access and Update
+
+A value can be retrieved by key:
+
+```python
+temperature = temperatures["sensor-01"]
+```
+
+and a new association can be created:
+
+```python
+temperatures["sensor-04"] = 20.7
+```
+
+Assigning to an existing key replaces the associated value:
+
+```python
+temperatures["sensor-01"] = 21.9
+```
+
+The dictionary therefore remains a mapping from unique keys to values.
+
+Attempting direct indexing with a key that is not present raises a `KeyError`. When absence is expected, `get` can provide an alternative:
+
+```python
+temperature = temperatures.get("sensor-10")
+```
+
+which returns `None` if the key is absent, or:
+
+```python
+temperature = temperatures.get("sensor-10", 0.0)
+```
+
+which provides an explicit default.
+
+It is important to distinguish a missing key from a key whose associated value happens to be `None`:
+
+```python
+configuration = {"threshold": None}
+```
+
+Here `"threshold"` is present even though:
+
+```python
+configuration.get("threshold")
+```
+
+returns `None`.
+
+When that distinction matters, membership should be tested explicitly:
+
+```python
+if "threshold" in configuration:
+    ...
+```
+
+### Dictionary Views and Iteration
+
+Iterating directly over a dictionary produces its keys:
+
+```python
+for sensor in temperatures:
+    ...
+```
+
+Python also provides views of keys, values, and key-value pairs:
+
+```python
+temperatures.keys()
+temperatures.values()
+temperatures.items()
+```
+
+For example:
+
+```python
+for sensor, temperature in temperatures.items():
+    print(sensor, temperature)
+```
+
+The objects returned by `keys()`, `values()`, and `items()` are views rather than independent snapshots of all dictionary contents. They remain associated with the dictionary and reflect its current state.
+
+This is another example of why understanding object relationships matters beyond syntax.
+
+### Hashable Keys
+
+Dictionary keys must satisfy a requirement known as **hashability**.
+
+A hashable object provides a hash value that remains stable while the object is used as a key and has equality semantics compatible with hashing. Immutable built-in values such as strings, integers, and appropriate tuples are commonly used as keys:
+
+```python
+coordinates = {
+    (0, 0): "origin",
+    (1, 0): "east",
+}
+```
+
+A list cannot normally be used as a dictionary key because it is mutable:
+
+```python
+invalid = {[1, 2]: "value"}
+```
+
+would fail.
+
+The reason for this restriction follows from the internal mechanism used to implement dictionaries: Python relies on hashing to locate keys efficiently. If a key could change in a way that changed its hash while stored, the structure could no longer reliably locate it.
+
+We will develop this mechanism formally when studying **maps and hash tables**. For now, the important distinction is:
+
+$$
+\boxed{
+\text{dictionary interface}
+\rightarrow
+\text{mapping by key},
+}
+$$
+
+while hashing is one implementation technique that makes this interface efficient.
+
+## Sets
+
+A `set` represents a collection of distinct hashable elements.
+
+For example:
+
+```python
+observed = {"A", "B", "C"}
+```
+
+Unlike a list or tuple, a set is not organised around positional access. Its central operations concern **membership** and **set relationships**.
+
+For example:
+
+```python
+"B" in observed
+```
+
+asks whether `"B"` belongs to the collection.
+
+Repeated values do not create repeated elements:
+
+```python
+values = {1, 1, 2, 2, 3}
+```
+
+represents the set:
+
+$$
+\{1,2,3\}.
+$$
+
+This makes sets useful when uniqueness is part of the problem itself.
+
+For example:
+
+```python
+unique_categories = set(categories)
+```
+
+constructs the distinct values appearing in an iterable.
+
+### Set Operations
+
+Python sets support the standard operations of mathematical set theory.
+
+For sets $A$ and $B$, the union:
+
+$$
+A\cup B
+$$
+
+contains elements belonging to either set and can be written:
+
+```python
+A | B
+```
+
+The intersection:
+
+$$
+A\cap B
+$$
+
+contains elements common to both:
+
+```python
+A & B
+```
+
+The difference:
+
+$$
+A\setminus B
+$$
+
+contains elements in $A$ but not in $B$:
+
+```python
+A - B
+```
+
+and the symmetric difference:
+
+$$
+A\triangle B
+$$
+
+contains elements belonging to exactly one of the sets:
+
+```python
+A ^ B
+```
+
+For example:
+
+```python
+expected = {"A", "B", "C", "D"}
+observed = {"A", "C", "E"}
+
+missing = expected - observed
+unexpected = observed - expected
+```
+
+The representation closely matches the underlying mathematical reasoning.
+
+Sets also support subset and superset relationships:
+
+```python
+A <= B
+A >= B
+```
+
+and disjointness can be tested with:
+
+```python
+A.isdisjoint(B)
+```
+
+This makes sets particularly useful when a problem is naturally expressed in terms of membership rather than position.
+
+### Mutable and Immutable Sets
+
+The ordinary `set` type is mutable:
+
+```python
+observed.add("D")
+observed.remove("A")
+```
+
+Python also provides `frozenset`, an immutable set type:
+
+```python
+required = frozenset({"A", "B", "C"})
+```
+
+Because its membership cannot change after creation, a `frozenset` can itself be hashable when its elements satisfy the necessary requirements. It can therefore participate in structures where an ordinary mutable set cannot, including use as a dictionary key or as an element of another set.
+
+## Choosing a Collection
+
+The built-in collections provide different ways of expressing relationships among objects.
+
+A list is appropriate when **order and positional access** matter and the sequence may change. A tuple represents an ordered structure whose references are intended to remain fixed. A dictionary expresses an association between **keys and values**. A set represents **membership and uniqueness**.
+
+These distinctions are semantic before they are computational.
+
+For example, suppose a program records the sequence in which events occurred:
+
+```python
+events = [...]
+```
+
+A list is natural because order is meaningful.
+
+If each event must instead be retrieved by a unique identifier:
+
+```python
+events_by_id = {...}
+```
+
+a dictionary expresses the problem more directly.
+
+If the only requirement is to know which event categories have appeared:
+
+```python
+categories = {...}
+```
+
+a set removes positional information that the problem does not require.
+
+Choosing an appropriate abstraction often simplifies the algorithm itself because the operations provided by the data structure correspond to the questions the program needs to answer.
+
+At the same time, these abstractions are implemented by concrete representations in memory. Those representations determine how much memory is required and how efficiently operations such as indexing, insertion, deletion, and membership can be performed.
+
+To understand those consequences, it is necessary to move below the public interface and examine how sequence structures are represented internally.
+
+# Algorithm Analysis
+
+Two programs can produce exactly the same result while requiring very different amounts of computational work. For small inputs, the difference may be negligible. As the input grows, however, the choice of algorithm and data structure can determine whether a computation remains practical.
+
+Consider the problem of finding the largest element of a non-empty sequence:
+
+```python
+def find_max(data):
+    largest = data[0]
+
+    for value in data[1:]:
+        if value > largest:
+            largest = value
+
+    return largest
+```
+
+The algorithm examines the elements and maintains the largest value encountered so far. If the input contains more elements, more comparisons are required.
+
+This suggests that computational cost should be described as a function of the **input size**:
+
+$$
+T(n),
+$$
+
+where $n$ measures the size of the problem and $T(n)$ represents the amount of work required.
+
+The appropriate definition of $n$ depends on the problem. For a sequence algorithm, it may be the number of elements. For a graph algorithm, both the number of vertices and edges may matter. For an integer algorithm, the number of bits required to represent the integer may be more meaningful than its numerical value.
+
+Algorithm analysis provides a framework for reasoning about these costs independently of a particular execution on a particular machine.
+
+## Experimental Analysis
+
+One direct way to study performance is to implement an algorithm and measure its execution time.
+
+Conceptually:
+
+$$
+t_{\text{elapsed}}
+=
+t_{\text{end}}
+-
+t_{\text{start}}.
+$$
+
+Repeating the experiment for increasing input sizes can reveal how runtime changes as the problem grows.
+
+This approach is useful. Empirical measurements can expose implementation overhead, memory behaviour, interpreter costs, caching effects, and other characteristics of an actual computing environment.
+
+However, experimental timing alone has important limitations.
+
+The observed result depends on factors such as:
+
+- hardware;
+- operating system;
+- Python implementation and version;
+- other processes using the machine;
+- details of the implementation;
+- the particular inputs used in the experiment.
+
+Furthermore, an algorithm must already have been implemented before it can be measured.
+
+Suppose two implementations are timed and one requires $0.4$ seconds while another requires $0.7$ seconds. This tells us something about those executions, but it does not by itself explain how their costs will behave if the input becomes ten, one thousand, or one million times larger.
+
+Empirical analysis and theoretical analysis therefore answer related but different questions:
+
+$$
+\begin{aligned}
+\text{experimental analysis}
+&\rightarrow
+\text{observed performance},
+\\
+\text{asymptotic analysis}
+&\rightarrow
+\text{growth of computational cost}.
+\end{aligned}
+$$
+
+The two approaches are complementary rather than competing.
+
+## A Model of Computation
+
+To reason about an algorithm without depending on a particular processor, we can count elementary computational steps rather than measuring seconds.
+
+Examples of such **primitive operations** include:
+
+- binding a name to an object;
+- retrieving an object associated with a name;
+- performing an arithmetic operation;
+- comparing two values;
+- accessing a sequence element by index;
+- calling or returning from a function.
+
+The precise duration of these operations varies in a real computer. For asymptotic analysis, however, they can often be treated as operations whose cost is bounded independently of the input size.
+
+If an algorithm performs $f(n)$ primitive operations on an input of size $n$, its running time can be modelled as proportional to:
+
+$$
+T(n)\propto f(n).
+$$
+
+The objective is not usually to predict the exact number of processor cycles. Instead, we want to understand how the amount of work changes as $n$ grows.
+
+For the maximum-search algorithm, each element is examined once and each iteration performs a bounded amount of work. The number of operations therefore grows proportionally to $n$.
+
+This is a **linear** growth pattern.
+
+## Best, Average, and Worst Cases
+
+An algorithm does not necessarily perform the same amount of work for every input of the same size.
+
+Consider a sequential search:
+
+```python
+def contains(data, target):
+    for value in data:
+        if value == target:
+            return True
+
+    return False
+```
+
+If `target` is the first element, only one comparison is required. If it is the last element, or does not occur at all, the algorithm may examine the entire sequence.
+
+For inputs of size $n$, we can therefore distinguish:
+
+$$
+T_{\text{best}}(n),
+\qquad
+T_{\text{average}}(n),
+\qquad
+T_{\text{worst}}(n).
+$$
+
+The **best case** describes the least work required by any input of size $n$.
+
+The **worst case** describes the greatest work required by any input of size $n$.
+
+The **average case** describes expected performance under a specified probability distribution over possible inputs.
+
+The last qualification is essential. An average cannot be defined meaningfully without assumptions about how inputs occur.
+
+For sequential search, for example, the expected number of comparisons depends on how likely the target is to occur and where it is likely to appear.
+
+Worst-case analysis is often particularly useful because it provides a guarantee:
+
+$$
+T(n)
+\leq
+T_{\text{worst}}(n)
+$$
+
+for every input of size $n$.
+
+This does not imply that worst-case behaviour is always the only relevant measure. Average-case and expected analyses are important for many algorithms and data structures. The appropriate measure depends on the question being studied.
+
+## Common Growth Functions
+
+A relatively small set of functions appears repeatedly in algorithm analysis.
+
+The most common growth classes considered in these notes are:
+
+$$
+1,
+\qquad
+\log n,
+\qquad
+n,
+\qquad
+n\log n,
+\qquad
+n^2,
+\qquad
+n^3,
+\qquad
+a^n,
+$$
+
+where $a>1$ is a constant.
+
+Their relative growth for sufficiently large $n$ is:
+
+$$
+1
+<
+\log n
+<
+n
+<
+n\log n
+<
+n^2
+<
+n^3
+<
+a^n.
+$$
+
+![Comparison of the principal growth functions used in algorithm analysis as input size increases.](figures/algorithm-growth-rates.png){#fig-algorithm-growth-rates}
+
+The differences become increasingly important as the input grows.
+
+### Constant Growth
+
+A constant-time operation requires an amount of work that does not grow with $n$:
+
+$$
+T(n)=c.
+$$
+
+For example, accessing one element of an array-like sequence by a known index can be constant time under an appropriate representation.
+
+Constant time does not mean that an operation takes literally one instruction or the same number of nanoseconds on every machine. It means that its cost does not grow as a function of the input size being analysed.
+
+### Logarithmic Growth
+
+A logarithmic process often appears when the remaining problem is reduced by a constant factor at each step.
+
+Suppose an input of size $n$ is repeatedly divided by $2$:
+
+$$
+n,
+\frac{n}{2},
+\frac{n}{2^2},
+\ldots,
+\frac{n}{2^k}.
+$$
+
+The process ends when the remaining size reaches approximately $1$:
+
+$$
+\frac{n}{2^k}\leq1.
+$$
+
+Therefore:
+
+$$
+n\leq2^k.
+$$
+
+Taking logarithms base $2$:
+
+$$
+\log_2 n\leq k.
+$$
+
+Thus the required number of reductions grows proportionally to:
+
+$$
+\log n.
+$$
+
+Binary search is a fundamental example of this pattern.
+
+The logarithm base is generally omitted in asymptotic analysis because logarithms with different constant bases differ only by a constant factor:
+
+$$
+\log_a n
+=
+\frac{\log_b n}{\log_b a}.
+$$
+
+Since:
+
+$$
+\frac{1}{\log_b a}
+$$
+
+is constant with respect to $n$, the asymptotic growth class is unchanged.
+
+### Linear Growth
+
+A linear algorithm performs an amount of work proportional to the input size:
+
+$$
+T(n)=cn+d.
+$$
+
+Processing each element of a sequence once is a typical example:
+
+```python
+total = 0
+
+for value in data:
+    total += value
+```
+
+If the sequence contains $n$ elements, the loop executes $n$ times.
+
+Ignoring constant factors and lower-order terms, the dominant growth is:
+
+$$
+n.
+$$
+
+### Linearithmic Growth
+
+Many efficient divide-and-conquer algorithms have running times proportional to:
+
+$$
+n\log n.
+$$
+
+This can arise when a computation performs approximately $\log n$ levels of decomposition while processing a total of $n$ elements at each level.
+
+Merge sort will later provide an important example.
+
+Linearithmic growth is substantially slower than linear growth for sufficiently large inputs, but substantially better than quadratic growth.
+
+### Quadratic Growth
+
+Quadratic behaviour commonly appears when each of $n$ elements is compared or combined with a number of other elements proportional to $n$.
+
+A simple nested loop illustrates the pattern:
+
+```python
+for i in range(n):
+    for j in range(n):
+        process(i, j)
+```
+
+The inner operation executes:
+
+$$
+n\cdot n=n^2
+$$
+
+times.
+
+Quadratic behaviour can also arise when the inner loop does not always execute exactly $n$ times.
+
+Consider:
+
+```python
+for i in range(n):
+    for j in range(i + 1):
+        process(i, j)
+```
+
+The number of executions is:
+
+$$
+1+2+3+\cdots+n.
+$$
+
+Using the arithmetic-series identity:
+
+$$
+\sum_{i=1}^{n}i
+=
+\frac{n(n+1)}{2},
+$$
+
+we obtain:
+
+$$
+T(n)
+=
+\frac{n^2+n}{2}.
+$$
+
+The dominant term is proportional to $n^2$, so the growth is quadratic.
+
+### Cubic and Exponential Growth
+
+Three nested loops whose ranges are each proportional to $n$ can produce cubic growth:
+
+$$
+T(n)\propto n^3.
+$$
+
+Exponential growth has the form:
+
+$$
+T(n)\propto a^n,
+\qquad a>1.
+$$
+
+The distinction between polynomial and exponential growth is substantial. If the input size increases by one, a polynomial changes by an amount determined by powers of $n$, while an exponential function is multiplied repeatedly by a constant factor.
+
+For example:
+
+$$
+2^{10}=1024,
+$$
+
+but:
+
+$$
+2^{50}
+=
+1\,125\,899\,906\,842\,624.
+$$
+
+Algorithms with exponential running time therefore become impractical rapidly as input size increases.
+
+## Asymptotic Analysis
+
+Exact operation counts can become complicated and often include details that do not determine how an algorithm scales.
+
+Suppose an algorithm performs:
+
+$$
+T(n)=8n+5
+$$
+
+primitive operations.
+
+As $n$ becomes large, the additive constant becomes increasingly insignificant relative to the linear term. Furthermore, whether one iteration corresponds to eight primitive operations or twelve may depend on implementation details.
+
+Asymptotic analysis focuses instead on the **rate of growth**.
+
+This allows algorithms to be compared according to their dominant computational behaviour while ignoring constant factors and lower-order terms when those terms do not affect the growth class.
+
+Three notations are particularly useful:
+
+$$
+O(g(n)),
+\qquad
+\Omega(g(n)),
+\qquad
+\Theta(g(n)).
+$$
+
+They express asymptotic upper bounds, lower bounds, and tight bounds respectively.
+
+## Big-O Notation
+
+Let $f(n)$ and $g(n)$ be positive functions for sufficiently large $n$.
+
+We say that:
+
+$$
+f(n)=O(g(n))
+$$
+
+if there exist constants:
+
+$$
+c>0
+$$
+
+and:
+
+$$
+n_0\geq1
+$$
+
+such that:
+
+$$
+0\leq f(n)\leq cg(n)
+$$
+
+for every:
+
+$$
+n\geq n_0.
+$$ {#eq-big-o-definition}
+
+The function $g(n)$ therefore provides an asymptotic upper bound for $f(n)$ up to a constant factor.
+
+![Big-O notation provides an asymptotic upper bound: beyond some input size $n_0$, the function $f(n)$ remains below a constant multiple $cg(n)$.](figures/big-o-upper-bound.png){#fig-big-o-upper-bound}
+
+Consider:
+
+$$
+f(n)=8n+5.
+$$
+
+We want to show:
+
+$$
+8n+5=O(n).
+$$
+
+According to the definition, we need constants $c$ and $n_0$ such that:
+
+$$
+8n+5\leq cn
+$$
+
+for all:
+
+$$
+n\geq n_0.
+$$
+
+For $n\geq5$:
+
+$$
+5\leq n.
+$$
+
+Therefore:
+
+$$
+8n+5
+\leq
+8n+n
+=
+9n.
+$$
+
+Thus we may choose:
+
+$$
+c=9,
+\qquad
+n_0=5,
+$$
+
+which proves:
+
+$$
+8n+5=O(n).
+$$
+
+The constants are not unique. The purpose is simply to establish that such constants exist.
+
+### Dominant Terms
+
+Big-O notation explains formally why constant factors and lower-order terms can often be omitted.
+
+Consider:
+
+$$
+f(n)=4n^2+3n+7.
+$$
+
+For:
+
+$$
+n\geq1,
+$$
+
+we have:
+
+$$
+3n\leq3n^2
+$$
+
+and:
+
+$$
+7\leq7n^2.
+$$
+
+Therefore:
+
+$$
+4n^2+3n+7
+\leq
+4n^2+3n^2+7n^2
+=
+14n^2.
+$$
+
+Hence:
+
+$$
+f(n)=O(n^2).
+$$
+
+The quadratic term determines the asymptotic upper bound.
+
+However, Big-O should not be interpreted as meaning "the exact running time is the dominant term". It describes a bound on growth.
+
+For example:
+
+$$
+n=O(n^2)
+$$
+
+is mathematically true, although $O(n)$ is a tighter upper bound for a linear function.
+
+## Big-Omega Notation
+
+Big-Omega provides the corresponding asymptotic lower bound.
+
+We say:
+
+$$
+f(n)=\Omega(g(n))
+$$
+
+if there exist constants:
+
+$$
+c>0
+$$
+
+and:
+
+$$
+n_0\geq1
+$$
+
+such that:
+
+$$
+f(n)\geq cg(n)
+$$
+
+for all:
+
+$$
+n\geq n_0.
+$$ {#eq-big-omega-definition}
+
+For example:
+
+$$
+f(n)=8n+5
+$$
+
+satisfies:
+
+$$
+8n+5\geq8n
+$$
+
+for all positive $n$.
+
+Therefore:
+
+$$
+8n+5=\Omega(n).
+$$
+
+Big-Omega is useful when establishing that an algorithm or problem cannot require asymptotically less than a certain amount of work.
+
+## Big-Theta Notation
+
+When the same function provides both an asymptotic upper and lower bound, we obtain a **tight asymptotic bound**.
+
+We say:
+
+$$
+f(n)=\Theta(g(n))
+$$
+
+if:
+
+$$
+f(n)=O(g(n))
+$$
+
+and:
+
+$$
+f(n)=\Omega(g(n)).
+$$
+
+Equivalently, there exist positive constants $c_1$, $c_2$, and $n_0$ such that:
+
+$$
+c_1g(n)
+\leq
+f(n)
+\leq
+c_2g(n)
+$$
+
+for every:
+
+$$
+n\geq n_0.
+$$ {#eq-big-theta-definition}
+
+For:
+
+$$
+f(n)=8n+5,
+$$
+
+we have already established:
+
+$$
+8n+5=O(n).
+$$
+
+We also know:
+
+$$
+8n+5\geq8n.
+$$
+
+Therefore:
+
+$$
+8n+5=\Omega(n).
+$$
+
+Combining both results:
+
+$$
+\boxed{
+8n+5=\Theta(n).
+}
+$$
+
+Big-Theta is often the most informative notation when the growth rate can be characterised tightly.
+
+The three notations can be summarised as:
+
+$$
+\begin{aligned}
+O(g(n))
+&\rightarrow
+\text{asymptotic upper bound},
+\\
+\Omega(g(n))
+&\rightarrow
+\text{asymptotic lower bound},
+\\
+\Theta(g(n))
+&\rightarrow
+\text{asymptotically tight bound}.
+\end{aligned}
+$$
+
+## Analysing Loops
+
+The complexity of many Python algorithms can be determined by examining how often their fundamental operations execute.
+
+Consider:
+
+```python
+def find_max(data):
+    largest = data[0]
+
+    for value in data:
+        if value > largest:
+            largest = value
+
+    return largest
+```
+
+For a sequence of size $n$, the loop performs $n$ iterations. Each iteration requires a bounded number of primitive operations.
+
+Thus:
+
+$$
+T(n)=an+b
+$$
+
+for constants $a$ and $b$, and therefore:
+
+$$
+T(n)=\Theta(n).
+$$
+
+Nested loops require more care. The complexity is determined by the total number of executions, not merely by counting the number of syntactic loop statements.
+
+For:
+
+```python
+for i in range(n):
+    for j in range(n):
+        process(i, j)
+```
+
+the operation executes:
+
+$$
+\sum_{i=1}^{n}n
+=
+n^2
+$$
+
+times.
+
+Therefore:
+
+$$
+T(n)=\Theta(n^2).
+$$
+
+For a triangular loop:
+
+```python
+for i in range(n):
+    for j in range(i):
+        process(i, j)
+```
+
+the number of executions is:
+
+$$
+\sum_{i=0}^{n-1}i.
+$$
+
+Using:
+
+$$
+\sum_{i=0}^{n-1}i
+=
+\frac{n(n-1)}{2},
+$$
+
+we obtain:
+
+$$
+T(n)
+=
+\frac{n^2-n}{2}
+=
+\Theta(n^2).
+$$
+
+The exact operation count differs from the rectangular nested loop, but both belong to the same asymptotic growth class.
+
+## Correctness and Efficiency
+
+An efficient algorithm is useful only if it is correct.
+
+Algorithm analysis therefore involves two distinct questions:
+
+1. Does the algorithm produce the required result?
+2. How much computational resource does it require?
+
+Testing can provide evidence that an implementation behaves correctly for selected inputs, but it does not generally prove correctness for all possible inputs.
+
+Mathematical reasoning can provide stronger guarantees.
+
+### Loop Invariants
+
+A **loop invariant** is a property that remains true at a specified point during every iteration of a loop.
+
+Consider again the maximum-search algorithm:
+
+```python
+def find_max(data):
+    largest = data[0]
+
+    for value in data[1:]:
+        if value > largest:
+            largest = value
+
+    return largest
+```
+
+A useful invariant is:
+
+> After processing the first $k$ elements, `largest` is the maximum of those $k$ elements.
+
+This can be justified in three stages.
+
+**Initialization.** Before the loop processes the remaining elements, `largest` is assigned:
+
+```python
+largest = data[0]
+```
+
+so it is trivially the maximum of the first element.
+
+**Maintenance.** Assume that before processing the next value, `largest` is the maximum of all elements examined so far.
+
+If the next value is greater:
+
+```python
+if value > largest:
+    largest = value
+```
+
+the new value becomes the maximum.
+
+Otherwise `largest` remains unchanged and is still the maximum.
+
+Therefore the invariant remains true after the next element is processed.
+
+**Termination.** When the loop finishes, all $n$ elements have been processed. By the invariant, `largest` is therefore the maximum of the entire sequence.
+
+This establishes the correctness of the algorithm.
+
+The reasoning has the same logical structure as mathematical induction:
+
+$$
+\boxed{
+\text{initialisation}
+\rightarrow
+\text{maintenance}
+\rightarrow
+\text{termination}.
+}
+$$
+
+Loop invariants will be useful later when reasoning about searching, sorting, data structure operations, and graph algorithms.
+
+## Time and Space Complexity
+
+Running time is not the only computational resource that matters. Algorithms also require memory.
+
+The **space complexity** of an algorithm describes how its memory requirements grow with input size.
+
+For example, an algorithm that processes a sequence while maintaining only a fixed number of additional variables may require:
+
+$$
+O(1)
+$$
+
+auxiliary space.
+
+An algorithm that constructs an additional sequence proportional to the input size may require:
+
+$$
+O(n)
+$$
+
+auxiliary space.
+
+This distinction becomes important because algorithms may trade one resource for another. Additional memory can sometimes reduce running time, while an in-place algorithm may conserve memory at the cost of more computation.
+
+The appropriate analysis therefore depends on the resources relevant to the problem:
+
+$$
+\boxed{
+\text{algorithmic efficiency}
+=
+\text{time requirements}
++
+\text{space requirements}
++
+\text{problem constraints}.
+}
+$$
+
+Asymptotic analysis now provides the vocabulary needed to examine Python's data structures more deeply. We can return to sequence types and ask not only what operations they provide, but how their internal representation determines the cost of indexing, insertion, deletion, resizing, and iteration.
+
+# Array-Based Sequences
+
+The built-in sequence interface explains what operations can be performed on lists and tuples, but it does not explain why indexing is fast, why inserting an element near the beginning can be expensive, or why repeated calls to `append` remain efficient even though a list occasionally needs additional storage.
+
+These properties arise from the underlying representation.
+
+An **array** provides a contiguous region of memory divided into a sequence of cells of fixed size. If the address of the first cell is known and every cell occupies $s$ bytes, the address of the cell at index $j$ can be computed as:
+
+$$
+\operatorname{address}(j)
+=
+\operatorname{address}(0)+js.
+$$ {#eq-array-address}
+
+The position of an element can therefore be calculated directly rather than found by traversing the preceding elements.
+
+This is the fundamental reason that indexed access in an array is constant time:
+
+$$
+T_{\text{access}}(n)=O(1).
+$$
+
+The result depends on the representation, not merely on the syntax of indexing.
+
+## Referential and Compact Arrays
+
+There are two conceptually different ways in which an array can represent a sequence.
+
+A **compact array** stores the representation of each element directly within the array cells:
+
+$$
+[\;x_0\;][\;x_1\;][\;x_2\;]\cdots[\;x_{n-1}\;].
+$$
+
+A **referential array** instead stores references to objects located elsewhere:
+
+$$
+[\;r_0\;][\;r_1\;][\;r_2\;]\cdots[\;r_{n-1}\;],
+$$
+
+where each $r_i$ identifies another object.
+
+Python lists and tuples follow the referential model. The array underlying the sequence maintains an ordered collection of object references rather than embedding independent copies of arbitrary Python objects. 
+
+This explains why a list can contain heterogeneous objects:
+
+```python
+record = [42, "sensor-01", 21.5, True]
+```
+
+The array cells do not need to accommodate the different internal representations of an integer, a string, a floating-point value, and a Boolean value. Each cell stores a reference of a uniform size.
+
+![A compact array stores element data directly in contiguous cells, whereas a referential array stores contiguous references to objects that may reside elsewhere in memory.](figures/compact-referential-arrays.png){#fig-compact-referential-arrays}
+
+The flexibility of referential storage comes with additional indirection. Accessing:
+
+```python
+data[j]
+```
+
+first identifies the reference stored at position $j$ and then reaches the corresponding object.
+
+Compact arrays can avoid this additional layer when the elements have a uniform representation. They may therefore use less memory and can provide better locality because the actual data values are stored consecutively. 
+
+This distinction will become particularly important when numerical arrays are considered later. Python's general-purpose `list` prioritises flexibility, while numerical array structures can exploit homogeneous representations for more compact and efficient numerical computation.
+
+## Fixed Capacity
+
+A low-level array has a fixed number of cells. Once storage has been allocated for $N$ elements, an additional element cannot simply be placed at position $N$ if no cell exists there.
+
+This creates a problem for a structure such as a Python list:
+
+```python
+values = []
+
+values.append(10)
+values.append(20)
+values.append(30)
+```
+
+From the user's perspective, the list appears able to grow whenever necessary. A fixed array cannot provide that behaviour directly.
+
+One possible strategy would be to allocate exactly enough storage after every insertion. If a sequence containing $n$ elements receives one additional element, a new array of size $n+1$ could be created and all existing references copied into it.
+
+The process would be:
+
+$$
+\text{allocate larger array}
+\rightarrow
+\text{copy existing references}
+\rightarrow
+\text{insert new reference}.
+$$
+
+But copying $n$ existing references requires:
+
+$$
+\Theta(n)
+$$
+
+time. Repeating this operation for every append would make growing a sequence unnecessarily expensive.
+
+A more efficient solution is the **dynamic array**.
+
+## Dynamic Arrays
+
+A dynamic array separates two quantities:
+
+$$
+n
+=
+\text{number of elements currently stored},
+$$
+
+and:
+
+$$
+N
+=
+\text{capacity of the underlying array}.
+$$
+
+The invariant is:
+
+$$
+0\leq n\leq N.
+$$
+
+When:
+
+$$
+n<N,
+$$
+
+there is unused capacity and a new element can be appended directly into the next available cell.
+
+When:
+
+$$
+n=N,
+$$
+
+the underlying array is full. The structure must allocate a larger array, copy the existing references, and replace the old array.
+
+![A dynamic array maintains a logical size smaller than or equal to its physical capacity. When the array becomes full, a larger array is allocated and the existing references are copied.](figures/dynamic-array-resizing.png){#fig-dynamic-array-resizing}
+
+A simplified resizing strategy is:
+
+$$
+N_{\text{new}}=2N.
+$$
+
+After resizing, the sequence contains the same $n$ elements but has enough unused capacity for many subsequent append operations.
+
+The important idea is that the expensive resizing operation does **not** occur on every append.
+
+Suppose the capacities evolve as:
+
+$$
+1,2,4,8,16,\ldots
+$$
+
+A resize occurs only when the number of stored elements reaches one of these capacity boundaries.
+
+Most append operations therefore require only:
+
+1. storing one reference in the next available cell;
+2. increasing the logical size.
+
+Those operations take constant time.
+
+A resize is more expensive because all existing references must be copied.
+
+Thus, the worst-case cost of a single append can be:
+
+$$
+O(n),
+$$
+
+while most individual appends cost:
+
+$$
+O(1).
+$$
+
+To describe the cost of a long sequence of appends correctly, we need a stronger form of analysis.
+
+## Amortized Analysis
+
+**Amortized analysis** studies the total cost of a sequence of operations and distributes that cost across the operations in the sequence.
+
+This differs from average-case analysis. No probability distribution over inputs is required. The objective is to establish a deterministic bound on the total cost of a sequence of operations.
+
+Consider a dynamic array whose capacity doubles whenever it becomes full.
+
+Starting from capacity $1$, the resize operations copy approximately:
+
+$$
+1,2,4,8,\ldots
+$$
+
+existing references.
+
+Suppose $n$ append operations are performed. If:
+
+$$
+2^k\leq n<2^{k+1},
+$$
+
+then the total number of references copied during all resize events is bounded by:
+
+$$
+1+2+4+\cdots+2^k.
+$$
+
+This is a geometric series. For:
+
+$$
+S_k
+=
+1+2+4+\cdots+2^k,
+$$
+
+multiplying by $2$ gives:
+
+$$
+2S_k
+=
+2+4+8+\cdots+2^{k+1}.
+$$
+
+Subtracting the first equation from the second:
+
+$$
+2S_k-S_k
+=
+2^{k+1}-1,
+$$
+
+and therefore:
+
+$$
+S_k
+=
+2^{k+1}-1.
+$$
+
+Since:
+
+$$
+2^k\leq n,
+$$
+
+we have:
+
+$$
+2^{k+1}\leq2n.
+$$
+
+Hence:
+
+$$
+S_k
+<
+2n.
+$$
+
+The total work spent copying references during all resize operations is therefore:
+
+$$
+O(n).
+$$
+
+The $n$ ordinary insertions themselves also require:
+
+$$
+O(n)
+$$
+
+total work.
+
+Consequently, the complete sequence of $n$ append operations requires:
+
+$$
+O(n)+O(n)=O(n).
+$$
+
+Dividing the total cost across the $n$ operations gives:
+
+$$
+\frac{O(n)}{n}
+=
+O(1).
+$$
+
+Therefore:
+
+$$
+\boxed{
+\text{dynamic-array append has }O(1)\text{ amortized time}.
+}
+$$
+
+Goodrich establishes the same result for a dynamic array whose capacity doubles when full: $n$ appends from an initially empty structure require $O(n)$ total time. 
+
+This statement must be interpreted carefully. It does **not** mean that every individual append is constant time. A particular append that triggers resizing can require linear time.
+
+Rather:
+
+$$
+\boxed{
+\text{worst-case individual append}=O(n),
+\qquad
+\text{amortized append}=O(1).
+}
+$$
+
+The distinction is fundamental when analysing dynamic data structures.
+
+### Why Geometric Growth Matters
+
+The amortized result depends on increasing capacity sufficiently aggressively.
+
+Suppose instead that a fixed amount $c$ were added whenever the array became full:
+
+$$
+c,2c,3c,\ldots,mc.
+$$
+
+To reach capacity proportional to $n$, the number of resize events would itself be proportional to $n$.
+
+The total amount of copying would be proportional to:
+
+$$
+c+2c+3c+\cdots+mc.
+$$
+
+Factoring out $c$:
+
+$$
+c\sum_{i=1}^{m}i
+=
+c\frac{m(m+1)}{2}.
+$$
+
+Since:
+
+$$
+m=\Theta(n),
+$$
+
+for fixed $c$, the total cost grows as:
+
+$$
+\Theta(n^2).
+$$
+
+Thus a seemingly small implementation decision produces a major asymptotic difference:
+
+$$
+\begin{aligned}
+\text{geometric capacity growth}
+&\rightarrow O(n)
+\text{ total resizing work},
+\\
+\text{fixed capacity increments}
+&\rightarrow \Theta(n^2)
+\text{ total resizing work}.
+\end{aligned}
+$$
+
+This is a useful example of why data structure design cannot be separated from algorithm analysis. Goodrich similarly contrasts geometric expansion with fixed-increment expansion, showing that the latter leads to quadratic total work over a sequence of appends. 
+
+Geometric growth also introduces a trade-off. Reserving unused capacity consumes additional memory, but it avoids frequent reallocations. A dynamic array deliberately uses some extra space to obtain efficient growth.
+
+## Insertion and Deletion
+
+Efficient append does not imply that every insertion into an array-based sequence is efficient.
+
+Suppose:
+
+```python
+data = [10, 20, 30, 40]
+```
+
+and a new element must be inserted at position $1$:
+
+```python
+data.insert(1, 15)
+```
+
+The resulting sequence is:
+
+```text
+[10, 15, 20, 30, 40]
+```
+
+Before `15` can occupy position $1$, the references to:
+
+```text
+20, 30, 40
+```
+
+must be shifted one position to the right.
+
+If a sequence contains $n$ elements and insertion occurs at index $k$, approximately:
+
+$$
+n-k
+$$
+
+references may need to be moved.
+
+Therefore:
+
+$$
+T_{\text{insert}}(n,k)
+=
+O(n-k+1)
+$$
+
+in the amortized sense when possible resizing is included. :chatgpt-content-reference{index="4"}
+
+Near the end of the sequence, little shifting is required. Near the beginning:
+
+$$
+k\approx0,
+$$
+
+so:
+
+$$
+T_{\text{insert}}(n,0)
+=
+O(n).
+$$
+
+Deletion has the same structural issue. Removing the element at position $k$ leaves a gap, so later references must be shifted left to preserve contiguous positional indexing.
+
+Thus:
+
+$$
+T_{\text{delete}}(n,k)
+=
+O(n-k)
+$$
+
+for positional deletion from an array-based sequence. 
+
+![Insertion into an array-based sequence requires subsequent references to be shifted to create a contiguous free position.](figures/array-insertion-shifting.png){#fig-array-insertion-shifting}
+
+This explains why:
+
+```python
+data.append(value)
+```
+
+and:
+
+```python
+data.insert(0, value)
+```
+
+have fundamentally different performance characteristics even though both add one element.
+
+The difference follows directly from the representation.
+
+## Complexity of Common Sequence Operations
+
+The representation of lists and tuples allows the costs of several common operations to be understood systematically.
+
+For a sequence of length $n$:
+
+| Operation | Complexity | Reason |
+|:---:|:---:|:---:|
+| `len(data)` | $O(1)$ | Length is maintained explicitly |
+| `data[j]` | $O(1)$ | Direct array indexing |
+| `data[j] = value` | $O(1)$ | Replace one stored reference |
+| `value in data` | $O(n)$ worst case | Sequential search |
+| `data.count(value)` | $O(n)$ | Entire sequence must be examined |
+| `data[j:k]` | $O(k-j)$ | A new sequence must be constructed |
+| `data1 + data2` | $O(n_1+n_2)$ | New sequence contains both operands |
+| `data.append(value)` | $O(1)$ amortized | Occasional resizing |
+| `data.insert(k, value)` | $O(n-k)$ amortized | Shift subsequent references |
+| `data.pop()` | $O(1)$ amortized | Remove final element |
+| `data.pop(k)` | $O(n-k)$ amortized | Shift subsequent references |
+
+These bounds are consistent with Goodrich's analysis of Python's list and tuple operations. In particular, length and indexed access are constant-time operations, while searching and sequence construction depend on the number of elements examined or created. 
+
+The table should not be memorised as an arbitrary collection of facts. Most entries follow from three questions:
+
+1. Can the required location be calculated directly?
+2. How many existing references must be examined or moved?
+3. Must a new sequence be constructed?
+
+For example, indexing:
+
+```python
+data[j]
+```
+
+calculates one array position and is therefore $O(1)$.
+
+Membership:
+
+```python
+target in data
+```
+
+may need to examine every element and is therefore $O(n)$ in the worst case.
+
+Slicing:
+
+```python
+data[j:k]
+```
+
+constructs a new sequence containing approximately $k-j$ references and therefore requires time proportional to the size of the result.
+
+The internal representation provides the explanation behind the asymptotic bound.
+
+## Lists and Tuples
+
+Lists and tuples share the same fundamental sequence abstraction and both support constant-time indexed access. Their different mutability requirements, however, affect their storage needs.
+
+A list must support future growth. Its dynamic-array representation may therefore maintain unused capacity.
+
+A tuple is immutable. Once created, its number of elements cannot change, so it does not need spare capacity to support later append operations. This can make tuples more memory-efficient than equivalent lists. 
+
+The distinction illustrates a broader design principle:
+
+$$
+\boxed{
+\text{the operations an abstraction promises influence the representation it requires}.
+}
+$$
+
+Supporting mutation and growth provides flexibility, but that flexibility has implementation costs.
+
+## Multidimensional Data
+
+A Python list is one-dimensional in its immediate structure, but nested lists can represent data with several logical dimensions.
+
+For example:
+
+```python
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+]
+```
+
+can be interpreted as a $3\times3$ matrix.
+
+Accessing:
+
+```python
+matrix[i][j]
+```
+
+performs two successive reference operations:
+
+$$
+\text{outer list}
+\rightarrow
+\text{row object}
+\rightarrow
+\text{element}.
+$$
+
+This is not the same representation as a single compact two-dimensional numerical array. Each row is itself an independent Python object, and different rows could even have different lengths:
+
+```python
+data = [
+    [1, 2],
+    [3, 4, 5],
+    [6],
+]
+```
+
+Nested lists therefore provide a flexible representation of multidimensional logical structure, but they do not impose rectangular shape, homogeneous element types, or compact numerical storage.
+
+These distinctions motivate specialised numerical array structures. Later, when NumPy arrays are introduced, the contrast between general-purpose referential containers and homogeneous multidimensional arrays will explain important differences in memory layout, vectorisation, broadcasting, and computational performance.
+
+Array-based sequences provide efficient indexed access because their positions have a direct relationship to memory locations. Their weakness is equally structural: maintaining contiguous positions makes insertion and deletion away from the end potentially expensive.
+
+This trade-off motivates another family of sequence structures. **Linked structures** abandon direct array indexing and instead connect elements through explicit references, changing both the representation and the computational costs of sequence operations.
+
+# Recursion
+
+Many computational problems contain smaller instances of the same problem. A directory may contain other directories, a tree contains subtrees, and a search interval can be reduced to a smaller interval with the same structure.
+
+When a problem has this form, its solution can often be expressed **recursively**: solve a simple case directly, and reduce every more complex case to one or more smaller instances of the same problem.
+
+The factorial function provides a simple mathematical example. For an integer $n \geq 0$:
+
+$$
+n!
+=
+\begin{cases}
+1, & n=0,\\
+n(n-1)!, & n\geq1.
+\end{cases}
+$$ {#eq-recursive-factorial}
+
+The definition contains two essential components:
+
+- a **base case**, which is solved directly;
+- a **recursive case**, which reduces the problem to a smaller instance.
+
+The corresponding Python function follows the mathematical definition closely:
+
+```python
+def factorial(n):
+    if n == 0:
+        return 1
+
+    return n * factorial(n - 1)
+```
+
+For example:
+
+```python
+factorial(4)
+```
+
+requires:
+
+$$
+4!
+=
+4(3!)
+=
+4(3(2!))
+=
+4(3(2(1!)))
+=
+4(3(2(1(0!)))).
+$$
+
+Once the base case is reached:
+
+$$
+0!=1,
+$$
+
+the pending operations can be completed in reverse order:
+
+$$
+1!=1,
+$$
+
+$$
+2!=2,
+$$
+
+$$
+3!=6,
+$$
+
+and finally:
+
+$$
+4!=24.
+$$
+
+This illustrates the central structure of recursion:
+
+$$
+\boxed{
+\text{problem}
+\rightarrow
+\text{smaller instance}
+\rightarrow
+\cdots
+\rightarrow
+\text{base case}.
+}
+$$
+
+A recursive definition is therefore not circular when each recursive call makes genuine progress toward a case that can be solved without further recursion. 
+
+## Recursive Execution and Activation Records
+
+A recursive call is an ordinary function call. What makes recursion distinctive is that several invocations of the same function may be active simultaneously.
+
+Each function invocation has its own execution state. Conceptually, Python maintains an **activation record**, or frame, containing information such as the call's parameters, local variables, and the point to which execution must return after a nested call completes. 
+
+For:
+
+```python
+factorial(4)
+```
+
+the active calls develop as:
+
+$$
+\begin{aligned}
+\texttt{factorial(4)}
+&\rightarrow
+\texttt{factorial(3)}
+\\
+&\rightarrow
+\texttt{factorial(2)}
+\\
+&\rightarrow
+\texttt{factorial(1)}
+\\
+&\rightarrow
+\texttt{factorial(0)}.
+\end{aligned}
+$$
+
+At the deepest point, five calls are active. Each has a distinct local binding for `n`.
+
+The calls can be viewed as a stack:
+
+```text
+factorial(0)    <- current call
+factorial(1)
+factorial(2)
+factorial(3)
+factorial(4)    <- initial call
+```
+
+When `factorial(0)` returns, its activation record is no longer needed and execution resumes in `factorial(1)`. The process continues until the original invocation returns.
+
+![Recursive execution creates a distinct activation record for each active function call. Calls accumulate until a base case is reached and then return in reverse order.](figures/recursion-call-stack.png){#fig-recursion-call-stack}
+
+This explains an important computational consequence of recursion: active recursive calls require memory.
+
+If recursion reaches depth $d$, the space required for its active call frames is generally proportional to:
+
+$$
+O(d),
+$$
+
+in addition to any other data structures used by the algorithm.
+
+Recursion therefore affects both time and space complexity.
+
+## Designing a Recursive Algorithm
+
+A recursive algorithm should satisfy two fundamental requirements.
+
+First, there must be one or more cases that can be solved directly:
+
+$$
+\text{base case}.
+$$
+
+Second, every recursive path must make progress toward such a case:
+
+$$
+\text{current problem}
+\rightarrow
+\text{strictly smaller problem}.
+$$
+
+Consider summing the first $n$ elements of a sequence $S$.
+
+For:
+
+$$
+n=0,
+$$
+
+the sum is:
+
+$$
+0.
+$$
+
+For:
+
+$$
+n>0,
+$$
+
+the sum can be decomposed as:
+
+$$
+\operatorname{sum}(S,n)
+=
+\operatorname{sum}(S,n-1)
++
+S[n-1].
+$$
+
+This leads naturally to:
+
+```python
+def linear_sum(data, n):
+    if n == 0:
+        return 0
+
+    return linear_sum(data, n - 1) + data[n - 1]
+```
+
+The correctness of the recursive step depends on a simple observation: if the first $n-1$ elements have already been summed correctly, adding the element at position $n-1$ produces the sum of the first $n$ elements.
+
+This is closely related to mathematical induction.
+
+A typical recursive correctness argument therefore has the structure:
+
+1. show that the base case is correct;
+2. assume that the recursive call correctly solves the smaller problem;
+3. show that the current call correctly constructs the larger solution from it.
+
+The relationship between recursion and induction is not accidental. Both reason about structures defined in terms of smaller instances of themselves.
+
+## Analysing Recursive Algorithms
+
+A recursive algorithm must be analysed across all of the calls it generates.
+
+For `linear_sum`, each call reduces $n$ by one:
+
+$$
+n,
+n-1,
+n-2,
+\ldots,
+1,
+0.
+$$
+
+There are therefore:
+
+$$
+n+1
+$$
+
+function invocations.
+
+Each call performs only constant nonrecursive work, so:
+
+$$
+T(n)
+=
+T(n-1)+O(1).
+$$
+
+Expanding the recurrence:
+
+$$
+T(n)
+=
+T(n-2)+O(1)+O(1),
+$$
+
+then:
+
+$$
+T(n)
+=
+T(n-3)+3O(1),
+$$
+
+and eventually:
+
+$$
+T(n)
+=
+T(0)+nO(1).
+$$
+
+Therefore:
+
+$$
+\boxed{
+T(n)=O(n).
+}
+$$
+
+Because all $n+1$ calls can be simultaneously active before the base case returns, the recursion depth is:
+
+$$
+O(n),
+$$
+
+and the additional space used by the call stack is also:
+
+$$
+O(n).
+$$
+
+Goodrich uses this linear summation as a representative example of linear recursion and derives the same linear running time. 
+
+This illustrates an important point: a recursive algorithm may have the same asymptotic running time as an iterative algorithm while using more auxiliary memory because of its activation records.
+
+## Binary Search
+
+Recursion becomes more compelling when the structure of the algorithm itself repeatedly reduces a problem.
+
+Suppose a sorted sequence contains $n$ values. To search for a target, we can inspect the middle element.
+
+If the middle value equals the target, the search is complete.
+
+If the target is smaller, only the left half can contain it.
+
+If the target is larger, only the right half can contain it.
+
+A recursive implementation can be expressed as:
+
+```python
+def binary_search(data, target, low, high):
+    if low > high:
+        return False
+
+    mid = (low + high) // 2
+
+    if target == data[mid]:
+        return True
+
+    if target < data[mid]:
+        return binary_search(data, target, low, mid - 1)
+
+    return binary_search(data, target, mid + 1, high)
+```
+
+Each recursive call reduces the number of remaining candidates by approximately one half:
+
+$$
+n,
+\frac{n}{2},
+\frac{n}{2^2},
+\frac{n}{2^3},
+\ldots
+$$
+
+After $k$ reductions:
+
+$$
+\frac{n}{2^k}
+$$
+
+candidates remain.
+
+The recursion terminates when this quantity becomes smaller than $1$:
+
+$$
+\frac{n}{2^k}<1.
+$$
+
+Therefore:
+
+$$
+n<2^k,
+$$
+
+and hence:
+
+$$
+k>\log_2 n.
+$$
+
+The recursion depth is consequently:
+
+$$
+O(\log n).
+$$
+
+Since each invocation performs constant work apart from the recursive call:
+
+$$
+\boxed{
+T(n)=O(\log n).
+}
+$$
+
+This is the same logarithmic behaviour introduced earlier, now expressed through recursive problem reduction. 
+
+![Binary search recursively discards approximately half of the remaining search interval after each comparison, producing logarithmic recursion depth.](figures/recursive-binary-search.png){#fig-recursive-binary-search}
+
+The example also shows that the word *binary* does not necessarily describe the number of recursive calls. During one invocation of binary search, at most one recursive branch is followed. Its recursion is therefore structurally **linear**, even though the problem size is divided by two at each step. 
+
+## Linear, Binary, and Multiple Recursion
+
+Recursive algorithms can be classified according to how many recursive calls a single invocation may initiate.
+
+In **linear recursion**, each invocation makes at most one recursive call:
+
+$$
+R(n)
+\rightarrow
+R(n-1).
+$$
+
+Factorial, linear summation, and binary search have this structure.
+
+In **binary recursion**, one invocation may make two recursive calls:
+
+$$
+R(n)
+\rightarrow
+\begin{cases}
+R_1(\cdot),\\
+R_2(\cdot).
+\end{cases}
+$$
+
+For example, a sequence can be summed by recursively dividing it into two halves:
+
+```python
+def binary_sum(data, start, stop):
+    if start >= stop:
+        return 0
+
+    if start == stop - 1:
+        return data[start]
+
+    mid = (start + stop) // 2
+
+    return (
+        binary_sum(data, start, mid)
+        + binary_sum(data, mid, stop)
+    )
+```
+
+The recursion forms a tree rather than a single chain.
+
+For $n$ elements, the problem is repeatedly divided until each terminal subproblem contains one element. The depth is:
+
+$$
+O(\log n),
+$$
+
+because the subproblem size is halved at each level.
+
+However, logarithmic depth does **not** imply logarithmic running time.
+
+Across the complete recursion tree, the algorithm makes:
+
+$$
+2n-1
+$$
+
+calls when $n$ is a power of two. Therefore:
+
+$$
+T(n)=O(n).
+$$
+
+At the same time, only one path through the recursion tree is simultaneously active, so the additional call-stack space is:
+
+$$
+O(\log n).
+$$
+
+Thus:
+
+$$
+\boxed{
+\text{recursion depth}
+\neq
+\text{number of recursive calls}.
+}
+$$
+
+Goodrich uses this binary summation example precisely to distinguish $O(\log n)$ recursion depth from $O(n)$ total running time. 
+
+Finally, **multiple recursion** occurs when one invocation may generate more than two recursive calls. Traversing a directory whose subdirectories are themselves recursively explored is a natural example. The number of recursive calls depends on the branching structure of the underlying problem. 
+
+These categories describe the **shape of the recursion**, not its asymptotic running time.
+
+## Recursion Trees
+
+When an invocation generates several recursive calls, a **recursion tree** provides a useful representation of the computation.
+
+Each node represents one function invocation, and its children represent the recursive calls initiated by that invocation.
+
+For binary summation of eight elements, the structure is conceptually:
+
+```text
+                    [0:8]
+                  /       \
+              [0:4]       [4:8]
+              /   \       /   \
+           [0:2] [2:4] [4:6] [6:8]
+            / \    / \    / \    / \
+           0   1  2   3  4   5  6   7
+```
+
+The tree exposes two different quantities.
+
+Its height determines the maximum number of simultaneously active nested calls:
+
+$$
+\text{depth}=O(\log n).
+$$
+
+The total number of nodes determines how many invocations occur:
+
+$$
+\text{calls}=O(n).
+$$
+
+![A recursion tree separates recursion depth from total work: its height corresponds to maximum nested call depth, while all nodes contribute to running time.](figures/recursion-tree.png){#fig-recursion-tree}
+
+This distinction becomes essential in divide-and-conquer algorithms and tree algorithms, where recursive structure is often the most natural representation of the computation.
+
+## Inefficient Recursion
+
+A recursive formulation can be mathematically correct while being computationally poor.
+
+The Fibonacci sequence is defined by:
+
+$$
+F_0=0,
+$$
+
+$$
+F_1=1,
+$$
+
+and:
+
+$$
+F_n=F_{n-1}+F_{n-2},
+\qquad n\geq2.
+$$
+
+A direct translation is:
+
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+
+    return fibonacci(n - 1) + fibonacci(n - 2)
+```
+
+The problem is that the recursion repeatedly computes the same values.
+
+For example, evaluating $F_5$ requires both $F_4$ and $F_3$. But computing $F_4$ itself also requires $F_3$:
+
+$$
+F_5
+\rightarrow
+\begin{cases}
+F_4
+\rightarrow
+\begin{cases}
+F_3\\
+F_2
+\end{cases}
+\\
+F_3
+\end{cases}
+$$
+
+The repeated subproblems multiply rapidly, producing exponential running time.
+
+The recursive definition of Fibonacci is elegant, but a literal implementation fails to preserve previously computed information.
+
+Goodrich contrasts this formulation with a linear recursive version that returns two consecutive Fibonacci values, allowing the second value already computed by one call to be reused by the next. That version requires only $O(n)$ time. :chatgpt-content-reference{index="7"}
+
+The example illustrates a general principle:
+
+$$
+\boxed{
+\text{a natural recursive definition does not guarantee an efficient recursive algorithm}.
+}
+$$
+
+The structure of the recursive calls must still be analysed.
+
+Later techniques such as memoization and dynamic programming address this problem more generally by retaining solutions to repeated subproblems.
+
+## Termination and Recursion Depth
+
+Every recursive path must eventually reach a base case.
+
+Consider an incorrect function:
+
+```python
+def recurse(n):
+    return recurse(n)
+```
+
+The recursive call receives exactly the same problem as its caller. No progress is made toward termination.
+
+More subtle errors can arise when the argument changes but does not necessarily approach the base case.
+
+A recursive algorithm should therefore have a clear **progress measure**: some quantity that moves monotonically toward a terminating condition.
+
+Examples include:
+
+$$
+n\rightarrow n-1,
+$$
+
+for factorial, and:
+
+$$
+n\rightarrow\frac{n}{2},
+$$
+
+for binary search.
+
+Without such progress, recursion can continue indefinitely in principle.
+
+In practice, Python limits the number of simultaneously active recursive calls. Exceeding that limit raises a recursion-related runtime error rather than allowing the call stack to grow without bound. The exact configured limit should be treated as an implementation property rather than as part of the recursive algorithm itself.
+
+This makes deep linear recursion particularly relevant in Python. An algorithm whose recursion depth is:
+
+$$
+O(n)
+$$
+
+may encounter the interpreter's recursion limit for sufficiently large $n$, even if the algorithm is otherwise logically correct.
+
+By contrast, an algorithm with depth:
+
+$$
+O(\log n)
+$$
+
+can handle much larger problem sizes before call depth becomes a concern. Goodrich makes this distinction explicitly when comparing recursive structures in Python. :chatgpt-content-reference{index="8"}
+
+Changing the interpreter's recursion limit can sometimes accommodate a legitimate computation, but it does not correct an algorithm whose recursion fails to terminate or whose recursive structure is unnecessarily deep.
+
+## Recursion and Iteration
+
+Recursion and iteration are both mechanisms for expressing repeated computation, but they organise state differently.
+
+An iterative algorithm typically stores evolving state explicitly:
+
+```python
+result = 1
+
+for value in range(2, n + 1):
+    result *= value
+```
+
+A recursive formulation can instead distribute state across function invocations:
+
+```python
+def factorial(n):
+    if n == 0:
+        return 1
+
+    return n * factorial(n - 1)
+```
+
+Both compute the same mathematical function.
+
+For factorial, the iterative version is generally simpler operationally: it avoids a sequence of nested function calls and requires only constant auxiliary state. Recursion provides little structural advantage in this particular problem.
+
+Other problems are different. Trees, directory hierarchies, divide-and-conquer algorithms, and recursive combinatorial structures naturally contain smaller instances of themselves. In those cases, recursion can mirror the structure of the problem directly.
+
+The appropriate question is therefore not whether recursion is intrinsically better or worse than iteration, but whether the recursive decomposition makes the algorithm easier to express and reason about without introducing unacceptable computational costs.
+
+### Tail Recursion
+
+A recursive call is **tail recursive** when it is the final operation performed by the function.
+
+For example, an accumulator-based formulation may have the structure:
+
+```python
+def process(n, result):
+    if n == 0:
+        return result
+
+    return process(n - 1, updated_result)
+```
+
+Nothing remains to be computed after the recursive call returns.
+
+In some programming languages, tail calls can be transformed into iteration so that additional call-stack frames are not required. A programmer should not assume such an optimisation when reasoning about ordinary Python recursion. For Python code, an explicit iterative formulation is generally preferable when the only purpose of recursion would be to express a long tail-recursive chain.
+
+The deeper value of recursion lies elsewhere: it provides a direct computational language for **recursive structure**.
+
+That structure will become increasingly important in the data structures that follow. Linked structures are defined through references between nodes, while trees are inherently recursive: every subtree is itself a tree. Recursion will therefore reappear not as an isolated language feature, but as a natural way to traverse and manipulate recursively organised data.
+
+# Linked Structures
+
+Array-based sequences obtain efficient positional access by storing references in contiguous memory. That representation also creates an important limitation: inserting or deleting an element away from the end may require shifting many existing references.
+
+A different representation is possible.
+
+Instead of determining the position of an element from its location inside a contiguous array, a **linked structure** stores elements in individual objects called **nodes** and connects those nodes through references.
+
+Conceptually, a sequence containing three elements can be represented as:
+
+$$
+\boxed{A}
+\longrightarrow
+\boxed{B}
+\longrightarrow
+\boxed{C}.
+$$
+
+The logical order of the elements is determined by the links between nodes rather than by adjacent positions in an array.
+
+This changes the fundamental trade-off of the structure. Direct indexed access is lost, but insertion and deletion can become very efficient when the relevant location is already known.
+
+## Nodes and Links
+
+A node combines an element with one or more references that describe its relationship to other nodes.
+
+For a singly linked structure, a node can be modelled conceptually as:
+
+$$
+\text{node}
+=
+(\text{element},\text{next}).
+$$
+
+A minimal Python representation might therefore have the form:
+
+```python
+class Node:
+    def __init__(self, element, next_node=None):
+        self.element = element
+        self.next = next_node
+```
+
+The `element` attribute refers to the object stored by the sequence, while `next` refers to the next node.
+
+A sequence:
+
+```text
+A, B, C
+```
+
+can then be represented as:
+
+$$
+\texttt{head}
+\longrightarrow
+[A\mid\bullet]
+\longrightarrow
+[B\mid\bullet]
+\longrightarrow
+[C\mid\texttt{None}].
+$$
+
+The final node contains no reference to a successor, so its `next` field is `None`.
+
+![A singly linked list represents a sequence through nodes containing an element reference and a reference to the next node. The logical order follows the links rather than contiguous memory locations.](figures/singly-linked-list.png){#fig-singly-linked-list}
+
+The nodes themselves need not occupy consecutive memory locations. What matters is that each node identifies the next node in the logical sequence.
+
+This distinction separates **logical adjacency** from **physical adjacency**:
+
+$$
+\boxed{
+\text{linked sequence}
+\rightarrow
+\text{order determined by references, not memory position}.
+}
+$$
+
+## Singly Linked Lists
+
+A **singly linked list** is a sequence of nodes in which each node maintains a reference to its successor.
+
+A list typically maintains a reference to its first node:
+
+```text
+head
+```
+
+and may also maintain:
+
+```text
+tail
+```
+
+to identify the final node efficiently.
+
+If the list contains $n$ elements:
+
+$$
+v_0,v_1,\ldots,v_{n-1},
+$$
+
+their nodes satisfy:
+
+$$
+\text{node}_0.next
+=
+\text{node}_1,
+$$
+
+$$
+\text{node}_1.next
+=
+\text{node}_2,
+$$
+
+and so on, until:
+
+$$
+\text{node}_{n-1}.next
+=
+\texttt{None}.
+$$
+
+Unlike an array, there is no address calculation analogous to:
+
+$$
+\operatorname{address}(j)
+=
+\operatorname{address}(0)+js.
+$$
+
+To reach the node at position $j$, traversal must begin from a known node and repeatedly follow `next`.
+
+Starting from the head:
+
+$$
+\text{head}
+\rightarrow
+\text{node}_0
+\rightarrow
+\text{node}_1
+\rightarrow
+\cdots
+\rightarrow
+\text{node}_j.
+$$
+
+This requires $j$ link traversals.
+
+Therefore:
+
+$$
+T_{\text{access}}(j)=O(j),
+$$
+
+and accessing an arbitrary position in a list of length $n$ has worst-case complexity:
+
+$$
+\boxed{
+T_{\text{access}}(n)=O(n).
+}
+$$
+
+This is the principal cost paid for abandoning contiguous positional storage.
+
+## Insertion at the Head
+
+Linked structures become attractive when elements must be inserted or removed without shifting the remainder of the sequence.
+
+Suppose the list is:
+
+$$
+\texttt{head}
+\longrightarrow
+A
+\longrightarrow
+B
+\longrightarrow
+C.
+$$
+
+To insert a new node $X$ at the beginning, only two relationships need to change.
+
+First:
+
+$$
+X.next
+=
+\texttt{head}.
+$$
+
+Then:
+
+$$
+\texttt{head}
+=
+X.
+$$
+
+The result is:
+
+$$
+\texttt{head}
+\longrightarrow
+X
+\longrightarrow
+A
+\longrightarrow
+B
+\longrightarrow
+C.
+$$
+
+No existing elements need to be shifted.
+
+The amount of work does not depend on the number of nodes already stored. Therefore:
+
+$$
+\boxed{
+T_{\text{insert-head}}(n)=O(1).
+}
+$$
+
+![Insertion at the head of a singly linked list requires only the creation of a new node and the redirection of a constant number of references.](figures/linked-list-head-insertion.png){#fig-linked-list-head-insertion}
+
+This contrasts directly with insertion at the beginning of an array-based sequence, where $n$ existing references may need to move:
+
+$$
+\begin{aligned}
+\text{array insertion at head}
+&\rightarrow O(n),
+\\
+\text{linked-list insertion at head}
+&\rightarrow O(1).
+\end{aligned}
+$$
+
+The improvement follows from representation, not from a different syntax for insertion.
+
+## Deletion at the Head
+
+Removing the first node is similarly direct.
+
+Suppose:
+
+$$
+\texttt{head}
+\longrightarrow
+A
+\longrightarrow
+B
+\longrightarrow
+C.
+$$
+
+The second node can be obtained through:
+
+$$
+\texttt{head.next}.
+$$
+
+The head reference can then be changed to:
+
+$$
+\texttt{head}
+=
+\texttt{head.next}.
+$$
+
+The resulting structure is:
+
+$$
+\texttt{head}
+\longrightarrow
+B
+\longrightarrow
+C.
+$$
+
+Again, the number of references changed is independent of $n$:
+
+$$
+\boxed{
+T_{\text{delete-head}}(n)=O(1).
+}
+$$
+
+If no remaining reference reaches the removed node, it is no longer part of the linked structure and can eventually be reclaimed by Python's memory-management system.
+
+## Insertion at the Tail
+
+If only a `head` reference is maintained, reaching the final node requires traversing the complete list:
+
+$$
+O(n).
+$$
+
+Maintaining a `tail` reference avoids that traversal.
+
+For a new node $X$:
+
+$$
+\texttt{tail.next}=X
+$$
+
+followed by:
+
+$$
+\texttt{tail}=X.
+$$
+
+Therefore, when the tail is explicitly maintained:
+
+$$
+T_{\text{insert-tail}}(n)=O(1).
+$$
+
+The empty-list case requires additional care because the first inserted node becomes both:
+
+$$
+\texttt{head}
+$$
+
+and:
+
+$$
+\texttt{tail}.
+$$
+
+This illustrates a recurring design principle: maintaining additional state can make an operation more efficient, but the structure must preserve that state correctly after every update.
+
+## Deletion at the Tail
+
+The situation is different for deletion.
+
+Suppose:
+
+$$
+A
+\longrightarrow
+B
+\longrightarrow
+C
+\longrightarrow
+D.
+$$
+
+Even if `tail` directly identifies $D$, a singly linked node contains no reference to its predecessor.
+
+To remove $D$, the structure must find $C$ so that:
+
+$$
+C.next
+=
+\texttt{None}
+$$
+
+and:
+
+$$
+\texttt{tail}
+=
+C.
+$$
+
+Finding $C$ requires traversal from the head:
+
+$$
+A
+\rightarrow
+B
+\rightarrow
+C.
+$$
+
+Therefore:
+
+$$
+\boxed{
+T_{\text{delete-tail}}(n)=O(n)
+}
+$$
+
+for a singly linked list.
+
+This asymmetry is fundamental:
+
+$$
+\text{next node}
+\rightarrow
+\text{directly available},
+$$
+
+but:
+
+$$
+\text{previous node}
+\rightarrow
+\text{not directly available}.
+$$
+
+The limitation motivates doubly linked structures.
+
+## Insertion and Deletion at an Interior Position
+
+Suppose a new node $X$ must be inserted after a known node $A$:
+
+$$
+A
+\longrightarrow
+B.
+$$
+
+The update can be performed as:
+
+$$
+X.next=B
+$$
+
+followed by:
+
+$$
+A.next=X.
+$$
+
+The result is:
+
+$$
+A
+\longrightarrow
+X
+\longrightarrow
+B.
+$$
+
+Once $A$ is already known, the insertion requires only a constant number of reference updates:
+
+$$
+O(1).
+$$
+
+Deletion follows the same principle. If:
+
+$$
+A
+\longrightarrow
+B
+\longrightarrow
+C
+$$
+
+and $A$ is known, $B$ can be bypassed by setting:
+
+$$
+A.next=C.
+$$
+
+Thus deletion of the successor of a known node is also:
+
+$$
+O(1).
+$$
+
+There is an important qualification.
+
+If the program knows only that the element is at logical position $j$, it must first traverse the list to reach the relevant node. That search requires:
+
+$$
+O(j)
+$$
+
+time.
+
+The distinction is therefore:
+
+$$
+\boxed{
+\text{locating a position}
+\neq
+\text{updating a known position}.
+}
+$$
+
+Linked lists provide constant-time structural updates **once the required nodes are known**. They do not provide constant-time arbitrary positional access.
+
+## Circularly Linked Lists
+
+A singly linked list does not have to terminate with:
+
+```python
+None
+```
+
+The final node can instead refer back to the first node:
+
+$$
+A
+\rightarrow
+B
+\rightarrow
+C
+\rightarrow
+A.
+$$
+
+This produces a **circularly linked list**.
+
+If a reference to the tail is maintained, the head is available through:
+
+$$
+\texttt{tail.next}.
+$$
+
+Thus a single external reference can identify both ends of the structure:
+
+$$
+\begin{aligned}
+\text{tail}
+&=
+\texttt{tail},
+\\
+\text{head}
+&=
+\texttt{tail.next}.
+\end{aligned}
+$$
+
+![In a circularly linked list, the final node refers back to the first node, allowing traversal to continue cyclically rather than terminating at None.](figures/circularly-linked-list.png){#fig-circularly-linked-list}
+
+Circular structures are natural when processing is itself cyclic. Examples include repeated turn allocation, round-robin scheduling, cyclic buffers, and processes in which the element following the last element is conceptually the first.
+
+A rotation can be achieved particularly simply:
+
+```python
+tail = tail.next
+```
+
+because the former head becomes the new tail and the next node becomes the new head. Goodrich uses this property to motivate circular lists for round-robin scheduling. 
+
+The structure therefore illustrates another important relationship between representation and algorithm:
+
+$$
+\boxed{
+\text{a representation that matches the problem structure can simplify the operation itself}.
+}
+$$
+
+## Doubly Linked Lists
+
+The main limitation of a singly linked list is directional asymmetry. From a node, its successor is immediately available, but its predecessor is not.
+
+A **doubly linked list** stores both relationships.
+
+A node can be represented conceptually as:
+
+$$
+\text{node}
+=
+(\text{prev},\text{element},\text{next}).
+$$
+
+For a sequence:
+
+$$
+A,B,C,
+$$
+
+the structure becomes:
+
+$$
+A
+\rightleftarrows
+B
+\rightleftarrows
+C.
+$$
+
+Each interior node has:
+
+$$
+\texttt{next}
+\rightarrow
+\text{successor}
+$$
+
+and:
+
+$$
+\texttt{prev}
+\rightarrow
+\text{predecessor}.
+$$
+
+This additional reference requires more memory per node, but provides symmetric navigation and update operations. Goodrich introduces the doubly linked representation precisely to overcome the inability of a singly linked list to efficiently identify a predecessor when only the current node is known. 
+
+### Sentinel Nodes
+
+Boundary conditions complicate linked-list implementations.
+
+Without additional structure, insertion at the beginning differs from insertion in the interior because the first node has no predecessor. Similarly, deletion of the final node requires handling the absence of a successor.
+
+A common solution is to introduce two special nodes:
+
+- a **header sentinel** before the first real element;
+- a **trailer sentinel** after the last real element.
+
+These nodes do not represent elements of the user-visible sequence.
+
+For:
+
+$$
+A,B,C,
+$$
+
+the representation becomes:
+
+$$
+\text{header}
+\rightleftarrows
+A
+\rightleftarrows
+B
+\rightleftarrows
+C
+\rightleftarrows
+\text{trailer}.
+$$
+
+![A doubly linked list with header and trailer sentinels gives every data node both a predecessor and a successor, simplifying boundary updates.](figures/doubly-linked-list-sentinels.png){#fig-doubly-linked-list-sentinels}
+
+An empty list can then be represented simply as:
+
+$$
+\text{header}
+\rightleftarrows
+\text{trailer}.
+$$
+
+The advantage is not asymptotic efficiency. The advantage is **uniformity**.
+
+Every insertion can be treated as insertion between two existing nodes, and every data-node deletion involves a node with both a predecessor and successor. Goodrich emphasises that the small additional storage required for the sentinels removes several boundary special cases from the implementation. 
+
+This is an example of a broader software-design principle:
+
+$$
+\boxed{
+\text{a small representational cost can substantially simplify invariants and update logic}.
+}
+$$
+
+## Insertion in a Doubly Linked List
+
+Suppose two adjacent nodes are:
+
+$$
+A
+\rightleftarrows
+B
+$$
+
+and a new node $X$ must be inserted between them.
+
+Initially:
+
+$$
+A.next=B
+$$
+
+and:
+
+$$
+B.prev=A.
+$$
+
+The new node is created with:
+
+$$
+X.prev=A
+$$
+
+and:
+
+$$
+X.next=B.
+$$
+
+The neighbouring references are then updated:
+
+$$
+A.next=X
+$$
+
+and:
+
+$$
+B.prev=X.
+$$
+
+The resulting structure is:
+
+$$
+A
+\rightleftarrows
+X
+\rightleftarrows
+B.
+$$
+
+Only a fixed number of references are modified. Therefore, when the neighbouring nodes are already known:
+
+$$
+\boxed{
+T_{\text{insert}}(n)=O(1).
+}
+$$
+
+## Deletion in a Doubly Linked List
+
+Suppose:
+
+$$
+A
+\rightleftarrows
+B
+\rightleftarrows
+C
+$$
+
+and node $B$ must be removed.
+
+Because $B$ directly identifies both neighbours:
+
+$$
+B.prev=A
+$$
+
+and:
+
+$$
+B.next=C.
+$$
+
+The list can bypass $B$ by setting:
+
+$$
+A.next=C
+$$
+
+and:
+
+$$
+C.prev=A.
+$$
+
+The resulting sequence is:
+
+$$
+A
+\rightleftarrows
+C.
+$$
+
+Again, only a constant number of references must be changed:
+
+$$
+\boxed{
+T_{\text{delete}}(n)=O(1)
+}
+$$
+
+when the node to be deleted is already known.
+
+Goodrich's basic doubly linked implementation uses exactly this pattern: insertion links a new node between a predecessor and successor, while deletion directly reconnects the deleted node's two neighbours. 
+
+This is a significant difference from a singly linked list. If only a reference to $B$ is available, the singly linked representation cannot directly determine $A$, whereas the doubly linked representation can.
+
+## Positions and Encapsulation
+
+A linked-list implementation could expose node objects directly to users. Doing so would allow a caller to identify locations efficiently, but it would also expose the internal representation.
+
+A user could potentially modify links incorrectly:
+
+```python
+node.next = ...
+```
+
+and violate the structural invariants of the list.
+
+It would also couple client code to implementation details such as sentinel nodes or the precise node representation.
+
+A stronger abstraction separates the notion of a **position** from the node used internally to implement it.
+
+A position represents the location of an element in a sequence:
+
+$$
+\text{position}
+\rightarrow
+\text{location in the collection},
+$$
+
+while the underlying node remains encapsulated.
+
+A positional-list interface can then provide operations such as:
+
+```text
+first()
+last()
+before(p)
+after(p)
+```
+
+and updates such as:
+
+```text
+add_before(p, value)
+add_after(p, value)
+delete(p)
+replace(p, value)
+```
+
+without exposing node manipulation.
+
+This separation is important conceptually:
+
+$$
+\boxed{
+\text{ADT interface}
+\neq
+\text{internal representation}.
+}
+$$
+
+Goodrich's positional-list ADT explicitly introduces a `Position` abstraction for this reason: direct node references would expose low-level implementation details, weaken structural integrity, and make future changes to the representation more difficult. 
+
+If implemented using a doubly linked list, operations relative to an already known valid position can be performed in worst-case:
+
+$$
+O(1)
+$$
+
+time. :chatgpt-content-reference{index="5"}
+
+This provides an important example of **encapsulation** in data-structure design. The efficient mechanism is retained internally while the public interface expresses the logical abstraction rather than the storage details.
+
+## Array-Based and Link-Based Sequences
+
+Array-based and linked sequences represent different compromises rather than a hierarchy in which one structure is universally superior.
+
+The central differences can be summarised as:
+
+| Property | Array-based sequence | Linked sequence |
+|:---:|:---:|:---:|
+| Indexed access | $O(1)$ | $O(n)$ worst case |
+| Traverse all elements | $O(n)$ | $O(n)$ |
+| Insert at known linked position | Requires shifting in general | $O(1)$ |
+| Delete at known linked position | Requires shifting in general | $O(1)$ |
+| Memory layout | Contiguous references | Separate node objects |
+| Extra structural storage | Capacity overhead | Link references per node |
+| Growth | May require resizing | Node-by-node allocation |
+
+The asymptotic comparison is only part of the decision.
+
+Array-based structures generally benefit from simpler representation, lower per-element structural overhead, and better memory locality. Linked structures require node allocation and additional references, and traversal follows objects that need not be contiguous in memory. Goodrich notes that even operations with the same asymptotic complexity can therefore have different constant factors, and that linked structures generally require more auxiliary storage per element. 
+
+Linked structures, however, provide strong guarantees for structural updates. Once the relevant location is known, insertion or deletion can modify a constant number of links without shifting the remaining elements. They also avoid the occasional large resizing operation required by a dynamic array. 
+
+The choice should therefore follow the operations required by the problem:
+
+$$
+\boxed{
+\text{representation}
+\rightarrow
+\text{available operations}
+\rightarrow
+\text{computational costs}.
+}
+$$
+
+This principle is more general than the comparison between arrays and linked lists. A data structure is useful because its representation makes some operations efficient while accepting costs elsewhere.
+
+The next step is to separate this implementation question from the **abstract behaviour** expected by a data structure. Stacks, queues, and deques provide a clear example: each specifies how elements may enter and leave a collection, while several different internal representations can be used to implement that behaviour.
+
 
 
 # References
