@@ -13349,6 +13349,1465 @@ Hashing solves key lookup by transforming keys into locations.
 
 The next family of structures solves the same problem differently. **Search trees** preserve ordering relationships between keys, sacrificing expected constant-time lookup in exchange for efficient ordered operations and stronger structural guarantees when the tree remains balanced.
 
+# Search Trees
+
+Hash tables provide an efficient implementation of the Map ADT when the principal operation is exact-key lookup.
+
+Under suitable assumptions, operations such as search, insertion, and deletion have expected running time:
+
+$$
+O(1).
+$$
+
+Hashing achieves this efficiency by transforming a key into a location. In doing so, however, it does not naturally preserve the ordering relationships among keys.
+
+Suppose a map contains the keys:
+
+$$
+5,12,18,27,31,44,63.
+$$
+
+A hash table can efficiently answer:
+
+```text
+Is key 27 present?
+```
+
+but questions such as:
+
+```text
+What is the smallest key?
+What is the largest key smaller than 27?
+What key comes immediately after 27?
+Which keys lie between 18 and 44?
+```
+
+require a structure that preserves order.
+
+A **sorted map** extends the Map ADT by exploiting the natural ordering of its keys.
+
+A **binary search tree** provides one such representation.
+
+## Binary Search Trees
+
+A **binary search tree**, or BST, is a binary tree in which each position stores a key-value item:
+
+$$
+(k,v),
+$$
+
+and the keys satisfy an ordering invariant.
+
+For every position $p$ with key $k_p$:
+
+$$
+\boxed{
+k < k_p
+\quad
+\text{for every key }k\text{ in the left subtree},
+}
+$$
+
+and:
+
+$$
+\boxed{
+k > k_p
+\quad
+\text{for every key }k\text{ in the right subtree}.
+}
+$$
+
+Assuming distinct keys, this can be written compactly as:
+
+$$
+\boxed{
+\text{left keys}
+<
+k_p
+<
+\text{right keys}.
+}
+$$ {#eq-bst-order-property}
+
+For example:
+
+```text
+                44
+              /    \
+            17      78
+           /  \    /  \
+          8   32  50   88
+             /    / \
+            28   48  62
+```
+
+is a binary search tree.
+
+At the root:
+
+$$
+44,
+$$
+
+every key in the left subtree satisfies:
+
+$$
+k<44,
+$$
+
+while every key in the right subtree satisfies:
+
+$$
+k>44.
+$$
+
+The same invariant applies recursively to every subtree.
+
+![A binary search tree maintains an ordering invariant at every position: all keys in the left subtree are smaller than the position's key, while all keys in the right subtree are larger.](figures/binary-search-tree-property.png){#fig-binary-search-tree-property}
+
+This recursive ordering is what makes efficient search possible.
+
+## Searching a Binary Search Tree
+
+Suppose we search for key:
+
+$$
+k.
+$$
+
+Begin at the root with key $k_p$.
+
+There are three possibilities:
+
+$$
+\boxed{
+\begin{aligned}
+k &= k_p
+&&\rightarrow \text{key found},\\
+k &< k_p
+&&\rightarrow \text{search left subtree},\\
+k &> k_p
+&&\rightarrow \text{search right subtree}.
+\end{aligned}
+}
+$$
+
+For example, search for:
+
+$$
+48
+$$
+
+in:
+
+```text
+                44
+              /    \
+            17      78
+                   /
+                  50
+                 /
+                48
+```
+
+The comparisons are:
+
+$$
+48>44,
+$$
+
+so move right.
+
+Then:
+
+$$
+48<78,
+$$
+
+so move left.
+
+Then:
+
+$$
+48<50,
+$$
+
+so move left.
+
+Finally:
+
+$$
+48=48.
+$$
+
+Thus the search path is:
+
+$$
+\boxed{
+44\rightarrow78\rightarrow50\rightarrow48.
+}
+$$
+
+![Binary-search-tree lookup follows a single root-to-node path, moving left when the search key is smaller and right when it is larger.](figures/bst-search.png){#fig-bst-search}
+
+At each level, only one subtree can contain the desired key.
+
+The algorithm therefore performs constant work per visited level.
+
+If the tree has height $h$:
+
+$$
+\boxed{
+T_{\text{search}}=O(h).
+}
+$$ {#eq-bst-search-complexity}
+
+This result is more fundamental than saying that BST search is:
+
+$$
+O(\log n).
+$$
+
+A binary search tree is logarithmic only when its height is logarithmic.
+
+## Minimum and Maximum
+
+The BST ordering invariant makes the extreme keys easy to locate.
+
+Because smaller keys always lie to the left, the minimum key is found by repeatedly following left children until no further left child exists.
+
+Similarly, the maximum is obtained by repeatedly following right children.
+
+Conceptually:
+
+```text
+minimum:
+root -> left -> left -> ... -> leftmost position
+
+maximum:
+root -> right -> right -> ... -> rightmost position
+```
+
+Therefore:
+
+$$
+\boxed{
+T_{\min}=O(h),
+\qquad
+T_{\max}=O(h).
+}
+$$
+
+The same structural principle will later support predecessor, successor, and range queries.
+
+## Inorder Traversal and Sorted Order
+
+Recall that inorder traversal of a binary tree visits:
+
+$$
+\text{left subtree}
+\rightarrow
+\text{node}
+\rightarrow
+\text{right subtree}.
+$$
+
+For a binary search tree, this traversal has a special property.
+
+Because:
+
+$$
+\text{left keys}
+<
+\text{node key}
+<
+\text{right keys},
+$$
+
+inorder traversal visits the keys in increasing order.
+
+For example:
+
+```text
+             44
+           /    \
+         17      78
+        /  \    /  \
+       8   32  50   88
+```
+
+produces:
+
+$$
+\boxed{
+8,17,32,44,50,78,88.
+}
+$$
+
+This follows recursively.
+
+The left subtree produces all keys smaller than the root in sorted order, then the root is visited, and finally the right subtree produces all larger keys in sorted order.
+
+Therefore:
+
+$$
+\boxed{
+\text{BST}
++
+\text{inorder traversal}
+\rightarrow
+\text{sorted key sequence}.
+}
+$$
+
+A complete inorder traversal visits every position once:
+
+$$
+\boxed{
+T_{\text{inorder}}(n)=O(n).
+}
+$$
+
+This is a major distinction from hash tables: ordering is encoded directly into the representation.
+
+## Predecessors and Successors
+
+For a key $k$, the **predecessor** is the greatest key smaller than $k$.
+
+The **successor** is the smallest key larger than $k$.
+
+Consider a position $p$.
+
+### Successor
+
+If $p$ has a right subtree, its successor is the minimum position of that subtree:
+
+$$
+\boxed{
+\operatorname{successor}(p)
+=
+\min(\operatorname{right}(p)).
+}
+$$
+
+If $p$ has no right subtree, move upward until reaching an ancestor for which $p$ lies in the ancestor's left subtree.
+
+That ancestor is the successor.
+
+### Predecessor
+
+Symmetrically, if $p$ has a left subtree:
+
+$$
+\boxed{
+\operatorname{predecessor}(p)
+=
+\max(\operatorname{left}(p)).
+}
+$$
+
+Otherwise, move upward until reaching an ancestor for which $p$ lies in the ancestor's right subtree.
+
+These operations require at most one downward or upward path through the tree:
+
+$$
+\boxed{
+T_{\text{predecessor}}=O(h),
+\qquad
+T_{\text{successor}}=O(h).
+}
+$$
+
+They demonstrate why maintaining key order provides capabilities that hashing does not naturally support.
+
+## Inserting into a Binary Search Tree
+
+Insertion begins with an ordinary search.
+
+Suppose we want to insert key:
+
+$$
+29.
+$$
+
+Starting from the root, comparisons determine a unique path.
+
+For example:
+
+```text
+             44
+           /    \
+         17      78
+           \
+            32
+           /
+          28
+```
+
+The search proceeds:
+
+$$
+29<44,
+$$
+
+$$
+29>17,
+$$
+
+$$
+29<32,
+$$
+
+$$
+29>28.
+$$
+
+The search then reaches an empty child position.
+
+The new item is inserted there:
+
+```text
+             44
+           /    \
+         17      78
+           \
+            32
+           /
+          28
+            \
+             29
+```
+
+![BST insertion follows the same comparison path as search and places the new item at the first empty child position where the ordering invariant remains satisfied.](figures/bst-insertion.png){#fig-bst-insertion}
+
+No other positions need to be moved.
+
+Because insertion follows one search path:
+
+$$
+\boxed{
+T_{\text{insert}}=O(h).
+}
+$$ {#eq-bst-insertion-complexity}
+
+## Deleting from a Binary Search Tree
+
+Deletion is more subtle because removing a position must preserve the ordering invariant.
+
+There are three structural cases.
+
+### Case 1: Deleting a Leaf
+
+Suppose the target position has no children:
+
+```text
+       32
+      /
+     28
+```
+
+Deleting 28 simply removes the leaf:
+
+```text
+       32
+```
+
+No other structural modification is necessary.
+
+### Case 2: Deleting a Position with One Child
+
+Suppose:
+
+```text
+       32
+      /
+     28
+       \
+        29
+```
+
+Deleting 28 promotes its only child:
+
+```text
+       32
+      /
+     29
+```
+
+The ordering invariant remains valid because the promoted subtree already occupied the correct interval of keys.
+
+### Case 3: Deleting a Position with Two Children
+
+Consider:
+
+```text
+                44
+              /    \
+            17      78
+           /  \    /  \
+          8   32  50   88
+             / \
+            28  40
+```
+
+Suppose key:
+
+$$
+32
+$$
+
+must be deleted.
+
+Removing the node directly would disconnect two subtrees.
+
+Instead, replace its item with either:
+
+- its inorder predecessor; or
+- its inorder successor.
+
+Using the predecessor, the replacement is the largest key in the left subtree:
+
+$$
+28.
+$$
+
+After copying that item into the target position, the original position containing 28 can be removed.
+
+The problem has therefore been reduced to deleting a node with at most one child.
+
+![BST deletion has three structural cases: removing a leaf, promoting the only child of a one-child node, or replacing a two-child node with its inorder predecessor or successor before performing a simpler deletion.](figures/bst-deletion-cases.png){#fig-bst-deletion-cases}
+
+Finding the target and, when necessary, its replacement requires only paths through the tree.
+
+Therefore:
+
+$$
+\boxed{
+T_{\text{delete}}=O(h).
+}
+$$ {#eq-bst-deletion-complexity}
+
+## The Importance of Height
+
+Search, insertion, and deletion all have running time proportional to tree height:
+
+$$
+\boxed{
+T(n)=O(h).
+}
+$$
+
+This makes the shape of the tree computationally important.
+
+Consider inserting:
+
+$$
+30,20,10.
+$$
+
+The resulting tree is:
+
+```text
+       30
+      /
+     20
+    /
+   10
+```
+
+Its height is:
+
+$$
+2.
+$$
+
+With many keys inserted in monotonic order, the same pattern continues:
+
+```text
+       50
+      /
+     40
+    /
+   30
+  /
+ 20
+/
+10
+```
+
+For $n$ positions:
+
+$$
+h=n-1.
+$$
+
+Thus:
+
+$$
+\boxed{
+T_{\text{search}}
+=
+T_{\text{insert}}
+=
+T_{\text{delete}}
+=
+O(n)
+}
+$$
+
+in the worst case.
+
+The binary search tree has effectively degenerated into a linked sequence.
+
+![A binary search tree may be compact with logarithmic height or degenerate into a linear chain, making operation costs depend directly on tree shape.](figures/bst-balanced-vs-degenerate.png){#fig-bst-balanced-vs-degenerate}
+
+At the other extreme, a compact binary search tree can have:
+
+$$
+h=\Theta(\log n).
+$$
+
+Then:
+
+$$
+\boxed{
+T_{\text{search}}
+=
+T_{\text{insert}}
+=
+T_{\text{delete}}
+=
+O(\log n).
+}
+$$
+
+This reveals the central weakness of an ordinary BST:
+
+$$
+\boxed{
+\text{ordering alone does not guarantee small height}.
+}
+$$
+
+Good performance therefore requires a second structural invariant.
+
+## Balanced Search Trees
+
+A **balanced search tree** maintains additional structural information so that its height cannot grow arbitrarily relative to the number of stored items.
+
+The objective is:
+
+$$
+\boxed{
+h=O(\log n).
+}
+$$
+
+If this can be guaranteed, operations whose cost is:
+
+$$
+O(h)
+$$
+
+become:
+
+$$
+O(\log n)
+$$
+
+in the worst case.
+
+Several balancing strategies exist.
+
+Examples include:
+
+- AVL trees;
+- red-black trees;
+- splay trees;
+- multiway search trees.
+
+They preserve the same fundamental BST ordering while imposing different additional invariants.
+
+The key idea is therefore:
+
+$$
+\boxed{
+\text{BST ordering invariant}
++
+\text{balance invariant}
+\rightarrow
+O(\log n)\text{ height}.
+}
+$$
+
+Before considering a particular balancing strategy, we need an operation capable of changing tree shape without destroying key order.
+
+## Tree Rotations
+
+A **rotation** locally restructures a binary search tree while preserving its inorder sequence.
+
+Consider:
+
+```text
+          y
+         / \
+        x   T3
+       / \
+      T1 T2
+```
+
+where the ordering relationships are:
+
+$$
+T_1 < x < T_2 < y < T_3.
+$$
+
+A right rotation around $y$ produces:
+
+```text
+          x
+         / \
+        T1  y
+           / \
+          T2 T3
+```
+
+The inorder ordering remains:
+
+$$
+T_1,x,T_2,y,T_3.
+$$
+
+Therefore the BST invariant is unchanged.
+
+Symmetrically, a left rotation transforms:
+
+```text
+          x
+         / \
+        T1  y
+           / \
+          T2 T3
+```
+
+into:
+
+```text
+          y
+         / \
+        x   T3
+       / \
+      T1 T2
+```
+
+![A tree rotation changes the local shape of a binary search tree while preserving the inorder ordering of all keys and subtrees.](figures/bst-rotations.png){#fig-bst-rotations}
+
+Only a constant number of parent-child references must be changed.
+
+With a linked representation:
+
+$$
+\boxed{
+T_{\text{rotation}}=O(1).
+}
+$$
+
+The importance of rotations is that they allow:
+
+$$
+\text{tree shape}
+$$
+
+to change independently of:
+
+$$
+\text{key ordering}.
+$$
+
+They are the fundamental local operation behind several balanced search-tree structures.
+
+## AVL Trees
+
+An **AVL tree** is a binary search tree that imposes a height-balance condition.
+
+For every position $p$, let:
+
+$$
+h_L(p)
+$$
+
+and:
+
+$$
+h_R(p)
+$$
+
+denote the heights of its left and right subtrees.
+
+The **balance factor** is:
+
+$$
+\boxed{
+BF(p)
+=
+h_L(p)-h_R(p).
+}
+$$ {#eq-avl-balance-factor}
+
+An AVL tree requires:
+
+$$
+\boxed{
+|BF(p)|\leq1
+}
+$$ {#eq-avl-balance-condition}
+
+for every position.
+
+Equivalently:
+
+$$
+BF(p)\in\{-1,0,1\}.
+$$
+
+For example:
+
+```text
+             30
+           /    \
+         20      40
+        /  \       \
+       10  25      50
+```
+
+is height-balanced.
+
+No position has left and right subtree heights differing by more than one.
+
+![An AVL tree maintains the binary-search-tree ordering invariant together with a height-balance condition requiring the two child subtrees of every position to differ in height by at most one.](figures/avl-balance-property.png){#fig-avl-balance-property}
+
+This local condition is strong enough to guarantee logarithmic global height.
+
+## Why AVL Height Is Logarithmic
+
+Let:
+
+$$
+N(h)
+$$
+
+be the minimum number of nodes that an AVL tree of height $h$ can contain.
+
+To make an AVL tree of height $h$ contain as few nodes as possible, one subtree should have height:
+
+$$
+h-1
+$$
+
+and the other:
+
+$$
+h-2.
+$$
+
+A greater difference would violate the AVL condition.
+
+Therefore:
+
+$$
+\boxed{
+N(h)
+=
+1+N(h-1)+N(h-2).
+}
+$$ {#eq-avl-minimum-nodes}
+
+The initial cases are:
+
+$$
+N(0)=1,
+$$
+
+and:
+
+$$
+N(1)=2.
+$$
+
+The recurrence resembles the Fibonacci sequence.
+
+In particular, $N(h)$ grows exponentially with $h$:
+
+$$
+N(h)=\Omega(\varphi^h),
+$$
+
+where:
+
+$$
+\varphi
+=
+\frac{1+\sqrt5}{2}.
+$$
+
+Therefore, for some positive constant $c$:
+
+$$
+n
+\geq
+c\varphi^h.
+$$
+
+Taking logarithms:
+
+$$
+\log n
+\geq
+\log c+h\log\varphi.
+$$
+
+Hence:
+
+$$
+h
+\leq
+\frac{\log n-\log c}{\log\varphi},
+$$
+
+which implies:
+
+$$
+\boxed{
+h=O(\log n).
+}
+$$ {#eq-avl-log-height}
+
+This is the crucial result.
+
+The local constraint:
+
+$$
+|h_L-h_R|\leq1
+$$
+
+forces the global tree height to remain logarithmic.
+
+Consequently:
+
+$$
+\boxed{
+\text{AVL search}=O(\log n)
+}
+$$
+
+in the worst case.
+
+## AVL Insertion
+
+Insertion initially proceeds exactly as in an ordinary BST.
+
+Suppose:
+
+$$
+30,20
+$$
+
+are already stored:
+
+```text
+       30
+      /
+     20
+```
+
+Now insert:
+
+$$
+10.
+$$
+
+Ordinary BST insertion produces:
+
+```text
+       30
+      /
+     20
+    /
+   10
+```
+
+At position 30:
+
+$$
+h_L-h_R=2,
+$$
+
+so the AVL condition is violated.
+
+The ordering is correct, but the shape is not.
+
+A rotation restores balance:
+
+```text
+       20
+      /  \
+     10  30
+```
+
+The sorted order remains:
+
+$$
+10<20<30.
+$$
+
+The resulting tree is again AVL-balanced.
+
+### Four Imbalance Configurations
+
+An imbalance involves three relevant positions:
+
+- $z$: the first unbalanced ancestor;
+- $y$: the taller child of $z$;
+- $x$: the taller child of $y$.
+
+Their relative orientations produce four familiar configurations:
+
+```text
+left-left
+right-right
+left-right
+right-left
+```
+
+The first two can be repaired with a single rotation.
+
+The latter two require a double rotation, equivalently a **trinode restructuring**.
+
+![AVL insertion can create four local imbalance configurations—left-left, right-right, left-right, and right-left—each repaired through an appropriate single or double rotation.](figures/avl-rotation-cases.png){#fig-avl-rotation-cases}
+
+For example, inserting:
+
+$$
+30,10,20
+$$
+
+produces:
+
+```text
+       30
+      /
+     10
+       \
+        20
+```
+
+This is a left-right configuration.
+
+First rotate left around 10:
+
+```text
+       30
+      /
+     20
+    /
+   10
+```
+
+then rotate right around 30:
+
+```text
+       20
+      /  \
+     10  30
+```
+
+The same result can be understood more generally as placing the median of:
+
+$$
+10,20,30
+$$
+
+at the root of the restructured subtree.
+
+## Trinode Restructuring
+
+The four AVL configurations can be unified.
+
+Let the three relevant positions be:
+
+$$
+x,y,z.
+$$
+
+Relabel them by inorder order as:
+
+$$
+a<b<c.
+$$
+
+The restructured subtree places:
+
+$$
+b
+$$
+
+at its root, with:
+
+$$
+a
+$$
+
+as its left child and:
+
+$$
+c
+$$
+
+as its right child.
+
+The four intervening subtrees:
+
+$$
+T_0,T_1,T_2,T_3
+$$
+
+are reattached according to their key ranges:
+
+```text
+             b
+           /   \
+          a     c
+         / \   / \
+        T0 T1 T2 T3
+```
+
+where:
+
+$$
+T_0<a<T_1<b<T_2<c<T_3.
+$$
+
+![Trinode restructuring unifies the four AVL rotation cases by placing the median of three ordered positions at the root and reattaching the four intervening subtrees according to their key ranges.](figures/avl-trinode-restructuring.png){#fig-avl-trinode-restructuring}
+
+Because only a constant number of links are modified:
+
+$$
+T_{\text{restructure}}=O(1).
+$$
+
+The search for the insertion position requires:
+
+$$
+O(\log n),
+$$
+
+and the upward balance inspection is bounded by the tree height.
+
+Therefore:
+
+$$
+\boxed{
+T_{\text{AVL insert}}=O(\log n).
+}
+$$
+
+## AVL Deletion
+
+Deletion begins with the ordinary BST deletion procedure.
+
+The physically removed node therefore has at most one child.
+
+Unlike insertion, however, removing a node can reduce the height of a subtree and cause an ancestor to become unbalanced.
+
+Suppose a deletion occurs below position $p$.
+
+The algorithm examines ancestors on the path:
+
+$$
+p
+\rightarrow
+\operatorname{parent}(p)
+\rightarrow
+\cdots
+\rightarrow
+\text{root}.
+$$
+
+If an unbalanced position $z$ is found, an appropriate trinode restructuring restores local balance.
+
+After deletion, however, the height of the restructured subtree may itself decrease.
+
+That decrease can affect a higher ancestor.
+
+Therefore AVL deletion may require rebalancing at several positions while moving toward the root.
+
+Even so, the number of examined levels is:
+
+$$
+O(\log n),
+$$
+
+and each local restructuring takes:
+
+$$
+O(1).
+$$
+
+Hence:
+
+$$
+\boxed{
+T_{\text{AVL delete}}=O(\log n).
+}
+$$
+
+The important distinction is:
+
+$$
+\boxed{
+\text{AVL insertion usually repairs one first imbalance},
+}
+$$
+
+whereas:
+
+$$
+\boxed{
+\text{AVL deletion may propagate rebalancing upward}.
+}
+$$
+
+## Performance of AVL Trees
+
+Because an AVL tree guarantees:
+
+$$
+h=O(\log n),
+$$
+
+operations whose cost depends on height receive worst-case logarithmic bounds.
+
+| Operation | AVL tree |
+|---|---:|
+| Search by key | $O(\log n)$ |
+| Insert | $O(\log n)$ |
+| Delete | $O(\log n)$ |
+| Minimum / maximum | $O(\log n)$ |
+| Predecessor / successor | $O(\log n)$ |
+| Ordered iteration | $O(n)$ |
+| Space | $O(n)$ |
+
+A range query reporting $s$ items can be performed in:
+
+$$
+\boxed{
+O(\log n+s)
+}
+$$
+
+time.
+
+The initial logarithmic term locates the beginning of the range, after which the reported positions can be traversed in sorted order.
+
+This is a capability for which the ordered representation is particularly well suited.
+
+## Hash Tables and Balanced Search Trees
+
+Hash tables and balanced search trees implement closely related abstractions but make different algorithmic trade-offs.
+
+| Property | Hash table | Balanced search tree |
+|---|---:|---:|
+| Exact-key search | $O(1)$ expected | $O(\log n)$ worst case |
+| Insert | $O(1)$ expected | $O(\log n)$ worst case |
+| Delete | $O(1)$ expected | $O(\log n)$ worst case |
+| Sorted traversal | Not inherent | $O(n)$ |
+| Minimum / maximum | Not inherent | $O(\log n)$ |
+| Predecessor / successor | Not inherent | $O(\log n)$ |
+| Range queries | Not natural | $O(\log n+s)$ |
+| Ordering required | No | Yes |
+| Worst-case exact lookup | $O(n)$ | $O(\log n)$ |
+
+The comparison should not be reduced to:
+
+$$
+O(1)
+<
+O(\log n).
+$$
+
+The two structures solve different versions of the map problem.
+
+Hashing asks:
+
+> Can the key be transformed into a likely location?
+
+A search tree asks:
+
+> Can ordering relationships eliminate part of the remaining search space?
+
+Thus:
+
+$$
+\boxed{
+\text{hash table}
+\rightarrow
+\text{location through hashing},
+}
+$$
+
+whereas:
+
+$$
+\boxed{
+\text{search tree}
+\rightarrow
+\text{location through ordering}.
+}
+$$
+
+## Other Balanced Search Trees
+
+AVL trees are not the only way to guarantee or encourage a useful tree shape.
+
+### Red-Black Trees
+
+A **red-black tree** is a binary search tree whose nodes carry an additional red-or-black state and satisfy structural coloring constraints.
+
+Those constraints restrict how unbalanced root-to-leaf paths can become.
+
+The resulting height satisfies:
+
+$$
+\boxed{
+h=O(\log n).
+}
+$$
+
+Consequently, search, insertion, and deletion retain:
+
+$$
+O(\log n)
+$$
+
+worst-case running time.
+
+Red-black trees use weaker balancing than AVL trees but can require fewer structural changes during updates. In Goodrich's treatment, insertion requires at most one trinode restructuring, while deletion requires at most two restructuring operations, although recoloring may propagate along a logarithmic path.
+
+For the purposes of these notes, the important point is not the complete recoloring algorithm but the design alternative:
+
+$$
+\boxed{
+\text{different balance invariant}
+\rightarrow
+\text{same asymptotic height guarantee}
+\rightarrow
+\text{different update behaviour}.
+}
+$$
+
+### Splay Trees
+
+A **splay tree** takes a different approach.
+
+It does not maintain a strict height-balance invariant after every operation.
+
+Instead, accessed positions are repeatedly rotated toward the root.
+
+Individual operations can therefore be expensive, but over a sequence of operations the structure achieves strong amortized performance.
+
+This provides another example of a principle encountered earlier:
+
+$$
+\boxed{
+\text{good aggregate performance}
+\not\Rightarrow
+\text{every individual operation is cheap}.
+}
+$$
+
+The full mechanics of red-black and splay trees are useful specialised topics, but AVL trees are sufficient here to expose the central mechanism of explicit search-tree balancing.
+
+## Search Trees as Ordered Maps
+
+The progression from maps to search trees can now be expressed at three levels.
+
+The abstraction is:
+
+$$
+\boxed{
+\text{key}
+\rightarrow
+\text{value}.
+}
+$$
+
+Hash tables implement this abstraction through:
+
+$$
+\boxed{
+\text{key}
+\rightarrow
+\text{hash}
+\rightarrow
+\text{bucket}.
+}
+$$
+
+Binary search trees instead use:
+
+$$
+\boxed{
+\text{key comparison}
+\rightarrow
+\text{left or right subtree}.
+}
+$$
+
+An ordinary BST provides:
+
+$$
+O(h)
+$$
+
+operations but does not control $h$.
+
+An AVL tree adds:
+
+$$
+|h_L-h_R|\leq1,
+$$
+
+which guarantees:
+
+$$
+h=O(\log n).
+$$
+
+The resulting chain of reasoning is:
+
+$$
+\boxed{
+\text{ordered Map ADT}
+\rightarrow
+\text{BST invariant}
+\rightarrow
+\text{height-dependent operations}
+\rightarrow
+\text{balance invariant}
+\rightarrow
+O(\log n)\text{ worst-case operations}.
+}
+$$
+
+This illustrates one of the most important principles in data-structure design:
+
+> an additional invariant requires maintenance work, but can provide stronger algorithmic guarantees.
+
+Search trees preserve more structure than hash tables because ordered operations require more information.
+
+The next topic, **Sorting and Selection**, approaches ordering from another direction. Instead of maintaining a dynamic collection under updates, sorting algorithms reorganise an existing collection into a global order, exposing fundamental ideas such as divide-and-conquer, comparison-based lower bounds, stability, in-place computation, and algorithmic trade-offs.
+
 
 
 # References
