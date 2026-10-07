@@ -9170,6 +9170,1694 @@ These mechanisms become especially valuable as data structures become more compl
 
 The linear structures considered so far organise elements along a single sequence. The next structures introduce hierarchy. **Trees** represent elements through parent-child relationships, and their recursive structure will bring together many of the ideas developed so far: nodes and references, recursion, iteration, abstract interfaces, inheritance, and algorithmic complexity.
 
+# Trees
+
+The structures considered so far are fundamentally **linear**. In an array, linked list, stack, queue, or deque, elements are organised along a sequence.
+
+Many relationships are not naturally linear.
+
+A file system contains directories within directories. A document contains sections and subsections. An organisation contains reporting relationships. An arithmetic expression can be decomposed into operators and operands. A decision can lead to several subsequent alternatives.
+
+These structures are **hierarchical**.
+
+A **tree** is a data structure that represents such relationships through a collection of positions connected by parent-child relationships.
+
+Unlike a linear sequence:
+
+$$
+x_0 \rightarrow x_1 \rightarrow x_2 \rightarrow \cdots,
+$$
+
+a tree allows one position to lead to several others:
+
+```text
+             A
+           / | \
+          B  C  D
+         / \    |
+        E   F   G
+```
+
+The structure begins at a distinguished position called the **root** and branches into progressively smaller subtrees.
+
+This recursive organisation is fundamental:
+
+$$
+\boxed{
+\text{tree}
+=
+\text{root}
++
+\text{subtrees}.
+}
+$$
+
+## Tree Terminology
+
+Let $T$ be a tree.
+
+If two positions $p$ and $q$ are directly connected and $p$ lies immediately above $q$, then:
+
+- $p$ is the **parent** of $q$;
+- $q$ is a **child** of $p$.
+
+A position may have several children, but every position other than the root has exactly one parent.
+
+For the tree:
+
+```text
+             A
+           / | \
+          B  C  D
+         / \    |
+        E   F   G
+```
+
+we have:
+
+$$
+\operatorname{parent}(B)=A,
+$$
+
+$$
+\operatorname{parent}(E)=B,
+$$
+
+and the children of $A$ are:
+
+$$
+B,C,D.
+$$
+
+Positions with the same parent are **siblings**. Thus:
+
+$$
+B,C,D
+$$
+
+are siblings, as are:
+
+$$
+E,F.
+$$
+
+A position with at least one child is an **internal position**.
+
+A position with no children is a **leaf** or **external position**.
+
+Therefore, in the example:
+
+$$
+\text{internal positions}
+=
+\{A,B,D\},
+$$
+
+while:
+
+$$
+\text{leaves}
+=
+\{C,E,F,G\}.
+$$
+
+The root is the unique position with no parent.
+
+![The fundamental terminology of a rooted tree includes the root, parent-child relationships, siblings, internal nodes, leaves, ancestors, and descendants.](figures/tree-terminology.png){#fig-tree-terminology}
+
+### Ancestors and Descendants
+
+The parent-child relationship extends transitively.
+
+A position $p$ is an **ancestor** of $q$ if $p$ lies on the path from the root to $q$.
+
+Conversely, $q$ is a **descendant** of $p$.
+
+For example:
+
+```text
+A
+|
+B
+|
+E
+```
+
+implies that:
+
+$$
+A
+$$
+
+and:
+
+$$
+B
+$$
+
+are ancestors of $E$, while $E$ is a descendant of both.
+
+Depending on convention, a position may be considered an ancestor and descendant of itself. When the position itself is excluded, the terms **proper ancestor** and **proper descendant** remove the ambiguity.
+
+## Edges and Paths
+
+An **edge** connects a parent to one of its children.
+
+If $u$ is the parent of $v$, then:
+
+$$
+(u,v)
+$$
+
+forms an edge of the tree.
+
+A **path** is a sequence of positions:
+
+$$
+p_0,p_1,\ldots,p_k
+$$
+
+such that consecutive positions are connected by edges.
+
+For example:
+
+$$
+A \rightarrow B \rightarrow E
+$$
+
+is a path.
+
+The number of edges in that path is:
+
+$$
+2.
+$$
+
+For a nonempty tree containing $n$ positions, the number of edges is:
+
+$$
+\boxed{
+n-1.
+}
+$$ {#eq-tree-edges}
+
+The reason follows directly from the parent relationship.
+
+The root has no parent, while every other position has exactly one parent. Therefore each of the remaining:
+
+$$
+n-1
+$$
+
+positions contributes exactly one parent-child edge.
+
+Hence:
+
+$$
+|E|=n-1.
+$$
+
+This simple property distinguishes a tree from more general graph structures, which may contain multiple paths between positions or cycles.
+
+## Subtrees
+
+Every position of a tree defines another tree.
+
+For a position $p$, the **subtree rooted at $p$** consists of:
+
+- $p$ itself;
+- every descendant of $p$.
+
+For example:
+
+```text
+             A
+           /   \
+          B     C
+         / \
+        D   E
+```
+
+the subtree rooted at $B$ is:
+
+```text
+          B
+         / \
+        D   E
+```
+
+This gives trees their recursive character.
+
+If the root $r$ has children:
+
+$$
+c_1,c_2,\ldots,c_k,
+$$
+
+then the complete tree consists of:
+
+$$
+r
+$$
+
+together with the subtrees rooted at:
+
+$$
+c_1,c_2,\ldots,c_k.
+$$
+
+Many tree algorithms therefore have a natural recursive form:
+
+```text
+process current position
+for each child:
+    recursively process child's subtree
+```
+
+The recursive algorithms introduced earlier are consequently not an isolated programming technique. They match the recursive structure of trees directly.
+
+## Ordered and Unordered Trees
+
+In some trees, the relative order of siblings matters.
+
+An **ordered tree** assigns a meaningful order to the children of each position.
+
+If a node has children:
+
+$$
+c_1,c_2,c_3,
+$$
+
+then:
+
+$$
+c_1,c_2,c_3
+$$
+
+is distinct from:
+
+$$
+c_3,c_1,c_2.
+$$
+
+A document structure is naturally ordered because chapters, sections, paragraphs, and other components appear in a meaningful sequence.
+
+In other hierarchical structures, sibling order may have no intrinsic meaning.
+
+An organisational hierarchy, for example, may represent reporting relationships without requiring one employee to be considered the "first" child of a manager.
+
+The distinction matters because traversal algorithms over an ordered tree must preserve the ordering of children.
+
+## Depth
+
+The **depth** of a position measures how far it is from the root.
+
+The root has depth:
+
+$$
+\boxed{
+\operatorname{depth}(r)=0.
+}
+$$
+
+For any non-root position $p$:
+
+$$
+\boxed{
+\operatorname{depth}(p)
+=
+1+\operatorname{depth}(\operatorname{parent}(p)).
+}
+$$ {#eq-tree-depth}
+
+Equivalently, the depth is the number of edges on the path from the root to $p$.
+
+Consider:
+
+```text
+          A
+        /   \
+       B     C
+      /       \
+     D         E
+    /
+   F
+```
+
+Then:
+
+$$
+\begin{aligned}
+\operatorname{depth}(A)&=0,\\
+\operatorname{depth}(B)&=1,\\
+\operatorname{depth}(D)&=2,\\
+\operatorname{depth}(F)&=3.
+\end{aligned}
+$$
+
+The recursive definition suggests a direct recursive algorithm:
+
+```python
+def depth(tree, p):
+    if tree.is_root(p):
+        return 0
+
+    return 1 + depth(tree, tree.parent(p))
+```
+
+If $p$ has depth $d$, the algorithm performs one recursive call for each ancestor of $p$.
+
+Therefore:
+
+$$
+\boxed{
+T_{\text{depth}}(p)=O(d).
+}
+$$
+
+In the worst case:
+
+$$
+d=O(n),
+$$
+
+so:
+
+$$
+T_{\text{depth}}(n)=O(n).
+$$
+
+## Height
+
+While depth measures the distance **from the root to a position**, height measures the longest downward distance.
+
+The height of a position $p$ can be defined recursively.
+
+If $p$ is a leaf:
+
+$$
+\boxed{
+\operatorname{height}(p)=0.
+}
+$$
+
+Otherwise:
+
+$$
+\boxed{
+\operatorname{height}(p)
+=
+1+
+\max_{c\in\operatorname{children}(p)}
+\operatorname{height}(c).
+}
+$$ {#eq-tree-position-height}
+
+The **height of a tree** is the height of its root:
+
+$$
+\boxed{
+h(T)
+=
+\operatorname{height}(\operatorname{root}(T)).
+}
+$$ {#eq-tree-height}
+
+Equivalently:
+
+$$
+h(T)
+=
+\max_{p\in T}\operatorname{depth}(p).
+$$
+
+Thus the height is the maximum depth of any position.
+
+For:
+
+```text
+          A
+        /   \
+       B     C
+      / \
+     D   E
+    /
+   F
+```
+
+the longest root-to-leaf path is:
+
+$$
+A\rightarrow B\rightarrow D\rightarrow F.
+$$
+
+It contains three edges, so:
+
+$$
+h(T)=3.
+$$
+
+![Depth measures the distance from the root to a position, while height measures the longest downward path from a position to a leaf.](figures/tree-depth-height.png){#fig-tree-depth-height}
+
+### Computing Height
+
+A straightforward but inefficient approach would compute the depth of every leaf and take the maximum.
+
+If each depth computation independently walks through ancestors, repeated work can make the overall computation expensive.
+
+The recursive structure of the tree suggests a better algorithm:
+
+```python
+def height(tree, p):
+    if tree.is_leaf(p):
+        return 0
+
+    return 1 + max(
+        height(tree, child)
+        for child in tree.children(p)
+    )
+```
+
+Each subtree computes its height once.
+
+For a tree containing $n$ positions, every position is visited once and the children of each position are inspected.
+
+Because a tree has:
+
+$$
+n-1
+$$
+
+edges, the total work is:
+
+$$
+\boxed{
+T_{\text{height}}(n)=O(n).
+}
+$$
+
+This is an important example of how the recursive representation of a structure can guide the design of an efficient algorithm.
+
+## The Tree ADT
+
+As with positional lists, it is useful to distinguish a tree position from the internal node used to represent it.
+
+A **position** represents a location within the tree and provides access to the element stored there.
+
+The Tree ADT can then expose operations such as:
+
+```text
+root()
+parent(p)
+children(p)
+num_children(p)
+is_root(p)
+is_leaf(p)
+```
+
+together with collection-level operations such as:
+
+```text
+len()
+is_empty()
+positions()
+```
+
+The abstraction can be represented as:
+
+$$
+\boxed{
+\text{Tree ADT}
+\rightarrow
+\text{positions and relationships}
+}
+$$
+
+rather than:
+
+$$
+\text{Tree ADT}
+\rightarrow
+\text{public node manipulation}.
+$$
+
+Goodrich defines the general Tree ADT using exactly this position abstraction, allowing users to navigate parent-child relationships without exposing the underlying node representation. 
+
+This continues the separation established earlier:
+
+$$
+\boxed{
+\text{Position}
+\neq
+\text{Node}.
+}
+$$
+
+A position belongs to the public abstraction. A node may remain an implementation detail.
+
+## Binary Trees
+
+A particularly important specialization is the **binary tree**.
+
+A binary tree is an ordered tree in which each position has at most two children, conventionally distinguished as:
+
+$$
+\text{left child}
+$$
+
+and:
+
+$$
+\text{right child}.
+$$
+
+Thus:
+
+$$
+\boxed{
+0
+\leq
+\operatorname{num\_children}(p)
+\leq
+2.
+}
+$$
+
+For example:
+
+```text
+             A
+           /   \
+          B     C
+         / \     \
+        D   E     F
+```
+
+The left and right relationships are semantically distinct.
+
+A node with only one child must therefore still identify whether that child is the left or right child:
+
+```text
+    A              A
+   /                \
+  B                  B
+```
+
+These are different binary trees.
+
+The Binary Tree ADT extends the general Tree ADT with operations such as:
+
+```text
+left(p)
+right(p)
+sibling(p)
+```
+
+while retaining operations inherited from the general tree abstraction.
+
+Goodrich explicitly models `BinaryTree` as a specialization of `Tree`, making this an immediate application of the inheritance and abstract-interface principles developed in the previous section. 
+
+## Structural Properties of Binary Trees
+
+Because every position has at most two children, binary trees satisfy useful structural bounds.
+
+Let:
+
+$$
+n_d
+$$
+
+denote the number of positions at depth $d$.
+
+At depth zero there can be at most one position:
+
+$$
+n_0\leq1.
+$$
+
+Each position can have at most two children, so:
+
+$$
+n_1\leq2,
+$$
+
+$$
+n_2\leq4,
+$$
+
+and in general:
+
+$$
+\boxed{
+n_d\leq2^d.
+}
+$$ {#eq-binary-tree-level-bound}
+
+This follows inductively.
+
+If:
+
+$$
+n_d\leq2^d,
+$$
+
+then the next level contains at most twice as many positions:
+
+$$
+n_{d+1}
+\leq
+2n_d
+\leq
+2\cdot2^d
+=
+2^{d+1}.
+$$
+
+For a binary tree of height $h$, the maximum possible number of positions is therefore:
+
+$$
+n
+\leq
+\sum_{d=0}^{h}2^d.
+$$
+
+Using the finite geometric series:
+
+$$
+\sum_{d=0}^{h}2^d
+=
+2^{h+1}-1,
+$$
+
+we obtain:
+
+$$
+\boxed{
+n\leq2^{h+1}-1.
+}
+$$ {#eq-binary-tree-size-height}
+
+Rearranging:
+
+$$
+n+1\leq2^{h+1}.
+$$
+
+Taking logarithms:
+
+$$
+\log_2(n+1)\leq h+1,
+$$
+
+and therefore:
+
+$$
+\boxed{
+h\geq\log_2(n+1)-1.
+}
+$$ {#eq-binary-tree-min-height}
+
+Since height is integral, this establishes that a binary tree containing $n$ positions cannot have height asymptotically smaller than:
+
+$$
+\Omega(\log n).
+$$
+
+However, this does **not** mean every binary tree has logarithmic height.
+
+A highly unbalanced tree may have the form:
+
+```text
+A
+ \
+  B
+   \
+    C
+     \
+      D
+       \
+        E
+```
+
+with:
+
+$$
+h=n-1.
+$$
+
+Thus:
+
+$$
+\boxed{
+\log_2(n+1)-1
+\leq
+h
+\leq
+n-1.
+}
+$$
+
+The shape of the tree therefore has direct algorithmic consequences.
+
+![Binary trees with the same number of positions can have very different heights, ranging from approximately logarithmic for compact trees to linear for highly unbalanced trees.](figures/binary-tree-shape-height.png){#fig-binary-tree-shape-height}
+
+This observation will become particularly important for search trees.
+
+## Full, Proper, Perfect, and Complete Binary Trees
+
+Several related terms describe important binary-tree shapes.
+
+A **full** or **proper** binary tree is one in which every internal position has exactly two children.
+
+Thus each position has either:
+
+$$
+0
+$$
+
+or:
+
+$$
+2
+$$
+
+children.
+
+If a proper binary tree contains:
+
+$$
+i
+$$
+
+internal positions and:
+
+$$
+e
+$$
+
+external positions, then:
+
+$$
+\boxed{
+e=i+1.
+}
+$$ {#eq-proper-binary-tree-leaves}
+
+To derive this, count edges in two ways.
+
+Every internal position contributes exactly two child edges:
+
+$$
+|E|=2i.
+$$
+
+But a tree with:
+
+$$
+n=i+e
+$$
+
+positions has:
+
+$$
+|E|=n-1=i+e-1.
+$$
+
+Therefore:
+
+$$
+2i=i+e-1,
+$$
+
+so:
+
+$$
+e=i+1.
+$$
+
+A **perfect binary tree** is a proper binary tree in which all leaves have the same depth.
+
+For height $h$, every possible position through depth $h$ is present:
+
+$$
+n
+=
+1+2+4+\cdots+2^h
+=
+2^{h+1}-1.
+$$
+
+A **complete binary tree** fills levels from top to bottom, with all levels except possibly the last completely filled and the final level occupied from left to right.
+
+These distinctions become particularly useful for heaps, because the complete-tree property permits an efficient array representation.
+
+## Linked Representation of a Binary Tree
+
+A binary tree can be represented using linked nodes.
+
+A node may conceptually contain:
+
+$$
+\text{node}
+=
+(
+\text{element},
+\text{parent},
+\text{left},
+\text{right}
+).
+$$
+
+For example:
+
+```text
+            A
+          /   \
+         B     C
+        / \
+       D   E
+```
+
+can be represented through nodes whose references encode the tree relationships.
+
+![A linked binary tree stores parent, left-child, and right-child references in each node while public positions can encapsulate those internal nodes.](figures/linked-binary-tree.png){#fig-linked-binary-tree}
+
+A linked representation provides direct access from a known node to:
+
+- its parent;
+- its left child;
+- its right child.
+
+Each of these navigation operations can therefore be implemented in:
+
+$$
+O(1)
+$$
+
+time.
+
+The tree object itself can maintain:
+
+```text
+root
+size
+```
+
+while individual nodes maintain the local structural relationships.
+
+As with positional lists, public `Position` objects can wrap internal nodes so that clients navigate the tree without receiving direct access to the references that maintain its structural invariants.
+
+Goodrich's `LinkedBinaryTree` follows precisely this architecture: a non-public node representation is wrapped by a public position abstraction, while validation utilities preserve the integrity of operations on positions. 
+
+## Array Representation of a Binary Tree
+
+Binary trees can also be represented implicitly in an array.
+
+Assign the root index:
+
+$$
+0.
+$$
+
+For a position stored at index $j$, define its children as:
+
+$$
+\boxed{
+\operatorname{left}(j)=2j+1
+}
+$$ {#eq-array-tree-left}
+
+and:
+
+$$
+\boxed{
+\operatorname{right}(j)=2j+2.
+}
+$$ {#eq-array-tree-right}
+
+For any non-root position at index $j$, its parent is:
+
+$$
+\boxed{
+\operatorname{parent}(j)
+=
+\left\lfloor
+\frac{j-1}{2}
+\right\rfloor.
+}
+$$ {#eq-array-tree-parent}
+
+For example:
+
+```text
+Tree:
+
+             A
+           /   \
+          B     C
+         / \   / \
+        D   E F   G
+
+Array:
+
+index    0   1   2   3   4   5   6
+       +---+---+---+---+---+---+---+
+       | A | B | C | D | E | F | G |
+       +---+---+---+---+---+---+---+
+```
+
+The structural relationships are encoded mathematically by array indices rather than explicit references.
+
+![A binary tree can be represented implicitly in an array, with parent and child relationships derived directly from each element's index.](figures/array-binary-tree.png){#fig-array-binary-tree}
+
+This representation is particularly efficient for complete or nearly complete binary trees because few array positions are unused.
+
+For sparse trees, however, it can waste substantial space.
+
+Consider a tree that repeatedly uses only the right child:
+
+```text
+A
+ \
+  B
+   \
+    C
+     \
+      D
+```
+
+The occupied indices are:
+
+$$
+0,2,6,14,\ldots
+$$
+
+because:
+
+$$
+j_{k+1}=2j_k+2.
+$$
+
+The index grows exponentially with depth even though only one node exists at each level.
+
+Thus the suitability of the representation depends strongly on tree shape:
+
+$$
+\boxed{
+\text{complete tree}
+\rightarrow
+\text{array representation is natural},
+}
+$$
+
+while:
+
+$$
+\boxed{
+\text{sparse or irregular tree}
+\rightarrow
+\text{linked representation is often more natural}.
+}
+$$
+
+This is the same design principle encountered throughout these notes: representation should reflect the structure and operations of the problem.
+
+## Tree Traversal
+
+A tree does not have a single intrinsic linear order.
+
+To process all positions, an algorithm must choose a **traversal order**.
+
+Different traversal orders expose different structural relationships.
+
+The principal traversals are:
+
+- preorder;
+- postorder;
+- breadth-first;
+- inorder for binary trees.
+
+Each visits every position, but the order differs.
+
+## Preorder Traversal
+
+In a **preorder traversal**, a position is visited **before** its subtrees.
+
+For a position $p$:
+
+```text
+visit p
+
+for each child c of p:
+    preorder(c)
+```
+
+Thus:
+
+$$
+\boxed{
+\text{node}
+\rightarrow
+\text{subtrees}.
+}
+$$
+
+For:
+
+```text
+             A
+           /   \
+          B     C
+         / \   / \
+        D   E F   G
+```
+
+preorder produces:
+
+$$
+\boxed{
+A,B,D,E,C,F,G.
+}
+$$
+
+The root appears first, followed recursively by each subtree.
+
+Preorder is useful when a parent must be processed before its descendants.
+
+Examples include producing hierarchical outlines, copying tree structures, or propagating information from parent to child.
+
+## Postorder Traversal
+
+In a **postorder traversal**, the subtrees are processed before the position itself.
+
+For a position $p$:
+
+```text
+for each child c of p:
+    postorder(c)
+
+visit p
+```
+
+Thus:
+
+$$
+\boxed{
+\text{subtrees}
+\rightarrow
+\text{node}.
+}
+$$
+
+For the same tree:
+
+$$
+\boxed{
+D,E,B,F,G,C,A.
+}
+$$
+
+The root appears last.
+
+Postorder is appropriate when a result for a parent depends on results already computed for its children.
+
+The height algorithm is an example:
+
+$$
+\operatorname{height}(p)
+=
+1+
+\max_c\operatorname{height}(c).
+$$
+
+Before computing the height of $p$, the heights of its children must already be known.
+
+Goodrich characterises postorder in exactly this way: recursively traverse the child subtrees first and visit the current position afterwards. 
+
+## Breadth-First Traversal
+
+Preorder and postorder follow subtrees recursively.
+
+A **breadth-first traversal** instead processes positions level by level:
+
+$$
+\text{depth }0
+\rightarrow
+\text{depth }1
+\rightarrow
+\text{depth }2
+\rightarrow
+\cdots
+$$
+
+For:
+
+```text
+             A
+           /   \
+          B     C
+         / \   / \
+        D   E F   G
+```
+
+breadth-first order is:
+
+$$
+\boxed{
+A,B,C,D,E,F,G.
+}
+$$
+
+This traversal naturally uses a **queue**.
+
+Begin by enqueuing the root:
+
+```text
+queue = [A]
+```
+
+Then repeatedly:
+
+1. dequeue the oldest position;
+2. visit it;
+3. enqueue its children.
+
+Conceptually:
+
+```python
+queue.enqueue(tree.root())
+
+while not queue.is_empty():
+    p = queue.dequeue()
+    visit(p)
+
+    for child in tree.children(p):
+        queue.enqueue(child)
+```
+
+The FIFO property guarantees that all positions at depth $d$ are processed before positions at depth $d+1$.
+
+This provides a direct connection between two abstractions developed earlier:
+
+$$
+\boxed{
+\text{breadth-first traversal}
++
+\text{FIFO discipline}
+\rightarrow
+\text{queue}.
+}
+$$
+
+Goodrich's breadth-first traversal uses exactly this queue-based structure. :chatgpt-content-reference{index="4"}
+
+## Inorder Traversal
+
+Binary trees provide an additional traversal because every position distinguishes between a left and right subtree.
+
+An **inorder traversal** processes:
+
+$$
+\boxed{
+\text{left subtree}
+\rightarrow
+\text{node}
+\rightarrow
+\text{right subtree}.
+}
+$$
+
+Conceptually:
+
+```python
+if left child exists:
+    inorder(left)
+
+visit current position
+
+if right child exists:
+    inorder(right)
+```
+
+For:
+
+```text
+             A
+           /   \
+          B     C
+         / \   / \
+        D   E F   G
+```
+
+the inorder traversal is:
+
+$$
+\boxed{
+D,B,E,A,F,C,G.
+}
+$$
+
+Unlike preorder, postorder, and breadth-first traversal, inorder depends specifically on the distinction between left and right children and therefore applies naturally to binary trees rather than arbitrary general trees. 
+
+This traversal becomes especially important for binary search trees because their ordering invariant causes inorder traversal to visit keys in sorted order.
+
+## Comparing Traversal Orders
+
+The same tree:
+
+```text
+             A
+           /   \
+          B     C
+         / \   / \
+        D   E F   G
+```
+
+produces four different sequences:
+
+| Traversal | Order |
+|---|---|
+| Preorder | A, B, D, E, C, F, G |
+| Postorder | D, E, B, F, G, C, A |
+| Breadth-first | A, B, C, D, E, F, G |
+| Inorder | D, B, E, A, F, C, G |
+
+![Preorder, postorder, inorder, and breadth-first traversals visit the same binary tree in different orders determined by when the current node is processed relative to its subtrees or depth level.](figures/tree-traversal-orders.png){#fig-tree-traversal-orders}
+
+The difference is not merely presentational. Traversal order determines when information becomes available.
+
+Preorder naturally propagates information downward.
+
+Postorder naturally aggregates information upward.
+
+Breadth-first processes the hierarchy level by level.
+
+Inorder exploits the left-right semantics of binary trees.
+
+Choosing a traversal is therefore an algorithmic decision:
+
+$$
+\boxed{
+\text{desired dependency order}
+\rightarrow
+\text{traversal strategy}.
+}
+$$
+
+## Complexity of Tree Traversal
+
+A complete traversal visits every position.
+
+For a tree with $n$ positions, preorder and postorder examine each position and each parent-child relationship a constant number of times.
+
+Since:
+
+$$
+|E|=n-1,
+$$
+
+their total running time is:
+
+$$
+\boxed{
+T(n)=O(n).
+}
+$$
+
+Goodrich notes that this is asymptotically optimal because any algorithm required to process every position must perform at least:
+
+$$
+\Omega(n)
+$$
+
+work. 
+
+Breadth-first traversal also processes each position once.
+
+Each position is enqueued once and dequeued once, so with constant-time queue operations:
+
+$$
+T(n)=O(n).
+$$
+
+Goodrich derives the same bound from the $n$ enqueue and $n$ dequeue operations. 
+
+Inorder traversal of a binary tree similarly visits each position once:
+
+$$
+T(n)=O(n).
+$$
+
+### Auxiliary Space
+
+Running time alone does not describe traversal cost.
+
+Recursive depth-first traversals maintain active function calls proportional to the tree height:
+
+$$
+\boxed{
+S_{\text{DFS}}=O(h).
+}
+$$
+
+For a balanced tree:
+
+$$
+h=O(\log n),
+$$
+
+while for a highly unbalanced tree:
+
+$$
+h=O(n).
+$$
+
+Breadth-first traversal instead maintains a queue containing positions awaiting processing.
+
+Its auxiliary space depends on the maximum number of positions simultaneously present in the traversal frontier.
+
+If the maximum width of the tree is:
+
+$$
+w,
+$$
+
+then:
+
+$$
+\boxed{
+S_{\text{BFS}}=O(w).
+}
+$$
+
+For a broad tree, this can be:
+
+$$
+O(n).
+$$
+
+This creates an important time-space distinction:
+
+$$
+\boxed{
+\text{DFS space depends primarily on depth},
+}
+$$
+
+whereas:
+
+$$
+\boxed{
+\text{BFS space depends primarily on width}.
+}
+$$
+
+## Expression Trees
+
+Trees can represent the recursive structure of arithmetic expressions.
+
+Consider:
+
+$$
+(3+1)(5-2).
+$$
+
+Its expression tree can be represented as:
+
+```text
+              *
+            /   \
+           +     -
+          / \   / \
+         3   1 5   2
+```
+
+Internal positions contain operators:
+
+$$
+*,+,-,
+$$
+
+while leaves contain operands:
+
+$$
+3,1,5,2.
+$$
+
+The tree exposes the structure of the expression rather than merely its textual notation.
+
+![An expression tree represents operators as internal nodes and operands as leaves, making the recursive structure and evaluation dependencies of an arithmetic expression explicit.](figures/expression-tree.png){#fig-expression-tree}
+
+Different traversal orders correspond naturally to different expression notations.
+
+For the tree above, preorder produces:
+
+```text
+* + 3 1 - 5 2
+```
+
+which corresponds to **prefix notation**.
+
+Postorder produces:
+
+```text
+3 1 + 5 2 - *
+```
+
+which corresponds to **postfix notation**.
+
+Inorder produces:
+
+```text
+3 + 1 * 5 - 2
+```
+
+but without parentheses this sequence does not fully preserve the original tree structure.
+
+A parenthesised inorder representation restores the hierarchy:
+
+$$
+(3+1)*(5-2).
+$$
+
+Goodrich uses arithmetic-expression trees as an important application of binary trees and inorder traversal. 
+
+### Evaluating an Expression Tree
+
+Evaluation naturally follows postorder.
+
+For an internal position $p$ with operator:
+
+$$
+\operatorname{op}(p)
+$$
+
+and children $l$ and $r$:
+
+$$
+\boxed{
+\operatorname{value}(p)
+=
+\operatorname{value}(l)
+\operatorname{op}(p)
+\operatorname{value}(r).
+}
+$$
+
+The operands must be evaluated before their operator can be applied.
+
+For:
+
+$$
+(3+1)(5-2),
+$$
+
+the left subtree evaluates to:
+
+$$
+3+1=4,
+$$
+
+the right subtree evaluates to:
+
+$$
+5-2=3,
+$$
+
+and finally:
+
+$$
+4\cdot3=12.
+$$
+
+The recursive algorithm follows the data structure directly:
+
+```python
+def evaluate(tree, p):
+    if tree.is_leaf(p):
+        return value_of(p)
+
+    left_value = evaluate(tree, tree.left(p))
+    right_value = evaluate(tree, tree.right(p))
+
+    return apply_operator(
+        element_of(p),
+        left_value,
+        right_value,
+    )
+```
+
+Each position is evaluated once, giving:
+
+$$
+T(n)=O(n).
+$$
+
+This illustrates a broader relationship:
+
+$$
+\boxed{
+\text{tree structure}
+\rightarrow
+\text{dependency structure}
+\rightarrow
+\text{recursive evaluation}.
+}
+$$
+
+## Euler Tours
+
+Preorder and postorder can be viewed as two observations of a more general traversal.
+
+Imagine walking around a tree while remaining immediately adjacent to its edges.
+
+A position may be encountered:
+
+- before traversing its children;
+- between traversals of consecutive children;
+- after all its children have been traversed.
+
+This traversal framework is called an **Euler tour**.
+
+For a general tree, the conceptual structure is:
+
+```text
+previsit node
+
+for each child:
+    recursively tour child
+
+postvisit node
+```
+
+The framework can therefore support customised computations at different stages of traversal.
+
+For binary trees, a node can naturally be encountered three times:
+
+$$
+\text{before left subtree},
+$$
+
+$$
+\text{between left and right subtrees},
+$$
+
+$$
+\text{after right subtree}.
+$$
+
+These moments correspond respectively to:
+
+$$
+\text{preorder},
+\quad
+\text{inorder},
+\quad
+\text{postorder}.
+$$
+
+![An Euler tour provides a unified view of depth-first tree traversal by distinguishing previsit, intermediate, and postvisit events around each node.](figures/euler-tour-tree.png){#fig-euler-tour-tree}
+
+This is more than a visual interpretation. It provides a reusable algorithmic framework in which application-specific behaviour can be attached to traversal events.
+
+Goodrich formalises this idea through an `EulerTour` abstraction with previsit and postvisit hooks that subclasses can customise. 
+
+It is therefore also an example of the template-method principle introduced in the object-oriented programming section:
+
+$$
+\boxed{
+\text{fixed traversal structure}
++
+\text{customisable operations}
+=
+\text{reusable algorithmic framework}.
+}
+$$
+
+## Trees as a Convergence of Earlier Concepts
+
+Trees bring together several ideas developed throughout these notes.
+
+Their representation can use linked nodes:
+
+$$
+\text{linked structures}.
+$$
+
+Their hierarchical definition naturally supports:
+
+$$
+\text{recursion}.
+$$
+
+Their public interface can distinguish:
+
+$$
+\text{positions from internal nodes}.
+$$
+
+Traversal can expose elements lazily through:
+
+$$
+\text{iterators and generators}.
+$$
+
+Breadth-first traversal depends on:
+
+$$
+\text{queues}.
+$$
+
+Tree abstractions can be organised through:
+
+$$
+\text{inheritance and abstract interfaces}.
+$$
+
+And the cost of many operations depends critically on:
+
+$$
+\text{tree height}.
+$$
+
+The central design relationship remains the same:
+
+$$
+\boxed{
+\text{structure}
+\rightarrow
+\text{representation}
+\rightarrow
+\text{algorithm}
+\rightarrow
+\text{complexity}.
+}
+$$
+
+Trees make this relationship particularly visible because the shape of the structure itself becomes an important computational variable.
+
+This prepares the ground for structures that impose additional invariants on trees. A **priority queue** uses ordering to provide efficient access to the element with highest priority, and a **heap** combines that ordering with a complete binary-tree structure. Later, binary search trees will impose a different ordering invariant to support efficient search.
+
 
 
 # References
