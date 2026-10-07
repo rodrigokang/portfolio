@@ -10436,7 +10436,7 @@ The same tree:
 produces four different sequences:
 
 | Traversal | Order |
-|---|---|
+|:---:|:---:|
 | Preorder | A, B, D, E, C, F, G |
 | Postorder | D, E, B, F, G, C, A |
 | Breadth-first | A, B, C, D, E, F, G |
@@ -10857,6 +10857,1221 @@ $$
 Trees make this relationship particularly visible because the shape of the structure itself becomes an important computational variable.
 
 This prepares the ground for structures that impose additional invariants on trees. A **priority queue** uses ordering to provide efficient access to the element with highest priority, and a **heap** combines that ordering with a complete binary-tree structure. Later, binary search trees will impose a different ordering invariant to support efficient search.
+
+# Priority Queues and Heaps
+
+Stacks and queues determine the next element to remove according to the order in which elements entered the collection.
+
+A stack uses:
+
+$$
+\text{LIFO},
+$$
+
+while a queue uses:
+
+$$
+\text{FIFO}.
+$$
+
+Many problems require a different rule.
+
+A task scheduler may need to process the most urgent task first. A simulation may need to process the event with the earliest timestamp. A graph algorithm may repeatedly require the vertex with the smallest current distance estimate.
+
+In these situations, removal depends not on arrival order but on **priority**.
+
+A **priority queue** is an abstract data type in which each stored item has an associated key that determines its priority.
+
+For a min-oriented priority queue, the item with the smallest key has the highest priority and is therefore the next item returned.
+
+Conceptually:
+
+$$
+\boxed{
+\text{item}
+=
+(\text{key},\text{value}).
+}
+$$
+
+The key determines ordering, while the value represents the associated data.
+
+For example:
+
+```text
+(2, "urgent")
+(8, "low priority")
+(4, "normal")
+```
+
+would be removed according to the key order:
+
+$$
+2,4,8,
+$$
+
+regardless of the order in which the items were inserted.
+
+## The Priority Queue ADT
+
+A min-oriented priority queue provides the fundamental operations:
+
+```text
+add(key, value)
+min()
+remove_min()
+```
+
+together with:
+
+```text
+is_empty()
+len()
+```
+
+Their semantics are:
+
+| Operation | Behaviour |
+|:---:|:---:|
+| `add(k, v)` | Insert an item with key `k` and value `v` |
+| `min()` | Return an item having minimum key without removing it |
+| `remove_min()` | Remove and return an item having minimum key |
+| `is_empty()` | Determine whether the priority queue is empty |
+| `len()` | Return the number of stored items |
+
+The abstraction specifies the required behaviour but does not prescribe how the items must be represented.
+
+Thus:
+
+$$
+\boxed{
+\text{Priority Queue ADT}
+\neq
+\text{Heap}.
+}
+$$
+
+A heap is one possible implementation of a priority queue.
+
+This distinction is important because simpler representations reveal the trade-off that motivates heaps.
+
+## Priority Queue with an Unsorted Sequence
+
+Suppose priority-queue items are stored without maintaining any particular order.
+
+For example:
+
+```text
+[(7,A), (2,B), (9,C), (4,D), (1,E)]
+```
+
+Insertion is simple.
+
+A new item can be added at a known end of the collection without determining where it belongs in the ordering.
+
+Therefore:
+
+$$
+\boxed{
+T_{\text{add}}(n)=O(1).
+}
+$$
+
+However, finding the minimum requires inspecting the collection:
+
+$$
+7,2,9,4,1.
+$$
+
+In the worst case, all $n$ items must be examined:
+
+$$
+\boxed{
+T_{\text{min}}(n)=O(n).
+}
+$$
+
+Removing the minimum similarly requires locating it first:
+
+$$
+\boxed{
+T_{\text{remove-min}}(n)=O(n).
+}
+$$
+
+This representation therefore favours insertion.
+
+## Priority Queue with a Sorted Sequence
+
+An alternative is to keep the collection ordered by key.
+
+For example:
+
+```text
+[(1,E), (2,B), (4,D), (7,A), (9,C)]
+```
+
+The minimum is immediately available at one boundary.
+
+Thus:
+
+$$
+\boxed{
+T_{\text{min}}(n)=O(1)
+}
+$$
+
+and, with an appropriate sequence representation:
+
+$$
+\boxed{
+T_{\text{remove-min}}(n)=O(1).
+}
+$$
+
+The cost has moved to insertion.
+
+A new item must be placed at the correct position to preserve sorted order. Locating that position and updating the sequence may require:
+
+$$
+\boxed{
+T_{\text{add}}(n)=O(n).
+}
+$$
+
+The two representations therefore produce opposite trade-offs:
+
+| Operation | Unsorted sequence | Sorted sequence |
+|:---:|:---:|:---:|
+| `add` | $O(1)$ | $O(n)$ |
+| `min` | $O(n)$ | $O(1)$ |
+| `remove_min` | $O(n)$ | $O(1)$ |
+
+Neither representation provides efficient insertion and removal simultaneously.
+
+This motivates a compromise:
+
+$$
+\boxed{
+\text{do not maintain complete order};
+\quad
+\text{maintain only enough order}.
+}
+$$
+
+That compromise is the **heap**.
+
+## Binary Heaps
+
+A **binary heap** is a binary tree satisfying two independent invariants:
+
+1. a structural invariant;
+2. an ordering invariant.
+
+For a min-oriented heap, these are:
+
+$$
+\boxed{
+\text{complete binary tree property}
+}
+$$
+
+and:
+
+$$
+\boxed{
+\text{heap-order property}.
+}
+$$
+
+The structural invariant controls the shape of the tree.
+
+The ordering invariant controls the relationship between keys.
+
+Together they allow both insertion and removal of the minimum in logarithmic time.
+
+## Complete Binary Tree Property
+
+A heap is a **complete binary tree**.
+
+All levels except possibly the last are completely filled, and positions on the final level are occupied from left to right.
+
+For example:
+
+```text
+             2
+           /   \
+          5     4
+         / \   / \
+        9   7 8   6
+       / \
+      12 11
+```
+
+is complete.
+
+In contrast:
+
+```text
+             2
+           /   \
+          5     4
+           \     \
+            7     6
+```
+
+is not complete because positions have been skipped.
+
+Completeness keeps the tree compact.
+
+If a complete binary tree has height $h$, every level:
+
+$$
+0,1,\ldots,h-1
+$$
+
+is full.
+
+Therefore the first $h$ levels contain:
+
+$$
+1+2+4+\cdots+2^{h-1}.
+$$
+
+Using the geometric series:
+
+$$
+1+2+\cdots+2^{h-1}
+=
+2^h-1.
+$$
+
+Because at least one position exists at level $h$:
+
+$$
+n\geq2^h.
+$$
+
+At most $2^h$ positions can exist at that level, so:
+
+$$
+n
+\leq
+(2^h-1)+2^h
+=
+2^{h+1}-1.
+$$
+
+Hence:
+
+$$
+2^h
+\leq
+n
+\leq
+2^{h+1}-1.
+$$
+
+Taking logarithms gives:
+
+$$
+h\leq\log_2 n
+$$
+
+and:
+
+$$
+h\geq\log_2(n+1)-1.
+$$
+
+Therefore:
+
+$$
+\boxed{
+h=\Theta(\log n).
+}
+$$ {#eq-heap-height}
+
+This logarithmic height is fundamental. Heap update operations will move through at most one root-to-leaf or leaf-to-root path, so their running time will be bounded by the height of the tree.
+
+## Heap-Order Property
+
+The second invariant concerns keys.
+
+For every non-root position $p$ in a min-oriented heap:
+
+$$
+\boxed{
+\operatorname{key}(\operatorname{parent}(p))
+\leq
+\operatorname{key}(p).
+}
+$$ {#eq-min-heap-order}
+
+Thus keys never decrease when moving downward from the root.
+
+For example:
+
+```text
+             2
+           /   \
+          5     4
+         / \   / \
+        9   7 8   6
+```
+
+satisfies the min-heap property because:
+
+$$
+2\leq5,
+\qquad
+2\leq4,
+$$
+
+$$
+5\leq9,
+\qquad
+5\leq7,
+$$
+
+and:
+
+$$
+4\leq8,
+\qquad
+4\leq6.
+$$
+
+Consequently, no descendant can contain a key smaller than the root.
+
+Therefore:
+
+$$
+\boxed{
+\operatorname{key}(\text{root})
+=
+\min_{p\in T}\operatorname{key}(p).
+}
+$$ {#eq-heap-root-minimum}
+
+![A min-heap combines two invariants: the tree is complete, and every parent key is less than or equal to the keys of its children. The minimum key therefore occurs at the root.](figures/min-heap-properties.png){#fig-min-heap-properties}
+
+This immediately gives:
+
+$$
+\boxed{
+T_{\text{min}}(n)=O(1).
+}
+$$
+
+The root can be accessed directly.
+
+### A Heap Is Not a Sorted Tree
+
+The heap-order property is deliberately weak.
+
+Suppose:
+
+```text
+             2
+           /   \
+          5     4
+```
+
+The heap requires:
+
+$$
+2\leq5
+$$
+
+and:
+
+$$
+2\leq4.
+$$
+
+It does **not** require:
+
+$$
+5\leq4
+$$
+
+or:
+
+$$
+4\leq5.
+$$
+
+Siblings have no required ordering relationship.
+
+Similarly, elements in different subtrees need not be globally ordered.
+
+Thus:
+
+$$
+\boxed{
+\text{heap order}
+\neq
+\text{total sorted order}.
+}
+$$
+
+This partial ordering is precisely what makes heaps useful. Maintaining complete order would perform unnecessary work for a priority queue whose main requirement is simply to locate and remove the minimum.
+
+## Array Representation of a Heap
+
+The complete-tree invariant makes an array particularly natural for representing a heap.
+
+Recall that for a binary tree stored from index zero:
+
+$$
+\operatorname{left}(j)=2j+1,
+$$
+
+$$
+\operatorname{right}(j)=2j+2,
+$$
+
+and for $j>0$:
+
+$$
+\operatorname{parent}(j)
+=
+\left\lfloor
+\frac{j-1}{2}
+\right\rfloor.
+$$
+
+Because a heap is complete, its positions occupy contiguous array indices:
+
+$$
+0,1,2,\ldots,n-1.
+$$
+
+No structural gaps are required.
+
+For example:
+
+```text
+Heap:
+
+             2
+           /   \
+          5     4
+         / \   / \
+        9   7 8   6
+
+Array:
+
+index     0   1   2   3   4   5   6
+        +---+---+---+---+---+---+---+
+key     | 2 | 5 | 4 | 9 | 7 | 8 | 6 |
+        +---+---+---+---+---+---+---+
+```
+
+![A complete binary heap maps naturally to a contiguous array: the root occupies index 0 and parent-child relationships are obtained directly from index arithmetic.](figures/heap-array-representation.png){#fig-heap-array-representation}
+
+The tree relationships therefore require no explicit:
+
+```text
+parent
+left
+right
+```
+
+references.
+
+They are implicit in arithmetic over indices.
+
+The final position is always:
+
+$$
+n-1.
+$$
+
+This becomes especially useful for insertion and removal because the structural invariant determines exactly where a new node must be added or which node must be removed.
+
+## Inserting into a Heap
+
+Insertion must preserve both heap invariants.
+
+Suppose the current heap is:
+
+```text
+             2
+           /   \
+          5     4
+         / \   /
+        9   7 8
+```
+
+and key:
+
+$$
+3
+$$
+
+is inserted.
+
+### Step 1: Preserve Completeness
+
+The new item must occupy the next available position in level order:
+
+```text
+             2
+           /   \
+          5     4
+         / \   / \
+        9   7 8   3
+```
+
+In the array representation, this simply means appending the new item:
+
+```text
+[2, 5, 4, 9, 7, 8, 3]
+```
+
+The complete-tree property is preserved automatically.
+
+However, heap order is now violated because:
+
+$$
+3<4.
+$$
+
+### Step 2: Restore Heap Order
+
+Compare the new key with its parent.
+
+Because:
+
+$$
+3<4,
+$$
+
+swap them:
+
+```text
+             2
+           /   \
+          5     3
+         / \   / \
+        9   7 8   4
+```
+
+Now:
+
+$$
+3\geq2,
+$$
+
+so the heap-order property has been restored.
+
+This upward correction is called **up-heap bubbling**, or simply **up-heap**.
+
+![Heap insertion first places the new item at the next available position to preserve completeness, then repeatedly swaps it with its parent while the heap-order property is violated.](figures/heap-upheap.png){#fig-heap-upheap}
+
+### Complexity of Insertion
+
+Each swap moves the inserted item upward by exactly one level.
+
+In the worst case, the item travels from the final level to the root.
+
+Therefore the number of swaps is bounded by the heap height:
+
+$$
+T_{\text{up-heap}}(n)=O(h).
+$$
+
+Since:
+
+$$
+h=\Theta(\log n),
+$$
+
+we obtain:
+
+$$
+\boxed{
+T_{\text{add}}(n)=O(\log n).
+}
+$$ {#eq-heap-insertion-complexity}
+
+For a dynamic-array representation, occasional array resizing contributes the usual amortized behaviour associated with dynamic arrays.
+
+## Removing the Minimum
+
+The minimum item is stored at the root.
+
+Removing it directly would leave a structural hole:
+
+```text
+             _
+           /   \
+          5     3
+         / \   / \
+        9   7 8   4
+```
+
+The complete-tree invariant must therefore be preserved carefully.
+
+Suppose the heap is:
+
+```text
+             2
+           /   \
+          5     3
+         / \   / \
+        9   7 8   4
+```
+
+### Step 1: Exchange Root and Last Item
+
+The last item is the rightmost item on the final level:
+
+$$
+4.
+$$
+
+Exchange it with the root:
+
+```text
+             4
+           /   \
+          5     3
+         / \   / \
+        9   7 8   2
+```
+
+### Step 2: Remove the Last Position
+
+The minimum now occupies the final array position and can be removed without creating an internal gap:
+
+```text
+             4
+           /   \
+          5     3
+         / \   /
+        9   7 8
+```
+
+Completeness has been preserved.
+
+Heap order, however, is violated because:
+
+$$
+3<4.
+$$
+
+### Step 3: Restore Heap Order
+
+The root must move downward.
+
+When both children exist, compare them and select the child with the smaller key.
+
+Here:
+
+$$
+\min(5,3)=3.
+$$
+
+Because:
+
+$$
+3<4,
+$$
+
+swap:
+
+```text
+             3
+           /   \
+          5     4
+         / \   /
+        9   7 8
+```
+
+The heap-order property is restored.
+
+This downward correction is called **down-heap bubbling**, or **down-heap**.
+
+![Removing the minimum exchanges the root with the final heap item, removes the last position, and repeatedly swaps the replacement downward with its smaller child until heap order is restored.](figures/heap-downheap.png){#fig-heap-downheap}
+
+### Why the Smaller Child?
+
+Suppose a position contains key:
+
+$$
+x
+$$
+
+and its children contain:
+
+$$
+a
+\quad\text{and}\quad
+b,
+$$
+
+with:
+
+$$
+a<b<x.
+$$
+
+If $x$ were exchanged with $b$, the new parent would be $b$, but:
+
+$$
+a<b,
+$$
+
+so the heap-order property would still be violated between $b$ and $a$.
+
+Exchanging with:
+
+$$
+\min(a,b)
+$$
+
+ensures that the smallest of the three values moves upward.
+
+This local decision preserves heap order above the position while moving the possible violation downward by one level.
+
+### Complexity of Removal
+
+Each swap moves the replacement one level downward.
+
+The maximum number of levels is:
+
+$$
+h=\Theta(\log n).
+$$
+
+Therefore:
+
+$$
+\boxed{
+T_{\text{remove-min}}(n)=O(\log n).
+}
+$$ {#eq-heap-removal-complexity}
+
+The heap has achieved the compromise that the sorted and unsorted representations could not:
+
+| Operation | Unsorted | Sorted | Heap |
+|:---:|:---:|:---:|:---:|
+| `add` | $O(1)$ | $O(n)$ | $O(\log n)$ |
+| `min` | $O(n)$ | $O(1)$ | $O(1)$ |
+| `remove_min` | $O(n)$ | $O(1)$ | $O(\log n)$ |
+| Space | $O(n)$ | $O(n)$ | $O(n)$ |
+
+The heap does not make every operation constant time. Instead, it provides a strong balance among the operations that define the priority queue abstraction.
+
+## Bottom-Up Heap Construction
+
+Suppose all $n$ items are already available.
+
+One way to build a heap is to begin with an empty priority queue and insert the items one at a time.
+
+Each insertion costs at most:
+
+$$
+O(\log n),
+$$
+
+so a simple upper bound for $n$ insertions is:
+
+$$
+O(n\log n).
+$$
+
+There is a more efficient method.
+
+Place all items directly into the array in arbitrary order:
+
+```text
+[k0, k1, k2, ..., k(n-1)]
+```
+
+This already defines the shape of a complete binary tree.
+
+The problem is only that heap order may not hold.
+
+Every leaf is already a valid heap containing one element. Therefore no work is required at leaf positions.
+
+Starting from the deepest internal positions and moving toward the root, perform a down-heap operation at each position.
+
+Conceptually:
+
+```python
+for j in internal_positions_from_bottom_to_top:
+    downheap(j)
+```
+
+After down-heaping a position, its subtree satisfies heap order.
+
+Eventually the root is processed, and the entire tree becomes a heap.
+
+This process is commonly called **heapify**.
+
+![Bottom-up heap construction begins with all items in complete-tree order and restores heap order from the deepest internal nodes upward, treating leaves as trivial one-element heaps.](figures/bottom-up-heap-construction.png){#fig-bottom-up-heap-construction}
+
+### Why Heapify Is Linear
+
+At first glance, the result may seem surprising.
+
+There are:
+
+$$
+O(n)
+$$
+
+positions, and an individual down-heap operation may cost:
+
+$$
+O(\log n).
+$$
+
+Multiplying these bounds gives:
+
+$$
+O(n\log n).
+$$
+
+But that bound is loose because most positions cannot travel through the full height of the tree.
+
+Most nodes are near the leaves.
+
+In a complete binary tree of height $h$:
+
+- approximately half the nodes are leaves and require no movement;
+- approximately one quarter can move down at most one level;
+- approximately one eighth can move down at most two levels;
+- and so forth.
+
+The total downward work is therefore bounded by a sum of the form:
+
+$$
+n
+\left(
+\frac{1}{4}
++
+\frac{2}{8}
++
+\frac{3}{16}
++
+\cdots
+\right).
+$$
+
+More generally:
+
+$$
+T(n)
+\leq
+n
+\sum_{i=1}^{\infty}
+\frac{i}{2^{i+1}}.
+$$
+
+The series converges to a constant.
+
+Since:
+
+$$
+\sum_{i=1}^{\infty}\frac{i}{2^i}=2,
+$$
+
+we have:
+
+$$
+\sum_{i=1}^{\infty}\frac{i}{2^{i+1}}=1.
+$$
+
+Therefore:
+
+$$
+T(n)\leq cn
+$$
+
+for some constant $c$, giving:
+
+$$
+\boxed{
+T_{\text{heapify}}(n)=O(n).
+}
+$$ {#eq-heapify-complexity}
+
+The important lesson is methodological.
+
+A worst-case bound for one operation cannot always be multiplied blindly by the number of operations. The total cost depends on how many operations can actually attain each cost.
+
+## Priority-Queue Sorting
+
+A priority queue immediately provides a sorting strategy.
+
+Given $n$ comparable elements:
+
+1. insert all elements into a min-oriented priority queue;
+2. repeatedly remove the minimum.
+
+The removal sequence is:
+
+$$
+x_{(1)},x_{(2)},\ldots,x_{(n)},
+$$
+
+where:
+
+$$
+x_{(1)}
+\leq
+x_{(2)}
+\leq
+\cdots
+\leq
+x_{(n)}.
+$$
+
+If the priority queue is heap-based, repeated removals require:
+
+$$
+O(n\log n)
+$$
+
+time.
+
+If the initial heap is constructed bottom-up:
+
+$$
+O(n),
+$$
+
+followed by:
+
+$$
+n
+$$
+
+removals costing:
+
+$$
+O(\log n)
+$$
+
+each.
+
+Thus:
+
+$$
+T(n)
+=
+O(n)+O(n\log n),
+$$
+
+and therefore:
+
+$$
+\boxed{
+T_{\text{heap-sort}}(n)=O(n\log n).
+}
+$$
+
+More precisely, heap-sort has:
+
+$$
+\Theta(n\log n)
+$$
+
+running time for the complete sorting process.
+
+This illustrates an important relationship:
+
+$$
+\boxed{
+\text{priority queue abstraction}
+\rightarrow
+\text{heap representation}
+\rightarrow
+\text{sorting algorithm}.
+}
+$$
+
+We will return to sorting algorithms in greater depth later.
+
+## Min-Heaps and Max-Heaps
+
+The discussion so far has used a **min-heap**, for which:
+
+$$
+\operatorname{key}(\operatorname{parent}(p))
+\leq
+\operatorname{key}(p).
+$$
+
+The ordering can be reversed.
+
+A **max-heap** satisfies:
+
+$$
+\boxed{
+\operatorname{key}(\operatorname{parent}(p))
+\geq
+\operatorname{key}(p).
+}
+$$ {#eq-max-heap-order}
+
+The root then contains a maximum key.
+
+Thus:
+
+$$
+\begin{aligned}
+\text{min-heap}
+&\rightarrow
+\text{minimum at root},
+\\
+\text{max-heap}
+&\rightarrow
+\text{maximum at root}.
+\end{aligned}
+$$
+
+The structural algorithms remain essentially the same. Only the comparison direction changes.
+
+The appropriate orientation depends on which extreme priority must be accessed efficiently.
+
+## Python's `heapq`
+
+Python provides heap operations through the `heapq` module.
+
+A heap is represented directly by a list:
+
+```python
+import heapq
+
+data = []
+
+heapq.heappush(data, 5)
+heapq.heappush(data, 2)
+heapq.heappush(data, 8)
+heapq.heappush(data, 3)
+```
+
+The smallest element is available at:
+
+```python
+data[0]
+```
+
+and can be removed with:
+
+```python
+heapq.heappop(data)
+```
+
+An existing collection can be transformed into a heap with:
+
+```python
+heapq.heapify(data)
+```
+
+The conceptual correspondence is:
+
+```text
+heappush  -> append + up-heap
+heappop   -> remove root + down-heap
+heapify   -> bottom-up heap construction
+```
+
+The list should not be interpreted as globally sorted.
+
+For example, a valid heap representation might be:
+
+```text
+[2, 5, 3, 9, 7, 8, 4]
+```
+
+although:
+
+$$
+5>3.
+$$
+
+That does not violate heap order because those entries occupy different branches rather than a parent-child relationship.
+
+The correct invariant is:
+
+$$
+\boxed{
+\text{parent}
+\leq
+\text{children},
+}
+$$
+
+not:
+
+$$
+\boxed{
+a_0\leq a_1\leq\cdots\leq a_{n-1}.
+}
+$$
+
+This distinction is essential when inspecting a heap directly.
+
+## Why Heaps Work
+
+The efficiency of a heap does not arise from one isolated technique.
+
+It comes from the interaction of two carefully chosen invariants.
+
+The **complete-tree invariant** guarantees:
+
+$$
+h=\Theta(\log n),
+$$
+
+and makes compact array representation possible.
+
+The **heap-order invariant** guarantees:
+
+$$
+\text{minimum at root}.
+$$
+
+Insertion temporarily violates only heap order near the newly added position and repairs it through:
+
+$$
+\text{up-heap}.
+$$
+
+Removal temporarily violates only heap order near the root and repairs it through:
+
+$$
+\text{down-heap}.
+$$
+
+Thus updates do not reconstruct or sort the complete structure.
+
+They repair a local violation along a single path.
+
+The resulting design can be summarised as:
+
+$$
+\boxed{
+\text{weak ordering invariant}
++
+\text{strong shape invariant}
+=
+\text{efficient priority queue}.
+}
+$$
+
+This is a recurring principle in data-structure design.
+
+A structure need not maintain more information than its required operations demand.
+
+The next major family of structures takes a different approach to ordering. **Maps and search trees** organise entries so that a specific key can be located efficiently rather than merely exposing the smallest one. This leads naturally to maps, hashing, binary search trees, and balanced search trees.
 
 
 
