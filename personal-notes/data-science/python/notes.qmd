@@ -7962,6 +7962,1214 @@ This sequence of decisions is one of the central ideas of data-structure design.
 
 The same distinction becomes even more important for hierarchical data. A tree defines relationships between parents, children, ancestors, and descendants independently of whether those relationships are represented through linked nodes or an array. Trees therefore provide the next major step from linear collections to structured, non-linear data.
 
+# Object-Oriented Programming
+
+Python's object model provides more than built-in types such as integers, strings, lists, and dictionaries. Programmers can define new types whose objects combine state with operations that act on that state.
+
+This capability is particularly important for data structures.
+
+A stack, linked list, tree, priority queue, or graph is not merely a collection of functions operating on unrelated variables. Each represents a coherent abstraction with:
+
+- internal state;
+- structural invariants;
+- permitted operations;
+- defined behaviour.
+
+Object-oriented programming provides one way to express that relationship directly.
+
+A **class** defines the structure and behaviour associated with a type of object, while an **instance** is a particular object created according to that definition.
+
+Conceptually:
+
+$$
+\boxed{
+\text{class}
+\rightarrow
+\text{instances}
+}
+$$
+
+and each instance combines:
+
+$$
+\boxed{
+\text{state}
++
+\text{behaviour}.
+}
+$$
+
+This complements the distinction introduced earlier between an abstract data type and its implementation. An ADT specifies what behaviour a structure should provide; a class can provide a concrete Python implementation of that abstraction.
+
+## Classes and Instances
+
+Consider a simple two-dimensional point:
+
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def distance_squared(self):
+        return self.x**2 + self.y**2
+```
+
+Creating:
+
+```python
+p = Point(3, 4)
+```
+
+produces an instance of `Point`.
+
+The instance maintains state:
+
+```python
+p.x
+p.y
+```
+
+and provides behaviour:
+
+```python
+p.distance_squared()
+```
+
+The relationship can be represented conceptually as:
+
+```text
+          Point
+            │
+        instantiation
+            │
+            ▼
+      ┌─────────────┐
+ p -> │ x = 3       │
+      │ y = 4       │
+      │-------------│
+      │ behaviour   │
+      └─────────────┘
+```
+
+The object `p` has its own identity, type, and state, consistent with the Python object model developed earlier.
+
+A second instance:
+
+```python
+q = Point(8, 2)
+```
+
+has the same type:
+
+```python
+type(p) is type(q)
+```
+
+but a different identity and potentially different state.
+
+Thus:
+
+$$
+\text{same class}
+\not\Rightarrow
+\text{same object}.
+$$
+
+![A class defines a common structure and behaviour, while each instance is a distinct object with its own identity and instance state.](figures/class-instance-relationship.png){#fig-class-instance-relationship}
+
+## Instance State and `self`
+
+Inside an instance method, Python conventionally names the current instance:
+
+```python
+self
+```
+
+For:
+
+```python
+p.distance_squared()
+```
+
+the method operates on `p`.
+
+Conceptually, the call corresponds to passing the instance to the method:
+
+```python
+Point.distance_squared(p)
+```
+
+This explains expressions such as:
+
+```python
+self.x
+```
+
+They mean:
+
+> retrieve the attribute named `x` from the current instance.
+
+The name `self` is not a special keyword. It is a strong Python convention that makes the role of the first instance-method parameter explicit.
+
+Each instance can therefore maintain independent state:
+
+```python
+p = Point(3, 4)
+q = Point(8, 2)
+
+p.x = 10
+```
+
+Changing `p.x` does not change `q.x`, because `p` and `q` are different objects.
+
+The state belongs to the instances, not to the local execution of the method.
+
+## Construction and `__init__`
+
+The method:
+
+```python
+__init__
+```
+
+is invoked as part of instance initialisation.
+
+For:
+
+```python
+p = Point(3, 4)
+```
+
+Python creates a new instance and then uses:
+
+```python
+Point.__init__(p, 3, 4)
+```
+
+to initialise its state.
+
+A typical constructor therefore establishes the object's initial **invariants**.
+
+Suppose a bounded counter should never begin with a negative limit:
+
+```python
+class Counter:
+    def __init__(self, limit):
+        if limit < 0:
+            raise ValueError("limit must be non-negative")
+
+        self.limit = limit
+        self.value = 0
+```
+
+The constructor prevents the object from beginning in an invalid state.
+
+This is an important responsibility of class design:
+
+$$
+\boxed{
+\text{construction}
+\rightarrow
+\text{establish valid state}.
+}
+$$
+
+Later methods should preserve the relevant invariants as the object changes.
+
+For a linked list, for example, those invariants concern relationships between nodes. For a heap, they will include structural and ordering properties. For a search tree, they will involve relationships between keys and subtrees.
+
+## Instance and Class Attributes
+
+Attributes do not all have the same ownership.
+
+An **instance attribute** belongs to a particular instance:
+
+```python
+self.x = x
+```
+
+A **class attribute** belongs to the class object itself and is shared through the class namespace:
+
+```python
+class Point:
+    dimensions = 2
+```
+
+Then:
+
+```python
+Point.dimensions
+```
+
+and normally:
+
+```python
+p.dimensions
+```
+
+both resolve to:
+
+```text
+2
+```
+
+unless the instance defines an attribute of the same name.
+
+This distinction matters particularly for mutable objects.
+
+Consider:
+
+```python
+class Container:
+    values = []
+```
+
+The list is created as a class attribute. Instances that access it without shadowing the name therefore reach the same mutable object.
+
+That may produce unintended shared state.
+
+If each instance should own an independent list, it belongs in the instance initialisation:
+
+```python
+class Container:
+    def __init__(self):
+        self.values = []
+```
+
+This is another manifestation of the aliasing and mutability principles introduced earlier. Object-oriented syntax does not change Python's underlying reference semantics.
+
+## Encapsulation
+
+A class should expose the behaviour needed by its clients without requiring those clients to depend on unnecessary implementation details.
+
+This principle is **encapsulation**.
+
+Suppose a stack is implemented using:
+
+```python
+self._data = []
+```
+
+Client code should interact through operations such as:
+
+```python
+stack.push(value)
+stack.pop()
+stack.top()
+```
+
+rather than manipulating:
+
+```python
+stack._data
+```
+
+directly.
+
+The distinction is:
+
+$$
+\begin{aligned}
+\text{public interface}
+&\rightarrow
+\text{what clients may rely on},
+\\
+\text{internal representation}
+&\rightarrow
+\text{how the behaviour is implemented}.
+\end{aligned}
+$$
+
+If clients depend only on the public interface, the implementation may later change:
+
+$$
+\text{dynamic array}
+\rightarrow
+\text{linked representation}
+$$
+
+without requiring client code to change.
+
+This is one of the principal benefits of encapsulation: implementation decisions can evolve while the abstraction remains stable. Goodrich emphasises this separation between public interfaces and internal details as a central object-oriented design principle. 
+
+### Non-Public Members
+
+Python does not enforce strict private access in the same manner as some languages.
+
+By convention, a name beginning with a single underscore:
+
+```python
+_data
+```
+
+communicates that the member is intended for internal use.
+
+For example:
+
+```python
+class Stack:
+    def __init__(self):
+        self._data = []
+```
+
+The underscore does not make `_data` inaccessible. It communicates an interface boundary:
+
+> client code should not rely on this member.
+
+Goodrich similarly describes the leading underscore as Python's convention for members that are considered non-public implementation details. 
+
+Encapsulation in Python therefore depends substantially on disciplined interface design rather than absolute access restriction.
+
+## Methods and Object Behaviour
+
+Methods define operations associated with objects.
+
+Consider:
+
+```python
+class Counter:
+    def __init__(self):
+        self._value = 0
+
+    def increment(self):
+        self._value += 1
+
+    def value(self):
+        return self._value
+```
+
+The object maintains state:
+
+$$
+\texttt{\_value}
+$$
+
+and exposes controlled operations over that state.
+
+This is often preferable to allowing arbitrary external mutation because methods can preserve invariants.
+
+For example:
+
+```python
+def increment(self):
+    if self._value == self._limit:
+        raise ValueError("counter limit reached")
+
+    self._value += 1
+```
+
+can ensure:
+
+$$
+0\leq\texttt{\_value}\leq\texttt{\_limit}.
+$$
+
+The public method is therefore not merely syntactic packaging around an assignment. It defines a valid transition between object states.
+
+This perspective becomes especially useful for mutable data structures:
+
+$$
+\boxed{
+\text{method}
+=
+\text{controlled state transition}.
+}
+$$
+
+## Special Methods
+
+Python allows user-defined classes to participate in the language's standard syntax through **special methods**, conventionally written with double underscores.
+
+Examples include:
+
+```text
+__len__
+__getitem__
+__setitem__
+__contains__
+__iter__
+__eq__
+__lt__
+__str__
+__repr__
+```
+
+These methods connect an object's implementation to Python syntax.
+
+For example:
+
+```python
+len(obj)
+```
+
+can invoke:
+
+```python
+obj.__len__()
+```
+
+while:
+
+```python
+obj[j]
+```
+
+can invoke:
+
+```python
+obj.__getitem__(j)
+```
+
+and:
+
+```python
+x in obj
+```
+
+may be supported through:
+
+```python
+obj.__contains__(x)
+```
+
+or related iteration behaviour.
+
+Thus Python's operators and built-in functions form part of an extensible object protocol.
+
+The relationship is conceptually:
+
+$$
+\boxed{
+\text{Python syntax}
+\rightarrow
+\text{special method protocol}
+\rightarrow
+\text{object behaviour}.
+}
+$$
+
+Goodrich uses this mechanism extensively when constructing custom sequence-like classes and data structures. 
+
+### Operator Overloading
+
+Special methods also allow operators to acquire meanings appropriate to a user-defined type.
+
+For example, a vector class might define:
+
+```python
+def __add__(self, other):
+    ...
+```
+
+so that:
+
+```python
+u + v
+```
+
+produces vector addition.
+
+This is **operator overloading**: the operator remains syntactically the same, but its behaviour depends on the types of its operands.
+
+This should preserve the conceptual meaning expected from the abstraction. Defining:
+
+```python
+u + v
+```
+
+is useful when addition has a natural interpretation for the type. Overloading operators with surprising or unrelated behaviour weakens rather than improves the interface.
+
+Special methods are therefore most useful when they make a custom object behave naturally within Python's existing protocols.
+
+## Sequence Protocols
+
+Consider a custom sequence class that supports:
+
+```python
+len(sequence)
+```
+
+and:
+
+```python
+sequence[j]
+```
+
+through:
+
+```python
+__len__()
+```
+
+and:
+
+```python
+__getitem__()
+```
+
+respectively.
+
+Those two operations already establish a substantial part of sequence behaviour.
+
+A simplified structure might be:
+
+```python
+class Sequence:
+    def __len__(self):
+        ...
+
+    def __getitem__(self, j):
+        ...
+```
+
+Higher-level operations can then be expressed in terms of those primitive behaviours.
+
+For example, membership can conceptually be implemented as:
+
+```python
+def __contains__(self, value):
+    for j in range(len(self)):
+        if self[j] == value:
+            return True
+
+    return False
+```
+
+The implementation does not need to know whether the sequence internally uses:
+
+- an array;
+- a linked structure;
+- a mathematical formula;
+- some other representation.
+
+It relies only on the public behaviours:
+
+$$
+\texttt{len(self)}
+$$
+
+and:
+
+$$
+\texttt{self[j]}.
+$$
+
+This is a powerful abstraction principle:
+
+$$
+\boxed{
+\text{higher-level behaviour can be constructed from a small primitive interface}.
+}
+$$
+
+Goodrich uses the `Sequence` abstraction to demonstrate exactly this relationship: operations such as membership, `index`, and `count` can be defined generically once length and indexed access are supplied. :chatgpt-content-reference{index="4"}
+
+## Iteration
+
+Python's iteration model is also protocol-based.
+
+When evaluating:
+
+```python
+for value in collection:
+    process(value)
+```
+
+Python needs a mechanism for obtaining elements successively from `collection`.
+
+An **iterator** is an object that represents the state of such a traversal.
+
+Conceptually:
+
+$$
+\text{iterable}
+\rightarrow
+\text{iterator}
+\rightarrow
+x_0,x_1,x_2,\ldots
+$$
+
+Python's iterator protocol centres on:
+
+```python
+__iter__()
+```
+
+and:
+
+```python
+__next__()
+```
+
+Calling:
+
+```python
+iter(collection)
+```
+
+requests an iterator.
+
+Repeated calls to:
+
+```python
+next(iterator)
+```
+
+produce successive values until the iterator signals that no values remain.
+
+This separates two concepts:
+
+$$
+\begin{aligned}
+\text{iterable}
+&\rightarrow
+\text{object that can produce an iterator},
+\\
+\text{iterator}
+&\rightarrow
+\text{object representing one traversal}.
+\end{aligned}
+$$
+
+![An iterable produces an iterator, which maintains traversal state and returns successive elements until the sequence is exhausted.](figures/python-iterator-protocol.png){#fig-python-iterator-protocol}
+
+The distinction allows multiple independent traversals over the same collection because each iterator can maintain its own traversal state.
+
+Iteration is therefore not merely syntax associated with `for`. It is an interface between an algorithm and a collection.
+
+An algorithm can request:
+
+> give me the next element
+
+without knowing how the collection stores that element internally.
+
+This is another example of abstraction through protocol.
+
+## Generators
+
+Python provides **generators** as a concise way to implement iterative behaviour.
+
+A function containing:
+
+```python
+yield
+```
+
+does not behave like an ordinary function that computes a single result and terminates. Instead, its execution can suspend while preserving local state and later resume from that point.
+
+For example:
+
+```python
+def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+```
+
+Using:
+
+```python
+for value in countdown(3):
+    print(value)
+```
+
+produces:
+
+```text
+3
+2
+1
+```
+
+without first constructing:
+
+```python
+[3, 2, 1]
+```
+
+as a complete collection.
+
+The generator therefore separates:
+
+$$
+\text{producing values}
+$$
+
+from:
+
+$$
+\text{storing all values simultaneously}.
+$$
+
+For a sequence of $n$ generated values, eager materialisation may require:
+
+$$
+O(n)
+$$
+
+additional storage.
+
+A generator can often retain only the state needed to produce the next value:
+
+$$
+O(1)
+$$
+
+additional state for simple generators such as the example above.
+
+The precise space requirement depends on the generator's internal state, but the broader principle is important:
+
+$$
+\boxed{
+\text{iteration does not require materialising an entire collection}.
+}
+$$
+
+This becomes valuable when processing large data streams, traversing structures, or constructing algorithmic pipelines.
+
+## Inheritance
+
+A class can reuse and specialise behaviour defined by another class through **inheritance**.
+
+Suppose:
+
+```python
+class Base:
+    ...
+```
+
+and:
+
+```python
+class Derived(Base):
+    ...
+```
+
+Then `Derived` is a subclass of `Base`, while `Base` is its superclass.
+
+Conceptually:
+
+$$
+\text{Base}
+\longrightarrow
+\text{Derived}.
+$$
+
+The subclass inherits available behaviour from the superclass and may:
+
+- use inherited methods unchanged;
+- add new behaviour;
+- override inherited behaviour.
+
+Goodrich describes inheritance in terms of **specialisation** and **extension**: a subclass may refine existing behaviour while also introducing capabilities not present in its superclass. 
+
+### Extending a Class
+
+Suppose a base class defines:
+
+```python
+class Collection:
+    def __init__(self):
+        self._size = 0
+
+    def __len__(self):
+        return self._size
+```
+
+A subclass can inherit the length behaviour and add operations specific to its abstraction.
+
+The inherited implementation need not be rewritten.
+
+This can reduce duplication when several related classes genuinely share behaviour and invariants.
+
+### Overriding
+
+A subclass may provide a new implementation of an inherited method.
+
+For example:
+
+```python
+class BaseCollection:
+    def describe(self):
+        return "collection"
+
+
+class SortedCollection(BaseCollection):
+    def describe(self):
+        return "sorted collection"
+```
+
+Calling:
+
+```python
+obj.describe()
+```
+
+uses the implementation appropriate to the actual object.
+
+Overriding allows a subclass to specialise inherited behaviour while retaining the broader interface.
+
+Goodrich also notes that overriding can improve efficiency. A generic sequence might implement membership through linear traversal, while a specialised representation may be able to determine membership more efficiently. :chatgpt-content-reference{index="6"}
+
+This connects inheritance directly to algorithmic design:
+
+$$
+\boxed{
+\text{same interface}
++
+\text{specialised representation}
+\rightarrow
+\text{specialised algorithm}.
+}
+$$
+
+## `super()`
+
+A subclass sometimes needs to extend rather than replace the initialisation or behaviour of its superclass.
+
+Python provides:
+
+```python
+super()
+```
+
+for cooperative access to inherited behaviour.
+
+For example:
+
+```python
+class NamedPoint(Point):
+    def __init__(self, x, y, name):
+        super().__init__(x, y)
+        self.name = name
+```
+
+The superclass establishes:
+
+```python
+x
+y
+```
+
+while the subclass adds:
+
+```python
+name
+```
+
+This avoids duplicating the superclass initialisation logic.
+
+The design principle is:
+
+$$
+\boxed{
+\text{reuse established behaviour rather than reproduce it}.
+}
+$$
+
+Inheritance is most valuable when the subclass genuinely satisfies the conceptual relationship represented by the superclass, rather than merely sharing a few lines of code.
+
+## Polymorphism
+
+**Polymorphism** allows the same operation to be applied to objects of different concrete types when those objects support the required behaviour.
+
+Suppose an algorithm requires only:
+
+```python
+len(data)
+```
+
+and iteration over `data`.
+
+The algorithm need not necessarily know whether `data` is:
+
+```text
+list
+tuple
+str
+custom sequence
+```
+
+If each object supports the required protocol, the same algorithm can operate on all of them.
+
+This can be expressed as:
+
+$$
+\boxed{
+\text{algorithm depends on behaviour}
+\quad
+\text{rather than concrete representation}.
+}
+$$
+
+In Python, polymorphism frequently arises without an explicit inheritance relationship.
+
+A function such as:
+
+```python
+def first_item(data):
+    return data[0]
+```
+
+can operate on any object that meaningfully supports indexed access.
+
+The function asks for a capability:
+
+```text
+getitem
+```
+
+rather than requiring one particular concrete class.
+
+This style is commonly described as **duck typing**.
+
+Goodrich contrasts this implicit behavioural approach with formal abstract base classes: Python often allows an abstraction to be used simply because an object supports the expected operations, with incompatibilities appearing at runtime if those expectations are not satisfied. 
+
+## Abstract Base Classes
+
+Duck typing is flexible, but some designs benefit from explicitly defining a common interface.
+
+An **abstract base class** (ABC) describes behaviour expected from concrete subclasses and may prevent direct instantiation until required operations have been implemented.
+
+Conceptually:
+
+$$
+\text{Abstract Interface}
+\longrightarrow
+\begin{cases}
+\text{Concrete Implementation A},\\
+\text{Concrete Implementation B},\\
+\text{Concrete Implementation C}.
+\end{cases}
+$$
+
+![An abstract base class defines a common interface while multiple concrete subclasses provide different implementations of that abstraction.](figures/abstract-base-class.png){#fig-abstract-base-class}
+
+For example, a sequence abstraction might require concrete implementations of:
+
+```text
+__len__()
+__getitem__()
+```
+
+while providing generic implementations of:
+
+```text
+__contains__()
+index()
+count()
+```
+
+in terms of those primitives.
+
+This is an example of the **template method** pattern:
+
+$$
+\boxed{
+\text{generic algorithm}
++
+\text{required primitive operations}
+=
+\text{reusable behaviour}.
+}
+$$
+
+Goodrich uses the sequence abstraction as the central example: once a subclass supplies concrete length and indexed-access operations, inherited higher-level sequence behaviours become well defined. 
+
+Python's `abc` facilities can formally declare such requirements, while the standard library provides established abstract collection interfaces.
+
+The conceptual value is larger than the syntax. An ABC separates:
+
+$$
+\text{what a family of objects must support}
+$$
+
+from:
+
+$$
+\text{how each concrete object provides it}.
+$$
+
+## Composition and Inheritance
+
+Inheritance is not the only way to construct an abstraction from existing components.
+
+**Composition** builds an object by containing and coordinating other objects.
+
+The stack implementation introduced earlier is a simple example:
+
+```python
+class Stack:
+    def __init__(self):
+        self._data = []
+```
+
+A stack **has a** list as part of its representation:
+
+$$
+\text{Stack}
+\rightarrow
+\text{contains List}.
+$$
+
+It is not conceptually a specialised kind of list.
+
+Therefore composition is more appropriate than:
+
+```python
+class Stack(list):
+    ...
+```
+
+The distinction is commonly expressed as:
+
+$$
+\begin{aligned}
+\text{inheritance}
+&\rightarrow
+\text{is-a relationship},
+\\
+\text{composition}
+&\rightarrow
+\text{has-a relationship}.
+\end{aligned}
+$$
+
+A stack implemented with a list has a storage component whose interface is deliberately hidden behind the stack abstraction.
+
+Composition also allows the representation to change independently:
+
+$$
+\text{list-backed stack}
+\rightarrow
+\text{linked stack}
+$$
+
+while preserving the same public stack interface.
+
+This reinforces the principle developed throughout these notes:
+
+$$
+\boxed{
+\text{public abstraction should not unnecessarily expose internal representation}.
+}
+$$
+
+## Designing Classes Around Responsibilities
+
+A class should represent a coherent responsibility rather than simply collect related variables and functions.
+
+A useful design process asks:
+
+> What state does this object own?
+
+> What invariants must it preserve?
+
+> What operations should clients be allowed to perform?
+
+> Which details should remain internal?
+
+Goodrich frames object-oriented design similarly in terms of responsibilities, independence, and clearly defined behaviours. 
+
+For a data structure, this produces a progression such as:
+
+$$
+\text{required operations}
+\rightarrow
+\text{public interface}
+\rightarrow
+\text{representation}
+\rightarrow
+\text{invariants}
+\rightarrow
+\text{implementation}.
+$$
+
+This is more robust than beginning with a collection of attributes and adding methods opportunistically.
+
+### Prefer Small Public Interfaces
+
+A class should expose the operations required by its abstraction, not every operation that its internal representation happens to support.
+
+If a stack uses a list internally, exposing arbitrary indexed assignment would weaken the stack abstraction.
+
+If a tree stores linked nodes internally, allowing external code to modify arbitrary parent and child references could violate tree invariants.
+
+A narrow interface makes invalid states harder to construct and implementation changes easier to manage.
+
+### Preserve Invariants Locally
+
+Operations that modify a structure should leave it in a valid state.
+
+For a doubly linked list, for example:
+
+$$
+x.next=y
+$$
+
+should correspond consistently with:
+
+$$
+y.prev=x.
+$$
+
+The class should centralise the code responsible for maintaining those relationships rather than requiring client code to manipulate links directly.
+
+Encapsulation therefore has an algorithmic role as well as a software-engineering role: it protects the assumptions on which data-structure operations depend.
+
+## Object-Oriented Design and Data Structures
+
+The object-oriented mechanisms introduced here are not independent features to be used merely because Python provides them.
+
+They support a hierarchy of abstraction:
+
+$$
+\boxed{
+\text{problem}
+\rightarrow
+\text{ADT}
+\rightarrow
+\text{public interface}
+\rightarrow
+\text{class}
+\rightarrow
+\text{internal representation}.
+}
+$$
+
+At each level, unnecessary details from the level below can be hidden.
+
+For a stack:
+
+$$
+\text{LIFO abstraction}
+\rightarrow
+\texttt{push/pop/top}
+\rightarrow
+\text{Stack class}
+\rightarrow
+\text{dynamic array or linked nodes}.
+$$
+
+For a sequence:
+
+$$
+\text{ordered collection}
+\rightarrow
+\texttt{len/index/iteration}
+\rightarrow
+\text{sequence implementation}
+\rightarrow
+\text{chosen storage representation}.
+$$
+
+Inheritance can share behaviour across genuinely related abstractions. Composition can build structures from independent components. Special methods allow custom types to participate naturally in Python's protocols. Iterators separate traversal from representation. Abstract interfaces allow algorithms to depend on capabilities rather than concrete implementations.
+
+These mechanisms become especially valuable as data structures become more complex.
+
+The linear structures considered so far organise elements along a single sequence. The next structures introduce hierarchy. **Trees** represent elements through parent-child relationships, and their recursive structure will bring together many of the ideas developed so far: nodes and references, recursion, iteration, abstract interfaces, inheritance, and algorithmic complexity.
+
 
 
 # References
