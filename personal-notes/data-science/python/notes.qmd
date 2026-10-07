@@ -12073,6 +12073,1282 @@ A structure need not maintain more information than its required operations dema
 
 The next major family of structures takes a different approach to ordering. **Maps and search trees** organise entries so that a specific key can be located efficiently rather than merely exposing the smallest one. This leads naturally to maps, hashing, binary search trees, and balanced search trees.
 
+# Maps and Hash Tables
+
+Many data structures organise elements according to their position within a sequence.
+
+A list associates an element with an integer index:
+
+$$
+0,1,2,\ldots,n-1.
+$$
+
+A map generalises this idea.
+
+Instead of requiring integer positions, a **map** associates arbitrary keys with values:
+
+$$
+\boxed{
+\text{key}
+\longrightarrow
+\text{value}.
+}
+$$
+
+Examples include:
+
+```text
+"Argentina" -> "Buenos Aires"
+"NZ"        -> "New Zealand"
+42          -> customer record
+"user_id"   -> account information
+```
+
+Each association is an **item**:
+
+$$
+(k,v),
+$$
+
+where:
+
+$$
+k=\text{key}
+$$
+
+and:
+
+$$
+v=\text{value}.
+$$
+
+The essential property is that keys are unique within a map.
+
+A key identifies at most one associated value.
+
+If an assignment is made using an existing key, the corresponding value is replaced rather than creating another independent entry with the same key.
+
+This makes maps appropriate whenever information is naturally retrieved by an identifier rather than by sequential position.
+
+## The Map ADT
+
+The fundamental map operations can be expressed using Python's familiar mapping syntax:
+
+```text
+M[k]
+M[k] = v
+del M[k]
+```
+
+Conceptually:
+
+```text
+M[k]
+```
+
+retrieves the value associated with key $k$;
+
+```text
+M[k] = v
+```
+
+creates or updates the association:
+
+$$
+k\rightarrow v;
+$$
+
+and:
+
+```text
+del M[k]
+```
+
+removes the item having key $k$.
+
+Additional operations commonly include:
+
+```text
+len(M)
+k in M
+iter(M)
+M.get(k)
+M.keys()
+M.values()
+M.items()
+```
+
+The Map ADT therefore describes a collection through **key-based access**.
+
+It does not prescribe how those keys are stored.
+
+Thus:
+
+$$
+\boxed{
+\text{Map ADT}
+\neq
+\text{dictionary implementation}
+\neq
+\text{hash table}.
+}
+$$
+
+A map may be implemented using:
+
+- an unsorted sequence;
+- a sorted sequence;
+- a hash table;
+- a search tree;
+- another suitable representation.
+
+The interface can remain essentially unchanged while the performance characteristics differ substantially.
+
+## A Simple Unsorted Map
+
+The simplest representation stores items in an unsorted sequence:
+
+```text
+[(k0,v0), (k1,v1), ..., (k(n-1),v(n-1))]
+```
+
+To retrieve the value associated with key $k$, search sequentially:
+
+```python
+for item in table:
+    if item.key == k:
+        return item.value
+```
+
+In the worst case, all $n$ items must be examined.
+
+Therefore:
+
+$$
+\boxed{
+T_{\text{search}}(n)=O(n).
+}
+$$
+
+Updating an existing key also requires locating it first:
+
+$$
+T_{\text{update}}(n)=O(n).
+$$
+
+Deletion has the same search requirement:
+
+$$
+T_{\text{delete}}(n)=O(n).
+$$
+
+Insertion of a genuinely new item can be constant time once it is known that the key does not already exist, but determining that uniqueness generally requires a search.
+
+The representation is simple, but it does not exploit the key itself to locate an item efficiently.
+
+Hashing addresses precisely this problem.
+
+## From Keys to Array Indices
+
+Arrays provide constant-time indexed access:
+
+$$
+A[j]
+\rightarrow
+O(1).
+$$
+
+Maps, however, may use keys such as:
+
+```text
+"customer-1842"
+```
+
+or:
+
+```text
+("Auckland", 2026)
+```
+
+rather than small consecutive integers.
+
+The central idea of hashing is to transform a key into an array index.
+
+Suppose the table contains:
+
+$$
+N
+$$
+
+buckets:
+
+$$
+A[0],A[1],\ldots,A[N-1].
+$$
+
+A **hash function** determines a bucket:
+
+$$
+\boxed{
+h(k)
+\in
+\{0,1,\ldots,N-1\}.
+}
+$$
+
+The item:
+
+$$
+(k,v)
+$$
+
+is then associated with bucket:
+
+$$
+A[h(k)].
+$$
+
+Conceptually:
+
+```text
+          key
+           |
+           v
+     hash function
+           |
+           v
+      bucket index
+           |
+           v
+        table
+```
+
+![Hashing transforms an arbitrary key into an index of a finite bucket array, providing the basis for efficient key-based access.](figures/hash-table-mapping.png){#fig-hash-table-mapping}
+
+If keys could always be mapped to distinct buckets, lookup would be straightforward:
+
+$$
+k
+\rightarrow
+h(k)
+\rightarrow
+A[h(k)].
+$$
+
+The difficulty is that the bucket array is finite while the possible key space is generally much larger.
+
+## Hash Codes and Compression
+
+It is useful to view hashing as two conceptual stages.
+
+First, a **hash code** converts a key into an integer:
+
+$$
+\boxed{
+k
+\longrightarrow
+\operatorname{hash}(k).
+}
+$$
+
+The resulting integer may be very large or negative and therefore cannot necessarily be used directly as an array index.
+
+A **compression function** then maps that integer into the table's valid index range:
+
+$$
+\boxed{
+\operatorname{hash}(k)
+\longrightarrow
+\{0,\ldots,N-1\}.
+}
+$$
+
+Thus the complete process is:
+
+$$
+\boxed{
+k
+\rightarrow
+\text{hash code}
+\rightarrow
+\text{compression}
+\rightarrow
+\text{bucket}.
+}
+$$
+
+Goodrich makes this distinction explicitly: the hash code maps the key to an integer, while the compression function converts that integer to a valid bucket index. 
+
+### Division Method
+
+A simple compression function uses modular arithmetic.
+
+For integer hash code $i$ and table capacity $N$:
+
+$$
+\boxed{
+h(i)=i\bmod N.
+}
+$$ {#eq-hash-division-method}
+
+This guarantees:
+
+$$
+0
+\leq
+h(i)
+<
+N.
+$$
+
+For example, if:
+
+$$
+N=13,
+$$
+
+then:
+
+$$
+h(41)=41\bmod13=2.
+$$
+
+Therefore the corresponding item is initially mapped to:
+
+$$
+A[2].
+$$
+
+The choice of $N$ can influence how well patterns in hash codes are distributed. Goodrich notes that prime capacities can help reduce repeated modular patterns, although choosing a prime number alone does not guarantee good distribution. 
+
+### Multiply-Add-and-Divide
+
+A more elaborate compression method described by Goodrich is the **Multiply-Add-and-Divide**, or MAD, method:
+
+$$
+\boxed{
+h(i)
+=
+((ai+b)\bmod p)\bmod N,
+}
+$$ {#eq-mad-hash}
+
+where:
+
+- $N$ is the table capacity;
+- $p>N$ is prime;
+- $a$ and $b$ are selected integers;
+- $a>0$.
+
+The additional transformation helps disrupt regular patterns that might otherwise survive a simple modulo operation. 
+
+The general objective is not mathematical complexity for its own sake.
+
+A useful hash function should distribute the keys approximately uniformly across the available buckets.
+
+## Hashability
+
+Python's built-in mapping types impose an important requirement on keys: keys must be **hashable**.
+
+A hashable object must provide a hash value that remains stable while the object is being used as a key.
+
+There is also a crucial consistency requirement between equality and hashing:
+
+$$
+\boxed{
+x=y
+\Rightarrow
+\operatorname{hash}(x)
+=
+\operatorname{hash}(y).
+}
+$$ {#eq-hash-equality-contract}
+
+If two objects compare as equal but produce incompatible hashes, a hash table could search for equivalent objects in different locations.
+
+Goodrich states this requirement explicitly when discussing custom `__hash__` and `__eq__` implementations. 
+
+This explains why mutability matters.
+
+Suppose a key were stored according to hash:
+
+$$
+h(k)=4.
+$$
+
+If the state used to compute the key's hash later changed and produced:
+
+$$
+h(k)=9,
+$$
+
+the table would search bucket 9 even though the item had originally been stored according to bucket 4.
+
+The mapping between key and location would become inconsistent.
+
+This is why immutable objects such as strings and tuples of hashable objects naturally serve as dictionary keys, whereas mutable lists do not.
+
+The relationship can be summarised as:
+
+$$
+\boxed{
+\text{stable key state}
+\rightarrow
+\text{stable hash}
+\rightarrow
+\text{reliable lookup}.
+}
+$$
+
+## Collisions
+
+No practical hash function can guarantee that every possible distinct key receives a unique bucket when the key space is larger than the table.
+
+Two distinct keys may therefore satisfy:
+
+$$
+\boxed{
+k_1\neq k_2
+\quad\text{but}\quad
+h(k_1)=h(k_2).
+}
+$$ {#eq-hash-collision}
+
+This is a **collision**.
+
+For example, with:
+
+$$
+h(k)=k\bmod13,
+$$
+
+the keys:
+
+$$
+18
+$$
+
+and:
+
+$$
+31
+$$
+
+both produce:
+
+$$
+5.
+$$
+
+Therefore both initially target:
+
+$$
+A[5].
+$$
+
+Collisions are not exceptional failures of hashing. They are an unavoidable consequence of mapping a large key space into a finite set of buckets.
+
+A correct hash-table implementation must therefore provide a systematic collision-resolution strategy.
+
+Two major families are:
+
+$$
+\boxed{
+\text{separate chaining}
+}
+$$
+
+and:
+
+$$
+\boxed{
+\text{open addressing}.
+}
+$$
+
+## Separate Chaining
+
+With **separate chaining**, each bucket stores a secondary collection containing all items mapped to that bucket.
+
+Suppose:
+
+$$
+h(k)=k\bmod13.
+$$
+
+Several keys may produce the same bucket:
+
+```text
+bucket array
+
+ 0
+ 1
+ 2 -> (41, ...)
+ 3
+ 4
+ 5 -> (18, ...) -> (31, ...) -> (57, ...)
+ 6
+ ...
+12
+```
+
+The bucket:
+
+$$
+A[5]
+$$
+
+does not contain a single item. It refers to a collection of colliding items.
+
+![Separate chaining resolves collisions by allowing each hash-table bucket to maintain a secondary collection containing all items mapped to that index.](figures/hash-separate-chaining.png){#fig-hash-separate-chaining}
+
+Searching for key $k$ therefore involves:
+
+1. compute $h(k)$;
+2. access bucket $A[h(k)]$;
+3. search within that bucket.
+
+If the hash function distributes items uniformly, the expected number of items per bucket remains small.
+
+This relationship is quantified through the **load factor**.
+
+## Load Factor
+
+Let:
+
+$$
+n
+$$
+
+be the number of stored items and:
+
+$$
+N
+$$
+
+the number of buckets.
+
+The **load factor** is:
+
+$$
+\boxed{
+\lambda
+=
+\frac{n}{N}.
+}
+$$ {#eq-hash-load-factor}
+
+For separate chaining, $\lambda$ represents the average number of items per bucket.
+
+For example, if:
+
+$$
+n=100
+$$
+
+and:
+
+$$
+N=200,
+$$
+
+then:
+
+$$
+\lambda
+=
+\frac{100}{200}
+=
+0.5.
+$$
+
+Under a good distribution, a bucket contains only a constant expected number of items when:
+
+$$
+\lambda=O(1).
+$$
+
+Therefore the expected cost of searching a bucket remains:
+
+$$
+O(1).
+$$
+
+This gives the characteristic expected performance of hashing:
+
+$$
+\boxed{
+T_{\text{search}}(n)
+=
+O(1)
+\quad\text{expected}.
+}
+$$
+
+Likewise:
+
+$$
+\boxed{
+T_{\text{insert}}(n)
+=
+O(1)
+\quad\text{expected},
+}
+$$
+
+and:
+
+$$
+\boxed{
+T_{\text{delete}}(n)
+=
+O(1)
+\quad\text{expected}.
+}
+$$
+
+Goodrich derives the same intuition from the expected bucket size $n/N$ and notes that the core operations remain expected constant time while the load factor remains bounded by a constant. 
+
+### Expected Time Is Not Worst-Case Time
+
+The qualification **expected** is essential.
+
+Suppose a poor hash function maps every key to the same bucket:
+
+```text
+0
+1
+2
+3 -> k1 -> k2 -> k3 -> ... -> kn
+4
+5
+...
+```
+
+Then searching that bucket may require examining:
+
+$$
+n
+$$
+
+items.
+
+Thus:
+
+$$
+\boxed{
+T_{\text{search}}(n)
+=
+O(n)
+\quad\text{worst case}.
+}
+$$
+
+The same applies to insertion and deletion when they require locating an existing key.
+
+Therefore:
+
+$$
+\boxed{
+\text{hash tables provide expected }O(1),
+\text{ not unconditional worst-case }O(1).
+}
+$$
+
+This distinction is important when comparing hashing with balanced search trees later.
+
+## Open Addressing
+
+Separate chaining stores colliding items in auxiliary containers.
+
+**Open addressing** takes a different approach:
+
+> every item is stored directly inside the bucket array.
+
+If the preferred bucket is occupied, the algorithm probes alternative positions according to a deterministic rule.
+
+Conceptually:
+
+```text
+preferred bucket occupied
+          |
+          v
+   try another bucket
+          |
+          v
+   continue probing
+          |
+          v
+      free slot
+```
+
+Because every item occupies an array cell directly:
+
+$$
+n\leq N,
+$$
+
+and therefore:
+
+$$
+\lambda\leq1.
+$$
+
+The choice of probing strategy determines which alternative cells are examined.
+
+## Linear Probing
+
+The simplest open-addressing strategy is **linear probing**.
+
+If:
+
+$$
+j=h(k)
+$$
+
+is occupied, inspect:
+
+$$
+j,
+$$
+
+then:
+
+$$
+(j+1)\bmod N,
+$$
+
+then:
+
+$$
+(j+2)\bmod N,
+$$
+
+and so forth.
+
+In general, probe:
+
+$$
+\boxed{
+(h(k)+i)\bmod N,
+\qquad
+i=0,1,2,\ldots
+}
+$$ {#eq-linear-probing}
+
+Suppose:
+
+$$
+N=11
+$$
+
+and:
+
+$$
+h(k)=k\bmod11.
+$$
+
+If a new key maps to index 4 but positions 4, 5, and 6 are occupied, the probe sequence is:
+
+$$
+4\rightarrow5\rightarrow6\rightarrow7.
+$$
+
+If index 7 is free, the item is inserted there.
+
+![Linear probing resolves a collision by examining consecutive array positions, wrapping around the table when necessary, until the desired key or an available bucket is found.](figures/hash-linear-probing.png){#fig-hash-linear-probing}
+
+Lookup must follow the same probe sequence.
+
+If an item originally mapped to bucket 4 but was ultimately stored at bucket 7, examining only:
+
+$$
+A[4]
+$$
+
+would not be sufficient.
+
+The probing rule is therefore part of both insertion and retrieval.
+
+## Deletion in Open Addressing
+
+Deletion introduces a subtle problem.
+
+Suppose the probe sequence is:
+
+```text
+index:    4    5    6    7
+        +----+----+----+----+
+        | k1 | k2 | k3 | k4 |
+        +----+----+----+----+
+```
+
+and $k_4$ originally collided at index 4 before eventually reaching index 7.
+
+Now suppose $k_3$ at index 6 is removed by simply replacing its cell with an ordinary empty slot:
+
+```text
+index:    4    5    6    7
+        +----+----+----+----+
+        | k1 | k2 |    | k4 |
+        +----+----+----+----+
+```
+
+A later search for $k_4$ begins at its original hash location and probes forward.
+
+When it reaches the apparently empty index 6, it could incorrectly conclude:
+
+> the key is not present.
+
+The probe chain has been broken.
+
+For this reason, deletion typically leaves a special marker indicating:
+
+```text
+previously occupied, now available
+```
+
+rather than a genuinely unused bucket.
+
+Search may pass through such a marker, while insertion may reuse it.
+
+Goodrich describes this distinction explicitly for linear probing. 
+
+This illustrates a broader principle:
+
+$$
+\boxed{
+\text{representation invariants can include historical state}.
+}
+$$
+
+The physical absence of an item does not necessarily mean its slot can immediately be treated as if it had never been occupied.
+
+## Clustering
+
+Linear probing is simple and cache-friendly, but it can create **primary clustering**.
+
+Once a consecutive run of occupied cells forms, new keys that hash anywhere into or immediately before that region tend to extend the same cluster.
+
+For example:
+
+```text
+... [X][X][X][X][X] ...
+```
+
+becomes increasingly likely to attract additional entries.
+
+As clusters grow, successful and unsuccessful searches require more probes.
+
+The resulting performance depends strongly on the load factor.
+
+Goodrich notes that linear probing degrades as the table becomes crowded and recommends keeping the load factor well below one. 
+
+Other open-addressing strategies modify the probe sequence.
+
+### Quadratic Probing
+
+Instead of advancing linearly, quadratic probing uses offsets based on:
+
+$$
+i^2.
+$$
+
+A conceptual probe sequence is:
+
+$$
+\boxed{
+(h(k)+i^2)\bmod N,
+\qquad
+i=0,1,2,\ldots
+}
+$$ {#eq-quadratic-probing}
+
+This reduces the primary clustering characteristic of linear probing, although it can introduce other clustering patterns. 
+
+### Double Hashing
+
+Double hashing uses a second hash function to determine the probe step.
+
+A general form is:
+
+$$
+\boxed{
+(h(k)+i\,h'(k))\bmod N.
+}
+$$ {#eq-double-hashing}
+
+The secondary hash:
+
+$$
+h'(k)
+$$
+
+must not evaluate to zero.
+
+Because different keys can generate different step sizes, double hashing reduces the systematic clustering produced by simpler probe sequences. 
+
+The broader principle is:
+
+$$
+\boxed{
+\text{collision strategy}
+\rightarrow
+\text{probe distribution}
+\rightarrow
+\text{performance}.
+}
+$$
+
+## Rehashing
+
+As more items are inserted, the load factor increases:
+
+$$
+\lambda
+=
+\frac{n}{N}.
+$$
+
+A crowded table produces more collisions and longer searches.
+
+To restore a lower load factor, the table can allocate a larger bucket array.
+
+Suppose the original capacity is:
+
+$$
+N.
+$$
+
+A new table might have capacity approximately:
+
+$$
+2N.
+$$
+
+However, existing entries cannot simply remain at the same numerical indices.
+
+The compression function depends on table capacity.
+
+For the division method:
+
+$$
+h_N(k)
+=
+\operatorname{hash}(k)\bmod N,
+$$
+
+while after resizing:
+
+$$
+h_{2N}(k)
+=
+\operatorname{hash}(k)\bmod 2N.
+$$
+
+These positions may differ.
+
+Therefore every existing item must be inserted again according to the new table size.
+
+This process is called **rehashing**.
+
+![Rehashing allocates a larger bucket array and recomputes the bucket location of every existing key because the compression function depends on table capacity.](figures/hash-table-rehashing.png){#fig-hash-table-rehashing}
+
+A single rehash requires:
+
+$$
+O(n)
+$$
+
+work.
+
+This does not imply that every insertion costs linear time.
+
+If capacity grows geometrically, rehashes occur only occasionally.
+
+As with dynamic arrays, their total cost can be distributed across many ordinary insertions, producing an additional:
+
+$$
+O(1)
+$$
+
+amortized resizing cost per insertion.
+
+Goodrich explicitly connects geometric hash-table resizing with the amortized analysis previously used for dynamic arrays. :chatgpt-content-reference{index="9"}
+
+This gives another example of a pattern already encountered several times:
+
+$$
+\boxed{
+\text{occasional expensive operation}
++
+\text{geometric growth}
+\rightarrow
+\text{small amortized cost}.
+}
+$$
+
+## Hash-Table Performance
+
+Under appropriate assumptions:
+
+- a good hash function;
+- a controlled load factor;
+- an effective collision-resolution strategy;
+
+the principal map operations have expected constant-time performance:
+
+$$
+\boxed{
+\begin{aligned}
+\text{search} &= O(1)\text{ expected},\\
+\text{insert} &= O(1)\text{ expected},\\
+\text{delete} &= O(1)\text{ expected}.
+\end{aligned}
+}
+$$
+
+The worst case remains:
+
+$$
+\boxed{
+O(n).
+}
+$$
+
+This difference between expected and worst-case performance is fundamental.
+
+A hash table obtains its efficiency by attempting to distribute keys across the table so that only a small number of candidates need to be examined.
+
+It does not maintain a global ordering relation among keys.
+
+Therefore operations such as:
+
+> find the smallest key;
+
+> find the next key after $k$;
+
+> iterate through keys in sorted order;
+
+are not the natural strengths of hashing.
+
+This leads to an important trade-off:
+
+$$
+\boxed{
+\text{hashing}
+\rightarrow
+\text{fast expected exact-key lookup},
+}
+$$
+
+while:
+
+$$
+\boxed{
+\text{ordered structures}
+\rightarrow
+\text{efficient order-based operations}.
+}
+$$
+
+Search trees will address the second requirement.
+
+## Python Dictionaries
+
+Python's `dict` provides the language's primary mapping abstraction:
+
+```python
+record = {
+    "name": "Ada",
+    "year": 1815,
+}
+```
+
+Lookup uses key syntax:
+
+```python
+record["name"]
+```
+
+insertion or update uses:
+
+```python
+record["field"] = value
+```
+
+and deletion can use:
+
+```python
+del record["field"]
+```
+
+From the programmer's perspective, the important abstraction is:
+
+$$
+\text{key}\rightarrow\text{value}.
+$$
+
+The fact that hashing supports the implementation explains several properties of dictionary keys, especially the requirement that keys be hashable and that equality and hashing remain consistent.
+
+However, implementation details of Python's `dict` should not be confused with the abstract hash-table algorithms developed here.
+
+Goodrich's 2013 discussion describes the CPython implementation available at that time, including its open-addressing strategy. Such implementation details may evolve independently of the Map ADT and the general theory of hashing.
+
+For these notes, the enduring concepts are therefore:
+
+$$
+\text{hashability},
+$$
+
+$$
+\text{collisions},
+$$
+
+$$
+\text{load factor},
+$$
+
+$$
+\text{probing},
+$$
+
+and:
+
+$$
+\text{rehashing}.
+$$
+
+## Sets and Hashing
+
+A set can be viewed as a collection of unique keys without separately associated values.
+
+A map stores:
+
+$$
+(k,v),
+$$
+
+whereas a set conceptually stores only:
+
+$$
+k.
+$$
+
+The principal operations include:
+
+```text
+add(k)
+remove(k)
+k in S
+```
+
+Hashing therefore applies naturally to sets as well.
+
+Membership becomes the central operation:
+
+$$
+\boxed{
+k\in S.
+}
+$$
+
+With a hash-based representation, membership can have:
+
+$$
+O(1)
+$$
+
+expected time.
+
+This connects the built-in `set` abstraction discussed earlier with the hashing mechanisms developed here.
+
+The distinction remains conceptual:
+
+$$
+\boxed{
+\text{Map}
+=
+\text{unique keys associated with values},
+}
+$$
+
+while:
+
+$$
+\boxed{
+\text{Set}
+=
+\text{unique elements}.
+}
+$$
+
+Both can exploit hashing when their elements or keys are hashable.
+
+## Choosing Hashing
+
+Hash tables are particularly effective when the dominant operation is exact-key access:
+
+```text
+lookup this identifier
+```
+
+rather than:
+
+```text
+find the next larger identifier
+```
+
+or:
+
+```text
+traverse identifiers in sorted order.
+```
+
+Their characteristic advantage is:
+
+$$
+\boxed{
+O(1)\text{ expected exact-key operations}.
+}
+$$
+
+That performance comes with important conditions.
+
+A good distribution of hash values is required.
+
+Collisions must be resolved.
+
+The load factor must remain controlled.
+
+Resizing occasionally requires rehashing.
+
+Worst-case operations remain linear.
+
+And the representation does not inherently maintain keys in sorted order.
+
+These are not incidental implementation details. They define the algorithmic trade-off of hashing.
+
+The relationship between abstraction, representation, and complexity can therefore be summarised as:
+
+$$
+\boxed{
+\text{Map ADT}
+\rightarrow
+\text{hash table}
+\rightarrow
+\text{hash function}
+\rightarrow
+\text{collision resolution}
+\rightarrow
+\text{expected }O(1)\text{ access}.
+}
+$$
+
+Hashing solves key lookup by transforming keys into locations.
+
+The next family of structures solves the same problem differently. **Search trees** preserve ordering relationships between keys, sacrificing expected constant-time lookup in exchange for efficient ordered operations and stronger structural guarantees when the tree remains balanced.
+
 
 
 # References
