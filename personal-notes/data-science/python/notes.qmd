@@ -69,6 +69,1096 @@ editor: visual
 
 # Introduction
 
+Programming provides a way to express computational processes in a form that a computer can execute. A computational problem begins with some input, applies a sequence of well-defined operations, and produces an output. The nature of the input and output depends on the problem: they may consist of numbers, text, images, measurements, records, or more complex structures.
+
+An **algorithm** describes the finite sequence of steps used to perform this transformation. It specifies what must be done without necessarily prescribing how those steps are expressed in a particular programming language. A **program** is a concrete representation of one or more algorithms, together with the data and supporting logic required for their execution.
+
+The relationship can be represented schematically as:
+
+$$
+\text{Input}
+\longrightarrow
+\text{Algorithm}
+\longrightarrow
+\text{Output}.
+$$
+
+For example, consider the problem of finding the largest measurement in a collection. The input is a sequence of measurements, the algorithm examines the values while maintaining the largest value encountered so far, and the output is the maximum measurement. The same algorithmic idea can be implemented in different programming languages and executed on different machines.
+
+![A computational process transforms input data into output through an algorithm implemented and executed by a computer.](figures/computational-process.png){#fig-computational-process}
+
+Figure @fig-computational-process illustrates this general relationship. The algorithm provides the logical procedure, while computation refers to carrying out the operations described by that procedure. In practical computing systems, those operations are ultimately executed by hardware, although programming languages provide abstractions that allow programs to be expressed without working directly with machine instructions.
+
+## Python as a Programming Language
+
+Python is a high-level, general-purpose programming language. It provides abstractions for representing data, expressing computations, organising programs, and building larger software systems. The language includes a relatively small core together with a large standard library and an extensive ecosystem of external packages.
+
+Python programs are written as source code. A source file conventionally uses the `.py` extension and contains statements that can define objects, perform computations, control execution, define functions and classes, or interact with external resources.
+
+For example:
+
+```python
+measurements = [4.2, 5.7, 3.8, 6.1]
+largest = max(measurements)
+
+print(largest)
+```
+
+The source code describes the computation, but it is not executed directly by the processor in this form. Python implementations provide the machinery required to interpret the language and execute its instructions. This separation allows the programmer to work with concepts such as numbers, strings, functions, collections, and objects rather than processor instructions and memory addresses.
+
+Python can be used interactively, where expressions and statements are evaluated as they are entered, or through scripts containing a sequence of instructions to be executed. Interactive execution is useful for exploration and experimentation, while scripts provide a persistent and reproducible representation of a computation. Both forms use the same language and follow the same underlying object model.
+
+The usefulness of Python does not come only from its syntax. Much of its behaviour follows from a small number of underlying ideas: values are represented by objects, names refer to those objects, operations are defined by their types, and larger abstractions are constructed by combining objects and behaviours. Understanding these ideas is more important than memorising individual language constructs.
+
+# Objects, Types, and Names
+
+A useful starting point for understanding Python is that computation operates on **objects**. Numbers, strings, lists, functions, classes, modules, and many other entities manipulated by a Python program are represented as objects.
+
+Every object has three fundamental properties:
+
+- an **identity**, which distinguishes it from other objects during its lifetime;
+- a **type**, which determines the operations and behaviour supported by the object;
+- a **value**, representing the information associated with the object.
+
+Consider:
+
+```python
+temperature = 21.5
+```
+
+It is tempting to describe this statement by saying that a variable called `temperature` contains the value `21.5`. Although convenient in simple examples, that description becomes misleading once aliasing, mutability, function arguments, and container objects are considered.
+
+A more accurate model is that Python creates or obtains an object representing the floating-point value `21.5` and binds the name `temperature` to that object:
+
+$$
+\texttt{temperature}
+\longrightarrow
+\texttt{float object representing }21.5.
+$$
+
+The assignment statement therefore establishes a relationship between a **name** and an **object**.
+
+![A Python name is bound to an object. The object has an identity, a type, and a value.](figures/name-object-binding.png){#fig-name-object-binding}
+
+This distinction is fundamental because names and objects have different roles. A name belongs to a namespace and can later be bound to another object. The object exists independently of the particular name used to access it.
+
+For example:
+
+```python
+temperature = 21.5
+temperature = 18.0
+```
+
+The second assignment does not modify the floating-point object representing `21.5`. Instead, the name `temperature` is rebound to another object:
+
+$$
+\begin{aligned}
+\texttt{temperature}
+&\longrightarrow 21.5
+\\[4pt]
+&\downarrow
+\\[-2pt]
+\texttt{temperature}
+&\longrightarrow 18.0.
+\end{aligned}
+$$
+
+This behaviour is especially important because many Python objects are immutable: once created, their value cannot be changed. Reassigning a name that refers to an immutable object therefore changes the binding, not the object itself.
+
+## Dynamic Typing
+
+The type belongs to the object rather than to the name. This is the basis of Python's **dynamic typing**.
+
+A name can therefore refer to objects of different types at different points during execution:
+
+```python
+result = 42
+result = 3.14
+result = "complete"
+```
+
+The name `result` has not changed its own type. Rather, it has successively been bound to an `int`, a `float`, and a `str` object.
+
+The type of an object can be inspected with `type()`:
+
+```python
+value = 42
+
+type(value)
+```
+
+which reports `int`.
+
+Types are important because they determine the operations that an object supports and the meaning of those operations. Addition, for example, has different behaviour depending on the operands:
+
+```python
+2 + 3
+"data" + "base"
+```
+
+The first expression performs numerical addition, while the second performs string concatenation. The `+` operator does not have a single meaning independent of its operands; its behaviour is determined by their types.
+
+Python provides several fundamental built-in types. Among those used throughout these notes are:
+
+| Type | Purpose | Mutable |
+|:---:|:---:|:---:|
+| `bool` | Boolean values | No |
+| `int` | Integer numbers | No |
+| `float` | Floating-point numbers | No |
+| `complex` | Complex numbers | No |
+| `str` | Text | No |
+| `list` | Mutable sequence | Yes |
+| `tuple` | Immutable sequence | No |
+| `dict` | Key-value mapping | Yes |
+| `set` | Set of distinct objects | Yes |
+| `frozenset` | Immutable set | No |
+
+The distinction between mutable and immutable objects will become important throughout the discussion of Python. It affects assignment, function calls, copying, hashing, and the behaviour of data structures.
+
+## Assignment and Aliasing
+
+Because assignment binds names to objects, more than one name can refer to the same object. This situation is known as **aliasing**.
+
+Consider:
+
+```python
+alpha = [1, 2, 3]
+beta = alpha
+```
+
+After the second assignment, no second list has been created. Both names refer to the same list:
+
+$$
+\begin{aligned}
+\texttt{alpha} &\searrow\\
+                 & [1,2,3]\\
+\texttt{beta}  &\nearrow
+\end{aligned}
+$$
+
+![Two Python names may refer to the same object. Mutating that object is therefore observable through either name.](figures/python-aliasing.png){#fig-python-aliasing}
+
+The consequence becomes visible when the object is modified:
+
+```python
+beta.append(4)
+
+print(alpha)
+```
+
+which produces:
+
+```text
+[1, 2, 3, 4]
+```
+
+The assignment to `beta` did not copy the list. Since `alpha` and `beta` refer to the same mutable object, a mutation performed through one name is observable through the other.
+
+This must be distinguished from **rebinding**:
+
+```python
+beta = beta + [5]
+```
+
+The expression on the right creates a new list, after which `beta` is rebound to that new object. The original list remains associated with `alpha`.
+
+The difference is therefore:
+
+$$
+\boxed{
+\text{mutation changes an object}
+\qquad
+\text{whereas}
+\qquad
+\text{assignment changes a binding}.
+}
+$$
+
+This distinction is one of the central ideas in Python's object model. It will reappear when considering mutable containers, function arguments, copying, class instances, and data structures.
+
+## Identity and Equality
+
+Aliasing introduces an important distinction between two different questions that can be asked about objects:
+
+1. Are two names referring to the same object?
+2. Do two objects represent equivalent values?
+
+Python provides different operators for these questions. The operators `is` and `is not` compare **identity**, while `==` and `!=` compare **equality**.
+
+Consider two independently created lists:
+
+```python
+alpha = [1, 2, 3]
+beta = [1, 2, 3]
+```
+
+The lists contain the same values, so:
+
+```python
+alpha == beta
+```
+
+evaluates to `True`. However:
+
+```python
+alpha is beta
+```
+
+evaluates to `False`, because `alpha` and `beta` refer to two distinct list objects.
+
+The distinction can be expressed as:
+
+$$
+\text{identity}
+\neq
+\text{equality}.
+$$
+
+Identity concerns the object itself. Equality concerns whether two objects are considered equivalent according to the semantics of their types.
+
+The situation changes if one name is assigned directly to the other:
+
+```python
+alpha = [1, 2, 3]
+beta = alpha
+```
+
+Now:
+
+```python
+alpha is beta
+```
+
+evaluates to `True`, because both names refer to the same object. Since an object is also equal to itself under the usual equality semantics, `alpha == beta` is also `True`.
+
+The two cases can therefore be distinguished conceptually as:
+
+$$
+\begin{aligned}
+\texttt{alpha == beta}
+&\rightarrow
+\text{equivalent values},
+\\
+\texttt{alpha is beta}
+&\rightarrow
+\text{same object}.
+\end{aligned}
+$$
+
+For most value comparisons, equality is the relevant relation. Identity testing is appropriate when the program specifically needs to determine whether two references designate the same object. A common example is comparison with `None`:
+
+```python
+if result is None:
+    ...
+```
+
+Here the intention is not to ask whether `result` has a value equivalent to `None`, but whether it refers to the particular object used by Python to represent the absence of a value.
+
+This distinction becomes even more important with user-defined classes. The meaning of equality can be defined as part of the behaviour of a type, whereas identity remains a property of the individual object. Equality will therefore be revisited when the Python object model and special methods are considered in greater detail.
+
+## Mutability and Immutability
+
+The effect of aliasing depends strongly on whether the referenced object is **mutable** or **immutable**.
+
+A mutable object can change its state after it has been created. Lists, dictionaries, and sets are common examples. An immutable object cannot change its value after creation. Numbers, strings, tuples, and frozensets are examples of immutable built-in types.
+
+Consider a list:
+
+```python
+values = [10, 20, 30]
+```
+
+The operation:
+
+```python
+values.append(40)
+```
+
+changes the existing list object. The binding of the name `values` does not need to change:
+
+$$
+\texttt{values}
+\longrightarrow
+[10,20,30]
+$$
+
+becomes:
+
+$$
+\texttt{values}
+\longrightarrow
+[10,20,30,40].
+$$
+
+The object has been mutated.
+
+Now consider an integer:
+
+```python
+count = 10
+count = count + 1
+```
+
+An integer object cannot be changed from $10$ into $11$. The expression on the right-hand side is evaluated first, producing an integer object representing $11$. The name `count` is then rebound to that object.
+
+Conceptually:
+
+$$
+\texttt{count}
+\longrightarrow
+10
+$$
+
+is replaced by:
+
+$$
+\texttt{count}
+\longrightarrow
+11.
+$$
+
+The integer object representing $10$ has not been modified.
+
+This distinction explains why superficially similar operations may have different consequences when aliases exist.
+
+For example:
+
+```python
+alpha = [1, 2]
+beta = alpha
+
+alpha.append(3)
+```
+
+Since the list is mutable, both names still refer to the modified object:
+
+```text
+alpha -> [1, 2, 3]
+beta  -> [1, 2, 3]
+```
+
+By contrast:
+
+```python
+alpha = 10
+beta = alpha
+
+alpha = alpha + 1
+```
+
+does not alter the object to which `beta` refers. Instead, `alpha` is rebound:
+
+```text
+alpha -> 11
+beta  -> 10
+```
+
+Mutability is therefore not simply a property used to classify built-in types. It has direct consequences for how state changes propagate through a program.
+
+An important subtlety is that the immutability of a container does not imply that every object referenced by the container is itself immutable. A tuple, for example, cannot have its references replaced after creation, but it may contain a mutable object:
+
+```python
+record = ("sensor-01", [21.4, 21.7])
+record[1].append(22.0)
+```
+
+The tuple itself has not been modified: it still refers to the same string and the same list. The list contained within it, however, is mutable and has changed.
+
+Thus, immutability concerns the state of the object under consideration, not necessarily the state of every object reachable from it.
+
+## Copying Objects
+
+Aliasing is useful when several parts of a program are intended to operate on the same object. In other situations, independent state is required.
+
+Suppose an existing collection is used as the starting point for another collection:
+
+```python
+original = [10, 20, 30]
+working = original
+```
+
+This does not create an independent list. The assignment creates another reference to the same object:
+
+$$
+\begin{aligned}
+\texttt{original} &\searrow\\
+                   &[10,20,30]\\
+\texttt{working}  &\nearrow
+\end{aligned}
+$$
+
+Consequently:
+
+```python
+working.append(40)
+```
+
+also changes what is observed through `original`.
+
+If an independent outer list is required, a new list can be constructed:
+
+```python
+working = list(original)
+```
+
+or, equivalently for a list:
+
+```python
+working = original.copy()
+```
+
+Now `original` and `working` refer to distinct list objects. Adding or removing an element from one list does not change the other.
+
+For flat collections containing immutable elements, this distinction is often sufficient. Nested mutable structures reveal a deeper issue.
+
+Consider:
+
+```python
+original = [
+    ["A", 10],
+    ["B", 20],
+]
+
+working = original.copy()
+```
+
+Two list objects now exist at the outer level, but their elements still refer to the same inner lists.
+
+The structure is conceptually:
+
+$$
+\begin{aligned}
+\texttt{original} &\longrightarrow
+\text{outer list}_1
+\searrow
+\\
+&&
+\text{inner objects}
+\\
+\texttt{working} &\longrightarrow
+\text{outer list}_2
+\nearrow
+\end{aligned}
+$$
+
+This is a **shallow copy**. The outer container has been duplicated, but the objects referenced by that container have not.
+
+Therefore:
+
+```python
+working[0][1] = 99
+```
+
+also changes:
+
+```python
+original[0]
+```
+
+because:
+
+```python
+working[0] is original[0]
+```
+
+is `True`.
+
+![Aliasing, shallow copying, and deep copying differ in which objects are shared between the original structure and its copy.](figures/python-copying.png){#fig-python-copying}
+
+When the nested objects must also be independent, a **deep copy** may be required. Python provides this operation through the `copy` module:
+
+```python
+import copy
+
+working = copy.deepcopy(original)
+```
+
+A deep copy recursively constructs independent copies of the objects contained within the structure rather than merely duplicating the outer container.
+
+The three situations can be summarised as:
+
+$$
+\begin{aligned}
+\text{assignment}
+&\rightarrow
+\text{same object},
+\\
+\text{shallow copy}
+&\rightarrow
+\text{new outer object, shared nested objects},
+\\
+\text{deep copy}
+&\rightarrow
+\text{independent copied structure}.
+\end{aligned}
+$$
+
+Deep copying should not be understood as a universally preferable form of copying. Sharing objects can be intentional and efficient, while duplicating an entire object structure may be unnecessary or inappropriate. The relevant question is whether the state represented by the objects is intended to be shared.
+
+The distinction between references and copies will become particularly important when working with nested containers and data structures. Many Python containers are **referential structures**: they store references to objects rather than embedding independent copies of those objects. Understanding what is copied and what remains shared is therefore necessary for reasoning correctly about their behaviour.
+
+# Expressions and Operators
+
+Objects become useful in a computation through the operations that can be performed on them. An **expression** combines objects, names, literals, operators, and function calls to produce a value.
+
+For example:
+
+```python
+subtotal = price * quantity
+```
+
+contains the expression:
+
+```python
+price * quantity
+```
+
+which is evaluated before the resulting object is bound to the name `subtotal`.
+
+The meaning of an operator depends on the types of its operands. The expression:
+
+```python
+2 + 3
+```
+
+performs numerical addition, while:
+
+```python
+"data" + "science"
+```
+
+performs string concatenation.
+
+This is not merely syntactic convenience. Operators are part of the behaviour provided by types. Python uses a common notation for operations that may have different meanings for different kinds of objects.
+
+Expressions may combine several operations:
+
+```python
+result = a + b * c
+```
+
+In such cases, Python applies a defined operator precedence. Multiplication is evaluated before addition, so the expression is interpreted as:
+
+```python
+result = a + (b * c)
+```
+
+rather than:
+
+```python
+result = (a + b) * c
+```
+
+Explicit parentheses should be used when they clarify the intended grouping, even when the default precedence would produce the same result.
+
+Operators can broadly express arithmetic, comparison, identity, membership, and logical relationships. Their detailed behaviour will be introduced together with the types and control structures for which they are relevant rather than treated as an isolated catalogue of syntax.
+
+This is particularly useful for Boolean expressions. Conditions such as:
+
+```python
+temperature > 30
+```
+
+or:
+
+```python
+value is None
+```
+
+do not merely perform computations; they produce Boolean results that can determine which parts of a program are executed. This provides the connection between expressions and **control flow**, which determines how execution proceeds through a program.
+
+## Boolean Expressions and Logical Operators
+
+Many computations require decisions rather than only the production of numerical or textual values. A program may need to determine whether a measurement exceeds a threshold, whether a collection contains an element, or whether several conditions hold simultaneously.
+
+These decisions are expressed through Boolean values. Python provides the type `bool`, whose two possible values are:
+
+```python
+True
+False
+```
+
+Comparison operators produce Boolean results. For example:
+
+```python
+temperature = 28.5
+
+temperature > 25
+```
+
+evaluates to `True`, while:
+
+```python
+temperature < 20
+```
+
+evaluates to `False`.
+
+The usual ordering comparisons are:
+
+| Operator | Meaning |
+|:---:|:---:|
+| `a < b` | $a$ is less than $b$ |
+| `a <= b` | $a$ is less than or equal to $b$ |
+| `a > b` | $a$ is greater than $b$ |
+| `a >= b` | $a$ is greater than or equal to $b$ |
+| `a == b` | $a$ and $b$ are equal |
+| `a != b` | $a$ and $b$ are not equal |
+
+As discussed previously, `is` and `is not` answer a different question: they compare object identity rather than value equality.
+
+Python also supports chained comparisons. A mathematical condition such as:
+
+$$
+0 \leq x < 1
+$$
+
+can be written directly as:
+
+```python
+0 <= x < 1
+```
+
+This expresses the intended relationship more naturally than writing the two comparisons separately.
+
+More complex conditions can be constructed with the logical operators `not`, `and`, and `or`.
+
+For propositions $P$ and $Q$, their behaviour can be summarised by the following truth table:
+
+| $P$ | $Q$ | `P and Q` | `P or Q` |
+|:---:|:---:|:---:|:---:|
+| `False` | `False` | `False` | `False` |
+| `False` | `True` | `False` | `True` |
+| `True` | `False` | `False` | `True` |
+| `True` | `True` | `True` | `True` |
+
+Negation reverses the truth value:
+
+| $P$ | `not P` |
+|:---:|:---:|
+| `False` | `True` |
+| `True` | `False` |
+
+These operators allow conditions to represent the actual logical requirements of a problem. For example:
+
+```python
+temperature > 20 and temperature < 30
+```
+
+requires both comparisons to hold, while:
+
+```python
+status == "warning" or status == "critical"
+```
+
+requires at least one of them.
+
+Logical expressions should generally be written to make the underlying condition evident. Parentheses can be useful when several operators are combined, even when Python's precedence rules would make them unnecessary:
+
+```python
+(is_valid and has_data) or use_default
+```
+
+The purpose of such expressions is not merely to produce `True` or `False`. They provide the logical basis for controlling which computations a program performs.
+
+### Truth Values
+
+Conditions in Python do not always require an explicit `bool` object. Objects of other types can be evaluated in a Boolean context.
+
+Several common values are considered false, including numeric zero, `None`, and empty containers:
+
+```python
+0
+0.0
+""
+[]
+{}
+set()
+None
+```
+
+Nonzero numbers and nonempty containers are generally considered true.
+
+This allows conditions such as:
+
+```python
+records = [...]
+
+if records:
+    ...
+```
+
+rather than:
+
+```python
+if len(records) > 0:
+    ...
+```
+
+The first form expresses the relevant question directly: whether `records` contains data.
+
+Truth-value testing should nevertheless be used when its meaning is clear. Different states may need to be distinguished explicitly. For example, an empty collection and `None` may both evaluate as false while representing different situations in a program.
+
+### Short-Circuit Evaluation
+
+The operators `and` and `or` are evaluated from left to right and use **short-circuit evaluation**. Python evaluates the second operand only when it is necessary to determine the result.
+
+For:
+
+```python
+P and Q
+```
+
+if `P` is false, the complete expression cannot be true, regardless of `Q`. Therefore `Q` does not need to be evaluated.
+
+Similarly, for:
+
+```python
+P or Q
+```
+
+if `P` is true, the complete expression is already true and `Q` does not need to be evaluated.
+
+This behaviour has practical consequences. Consider a search through a sequence:
+
+```python
+index = 0
+
+while index < len(data) and data[index] != target:
+    index += 1
+```
+
+The first condition verifies that `index` is valid before the expression attempts to access:
+
+```python
+data[index]
+```
+
+When `index == len(data)`, the first condition is false. Because `and` short-circuits, the second condition is not evaluated, preventing an invalid access beyond the end of the sequence.
+
+The order of the conditions is therefore significant. Writing:
+
+```python
+while data[index] != target and index < len(data):
+    ...
+```
+
+would not provide the same protection, because `data[index]` would be evaluated first.
+
+Short-circuit evaluation is consequently more than an optimisation. It can be part of the correctness of an expression.
+
+# Control Flow
+
+A program consisting only of expressions evaluated sequentially would follow the same path every time it executes. Most computations require greater flexibility: some operations should occur only under certain conditions, while others must be repeated until a task is complete.
+
+**Control flow** determines the order in which statements are executed.
+
+Python provides two fundamental mechanisms for changing sequential execution:
+
+- **selection**, which chooses among alternative paths;
+- **iteration**, which repeats a computation.
+
+These mechanisms are expressed primarily through conditional statements and loops.
+
+Python uses indentation to define blocks of statements. Indentation is therefore part of the structure of the language rather than merely a formatting convention.
+
+For example:
+
+```python
+if temperature > 30:
+    alert = True
+    message = "High temperature"
+
+log_temperature(temperature)
+```
+
+The two indented statements belong to the conditional block. The final statement lies outside it and is executed regardless of the condition.
+
+## Conditional Execution
+
+An `if` statement allows execution to depend on a condition evaluated at runtime.
+
+Consider a simple classification:
+
+```python
+if temperature > 30:
+    status = "high"
+else:
+    status = "normal"
+```
+
+Exactly one of the two assignments is performed. The selected path depends on the Boolean value of:
+
+```python
+temperature > 30
+```
+
+More than two mutually exclusive cases can be represented with `elif`:
+
+```python
+if temperature < 10:
+    status = "low"
+elif temperature <= 30:
+    status = "normal"
+else:
+    status = "high"
+```
+
+The conditions are evaluated in order. Once one evaluates to true, its corresponding block is executed and the remaining alternatives are skipped.
+
+This ordering matters whenever conditions overlap. Consider:
+
+```python
+if score >= 50:
+    grade = "pass"
+elif score >= 80:
+    grade = "distinction"
+```
+
+A score of `90` satisfies the first condition, so the second condition is never reached. The intended classification requires the more restrictive condition first:
+
+```python
+if score >= 80:
+    grade = "distinction"
+elif score >= 50:
+    grade = "pass"
+else:
+    grade = "fail"
+```
+
+Conditional logic therefore involves more than writing syntactically valid comparisons. The branches must partition the relevant cases in a way that represents the problem correctly.
+
+Several independent `if` statements should also be distinguished from a single `if`–`elif`–`else` chain. With independent statements:
+
+```python
+if condition_a:
+    ...
+
+if condition_b:
+    ...
+```
+
+both blocks may execute. In an `if`–`elif` chain, at most one branch is selected.
+
+This difference reflects two different logical structures: independent conditions versus mutually exclusive alternatives.
+
+## Iteration
+
+Many computational tasks involve applying an operation repeatedly. A collection may need to be processed element by element, a search may continue until a target is found, or a numerical method may iterate until a convergence criterion is satisfied.
+
+Python provides two principal loop constructs:
+
+```python
+for
+while
+```
+
+They both express repetition, but they correspond to different ways of describing when repetition should continue.
+
+### Iteration over an Iterable
+
+A `for` loop consumes values from an **iterable**:
+
+```python
+measurements = [4.2, 5.7, 3.8, 6.1]
+
+for value in measurements:
+    print(value)
+```
+
+The important idea is that Python's `for` loop is fundamentally an iteration over values, not a counter-based loop. During each iteration, the loop variable is bound to the next object produced by the iterable.
+
+For example, a maximum can be computed as:
+
+```python
+measurements = [4.2, 5.7, 3.8, 6.1]
+
+largest = measurements[0]
+
+for value in measurements[1:]:
+    if value > largest:
+        largest = value
+```
+
+The loop directly expresses the operation being performed: examine each remaining measurement and update the current maximum when a larger value is encountered.
+
+This pattern appears throughout algorithms:
+
+$$
+\boxed{
+\text{initial state}
+\rightarrow
+\text{process next element}
+\rightarrow
+\text{update state}
+\rightarrow
+\text{repeat}.
+}
+$$
+
+The variable `largest` represents the state accumulated by the computation. After each iteration, it contains the largest value encountered so far.
+
+### Ranges and the Half-Open Convention
+
+Some computations require positions rather than only values. Python provides `range` for generating sequences of integers suitable for iteration.
+
+The expression:
+
+```python
+range(n)
+```
+
+represents the integers:
+
+$$
+0,1,2,\ldots,n-1.
+$$
+
+The upper bound $n$ is excluded. More generally:
+
+```python
+range(start, stop)
+```
+
+follows the half-open interval:
+
+$$
+[\text{start},\text{stop}).
+$$
+
+This convention is particularly useful for indexing. A sequence of length $n$ has valid positions:
+
+$$
+0,1,\ldots,n-1,
+$$
+
+which correspond exactly to:
+
+```python
+range(n)
+```
+
+For example:
+
+```python
+for index in range(len(data)):
+    print(index, data[index])
+```
+
+There is, however, no reason to introduce an index when only the values are needed. If the position and value are both relevant, Python provides `enumerate`:
+
+```python
+for index, value in enumerate(data):
+    print(index, value)
+```
+
+This expresses the intention more directly than manually managing an index.
+
+### Condition-Controlled Iteration
+
+A `while` loop is appropriate when repetition is governed by a condition rather than by consuming a predefined iterable:
+
+```python
+while condition:
+    ...
+```
+
+The condition is evaluated before every iteration. Execution continues while it remains true.
+
+Consider an iterative approximation in which successive estimates are computed until the change becomes sufficiently small:
+
+```python
+estimate = initial_estimate
+
+while error > tolerance:
+    estimate = update(estimate)
+    error = compute_error(estimate)
+```
+
+The number of iterations is not necessarily known beforehand. Termination depends on the evolving state of the computation.
+
+This distinguishes the two principal loop forms conceptually:
+
+$$
+\begin{aligned}
+\texttt{for}
+&\rightarrow
+\text{iterate over values from an iterable},
+\\
+\texttt{while}
+&\rightarrow
+\text{repeat while a condition holds}.
+\end{aligned}
+$$
+
+A `while` loop must eventually make progress toward making its condition false unless nontermination is intentional. Failure to update the relevant state produces an infinite loop.
+
+For example:
+
+```python
+index = 0
+
+while index < len(data):
+    process(data[index])
+    index += 1
+```
+
+terminates because `index` increases on each iteration and eventually reaches `len(data)`.
+
+This idea of **progress toward termination** becomes important when reasoning about algorithm correctness. A loop should not only perform the intended operation during each iteration; there must also be a reason why the process eventually stops.
+
+### Early Termination
+
+Sometimes a loop does not need to examine every possible element. Once the required information has been obtained, continuing would perform unnecessary work.
+
+A search is a typical example:
+
+```python
+found = False
+
+for value in data:
+    if value == target:
+        found = True
+        break
+```
+
+The `break` statement terminates the nearest enclosing loop immediately.
+
+The `continue` statement has a different purpose. It terminates only the current iteration and proceeds with the next one:
+
+```python
+for value in data:
+    if value < 0:
+        continue
+
+    process(value)
+```
+
+Here negative values are skipped while iteration continues over the remaining elements.
+
+Both constructs can simplify control flow when used deliberately. Excessive use, however, can make the execution path difficult to follow. A loop should generally retain a clear termination condition and a clear purpose.
+
+Python also allows a loop to have an `else` clause. The `else` block executes when the loop finishes normally rather than through `break`.
+
+This is useful for searches:
+
+```python
+for value in data:
+    if value == target:
+        print("Target found")
+        break
+else:
+    print("Target not found")
+```
+
+The `else` clause expresses a precise condition: the loop exhausted its iterable without encountering a `break`.
+
+This behaviour can initially appear unusual, but it avoids maintaining a separate Boolean flag when the relevant distinction is simply whether the search terminated early.
+
+Control structures provide the machinery for expressing algorithmic processes, but larger programs also require a way to isolate computations behind well-defined interfaces. This is the role of **functions**, which allow behaviour to be named, parameterised, reused, and composed.
+
+
+
 # References
 
 ::: {#refs}
