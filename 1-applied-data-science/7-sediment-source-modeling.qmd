@@ -537,3 +537,19 @@ The experimental results presented in this chapter indicate that the log-ratio f
 Taken together, the three methods discussed in this appendix illustrate complementary ways of solving the same inverse mixing problem. The Bootstrapped Mixing Model emphasizes uncertainty quantification through repeated resampling, the McCaffrey formulation seeks the best deterministic reconstruction in the original concentration space, and the Sandoval formulation extends this deterministic approach to log-ratio space to account explicitly for the compositional nature of geochemical data. Although these methods differ in their estimation strategies, they all rely on the same physical model of sediment mixing, the same conservation constraints, and the same constrained optimization framework. Once the inverse problem has been formulated, the choice of method primarily reflects how uncertainty is represented and how the discrepancy between the measured and reconstructed compositions is quantified, rather than a change in the underlying physics.
 
 More broadly, this shared mathematical foundation illustrates an idea that extends well beyond sediment fingerprinting. Scientific problems that appear unrelated at first glance are often governed by remarkably similar mathematical structures. Recognizing these common patterns makes it possible to transfer methodologies across disciplines with only minor adaptations, allowing existing models to address new challenges without fundamentally changing their underlying principles. In this chapter, techniques originally developed for petroleum production allocation proved equally applicable to sediment source apportionment, illustrating that effective solutions often emerge not from developing entirely new algorithms, but from recognizing the mathematical structures that different scientific problems have in common.
+
+
+## Further Reading
+
+::: {.content-visible when-format="html"}
+
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available <a href="../technical-notes/data-science/geochemical-deconvolution/notes.pdf" download><i class="bi bi-file-earmark-pdf"></i></a>.
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
+For readers interested in a more detailed mathematical treatment, including derivations and additional discussion, the accompanying technical note is available \href{https://raw.githubusercontent.com/rodrigokang/portfolio/main/technical-notes/data-science/geochemical-deconvolution/notes.pdf}{\faFilePdf}.
+
+:::
+
