@@ -3,6 +3,8 @@
 ***Technical Notes***  
 **Author:** Rodrigo Kang
 
+---
+
 This directory contains technical notes accompanying selected projects in Computational Physics.
 
 The notes provide detailed treatments of the physical principles, mathematical formulations, and computational methods underlying these projects, with particular attention to theoretical developments and analytical derivations that warrant further explanation.

@@ -3,6 +3,8 @@
 **Technical Notes**  
 **Author:** Rodrigo Kang
 
+---
+
 This directory contains technical notes accompanying selected projects in Data Science, with particular emphasis on Machine Learning.
 
 The notes provide detailed treatments of the mathematical, statistical, and computational foundations underlying these projects, including theoretical developments and methodological considerations that warrant further explanation.

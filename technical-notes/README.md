@@ -3,6 +3,8 @@
 ***Technical Notes***  
 **Author:** Rodrigo Kang
 
+---
+
 This repository contains technical notes accompanying selected projects in Data Science and Computational Physics.
 
 The notes provide self-contained treatments of mathematical foundations, theoretical developments, and computational methods that warrant more detailed discussion than is appropriate within the main project documentation.
