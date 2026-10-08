@@ -3,18 +3,18 @@
 ***Technical Notes***  
 **Author:** Rodrigo Kang
 
-This repository contains a collection of technical notes developed primarily in Data Science and related computational topics.
+This repository contains technical notes accompanying selected projects in Data Science and Computational Physics.
 
-The notes serve as a structured record of technical work, with an emphasis on mathematical foundations, statistical and computational methods, derivations, and practical implementation. They complement the applied projects in the broader portfolio while remaining available as reference material for further development.
+The notes provide self-contained treatments of mathematical foundations, theoretical developments, and computational methods that warrant more detailed discussion than is appropriate within the main project documentation.
 
 ## Topics
 
-* [`Data Science`](data-science/) — Mathematical, statistical, and computational foundations of Data Science, with particular emphasis on Machine Learning methods and their implementation.
+* [`Data Science`](data-science/) — Mathematical, statistical, and computational methods underlying selected Data Science projects, with particular emphasis on Machine Learning.
 
-* [`Computational Physics`](computational-physics/) — Numerical and computational approaches to problems in physics, with emphasis on mathematical modelling, simulation, and scientific computing.
+* [`Computational Physics`](computational-physics/) — Mathematical formulations, analytical methods, and computational techniques associated with selected problems in physics.
 
 ## About These Notes
 
-These notes are intended primarily as technical reference material. Topics are developed from first principles where useful, with attention to the connection between mathematical formulation, computational methods, and implementation.
+The notes are developed where a more detailed theoretical or methodological treatment is useful for understanding the corresponding project. They emphasise mathematical reasoning, key derivations, and the connection between theory and implementation.
 
-The collection will evolve over time as new topics become relevant. Existing material may also be extended, reorganised, or refined as the repository develops.
+The collection is selective rather than comprehensive. New notes may be added as projects develop, while existing material may be extended or refined where necessary.

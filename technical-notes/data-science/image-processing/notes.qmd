@@ -6,6 +6,12 @@ author: "Rodrigo Kang"
 
 lang: en
 
+bibliography: references.bib
+csl: ieee.csl
+
+nocite: |
+  @szeliski2011computer
+
 execute:
   echo: true
   output: true
@@ -25,7 +31,7 @@ format:
       - margin=2.8cm
 
     toc: true
-    toc-depth: 3
+    toc-depth: 4
 
     number-sections: true
     number-depth: 3
@@ -4203,3 +4209,8 @@ $$
 \text{blend}.
 }
 $$
+
+# References
+
+::: {#refs}
+:::

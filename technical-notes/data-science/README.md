@@ -3,26 +3,27 @@
 **Technical Notes**  
 **Author:** Rodrigo Kang
 
-This directory contains technical notes on Data Science, with particular emphasis on the mathematical, statistical, and computational foundations of Machine Learning.
+This directory contains technical notes accompanying selected projects in Data Science, with particular emphasis on Machine Learning.
 
-The notes examine the methods used to model, analyse, and learn from data, connecting their theoretical foundations with computational implementation and practical considerations.
+The notes provide detailed treatments of the mathematical, statistical, and computational foundations underlying these projects, including theoretical developments and methodological considerations that warrant further explanation.
 
 ## Scope
 
-The material covers topics in supervised and unsupervised learning, statistical modelling, dimensionality reduction, clustering, optimisation, model evaluation, and other methods relevant to Data Science and Machine Learning.
+The material addresses mathematical, statistical, and computational aspects of Data Science, including modelling techniques, learning algorithms, and methods for analysing and interpreting data.
 
-Additional topics may be incorporated as they become relevant to applied work or provide useful foundations for understanding the methods under study.
+Topics are developed in connection with specific projects, with emphasis on the theoretical foundations and methodological details necessary to understand the approaches employed.
 
 ## Approach
 
-The notes focus on understanding the principles behind each method rather than treating algorithms as black boxes. Mathematical formulations and key derivations are developed where they clarify how a method works, while computational implementations and experiments are used to examine its behaviour in practice.
+The notes develop mathematical and statistical principles from first principles where appropriate, connecting theoretical formulations with computational methods and practical implementation.
 
 Particular attention is given to:
 
-* the assumptions and mathematical foundations underlying each method;
-* how models and algorithms are formulated and derived;
-* the relationship between statistical reasoning and computational implementation;
-* how methods behave under different data and modelling conditions;
-* the interpretation and evaluation of results;
-* computational considerations relevant to practical implementation; and
-* the limitations and appropriate use of each method.
+* the assumptions and mathematical foundations underlying models and methods;
+* the formulation and derivation of statistical and computational approaches;
+* the relationship between theoretical principles and practical implementation;
+* the interpretation and evaluation of models and results;
+* computational considerations relevant to the methods employed; and
+* the limitations and appropriate use of each approach.
+
+The treatment is intended to complement the corresponding projects without duplicating their main discussion of methods, implementation, and results.

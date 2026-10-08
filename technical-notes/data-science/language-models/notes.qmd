@@ -6,6 +6,12 @@ author: "Rodrigo Kang"
 
 lang: en
 
+bibliography: references.bib
+csl: ieee.csl
+
+nocite: |
+  @alammar2024hands
+
 execute:
   echo: true
   output: true
@@ -25,7 +31,7 @@ format:
       - margin=2.8cm
 
     toc: true
-    toc-depth: 6
+    toc-depth: 4
 
     number-sections: true
     number-depth: 3
@@ -5762,3 +5768,8 @@ W_{\mathrm{down}}
 $$
 
 The feedforward sublayer therefore preserves the model dimension while using a larger internal representation and a learned gating mechanism.
+
+# References
+
+::: {#refs}
+:::
