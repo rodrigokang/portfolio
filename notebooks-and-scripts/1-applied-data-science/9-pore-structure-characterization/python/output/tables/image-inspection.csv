@@ -1,0 +1,6 @@
+sample,width_px,height_px,mode,dtype,min_intensity,max_intensity,field_width_um,field_height_um
+44A,16384,12288,L,uint8,0,254,2850.816,2138.112
+45A,16384,12288,L,uint8,0,254,2850.816,2138.112
+47A,16384,12288,L,uint8,0,254,2850.816,2138.112
+48A,16384,12288,L,uint8,0,254,2850.816,2138.112
+51A,16384,12288,L,uint8,0,254,2850.816,2138.112

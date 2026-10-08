@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>9&nbsp; Pore Structure Characterization from Sandstone SEM Images – Data Science Across Domains</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../2-writings-and-essays/0-overview.html" rel="next">
+<link href="../1-applied-data-science/8-skin-lesion-triage.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Applied Data Science</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/9-pore-structure-characterization.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Pore Structure Characterization from Sandstone SEM Images</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Data Science Across Domains</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/rodrigokang/portfolio" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/rodrigojuankang/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="mailto:rodrigokang88@gmail.com" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-envelope"></i></a>
+    <a href="https://raw.githubusercontent.com/rodrigokang/portfolio/main/data-science-across-domains.pdf" title="PDF" class="quarto-navigation-tool px-1" aria-label="PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../preface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../reading-guide.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to Read This Portfolio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Applied Data Science</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/0-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/1-capm-and-fama-french-factor-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">CAPM and Fama–French Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/2-unsupervised-learning-for-asset-allocation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unsupervised Learning for Asset Allocation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/3-option-pricing-with-path-integrals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Option Pricing with Path Integrals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/4-credit-card-fraud-detection-ml-benchmark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Credit Card Fraud Detection</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/5-customer-value-and-retention.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Customer Value and Retention</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/6-customer-feedback-nlp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Understanding Customer Feedback through NLP</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/7-sediment-source-modeling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Sediment Source Modeling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/8-skin-lesion-triage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Skin Lesion Triage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../1-applied-data-science/9-pore-structure-characterization.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Pore Structure Characterization from Sandstone SEM Images</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Writings &amp; Essays</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../2-writings-and-essays/0-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../2-writings-and-essays/1-data-science-age-of-hype.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Science in the Age of Hype: Why the scientific method still matters</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../2-writings-and-essays/2-conformal-geometry-in-3d.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Conformal Geometry and Electrostatics in Three Dimensions</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link active" data-scroll-target="#problem-definition"><span class="header-section-number">9.1</span> Problem Definition</a></li>
+  <li><a href="#modeling-approach" id="toc-modeling-approach" class="nav-link" data-scroll-target="#modeling-approach"><span class="header-section-number">9.2</span> Modeling Approach</a>
+  <ul class="collapse">
+  <li><a href="#intensity-based-segmentation" id="toc-intensity-based-segmentation" class="nav-link" data-scroll-target="#intensity-based-segmentation"><span class="header-section-number">9.2.1</span> Intensity-Based Segmentation</a></li>
+  <li><a href="#morphological-and-spatial-descriptors" id="toc-morphological-and-spatial-descriptors" class="nav-link" data-scroll-target="#morphological-and-spatial-descriptors"><span class="header-section-number">9.2.2</span> Morphological and Spatial Descriptors</a></li>
+  </ul></li>
+  <li><a href="#methodology-and-implementation" id="toc-methodology-and-implementation" class="nav-link" data-scroll-target="#methodology-and-implementation"><span class="header-section-number">9.3</span> Methodology and Implementation</a>
+  <ul class="collapse">
+  <li><a href="#dataset-and-image-inspection" id="toc-dataset-and-image-inspection" class="nav-link" data-scroll-target="#dataset-and-image-inspection"><span class="header-section-number">9.3.1</span> Dataset and Image Inspection</a></li>
+  <li><a href="#segmentation-and-assessment" id="toc-segmentation-and-assessment" class="nav-link" data-scroll-target="#segmentation-and-assessment"><span class="header-section-number">9.3.2</span> Segmentation and Assessment</a></li>
+  <li><a href="#local-morphology-and-image-scale-heterogeneity" id="toc-local-morphology-and-image-scale-heterogeneity" class="nav-link" data-scroll-target="#local-morphology-and-image-scale-heterogeneity"><span class="header-section-number">9.3.3</span> Local Morphology and Image-Scale Heterogeneity</a></li>
+  </ul></li>
+  <li><a href="#results-discussion-and-limitations" id="toc-results-discussion-and-limitations" class="nav-link" data-scroll-target="#results-discussion-and-limitations"><span class="header-section-number">9.4</span> Results, Discussion, and Limitations</a>
+  <ul class="collapse">
+  <li><a href="#segmentation-results" id="toc-segmentation-results" class="nav-link" data-scroll-target="#segmentation-results"><span class="header-section-number">9.4.1</span> Segmentation Results</a></li>
+  <li><a href="#spatial-distribution-and-morphology" id="toc-spatial-distribution-and-morphology" class="nav-link" data-scroll-target="#spatial-distribution-and-morphology"><span class="header-section-number">9.4.2</span> Spatial Distribution and Morphology</a></li>
+  <li><a href="#comparison-with-petrophysical-properties" id="toc-comparison-with-petrophysical-properties" class="nav-link" data-scroll-target="#comparison-with-petrophysical-properties"><span class="header-section-number">9.4.3</span> Comparison with Petrophysical Properties</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">9.4.4</span> Limitations</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions"><span class="header-section-number">9.4.5</span> Conclusions</a></li>
+  </ul></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">9.5</span> Further Reading</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../1-applied-data-science/0-overview.html">Applied Data Science</a></li><li class="breadcrumb-item"><a href="../1-applied-data-science/9-pore-structure-characterization.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Pore Structure Characterization from Sandstone SEM Images</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Pore Structure Characterization from Sandstone SEM Images</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This project uses classical computer vision to examine the geometry and spatial distribution of dark regions in scanning electron microscopy (SEM) images of sandstone. Five samples from the Leman Sandstone dataset are analysed using intensity-based segmentation, connected-component measurements, distance transforms, and spatial statistics. The image-derived descriptors are then compared with laboratory porosity and permeability measurements, with particular attention to what can and cannot be inferred from two-dimensional images.</p>
+<section id="problem-definition" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="problem-definition"><span class="header-section-number">9.1</span> Problem Definition</h2>
+<p>The pore structure of a rock influences how fluids are stored and transported through it. Porosity describes the fraction of the rock volume occupied by void space, but it does not fully describe the geometry of that space or the connections between pores. Two rocks with similar porosity may therefore exhibit substantially different permeability. Understanding these differences requires information about the spatial arrangement of the rock’s internal structures, beyond a single bulk measurement.</p>
+<p>Scanning electron microscopy provides a detailed view of mineral grains, grain boundaries, fractures, and regions that may correspond to pores. These images contain useful geometric information, although converting image intensity into a physical description of pore space is not straightforward. Dark regions may include pores, but they can also represent low-contrast minerals or other features of the specimen and imaging process. The first challenge is therefore to define a reproducible segmentation procedure without assuming that every dark pixel identifies a pore.</p>
+<p>The question addressed in this project is how the geometry and spatial distribution of intensity-defined dark regions vary among sandstone samples with different petrophysical properties. The analysis also examines whether these image descriptors offer useful context for samples with similar measured porosity but markedly different permeability. The purpose is characterisation and comparison, rather than permeability prediction or reconstruction of a three-dimensional pore network.</p>
+</section>
+<section id="modeling-approach" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="modeling-approach"><span class="header-section-number">9.2</span> Modeling Approach</h2>
+<p>The analysis follows a classical image-processing workflow. Grayscale intensities are examined first, followed by binary segmentation and measurements of the resulting regions. The original image resolution is retained for quantitative calculations. This is important because downsampling could remove small structures or alter their apparent geometry.</p>
+<section id="intensity-based-segmentation" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="intensity-based-segmentation"><span class="header-section-number">9.2.1</span> Intensity-Based Segmentation</h3>
+<p>Backscattered-electron SEM images contain variations in grayscale intensity associated with differences in material and imaging response. In the images considered here, the histograms contain a relatively small low-intensity population and a dominant higher-intensity population. These distributions motivate an initial segmentation of dark regions, but do not establish their geological identity.</p>
+<p>Two global thresholding procedures are compared. Otsu’s method selects a threshold by maximising the variance between the two intensity classes. A second procedure locates a minimum between the dark and bright peaks of a smoothed histogram. Both thresholds are estimated separately for each image, since the intensity distributions differ among samples. The valley procedure uses predefined peak-search intervals chosen after inspection of this dataset; it is included as a methodological comparison rather than a universal segmentation rule.</p>
+<p>For an image with <span class="math inline">\(N\)</span> pixels and threshold <span class="math inline">\(t\)</span>, the dark-area fraction is defined as</p>
+<p><span id="eq-dark-area-fraction"><span class="math display">\[
+A_d(t) = \frac{1}{N}\sum_{i=1}^{N}\mathbb{1}(I_i \leq t),
+\tag{9.1}\]</span></span></p>
+<p>where <span class="math inline">\(I_i\)</span> is the grayscale intensity of pixel <span class="math inline">\(i\)</span> and <span class="math inline">\(\mathbb{1}(\cdot)\)</span> is the indicator function. This quantity is an image-derived area fraction. It is not assumed to be equal to the porosity measured on the rock plug.</p>
+<p>Otsu’s method is retained as the reference segmentation for the subsequent analysis because it is automatic and reproducible. The alternative threshold and small perturbations of the selected thresholds are used to assess how strongly the measurements depend on this choice. The resulting binary masks are described throughout the project as <em>dark-region masks</em>, rather than confirmed pore-space labels.</p>
+</section>
+<section id="morphological-and-spatial-descriptors" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="morphological-and-spatial-descriptors"><span class="header-section-number">9.2.2</span> Morphological and Spatial Descriptors</h3>
+<p>The segmented images are examined at two complementary scales. At the local scale, connected-component labelling identifies contiguous dark regions in selected image crops. An eight-neighbour connectivity rule is used, allowing diagonal adjacency. Component area is calculated from the pixel count and the physical pixel dimensions. Components intersecting a crop boundary are excluded from the area summaries because their full extent cannot be observed within that crop. Consequently, these statistics describe fully contained binary components, not an unbiased distribution of all pore sizes.</p>
+<p>A Euclidean distance transform provides another description of local geometry. For each dark pixel, it measures the distance to the nearest background pixel in the binary mask. The 90th percentile of these distances is used to characterise the extent of dark regions within each crop. This is a pixel-weighted distance statistic, not a measurement of individual pore radii or pore-throat dimensions. A background border is added around each crop for the calculation, making the treatment of crop boundaries explicit.</p>
+<p>At the image scale, the full field of view is divided into equal-sized tiles. The fraction of dark pixels is calculated within each tile, and its standard deviation describes how unevenly dark regions are distributed across the image. These tile statistics provide a spatial complement to the global dark-area fraction. They do not measure the hydraulic connectivity of pore space.</p>
+</section>
+</section>
+<section id="methodology-and-implementation" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="methodology-and-implementation"><span class="header-section-number">9.3</span> Methodology and Implementation</h2>
+<section id="dataset-and-image-inspection" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="dataset-and-image-inspection"><span class="header-section-number">9.3.1</span> Dataset and Image Inspection</h3>
+<p>The study uses five images from <em>Leman Sandstone SEM Images</em>, published through the Digital Rocks Portal and identified as DRP-307 <span class="citation" data-cites="scott2020leman"><a href="../references.html#ref-scott2020leman" role="doc-biblioref">[1]</a></span>. The images correspond to samples 44A, 45A, 47A, 48A, and 51A. The dataset also provides laboratory helium porosity, nitrogen permeability, and formation resistivity factor measurements for each sample.</p>
+<p>All five files are eight-bit grayscale PNG images with dimensions of 16,384 × 12,288 pixels. Their stated pixel spacing is 0.174 µm in both directions, corresponding to a field of view of approximately 2.85 × 2.14 mm. This common resolution permits the use of the same physical units and tile dimensions across samples. <a href="#fig-sem-samples" class="quarto-xref">Figure&nbsp;<span>9.1</span></a> presents reduced previews of the five original images; the previews are used only for visual inspection.</p>
+<div id="fig-sem-samples" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sem-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/9-pore-structure-characterization/python/output/figures/sem-samples.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sem-samples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.1: Grayscale previews of the five sandstone BSE-SEM images. The original images have identical pixel dimensions and spatial resolution.
+</figcaption>
+</figure>
+</div>
+<p>Because each original image contains more than 200 million pixels, processing is organised sequentially to limit memory use. Full-resolution intensity histograms are calculated directly from the original images, without retaining all five arrays in memory. Image previews are reduced only for display. The metadata, intermediate measurements, figures, and tables are generated by the accompanying Python notebook.</p>
+</section>
+<section id="segmentation-and-assessment" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="segmentation-and-assessment"><span class="header-section-number">9.3.2</span> Segmentation and Assessment</h3>
+<p>Initial inspection of the intensity histograms and native-resolution crops did not indicate a clear need for denoising or contrast enhancement. The images are therefore segmented using their original grayscale values, avoiding changes to fine boundaries before threshold selection.</p>
+<p>Otsu and histogram-valley thresholds are calculated from each image’s full-resolution histogram. Their masks are compared on three native-resolution crops per sample, centred at fixed relative positions in the image. <a href="#fig-segmentation-44a" class="quarto-xref">Figure&nbsp;<span>9.2</span></a> shows the original crops and the two segmentation candidates for sample 44A. In this example, Otsu includes substantially more intermediate-intensity material than the more restrictive valley threshold.</p>
+<div id="fig-segmentation-44a" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-segmentation-44a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/9-pore-structure-characterization/python/output/figures/segmentation-44a.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-segmentation-44a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.2: Comparison of original image crops, Otsu masks, and histogram-valley masks for sample 44A. White pixels represent the segmented dark class.
+</figcaption>
+</figure>
+</div>
+<p>The fraction of dark pixels is calculated from the full-image histograms for both methods, without constructing additional full-resolution masks. The laboratory helium porosity is included as an external point of comparison, not as a target for threshold calibration. Sensitivity is evaluated by changing each threshold by five grayscale levels in either direction. This establishes whether modest changes in the threshold materially affect the segmented area, while leaving the question of physical classification unresolved.</p>
+</section>
+<section id="local-morphology-and-image-scale-heterogeneity" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="local-morphology-and-image-scale-heterogeneity"><span class="header-section-number">9.3.3</span> Local Morphology and Image-Scale Heterogeneity</h3>
+<p>For each sample, three crops of 1024 × 1024 pixels are selected at the same relative locations used for segmentation inspection. Connected-component areas and distance-transform statistics are computed on the corresponding Otsu masks. The measurements are repeated at Otsu −5 and Otsu +5 to evaluate the sensitivity of the morphological descriptors themselves, rather than relying only on the stability of the segmented fraction.</p>
+<p>The complete images are also divided into non-overlapping 1024 × 1024-pixel tiles. At the stated resolution, each tile covers approximately 178 × 178 µm. Dark-area fraction is measured for every tile, producing a 12 × 16 spatial map for each image. These measurements describe the distribution of segmented regions over the full field of view, while the more detailed component and distance measurements remain local to the three selected crops.</p>
+<p>The implementation uses NumPy and pandas for numerical analysis, Pillow for image reading, SciPy for connected-component labelling and distance transforms, and Matplotlib for visualisation. No machine-learning model is trained. The emphasis is on interpretable image measurements and explicit evaluation of their limitations.</p>
+<p>The complete implementation, including the Python code, figures, and numerical results, is available in the accompanying Jupyter notebook <a href="../notebooks-and-scripts/1-applied-data-science/9-pore-structure-characterization/python/1-pore-structure-characterization.html" target="_blank" title="View Jupyter notebook"><i class="bi bi-file-earmark-code"></i></a>.</p>
+</section>
+</section>
+<section id="results-discussion-and-limitations" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="results-discussion-and-limitations"><span class="header-section-number">9.4</span> Results, Discussion, and Limitations</h2>
+<section id="segmentation-results" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="segmentation-results"><span class="header-section-number">9.4.1</span> Segmentation Results</h3>
+<p>The two thresholding procedures produce notably different dark-area fractions, particularly for samples 44A and 45A. For these samples, Otsu identifies 14.68% and 13.61% of the image area as dark, compared with 5.41% and 3.79% using the valley method. The differences are smaller for the remaining samples. This indicates that the estimated dark-area fraction depends on how the boundary between the low- and intermediate-intensity populations is defined.</p>
+<p><a href="#fig-porosity-comparison" class="quarto-xref">Figure&nbsp;<span>9.3</span></a> compares both image-derived measurements with laboratory helium porosity. The Otsu fractions are numerically close to the bulk measurements for samples 47A and 48A, while larger differences appear for 44A, 45A, and 51A. The apparent agreement in some samples is not evidence that Otsu has accurately segmented their pores. Helium porosity is a volume measurement on a core plug; the image analysis measures the fraction of pixels classified as dark in a particular two-dimensional section. The two measurements also differ in spatial support and in the structures they can resolve.</p>
+<div id="fig-porosity-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-porosity-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/9-pore-structure-characterization/python/output/figures/porosity-comparison.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-porosity-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.3: Full-image dark-area fractions obtained using Otsu and histogram-valley thresholds, compared with laboratory helium porosity. The measurements are not physically equivalent.
+</figcaption>
+</figure>
+</div>
+<p>Small changes of ±5 intensity levels produce gradual changes in the full-image dark-area fraction. Nevertheless, relative stability in area does not guarantee stability in component geometry: joining or separating a narrow connection can alter connected-component measurements without producing a large change in total area. This distinction motivates the additional morphological sensitivity analysis described below.</p>
+</section>
+<section id="spatial-distribution-and-morphology" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="spatial-distribution-and-morphology"><span class="header-section-number">9.4.2</span> Spatial Distribution and Morphology</h3>
+<p>The tile-level maps in <a href="#fig-spatial-heterogeneity" class="quarto-xref">Figure&nbsp;<span>9.4</span></a> show considerable variation within individual images. Samples 44A and 45A have relatively low global dark-area fractions, while 47A, 48A, and 51A contain more pronounced concentrations of dark regions. These concentrations are not spatially uniform. Some tiles have substantially higher dark-area fractions than neighbouring tiles, indicating that a single sample-level percentage conceals local differences.</p>
+<div id="fig-spatial-heterogeneity" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spatial-heterogeneity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/9-pore-structure-characterization/python/output/figures/spatial-heterogeneity.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spatial-heterogeneity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.4: Spatial variation in Otsu dark-area fraction for the five images. Each map contains 1024 × 1024-pixel tiles displayed on a common colour scale.
+</figcaption>
+</figure>
+</div>
+<p><a href="#tbl-sample-comparison" class="quarto-xref">Table&nbsp;<span>9.1</span></a> summarises the principal laboratory measurements and image descriptors. The standard deviation of tile dark-area fractions is expressed in percentage points. Among these five images, sample 47A has the highest spatial standard deviation, at 14.73 percentage points, followed by 48A at 12.44 and 51A at 11.70. These values reflect variation across the selected tile size; they are not direct measures of pore connectivity.</p>
+<div id="tbl-sample-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sample-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;9.1: Laboratory measurements and image-derived descriptors for the five sandstone samples. Tile SD is the standard deviation of Otsu dark-area fractions over the 1024 × 1024-pixel tiles, in percentage points.
+</figcaption>
+<div aria-describedby="tbl-sample-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 20%">
+<col style="width: 27%">
+<col style="width: 24%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Sample</th>
+<th style="text-align: right;">He porosity (%)</th>
+<th style="text-align: right;">N₂ permeability (mD)</th>
+<th style="text-align: right;">Otsu dark area (%)</th>
+<th style="text-align: right;">Tile SD (pp)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">44A</td>
+<td style="text-align: right;">12.8</td>
+<td style="text-align: right;">7.7</td>
+<td style="text-align: right;">14.68</td>
+<td style="text-align: right;">10.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">45A</td>
+<td style="text-align: right;">10.8</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">13.61</td>
+<td style="text-align: right;">6.49</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">47A</td>
+<td style="text-align: right;">17.4</td>
+<td style="text-align: right;">263.0</td>
+<td style="text-align: right;">17.65</td>
+<td style="text-align: right;">14.73</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">48A</td>
+<td style="text-align: right;">20.1</td>
+<td style="text-align: right;">58.0</td>
+<td style="text-align: right;">19.97</td>
+<td style="text-align: right;">12.44</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">51A</td>
+<td style="text-align: right;">17.7</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">19.55</td>
+<td style="text-align: right;">11.70</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The local morphological measurements provide a different perspective. Connected-component areas describe the sizes of fully contained binary objects, whereas distance-transform statistics describe how far dark pixels lie from their segmented boundaries. Because only three crops are examined per sample, these measurements should not be interpreted as exhaustive descriptions of the full rock section.</p>
+<p>The sensitivity analysis in <a href="#fig-morphology-sensitivity" class="quarto-xref">Figure&nbsp;<span>9.5</span></a> focuses on 47A and 51A. Across Otsu ±5, the 90th percentile of dark-pixel distance changes relatively little within most of the selected crops. The median area of fully contained components is less consistent, with some crops showing noticeable changes that are not necessarily monotonic. This is expected when threshold variations change the membership or connectivity of small binary regions. The stability assessment therefore supports cautious use of the distance statistics while discouraging strong conclusions based on small differences in median component area.</p>
+<div id="fig-morphology-sensitivity" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-morphology-sensitivity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/9-pore-structure-characterization/python/output/figures/morphology-sensitivity.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-morphology-sensitivity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.5: Sensitivity of local component-area medians and dark-pixel distance percentiles to Otsu threshold offsets of −5, 0, and +5 for samples 47A and 51A.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="comparison-with-petrophysical-properties" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="comparison-with-petrophysical-properties"><span class="header-section-number">9.4.3</span> Comparison with Petrophysical Properties</h3>
+<p><a href="#fig-petrophysical-comparison" class="quarto-xref">Figure&nbsp;<span>9.6</span></a> places the image-level dark-area fraction and tile-level standard deviation alongside nitrogen permeability. The five samples span a wide permeability range, and neither image descriptor provides a simple ordering that matches permeability across all specimens. In particular, 48A has the highest helium porosity and a larger dark-area fraction than 47A, yet its measured permeability is considerably lower. These observations argue against treating the image dark-area fraction as a direct permeability surrogate.</p>
+<div id="fig-petrophysical-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-petrophysical-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../notebooks-and-scripts/1-applied-data-science/9-pore-structure-characterization/python/output/figures/petrophysical-comparison.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-petrophysical-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.6: Exploratory comparison of nitrogen permeability with Otsu dark-area fraction and tile-level spatial variability. The permeability axis is logarithmic; no predictive model is fitted.
+</figcaption>
+</figure>
+</div>
+<p>Samples 47A and 51A provide a useful comparison. Their measured helium porosities are 17.4% and 17.7%, respectively, but their nitrogen permeabilities are 263 and 7.5 mD. The permeability of 47A is therefore approximately 35 times that of 51A, despite its slightly lower porosity. Their Otsu dark-area fractions are 17.65% and 19.55%, while their tile-level standard deviations are 14.73 and 11.70 percentage points. The images thus differ in the spatial distribution of dark regions even though their bulk porosities are similar.</p>
+<p>Local morphology is also heterogeneous. For example, the lower-right crop of 47A has a 90th-percentile dark-pixel distance of 17.40 µm, compared with 4.87 µm for the corresponding crop of 51A. The relation reverses in the central crops, where the values are 2.29 and 5.02 µm. These contrasting measurements show why individual crops cannot be used to rank the overall pore structure of the two samples. They do, however, demonstrate that similar bulk porosity does not imply identical image geometry at the locations examined.</p>
+<p>The analysis cannot determine whether these differences account for the observed permeability contrast. Permeability depends strongly on connected flow paths and constrictions within a three-dimensional medium, whereas the present descriptors are obtained from isolated two-dimensional sections. The comparison is therefore descriptive, not a causal explanation or a validated predictive relationship.</p>
+</section>
+<section id="limitations" class="level3" data-number="9.4.4">
+<h3 data-number="9.4.4" class="anchored" data-anchor-id="limitations"><span class="header-section-number">9.4.4</span> Limitations</h3>
+<p>The principal uncertainty concerns segmentation. The binary class is defined by grayscale intensity and has not been independently verified against pore labels. Dark regions can contain more than one physical phase, while small pores may remain unresolved or may not be separated from the surrounding material by the selected threshold. The difference between Otsu and histogram-valley masks illustrates the extent to which measurements can depend on this definition.</p>
+<p>A second limitation is spatial representativeness. Each image covers only one section of a rock plug, and local morphological measurements are based on three fixed crops. Excluding boundary-touching components avoids assigning artificially truncated areas to those objects, but it also favours components that fit entirely inside a crop. The added background boundary in the distance transform similarly imposes a computational edge on the measured geometry. Neither procedure yields an unbiased three-dimensional pore-size distribution.</p>
+<p>The tile analysis describes variability at a chosen spatial scale. A different tile size could produce different standard deviations and spatial patterns. Furthermore, connected components in a two-dimensional mask do not establish the connectivity of the rock’s pore network in three dimensions, nor do they identify which paths contribute to fluid flow.</p>
+<p>Finally, the dataset contains only five samples, with one SEM image analysed for each. The results are suitable for a focused comparison but do not support statistical generalisation, permeability prediction, or claims about the geological causes of the observed differences. Additional imaging modalities, independently verified pore labels, or three-dimensional measurements would be needed to address those questions.</p>
+</section>
+<section id="conclusions" class="level3" data-number="9.4.5">
+<h3 data-number="9.4.5" class="anchored" data-anchor-id="conclusions"><span class="header-section-number">9.4.5</span> Conclusions</h3>
+<p>The study provides a reproducible workflow for extracting quantitative descriptors from high-resolution sandstone SEM images using classical computer vision. Full-resolution intensity analysis supports image-specific thresholding, while connected-component measurements, distance transforms, and spatial tiling describe complementary aspects of the segmented dark regions.</p>
+<p>The results show that dark-area fraction alone does not capture the variation in local geometry or spatial organisation observed across these five images. The comparison between samples 47A and 51A is particularly informative: similar laboratory porosity coexists with markedly different permeability and distinct image-level spatial patterns. These findings support the usefulness of image descriptors as complementary observations, while also illustrating why two-dimensional intensity segmentation cannot substitute for a validated three-dimensional characterisation of pore space.</p>
+<p>Within these limits, the project demonstrates how relatively simple image-processing methods can be used to produce interpretable measurements from large scientific images without introducing a predictive model that the available data cannot support.</p>
+</section>
+</section>
+<section id="further-reading" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">9.5</span> Further Reading</h2>
+<p>For readers interested in the theoretical foundations of the image analysis methods used in this project, the accompanying technical notes on <strong>Image Processing</strong> cover binary image analysis, connected-component labeling, and distance transforms <a href="../technical-notes/data-science/image-processing/notes.pdf" download=""><i class="bi bi-file-earmark-pdf"></i></a>.</p>
+<p>The notes on <strong>Image Formation</strong> provide further background on image representation, spatial sampling, and the limitations involved in recovering information about a three-dimensional scene from two-dimensional measurements <a href="../technical-notes/data-science/image-formation/notes.pdf" download=""><i class="bi bi-file-earmark-pdf"></i></a>.</p>
+
+
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-scott2020leman" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">G. Scott, <span>“Leman sandstone SEM images.”</span> Digital Porous Media Portal, 2020. doi: <a href="https://doi.org/10.17612/AKY4-9A88">10.17612/AKY4-9A88</a>.</div>
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../1-applied-data-science/8-skin-lesion-triage.html" class="pagination-link" aria-label="Skin Lesion Triage">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Skin Lesion Triage</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../2-writings-and-essays/0-overview.html" class="pagination-link" aria-label="Overview">
+        <span class="nav-page-text">Overview</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

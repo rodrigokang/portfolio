@@ -1,0 +1,6 @@
+sample,pixel_x_um,pixel_y_um,units,segmented_flag
+44A,0.174,0.174,micrometer,no
+45A,0.174,0.174,micrometer,no
+47A,0.174,0.174,micrometer,no
+48A,0.174,0.174,micrometer,no
+51A,0.174,0.174,micrometer,yes

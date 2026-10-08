@@ -39,6 +39,7 @@ book:
         - 1-applied-data-science/6-customer-feedback-nlp.qmd
         - 1-applied-data-science/7-sediment-source-modeling.qmd
         - 1-applied-data-science/8-skin-lesion-triage.qmd
+        - 1-applied-data-science/9-pore-structure-characterization.qmd
 
     - part: "Writings & Essays"
       chapters:
